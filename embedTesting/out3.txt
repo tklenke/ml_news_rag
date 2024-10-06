@@ -1,0 +1,512 @@
+Starting EmbedTesting...
+  cf:opening chroma on localhost:8000...
+running embed model all-minilm...
+  cf:opening all-minilm...
+  cf:found duplicate collection all-minilm. Removing...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with all-minilm
+  ef:done 14.731119394302368 secs
+  cf:embeded:89 of 89 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with all-minilm
+  ef:done 13.495678424835205 secs
+  cf:embeded:109 of 109 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with all-minilm
+  ef:done 12.487741231918335 secs
+  cf:embeded:99 of 99 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with all-minilm
+  ef:done 9.873270034790039 secs
+  cf:embeded:80 of 80 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with all-minilm
+  ef:done 10.978856801986694 secs
+  cf:embeded:88 of 88 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with all-minilm
+  ef:done 16.01279354095459 secs
+  cf:embeded:111 of 111 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with all-minilm
+  ef:done 13.801090955734253 secs
+  cf:embeded:96 of 96 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model bge-m3...
+  cf:opening bge-m3...
+  cf:found duplicate collection bge-m3. Removing...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with bge-m3
+  ef:done 65.12268567085266 secs
+  cf:embeded:89 of 89 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with bge-m3
+  ef:done 70.60261559486389 secs
+  cf:embeded:109 of 109 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with bge-m3
+  ef:done 63.983983278274536 secs
+  cf:embeded:99 of 99 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with bge-m3
+  ef:done 51.06739807128906 secs
+  cf:embeded:80 of 80 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with bge-m3
+  ef:done 55.705448627471924 secs
+  cf:embeded:88 of 88 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with bge-m3
+  ef:done 70.33697652816772 secs
+  cf:embeded:111 of 111 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with bge-m3
+  ef:done 60.795862674713135 secs
+  cf:embeded:96 of 96 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model bge-large...
+  cf:opening bge-large...
+  cf:found duplicate collection bge-large. Removing...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with bge-large
+  ef:done 24.581973791122437 secs
+  cf:embeded:89 of 89 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with bge-large
+  ef:done 21.693394899368286 secs
+  cf:embeded:109 of 109 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with bge-large
+  ef:done 19.034648418426514 secs
+  cf:embeded:99 of 99 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with bge-large
+  ef:done 15.86772894859314 secs
+  cf:embeded:80 of 80 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with bge-large
+  ef:done 17.4632887840271 secs
+  cf:embeded:88 of 88 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with bge-large
+  ef:done 21.7257399559021 secs
+  cf:embeded:111 of 111 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with bge-large
+  ef:done 19.063212633132935 secs
+  cf:embeded:96 of 96 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model mxbai-embed-large...
+  cf:opening mxbai-embed-large...
+  cf:found duplicate collection mxbai-embed-large. Removing...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 24.64667820930481 secs
+  cf:embeded:89 of 89 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 21.779662132263184 secs
+  cf:embeded:109 of 109 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 18.961902379989624 secs
+  cf:embeded:99 of 99 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 16.15238857269287 secs
+  cf:embeded:80 of 80 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 17.339137077331543 secs
+  cf:embeded:88 of 88 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 21.92929983139038 secs
+  cf:embeded:111 of 111 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 19.075758457183838 secs
+  cf:embeded:96 of 96 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model snowflake-arctic-embed...
+  cf:opening snowflake-arctic-embed...
+  cf:found duplicate collection snowflake-arctic-embed. Removing...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 24.762200117111206 secs
+  cf:embeded:89 of 89 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 21.761006832122803 secs
+  cf:embeded:109 of 109 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 19.098233461380005 secs
+  cf:embeded:99 of 99 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 15.96444296836853 secs
+  cf:embeded:80 of 80 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 17.035722970962524 secs
+  cf:embeded:88 of 88 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 22.22771716117859 secs
+  cf:embeded:111 of 111 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 19.0637366771698 secs
+  cf:embeded:96 of 96 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model nomic-embed-text...
+  cf:opening nomic-embed-text...
+  cf:found duplicate collection nomic-embed-text. Removing...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with nomic-embed-text
+  ef:done 14.61066460609436 secs
+  cf:embeded:89 of 89 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with nomic-embed-text
+  ef:done 16.412151336669922 secs
+  cf:embeded:109 of 109 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with nomic-embed-text
+  ef:done 14.505217790603638 secs
+  cf:embeded:99 of 99 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with nomic-embed-text
+  ef:done 12.206784963607788 secs
+  cf:embeded:80 of 80 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with nomic-embed-text
+  ef:done 13.159585952758789 secs
+  cf:embeded:88 of 88 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with nomic-embed-text
+  ef:done 16.513094663619995 secs
+  cf:embeded:111 of 111 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with nomic-embed-text
+  ef:done 14.25941014289856 secs
+  cf:embeded:96 of 96 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model None...
+ skipping embed for None
+ asking questions...
+  asking question 0...
+  asking question 1...
+  asking question 2...
+----QUESTIONS-----
+Question 0: How much angle should I have for the control stick to allow for sufficient clearance?
+Question 1: Give me a list of engines that I should consider.  Include two sentences of pros and cons for each.
+Question 2: Give me a list of tips to consider when installing the engine.
+-----ANSWERS------
+Model: all-minilm
+  A0: ----------
+Based on the provided context, I would recommend an angle of around 17-18° for the control stick attachment to ensure sufficient clearance between the stick and the fuselage side while still achieving full aileron travel with your hand on the stick.
+  A1: ----------
+Here's a list of engines that you should consider for your amateur-built aircraft, along with two sentences of pros and cons for each:
+
+1. Lycoming O-235 series:
+	* Pros: Proven reliability, efficient at economy cruise, and suitable for smaller aircraft. The model L2C with mechanical fuel pump is preferred.
+	* Cons: Heavier than other options, may not provide the best takeoff and climb performance.
+
+Note that this engine is considered optimum by the designer of the Cozy aircraft, and has been demonstrated as a reliable choice.
+
+2. Lycoming O-320 series:
+	* Pros: More power than the O-235, suitable for larger aircraft, and provides good takeoff and climb performance.
+	* Cons: Heavier and more expensive than the O-235, may not be necessary for smaller aircraft like the Cozy.
+
+Note that some Long EZ builders have installed this engine, but it has not been tried on a Cozy aircraft yet.
+  A2: ----------
+Here are some tips to consider when installing an engine:
+
+* Consider using a used engine instead of a new one, as ground running can be hard on a new engine.
+* Make sure you have enough clearance between the engine and cowling; if not, you may need to deform or add a blister to the cowling to prevent contact.
+* Refer to Chapter 23 of Section IA for detailed instructions on engine installation.
+
+Note: The rest of the text is discussing plans and decisions made by the authors, rather than providing specific tips or guidance.
+Model: bge-m3
+  A0: ----------
+Based on the context, the recommended angle for the control stick is 15°. This is specified in Chap.16, p.2, Change CZSA stick angle from 10° to 15°.
+  A1: ----------
+Here is a list of larger engines that you may consider for your amateur-built aircraft, along with two sentences of pros and cons for each:
+
+1. Lycoming O-235 series:
+Pros: The O-235 is a well-established and reliable engine option, with many years of service in various aircraft types. It's also a popular choice among homebuilders.
+Cons: The O-235 can be heavy, which may affect the overall weight distribution of your aircraft. Additionally, it may require more maintenance and repair compared to newer engines.
+
+2. Continental IO-360:
+Pros: The IO-360 is a powerful engine with plenty of horsepower, making it suitable for larger aircraft or those that need extra performance. It's also known for its reliability and low-maintenance design.
+Cons: The IO-360 can be heavier and more expensive than other options, which may impact your budget and overall aircraft design.
+
+3. Rotax 914:
+Pros: The Rotax 914 is a popular choice among homebuilders due to its high power-to-weight ratio, compact size, and relatively low cost. It's also well-suited for smaller aircraft.
+Cons: The 914 may require more maintenance and tuning compared to other engines, particularly if you're new to flying or building an aircraft.
+
+Remember that each engine has its unique characteristics, and it's essential to research and consider factors like weight, power output, fuel efficiency, and maintenance requirements before making a decision.
+  A2: ----------
+Here are some tips to consider when installing an engine on an amateur-built aircraft:
+
+1. **Mount the engine correctly**: Ensure the crankshaft center line is aligned with BL 0 looking down at a plan view, with no side-to-side offset.
+2. **Achieve the right angle**: Mount the engine with a 2-degree downward thrust (prop flange higher than magneto end). ±1 degree will be acceptable.
+3. **Check engine mount clearance**: Ensure sufficient clearance between the engine and cowling to avoid touching. If necessary, use heat to deform the cowling or add a local blister.
+4. **Pay attention to condensation**: Consider installing a system to "breathe" and eliminate condensation to prevent corrosion on wing bolts.
+
+Remember that these instructions are not exhaustive and you should consult the engine installation manual (Chapter 23 of Section 1A) for more detailed guidance.
+Model: bge-large
+  A0: ----------
+To allow for sufficient clearance, I would recommend an angle of around 5° to 6° for the control stick attachment. This takes into account the hints provided in the text and allows for adequate clearance between the stick and the fuselage side while still providing a reasonable angle for control input.
+  A1: ----------
+Here's a list of engines that you should consider for your amateur-built aircraft, along with two sentences of pros and cons for each:
+
+1. Lycoming O-320:
+Pros: The O-320 is a popular choice for many homebuilts, including the Long EZ, due to its reliability and strong performance. It's also widely supported by maintenance shops and has a large community of owners who can offer guidance and advice.
+Cons: The O-320 is a larger engine that requires more maintenance and has higher operating costs compared to smaller engines. Its weight and size may also affect the overall balance and handling of your aircraft.
+
+2. Continental C-90:
+Pros: The C-90 is a strong and reliable engine that provides good performance for most amateur-built aircraft. It's also relatively lightweight and compact, making it easier to install in smaller planes.
+Cons: The C-90 has higher operating costs compared to other engines, and its maintenance requirements are more complex due to its overhead-valve design.
+
+3. Rotax 912:
+Pros: The 912 is a popular choice for many homebuilts due to its high power-to-weight ratio and low operating costs. It's also relatively simple to maintain and has a large community of owners who can offer guidance and advice.
+Cons: The 912 has limited availability in the US market, and its installation may require additional modifications to your aircraft.
+
+4. Jabiru 3300:
+Pros: The 3300 is a lightweight and efficient engine that provides good performance for many amateur-built aircraft. It's also relatively low-maintenance and has a reputation for reliability.
+Cons: The 3300 has limited availability in the US market, and its installation may require additional modifications to your aircraft.
+
+5. VW-derived engines (e.g., AE-300):
+Pros: VW-derived engines are often cheaper than other options and have a large community of owners who can offer guidance and advice. They're also relatively lightweight and simple to maintain.
+Cons: VW-derived engines are designed for automotive use, not aviation, so they may require additional modifications to meet FAA regulations. Their performance may also be limited compared to more powerful engines.
+
+Remember that used engines are often a better value than new ones, as you mentioned earlier. Additionally, be sure to research and consider the installation requirements and costs associated with each engine option.
+  A2: ----------
+Here are the tips to consider when installing the engine, as per the instructions in Chapter 23 of Section IA:
+
+1. **Seal your gas tanks well**: A well-sealed fiberglass tank can be a joy, but a leaky one can be a real pain.
+2. **Use a used engine**: If possible, use a used engine instead of a new one. Ground running to test and break in the engine is bad on a new engine.
+3. **Be mindful of design changes**: Resist the temptation to make significant design changes, such as using a heavier engine or longer nose, without consulting the designer first.
+4. **Cowl clearance**: If you don't have enough clearance between the engine and cowling, use heat to deform it or add a small blister locally to avoid touching.
+
+Note: These tips are based on the original plans and may not apply if changes were made to the design. It's always best to consult the official instructions for any updates or modifications.
+Model: mxbai-embed-large
+  A0: ----------
+Based on the plans changes and corrections, I would recommend a control stick angle of around 5° bend in the aluminum stick extension, as mentioned in the "CHANGES" section. This is to ensure sufficient clearance between the stick and the fuselage side for full aileron travel when your hand is on the stick.
+  A1: ----------
+Here's a list of engines that you should consider for your amateur-built aircraft:
+
+1. Lycoming O-235 series (model L2C with mechanical fuel pump)
+	* Pros: Optimum engine choice for the Cozy, reliable and efficient.
+	* Cons: Heaviest engine installation approved by Burt Rutan, may require additional structural reinforcement.
+
+Note: This is the approved engine for the Cozy, but it's not necessary to go this route.
+  A2: ----------
+Based on the provided context and engine installation manual, here are some tips to consider when installing the engine:
+
+1. **Seal gas tanks well**: Ensure good sealing of fiberglass gas tanks to avoid leaks and potential problems.
+2. **Choose a used engine**: Consider using a used engine instead of a new one, as ground running can be harsh on a new engine. A used engine is also cheaper and easier to break in.
+3. **Cowl clearance**: If you don't have enough clearance between the engine and cowling, use heat to deform the cowl or add a local blister to ensure proper fit.
+4. **Engine alignment**: Mount the engine with the crankshaft centerline at B.L. 0 (plan view) and no side-to-side offset (side view).
+5. **Condensation management**: Consider installing features to manage condensation and eliminate moisture, which can corrode wing bolts.
+
+Please note that these tips are based on the provided context and may not cover all aspects of engine installation. It's essential to consult the official engine installation manual for a comprehensive guide.
+Model: snowflake-arctic-embed
+  A0: ----------
+Based on the context, it appears that you are trying to increase the clearance between the control stick and the fuselage side to allow for sufficient aileron travel. The plans suggest increasing the angle of the stick attachment from 10° to 15° to achieve this. Therefore, I would recommend setting the control stick at an angle of around 13-14° to provide sufficient clearance while still allowing for proper aileron movement.
+  A1: ----------
+Here are some engine options for amateur-built aircraft, along with pros and cons for each:
+
+**Lycoming O-235**: A popular choice for small planes, known for its reliability and fuel efficiency.
+
+Pros: Well-established manufacturer, widely supported by maintenance infrastructure.
+Cons: Can be heavy and may require longer landing gear to accommodate the added weight.
+
+**Continental O-200**: Another well-known engine suitable for smaller aircraft, offering a good balance of power and economy.
+
+Pros: Proven track record in many amateur-built planes, relatively lightweight.
+Cons: May have higher maintenance costs compared to Lycoming engines.
+
+**Rotax 912S**: A popular choice for light sport aircraft (LSA), offering high power-to-weight ratio and low emissions.
+
+Pros: High-performance engine with modern features like fuel injection and electronic ignition.
+Cons: May require specialized knowledge or training to maintain, can be pricey.
+
+**Volkswagen-based engines**: Modified Volkswagen engines have gained popularity in the amateur-built aircraft community for their reliability, simplicity, and affordability.
+
+Pros: Well-established automotive manufacturer means access to spare parts and maintenance expertise.
+Cons: May not be designed specifically for aviation use, requires careful conversion and testing to ensure airworthiness.
+
+**Zenoah G-200**: A high-performance, fuel-injected engine suitable for smaller aircraft like ultralights and LSA.
+
+Pros: High power output, low emissions, and advanced features like electronic ignition.
+Cons: May be more expensive than other options, requires specialized knowledge or training to maintain.
+
+Please note that each of these engines has its own specific requirements, limitations, and considerations. It's essential to research and understand the unique needs and characteristics of each engine before making a decision.
+  A2: ----------
+Here are some tips to consider when installing the engine:
+
+1. **Plan ahead**: Don't underestimate the complexity of the installation process.
+2. **Follow the instructions carefully**: Make sure you read and understand the engine installation manual (Chapter 23 of Section 1A) before starting the installation.
+3. **Pre-fab as much as possible**: Take advantage of the pre-fabricated parts to save time and effort.
+4. **Be prepared for changes**: Be flexible if you decide to make changes to your design, such as a heavier engine or longer nose. Keep in mind that this may affect performance and safety.
+5. **Conduct thorough tests**: Once the installation is complete, ensure it's safe and functioning properly by conducting thorough tests.
+6. **Check for errors and corrections**: Regularly review newsletters and correction publications to stay up-to-date on any changes or errors.
+
+Remember, installing an engine can be a significant undertaking. Take your time, follow the instructions carefully, and don't hesitate to seek guidance if you're unsure about any aspect of the process.
+Model: nomic-embed-text
+  A0: ----------
+According to Chap. 16, p.2, the recommended angle for the control stick is 15°. This is an increase from the original angle of 10°.
+  A1: ----------
+Based on my expertise and considering the context you provided, here's a list of engines that I recommend for amateur-built aircraft:
+
+1. Lycoming O-235 series (L2C with mechanical fuel pump preferred)
+	* Pros: Optimum engine configuration demonstrated on Varieze and Long EZ; strong performance.
+	* Cons: Heavier than other options, potentially less desirable, and may cost more to operate.
+
+Other engines you might consider:
+
+2. Lycoming O-235 series (without starter)
+	* Pros: Well-established brand, reliable performance.
+	* Cons: Heavy engine installation, may require additional modifications to the aircraft.
+
+When evaluating these engines, keep in mind that it's essential to choose an engine that's well-suited for your flying conditions and anticipated usage. I recommend considering factors like operating costs, weight, and performance characteristics before making a decision.
+  A2: ----------
+Here are some tips to consider when installing the engine:
+
+1. **Mount the engine with the crankshaft centerline at B.L. 0**: Ensure proper alignment for smooth operation.
+2. **Avoid side-to-side offset**: Keep the engine centered and symmetrical for even weight distribution.
+3. **Breathe and eliminate condensation**: Prevent corrosion on wing bolts by ensuring proper airflow and drainage.
+4. **Use a used engine if possible**: Cheaper and less prone to damage from ground running tests.
+5. **Align the engine with the O-235 prototype**: Ensure a snug fit, especially if you're using this same engine configuration.
+6. **Adjust cowling clearance as needed**: Use heat or add local blisters to prevent engine-cowling contact.
+7. **Consider design changes carefully**: Be aware that modifying your plane's design can have unintended consequences and affect overall performance.
+
+Remember, these tips are based on the context provided, and I encourage you to consult the official plans and instructions for more detailed guidance.
+Model: None
+  A0: ----------
+Typically, a good starting point for the control stick's neutral position is around 3-5 degrees of rotation from fully forward. This provides enough clearance for pilot comfort and ease of use while still allowing for smooth control input. However, this can vary depending on personal preference and aircraft design specifics, so feel free to experiment and find what works best for you!
+  A1: ----------
+Here's a list of engines suitable for amateur-built aircraft:
+
+1. Lycoming IO-360:
+	* Pros: Reliable, widely supported by the aviation community, and has a good power-to-weight ratio.
+	* Cons: Relatively heavy, which can affect the overall performance of the aircraft.
+
+2. Continental O-200:
+	* Pros: Lightweight, simple design makes it easy to maintain, and is a popular choice for small planes.
+	* Cons: May not have as much power as other engines in its class.
+
+3. Rotax 912S:
+	* Pros: High-performance engine with good fuel efficiency, quiet operation, and has a strong reputation among ultralight aircraft enthusiasts.
+	* Cons: Can be expensive to purchase and maintain, and may require specialized knowledge for installation.
+
+4. Jabiru 3300:
+	* Pros: Affordable, low-maintenance option that's well-suited for training or touring planes.
+	* Cons: Not as powerful as other engines in its class, which can affect overall performance.
+
+5. Honda GX610:
+	* Pros: Low-cost option with good reliability and fuel efficiency, making it suitable for small aircraft.
+	* Cons: May not have as much power as other engines in its class, and requires specialized knowledge for installation.
+
+6. Subaru EA-81:
+	* Pros: Reliable, simple design makes it easy to maintain, and has a strong reputation among amateur-built aircraft enthusiasts.
+	* Cons: May not have as much power as other engines in its class, which can affect overall performance.
+
+Please note that the suitability of these engines for your specific project will depend on factors such as the weight, size, and intended use of your aircraft. It's essential to research each engine thoroughly and consult with a qualified professional before making a decision.
+  A2: ----------
+Here are some key tips to consider when installing an engine in your amateur-built aircraft:
+
+1. **Plan ahead**: Ensure you have a clear understanding of the installation process and necessary steps before starting.
+2. **Choose the right mounts**: Select mounts that provide adequate clearance, vibration isolation, and stability for the engine and airframe.
+3. **Verify clearance**: Check the engine's dimensions against the airframe to ensure proper fitment and clearance from control surfaces and other components.
+4. **Secure connections**: Make sure all electrical, fuel, and control connections are properly secured and protected against environmental factors.
+5. **Ensure proper alignment**: Verify the engine's alignment with the airframe's centerline and ensure proper attachment of mounts and accessories.
+6. **Consider temperature management**: Plan for adequate cooling airflow around hot components like exhaust systems and cylinders.
+7. **Check fuel system compatibility**: Ensure the fuel system is compatible with the chosen engine type and meets safety standards.
+8. **Ground all electrical connections**: Properly ground all electrical connections to prevent EMI/RFI interference and ensure safe operation.
+9. **Verify propeller clearance**: Ensure the propeller has sufficient clearance from control surfaces, other components, and the airframe's leading edges.
+10. **Consult relevant documentation**: Refer to manufacturer instructions, aircraft plans, and industry guidelines for specific installation procedures and best practices.
+
+Remember to always follow established safety protocols and guidelines during the engine installation process.
+-----STATS------
+Chunk size: 50
+Model: all-minilm
+  Embed: 92.8150 secs
+  Q0: 24.4487 secs
+  Q1: 42.5620 secs
+  Q2: 26.1854 secs
+Model: bge-m3
+  Embed: 439.0576 secs
+  Q0: 21.1508 secs
+  Q1: 78.5153 secs
+  Q2: 58.3875 secs
+Model: bge-large
+  Embed: 140.6773 secs
+  Q0: 23.5685 secs
+  Q1: 120.0616 secs
+  Q2: 60.4807 secs
+Model: mxbai-embed-large
+  Embed: 141.2102 secs
+  Q0: 24.7029 secs
+  Q1: 37.8514 secs
+  Q2: 62.8807 secs
+Model: snowflake-arctic-embed
+  Embed: 141.1127 secs
+  Q0: 29.8103 secs
+  Q1: 90.0445 secs
+  Q2: 59.6283 secs
+Model: nomic-embed-text
+  Embed: 102.8139 secs
+  Q0: 10.9069 secs
+  Q1: 37.0957 secs
+  Q2: 47.6689 secs
+Model: None
+  Embed: 0.0000 secs
+  Q0: 14.3648 secs
+  Q1: 65.4906 secs
+  Q2: 51.1258 secs

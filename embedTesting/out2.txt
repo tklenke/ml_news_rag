@@ -1,0 +1,673 @@
+Starting EmbedTesting...
+  cf:opening chroma on localhost:8000...
+running embed model all-minilm...
+  cf:opening all-minilm...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with all-minilm
+  ef:done 7.0024614334106445 secs
+  cf:embeded:23 of 23 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with all-minilm
+  ef:done 4.768470287322998 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with all-minilm
+  ef:done 4.3841822147369385 secs
+  cf:embeded:25 of 25 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with all-minilm
+  ef:done 3.763456106185913 secs
+  cf:embeded:20 of 20 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with all-minilm
+  ef:done 4.001714468002319 secs
+  cf:embeded:22 of 22 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with all-minilm
+  ef:done 4.9931933879852295 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with all-minilm
+  ef:done 4.2434611320495605 secs
+  cf:embeded:24 of 24 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model bge-m3...
+  cf:opening bge-m3...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with bge-m3
+  ef:done 26.189167022705078 secs
+  cf:embeded:23 of 23 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with bge-m3
+  ef:done 21.253410577774048 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with bge-m3
+  ef:done 18.84070062637329 secs
+  cf:embeded:25 of 25 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with bge-m3
+  ef:done 16.003892183303833 secs
+  cf:embeded:20 of 20 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with bge-m3
+  ef:done 16.446401119232178 secs
+  cf:embeded:22 of 22 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with bge-m3
+  ef:done 22.305783987045288 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with bge-m3
+  ef:done 18.62863039970398 secs
+  cf:embeded:24 of 24 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model bge-large...
+  cf:opening bge-large...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with bge-large
+  ef:done 13.395172834396362 secs
+  cf:embeded:23 of 23 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with bge-large
+  ef:done 8.046233177185059 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with bge-large
+  ef:done 7.078368425369263 secs
+  cf:embeded:25 of 25 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with bge-large
+  ef:done 5.88179874420166 secs
+  cf:embeded:20 of 20 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with bge-large
+  ef:done 6.362000942230225 secs
+  cf:embeded:22 of 22 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with bge-large
+  ef:done 8.165601015090942 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with bge-large
+  ef:done 6.851100444793701 secs
+  cf:embeded:24 of 24 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model mxbai-embed-large...
+  cf:opening mxbai-embed-large...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 13.66692066192627 secs
+  cf:embeded:23 of 23 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 7.999810695648193 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 7.092921018600464 secs
+  cf:embeded:25 of 25 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 5.880361557006836 secs
+  cf:embeded:20 of 20 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 6.401150465011597 secs
+  cf:embeded:22 of 22 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 8.15835165977478 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with mxbai-embed-large
+  ef:done 6.900970935821533 secs
+  cf:embeded:24 of 24 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model snowflake-arctic-embed...
+  cf:opening snowflake-arctic-embed...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 13.673508167266846 secs
+  cf:embeded:23 of 23 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 7.9626476764678955 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 7.085478782653809 secs
+  cf:embeded:25 of 25 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 5.94429874420166 secs
+  cf:embeded:20 of 20 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 6.3618080615997314 secs
+  cf:embeded:22 of 22 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 8.17781686782837 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with snowflake-arctic-embed
+  ef:done 6.959460735321045 secs
+  cf:embeded:24 of 24 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model nomic-embed-text...
+  cf:opening nomic-embed-text...
+  cf:reading text files from ../data/test...
+  cf: chuncking news_04.txt
+  ef:embeding with nomic-embed-text
+  ef:done 5.756838798522949 secs
+  cf:embeded:23 of 23 chunks
+  cf: chuncking news_05.txt
+  ef:embeding with nomic-embed-text
+  ef:done 5.236443996429443 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_06.txt
+  ef:embeding with nomic-embed-text
+  ef:done 4.612009048461914 secs
+  cf:embeded:25 of 25 chunks
+  cf: chuncking news_07.txt
+  ef:embeding with nomic-embed-text
+  ef:done 3.7722411155700684 secs
+  cf:embeded:20 of 20 chunks
+  cf: chuncking news_08.txt
+  ef:embeding with nomic-embed-text
+  ef:done 4.125365972518921 secs
+  cf:embeded:22 of 22 chunks
+  cf: chuncking news_09.txt
+  ef:embeding with nomic-embed-text
+  ef:done 5.361114025115967 secs
+  cf:embeded:28 of 28 chunks
+  cf: chuncking news_10.txt
+  ef:embeding with nomic-embed-text
+  ef:done 4.51577615737915 secs
+  cf:embeded:24 of 24 chunks
+ asking questions...
+  getting question 0 related docs...
+  asking question 0...
+  getting question 1 related docs...
+  asking question 1...
+  getting question 2 related docs...
+  asking question 2...
+running embed model None...
+ skipping embed for None
+ asking questions...
+  asking question 0...
+  asking question 1...
+  asking question 2...
+----QUESTIONS-----
+Question 0: How much angle should I have for the control stick to allow for sufficient clearance?
+Question 1: Give me a list of engines that I should consider.  Include two sentences of pros and cons for each.
+Question 2: Give me a list of tips to consider when installing the engine.
+-----ANSWERS------
+Model: all-minilm
+  A0: ----------
+Another Cozy Newsletter!
+
+The main topic this time is propellers! It seems that the Long-EZ team has been testing 7 different props from four manufacturers, and most of them work well, considering the aircraft's clean design and large speed range (stalling at 51 knots and indicating up to 165 knots at sea level). However, they've found that a minimum of 2400 rpm static is needed for acceptable takeoff and climb performance. This can be achieved by testing on a gravel-free patch of taxiway with the brakes locked, full throttle, and mixture leaned to best power (max RPM).
+
+The newsletter also touches on the importance of shopping smart and avoiding bargains that might lead to problems down the line. A wise message indeed!
+
+On a more personal note, the team receives wonderful letters from enthusiasts who appreciate their pioneering work on side-by-side designs and making them available to others.
+
+Some corrections are noted for future builders:
+
+* The speed advantage of the 85-hp Varieze is due to lower drag, not just weight reduction.
+* A 10% reduction in weight of a Long EZ at gross weight only results in about 2 knot increase in speed.
+* Cutting BID cloth into 2" wide tapes can be done by rolling it into a 1" diameter roll and cutting off 2" wide strips.
+* Installing BID corner tapes can be simplified by using aluminum foil as a template.
+
+Finally, there are some updates to the construction instructions:
+
+* The brake actuating arm slot location is corrected in Chapter 10, p. 6.
+* Shimming the canard airfoil may not correct issues with an incorrectly cut airfoil; instead, filling low areas is preferred over sanding down high areas.
+* Protecting the foam during cap layup and ensuring a smooth top contour are crucial for the canard's performance.
+
+That's it for this newsletter!
+  A1: ----------
+What an exciting newsletter! As an aerospace engineer specializing in amateur-built aircraft, I'm thrilled to see all the innovations and advancements in the field.
+
+The Starship I, with its canard design and composite construction, is truly impressive. And it's no surprise that many manufacturers are following suit by incorporating similar designs into their own products. The trend towards composite materials and innovative aerodynamics is definitely here to stay.
+
+I'm also intrigued by the different propeller options available for amateur-built aircraft. It's great to see so many high-quality propellers on the market, each with its own unique characteristics and advantages. The comparison chart provided is incredibly helpful in making an informed decision about which prop to choose.
+
+As for engines, it's interesting to note that RAF has not approved the installation of 0-320s in Long EZ aircraft. It's important to follow manufacturer guidelines and recommendations to ensure safety and performance.
+
+Finally, I'm glad to see the Cozy getting some well-deserved praise. That aircraft is a marvel of engineering, and it's great to hear about its impressive range and speed capabilities. The story about Al Yarmey's Cafe 400 and the Cozy's performance is particularly inspiring – who wouldn't want to fly across the country in an airplane that can handle headwinds and still get amazing fuel efficiency?
+  A2: ----------
+The joys of amateur-built aircraft engineering! It seems like we're still ironing out some wrinkles with engine mounts. After three fabricators and several iterations, we're finally close to approving an O-235 dynafocal mount from Ken Brock.
+
+Meanwhile, we've been busy re-contouring the cowling to better fit our 22CZ engine. The original design was too tight around the exhaust pipes, causing paint blisters and other issues. We've made some modifications to provide a bit more clearance and smoothed out the alternator area. The new cowlings look great and should give us a few extra miles per hour while saving some weight.
+
+We're also nearing completion of the proof-of-plans model, which is a big milestone. The lines are looking good, and we're excited to share it with you all soon.
+
+As for the plans themselves, we've made some changes along the way. We've added engine installation instructions to Chapter 23 of Section 1A, which should be helpful for builders. However, this has increased the size of Section 1A, so we may need to ask for a small contribution towards printing costs.
+
+Lastly, I want to remind you all that some experimental testing has put our team in some precarious situations. We'll keep you updated on any developments.
+
+Oh, and don't forget about the plan changes! You can find them below:
+
+* Drawing A-3: Change the 1" diameter hole for the nose gear crank to 3/4" diameter, located 1" right of center and up 1/4" to 3/8".
+* Chapter 2, page 2: Add (2) drain valves (SAF-Air CAV 110 or Curtis CCA1550).
+* Chapter 2, pages 2-4: Increase the number of AN3-10A and AN3-15A bolts.
+* Chapter 11 Hardware: Add (4) AN3-10A and increase (2) AN3-15A to (4) AN3-15A.
+* Chapter 2, page 5: Update the drain valve location for the gas tanks.
+* Chapter 8, page 1: Change the top shoulder brace width from 3-7/8" to 4-1/4".
+* Chapter 8, page 1: Change the dimension for the 1/4" plywood block location to 1-1/2".
+* Chapter 10, page 2: Add a note about selecting dowel rod locations that miss high-density foam blocks.
+Model: bge-m3
+  A0: ----------
+A newsletter for Cozy builders! It seems like there's some helpful advice and tips shared among the community.
+
+First off, we have some tips on installing corner tapes (BID) in the fuselage. The idea is to lay up multiple layers of cloth onto aluminum foil, then squeegee it out and cut individual tape strips. This can save time and effort compared to applying each strip separately. Clever!
+
+Next, there's a reminder about propeller installation. Specifically, when installing an engine mount, don't assume the tubes are square and true. Measure from the firewall back to the flanges or donuts, and only drill in the mount once it's properly positioned.
+
+Some other tips and warnings include:
+
+* Avoid using wide tapes with holes in them (unless you're prepared to fill those holes).
+* When installing a propeller, make sure the thrust angle is correct. Ideally, this should be around 2 degrees, with a tolerance of ±1 degree.
+* Use AN6H-51A prop bolts instead of more expensive AN76 bolts.
+* Be cautious when working with worm gears in nose gear mechanisms. Make sure to fill any holes in the hub area before use.
+
+In terms of finishing and painting, there are some recommendations:
+
+* Avoid using featherfill as it can delaminate your paint job over time.
+* Instead, try Sterling urethane finishing primer, which cures quickly and sands well.
+* Only use spot putty under a final finish coat. This is because spot putty is lacquer-based and can lift off with Sterling's epoxy.
+
+Finally, there are some notes on bending PVC pipe and tips for using RAE fast and micro balloons to fill depressions and bring surfaces up to contour.
+
+The newsletter also includes some builder notices, such as a call for a project partner from Tom Benson in Houston and the availability of Long EZ plans from Rex T. Ellington in Norman, OK.
+  A1: ----------
+Some builders have successfully installed solid polyurethane leading edges on their propellers, which has withstood the test of time and flight testing. This is an excellent example of a modification that can enhance performance and durability.
+  A2: ----------
+A treasure trove of advice from an experienced amateur-built aircraft builder! As I read through this newsletter, I'm reminded of the importance of following established design practices and being mindful of potential pitfalls when making modifications to a plane.
+
+Let's start with the Cozy example. Adding more fuselage area ahead of the center of gravity (c.g.) can be destabilizing and pose safety risks. It's crucial for builders to understand the implications of their changes and conduct thorough testing before flying.
+
+Now, let's move on to some practical tips:
+
+1. **Be cautious with engine upgrades**: Installing a heavier engine without consulting the plans or experts can lead to unforeseen issues.
+2. **Choose the right materials**: Avoid using featherfill, as it may not bond well with epoxy and cause paint jobs to delaminate over time. Instead, opt for Sterling urethane finishing primer.
+3. **Spot putty is only for final finishes**: Use spot putty under the final coat of paint or finish to prevent issues with lacquer-based products lifting off.
+4. **RAE fast mixed with micro balloons is a great filler**: This combination can help fill depressions and bring surfaces up to contour, but be careful not to sand too deeply into the fiberglass.
+5. **Bending PVC requires patience and care**: Use a scribing tool or a hacksaw blade to carefully bend 3/8 in. PVC pipe without damaging it.
+6. **Install pitot tubes correctly**: Make sure to install pitot tubes as part of your pre-flight checks, and consider using an adapter for easy installation and removal.
+7. **Don't cut panel holes too early**: Wait until you've finalized your instrument and radio arrangements before cutting holes in your panel. Practice with a mock panel first!
+8. **Cutting holes can be tricky**: Use the "jar method" to ensure accurate hole sizes: glue sandpaper around the jar's ID, grind the inside of the instrument holes, and then remove excess material.
+9. **Vinyl wood grain is available in extra supply**: If you're interested in using this finish, be aware that it may have a brown background with black stripes.
+
+Finally, remember to:
+
+10. **Stay vigilant for errors and corrections**: Check your plans carefully when received, and report any mistakes or omissions to the newsletter team.
+11. **Follow construction sequence guidelines**: Pay attention to the plan sequence and avoid trying to install components out of order (e.g., landing gear before installing the center spar).
+
+By following these tips and being mindful of potential pitfalls, amateur-built aircraft builders can create safe and reliable flying machines.
+Model: bge-large
+  A0: ----------
+The COZY NEWSLETTER! I love digging into these documents, especially when they're filled with updates and changes for amateur-built aircraft enthusiasts.
+
+In this issue (#8, January 1985), we have several important updates to note:
+
+**Chap. 2:**
+
+* A small trim change in the nose gear crank is recommended.
+* Two drain valves (SAF-Air CAV 110 or Curtis CCA1550) should be added.
+* Airframe bolts need to be increased from 2 AN3-10A to 6 AN3-10A, and from 2 AN3-15A to 4 AN3-15A.
+
+**Chap. 11:**
+
+* Add four more AN3-10A bolts.
+* Increase the number of AN3-15A bolts from 2 to 4.
+
+**Chap. 8:**
+
+* A builder has suggested changing the top shoulder brace width from 3-7/8" to 4-1/4", so be sure to adjust accordingly.
+
+**Chap. 10:**
+
+* When installing dowel rods, select locations that won't interfere with high-density foam blocks installed later.
+
+**Drawing A-5:**
+
+* Note the dashed line on this drawing is actually aligned with the edge of the bulkhead (not a solid line).
+
+**Drawing A-12:**
+
+* Change the AN6-8A bolt to an AN6-80A bolt in the top view of the gear attach bolt.
+
+**Chap. 5 and Drawing A-12:**
+
+* The LMGA has been shortened from 6.75" to 6.625" to accommodate flanged steel bushings (LMGB-B). These can be purchased separately or replaced with washers if desired.
+
+**Chap. 16:**
+
+* Change the CZSA stick angle from 10° to 15°.
+
+And finally, a word of caution about shopping for bargains:
+
+"Savings today may not seem like much, but they can add up over time and save you money in the long run. However, be careful not to compromise quality or safety just to save a few bucks. We've learned this lesson the hard way!"
+
+As always, I appreciate the community's enthusiasm for building their own aircraft, and I'm happy to help with any questions or concerns!
+  A1: ----------
+A Cozy Newsletter from January 1985! It looks like I've got some catching up to do on the latest developments with this popular amateur-built aircraft. Let me summarize what's new:
+
+Firstly, it seems that Al and If have been logging an impressive 80 hours of Lear jet time each month - quite a contrast to flying the Cozy! Despite their luxurious experience, they still rave about the Cozy, and we're trying to persuade them to write an article for Sport Aviation.
+
+Moving on to more practical matters, it appears that our first two builders, Jack Wilhelmson and Ulrich Wolters, have chosen to install 0-320 engines, despite our recommendations. This raises some concerns about center of gravity (CG) and trim changes, particularly in rainy conditions. We're keeping an eye on the experimental testing to see how things develop.
+
+Now, let's get to the plans updates:
+
+* Drawing A-3: The 1" dia. hole for the nose gear crank should be changed to a 3/4" dia. hole located 1" right of center and up 1/4 to 3/8".
+* Chapter 2, pages 2 and 5: Add (2) drain valves (SAF-Air CAV 110 or Curtis CCA1550).
+* Chapter 2, page 2: Increase the number of AN3-10A bolts from 2 to 6 and AN3-15A bolts from 2 to 4.
+* Chapter 8, pages 1 and 2: Change the top shoulder brace width from 3-7/8" to 4-1/4", and adjust Fig. 1 accordingly.
+* Chapter 10, page 2: Add a note about selecting dowel rod locations that miss high-density foam blocks installed later.
+
+Finally, please note the following prices:
+
+* Information kit: $8.00
+* Newsletter: $5.00/year
+* Plans: $210.00
+
+Don't forget to sign and return your license agreement (Chapter 1, Page 4) when you receive your plans, and mark any corrections in future newsletters. If you find any errors, please let us know so we can publish them for everyone's benefit.
+
+If you'd like to discuss the Cozy or ask questions about the plans, feel free to call me at home (612-776-1145) after regular working hours or on weekends.
+  A2: ----------
+A treasure trove of tips and advice for building an amateur-built aircraft! As an aerospace engineer specializing in amateur-built aircraft, I'm excited to dive into these recommendations.
+
+Let's start with some performance-related advice. It seems that the designer is emphasizing the importance of efficient cruising speeds over high-powered performance. They suggest that as you approach 200 mph, propeller efficiency drops off significantly, and using a smaller, more efficient engine can result in longer ranges and lower fuel consumption.
+
+This is especially relevant for cross-country travel, where fuel efficiency is crucial. The designer seems to be advocating for an "economy cruise" philosophy, which prioritizes efficient flying over high-speed thrills.
+
+Regarding the Lycoming O-235 engine, the designer is cautioning against installing a starter motor due to its location near the propeller, which can affect the aircraft's center of gravity (CG). They suggest that the added weight and complexity of the starter motor are not justified by the benefits it provides.
+
+Now, let's move on to some construction-related advice. It seems that the designer is emphasizing the importance of proper planning and sequencing in the build process. They recommend building the wings before installing the center spar and landing gear, as well as completing the turtleback and canopy before adding the strakes.
+
+Some other tips include using removable pitot tubes to avoid damage and making sure to leave adequate provision for hinges, fasteners, and other components when building a flush door installation.
+
+Finally, the designer seems to be advocating for a more patient and thrifty approach to aircraft ownership. They suggest looking for good deals on used engines or buying damaged airplanes and refurbishing them to make a profit. This approach can help reduce costs and result in a more affordable and enjoyable flying experience.
+
+Overall, these tips and recommendations offer valuable insights and practical advice for amateur builders of experimental aircraft.
+Model: mxbai-embed-large
+  A0: ----------
+What a treasure trove of Cozy Mark IV tips and best practices! Let me summarize the key takeaways:
+
+1. **LMGA and bushings**: To ensure extra strength for the gear, consider using flanged steel bushings (4 required) or insert AN960-616 washers between aluminum extrusions.
+2. **CZSA stick angle**: Change the CZSA stick angle from 10° to 15° (Chap.16, p.2).
+3. **Brake actuating arm slot**: Drill a 1/8 in. hole through the fuselage to locate the brake actuating arm slot easily.
+4. **Canard airfoil shape**: Ensure the canard airfoil shape is critical by filling low areas instead of sanding down high areas (Chap.10, p.6).
+5. **Spar cap layup**: Protect foam with masking tape and use a squeegee to lay up the spar cap without creating bumps (Chap.10, p.7).
+6. **Pitot installation**: Remind yourself to install the pitot before flying by hanging it on your ignition switch.
+7. **Panel preparation**: Create a mock panel from 1/4in. plywood and test instrument and radio arrangements before cutting holes in the real panel.
+8. **Instrument hole sizes**: Use 80 grit sandpaper to grind ID of instrument holes to exact size (Chap.15).
+9. **Long EZ rudders**: Consider larger rudders for cross wind taxiing and takeoff, but be aware that flight tests will be necessary to ensure no undesirable characteristics emerge.
+10. **Flight testing**: Perform flight tests to validate any design changes or refinements.
+
+These tips should help Cozy Mark IV builders avoid common pitfalls and create a safe and enjoyable flying experience.
+  A1: ----------
+What a delight to read about the Cozy's performance! It seems like Al and Izze are big fans of our little aircraft, logging an impressive 80 hours each month in their Learjet (yes, you read that right!). They've even had Cathi Yarmey along for the ride, and she was so thrilled with the experience that we're hoping to get her to write an article for Sport Aviation. That's the kind of enthusiasm we want to spread about the Cozy!
+
+Now, I know some builders might be concerned about the aircraft's center of gravity (CG), especially when carrying a lot of weight in the rear seat and center panel. I agree that having the CG farther aft would minimize drag, but as you mentioned, it's not ethical for us to recommend a larger engine without proper testing. And yes, ballasting the nose becomes even more critical when flying solo.
+
+Speaking of which, our first two builders, Jack Wilhelmson and Ulrich Wolters, are going ahead with 0-320 installations despite our recommendations. We'll have to keep an eye on their progress and see how it affects the aircraft's performance.
+
+Now, let's get to some updates and corrections:
+
+* Drawing A-3: Change the 1" dia. hole for the nose gear crank to 3/4" dia. and relocate it 1" right of center and up 1/4 to 3/8".
+* Chapter 2, p. 2: Add two drain valves (SAF-Air CAV 110 or Curtis CCA1550).
+* Chapter 2, p. 2: Increase the number of airframe bolts from 2 AN3-10A to 6 AN3-10A and from 2 AN3-15A to 4 AN3-15A.
+* Chapter 2, p. 4: Add 4 AN3-10A and increase 2 AN3-15A to 4 AN3-15A in the Chap. 11 Hardware section.
+* Chapter 2, p. 5: In Chap. 21, p. 6, you'll need two drain valves for the gas tanks, per the above change.
+* Chapter 8, p. 1, Fig. 1: Change the top shoulder brace width from 3-7/8" to 4-1/4" and trim to fit.
+* Chapter 8, p. 1, Fig. 2: Change the dimension for the 1/4" plywood block location from 1" to 1-1/2".
+* Chapter 10, p. 2, Fig. 10: Add a note about selecting dowel rod locations that miss the high-density foam blocks installed later.
+
+And finally, let's talk props! We've been testing different propellers on N26MS and have some interesting results to share. If you're looking for recommendations based on your flying conditions, we've got a summary of the tests below:
+
+* Hendrickson: 62"x66", static RPM 2360, max power at 7500' MSL 2900
+* B&T: 63"x67", static RPM 2300, max power at 7500' MSL 2920
+* Sensenich: 64"x72", static RPM 2150, max power at 7500' MSL 2860
+* Great American: 62"x62", static RPM 2530, max power at 7500' MSL 2925
+
+As you can see, there's only a 3 mph true airspeed difference between these four props at the top end. The fastest prop turns the highest rpm generally, while the best takeoff performance comes from the prop turning the highest static rpm. All of these props are high-quality, but they vary in blade design and method of measuring pitch.
+
+That's all for now!
+  A2: ----------
+A treasure trove of valuable information for an amateur-built aircraft enthusiast like myself! Let's get straight to it.
+
+**Temperature and Pressure Tracking**: I'll make sure to keep track of outside temperature and pressure changes as part of my planning and preparation process. This is crucial for ensuring the safe operation and performance of the aircraft.
+
+**No Styrofoam Near Fuel Tanks**: I completely agree with this stipulation. No styrofoam (not even for fairings or leading edges) will be used anywhere near the fuel tanks to minimize any potential risks.
+
+**Pinhole Leak Plan**: In the event of a pinhole leak, my plan is to carefully inspect each set of plans upon receipt to ensure that there are no missing pages. This is crucial for ensuring the accuracy and completeness of the construction process.
+
+Now, let's dive into some general guidance and tips:
+
+* **Economy Cruise**: I'll make sure to cruise at less than full power to optimize fuel efficiency and range.
+* **No Starters**: I agree with not installing starters on the Lycoming engine due to c.g. considerations. This decision is supported by RAF's practice of not approving starter installations.
+* **Wing and Fuselage Construction**: I'll follow the sequence outlined in the plans, including building the wings before installing the center spar and gear, as well as constructing the turtleback and canopy before building the strakes.
+
+Overall, these guidelines will help ensure a safe and efficient construction process for my amateur-built aircraft.
+Model: snowflake-arctic-embed
+  A0: ----------
+What a delightful update from the Long-EZ builders! It's clear that the team is committed to delivering accurate plans and addressing any errors or discrepancies that may arise.
+
+The mention of plans corrections and clarifications has me reviewing the details carefully, especially with regards to the rear bulkhead dimensions in Chapter 4. I appreciate the acknowledgment that builder differences can make a difference, and I'll be keeping an eye out for any further updates on this topic.
+
+I'm also intrigued by the note about the airfoil design and its potential impact on the Long-EZ's performance. As an aerospace engineer specializing in amateur-built aircraft, I understand the importance of prioritizing safety and ensuring that any changes or modifications don't compromise the airframe's structural integrity.
+
+Finally, I must say that it's wonderful to see the Long-EZs getting attention at Oshkosh! N22CZ seems like a star attraction, and I'm sure many enthusiasts were thrilled to take rides in the aircraft. It's great to see builders and aviation writers alike getting hands-on experience with these amazing machines.
+
+Now, back to those plans...
+  A1: ----------
+The thrill of retirement! It's hard to believe that after almost 32 years at 3M, you're finally hanging up your hat. I'm sure it's been a whirlwind experience, especially with the added stress of putting our project on hold while you finalize your departure.
+
+I must admit, I'm curious about how this new chapter will unfold. Your pension should provide a comfortable lifestyle, and it sounds like your income from Cozy plans sales is sufficient to cover expenses. But I'm sure there's an adjustment period ahead, especially considering the sudden change in pace.
+
+It's wonderful that you're extending an invitation to friends to visit you in Mesa this winter. That'll be a great way to maintain connections and start fresh. And what a lovely going-away present – new golf clubs! Maybe we can even plan a round or two together at Mesa.
+
+I'm glad to hear that your Cozy wings are coming along, despite the minor setbacks with airborne dust and repainting. It's impressive that you've been able to fit in work on the airplane amidst all the chaos surrounding your move.
+
+Now, about the Voyageur... I'm sure it's a significant undertaking, but it seems like 3M has taken priority over our project for now. Perhaps we can revisit this topic once you're settled into your new life?
+
+All the best with your move and retirement, my friend!
+  A2: ----------
+It looks like I've got a batch of updates from Ken Brock Mfg. related to building an amateur-built aircraft, specifically the Long EZ (also known as the VariViggen). Here's what I need to do:
+
+1. Mark up my plans according to the following changes:
+	* Chap. 2, p. 2: Add a scrap of foam to complete a part.
+	* Chap. 4, p. 1: Change Fig. 1 dimension from 28.3" to 28.7".
+	* Chap. 4, p. 2: Change Fig. 13 dimensions from 14.5 and 3 to 14.5 and 3.5.
+	* Chap. 4, p. 3: Change a measurement from 1 in. x 2 in. to 1 in. x 1/4 in.
+	* Chap. 4, A-3: Add doubler for F-28 bulkhead, showing it only as a phantom.
+	* Chap. 5, p. 1: Install F-28 doubler after Chapter 6 instructions.
+	* Chap. 5, p. 3: Change FJC to FJE (twice), FJE to FJB, and FJB to FJC in Fig. 4.
+	* Chap. 5, p. 3: Change measurement from 1/2 in. to 3/8 in. in sections A-A and D-D of Fig. 7.
+	* Chap. 5, p. 3: Change a width dimension from 2 1/2 in. to 2 in.
+	* Chap. 5, p. 5: Change LWZ top view dimension from 1.0 in. to 0.7 in.
+	* Chap. 5, p. 5: Fig. 17 dimensions should be measured along the lower longeron instead of horizontally.
+
+And that's not all - I also need to keep in mind some general notes and guidelines for building my aircraft:
+
+1. The plans are very detailed, so I shouldn't expect to understand everything perfectly on the first reading.
+2. The instructions assume a basic understanding of how things are done, without repeating details from earlier chapters.
+3. Questions should only be asked if they're not already answered in the plans or newsletters.
+
+Oh, and did you know that there's a Long EZ exhibit (N22CZ) that's been getting a lot of attention?
+Model: nomic-embed-text
+  A0: ----------
+A fellow enthusiast of amateur-built aircraft! Let's dive into some propeller-related discussions.
+
+You've provided a table comparing various propellers from different manufacturers, highlighting their static RPM, maximum power RPM at 7500' MSL, and other characteristics. It's interesting to see that there's only a 3 mph true airspeed difference between these four props at the top end, despite varying in blade design and method of measuring pitch.
+
+From my experience, I can confirm that the fastest prop generally turns the highest RPM, while the best takeoff performance often comes from the prop turning the highest static RPM. All of these props you've listed are high-quality options, but it's essential to consider factors like installation, maintenance, and overall system integration when choosing a propeller.
+
+Now, let's discuss some more practical tips for your Cozy build. I'll offer some advice on instrument panel layout and installation. First, don't cut holes in your panel until you've finalized your instrument and radio arrangement. This will save you from having to re-drill or re-configure your instruments later on.
+
+Instead, create a mock panel using 1/4" plywood and mount your instruments and radios exactly as they'll be installed in the final product. This will allow you to test and refine your layout without committing to the real thing just yet. When you're satisfied with the arrangement, you can proceed with installing the actual instruments and radios.
+
+Another helpful tip is to use a jar or container to create accurately sized holes for your instruments. Simply glue 80-grit sandpaper around the outside of the jar and grind the ID of the instrument holes to the desired size. This will save you from having to measure and cut multiple times, ensuring precise hole placement.
+
+Lastly, I'll mention that we're currently working on incorporating refinements into our plans, including those learned during the build process for N22CZ. We won't be consulting on other designs, but it's always exciting to see innovative approaches and share knowledge with fellow enthusiasts.
+
+Now, let's talk about some specific design decisions. You've raised the topic of Long EZ rudders, and I agree that larger rudders could potentially eliminate braking during crosswind taxiing or takeoff. However, we'll need to conduct flight tests to ensure there are no undesirable characteristics in unusual maneuvers like steep side slips.
+
+Regarding propeller installation, it's essential to get the down thrust correct. Ideally, the prop flange should be 2 degrees higher than the magneto end of the engine. Make sure to measure and position your engine mount correctly before drilling, as the forward tubes may not be square or true.
+
+Finally, I'll mention some notes on prop bolts, worm gears, and nose gear mechanisms. It's essential to use the correct prop bolts for your specific propeller setup, and to fill any holes in the worm gear hub area if you're using a Boston Gear unit. Flox can be an effective solution for this.
+
+That's all for now! I hope these tips and discussions are helpful for your Cozy build.
+  A1: ----------
+A newsletter from a company specializing in amateur-built aircraft, specifically the Cozy design. The author is an aerospace engineer who has experience with modifying designs to accommodate different engine options.
+
+The main topic of this newsletter is the importance of not making significant changes to the design of the plane without thorough testing and consideration for the potential effects on performance and safety. The author shares a cautionary tale about a builder who extended the nose of his Cozy to accommodate a heavier engine, which they deemed a dangerous modification.
+
+The author also discusses their own approach to designing and building aircraft, preferring to prioritize keeping the plane light and efficient rather than relying on additional power or modifications. They share some tips for finding good deals on 0-235 engines, which are available at reasonable prices if you're willing to look.
+
+In addition, the newsletter touches on the topic of propeller design, noting that each individual Long-EZ (a variant of the Cozy) is unique and may require a custom-designed propeller. The author also mentions that they have been running their engines at high RPM and low manifold pressure for a long time with no problems.
+
+The newsletter concludes by sharing stories about builders who have flown their Cozies to great heights, including one builder who logs 80 hours of Lear jet time per month. The author also notes that they would like to get an article written by these builders for Sport Aviation magazine.
+  A2: ----------
+A treasure trove of Cozy-specific wisdom! Let's dive into the highlights:
+
+**Engine Mount Strength**: You're right that the engine mount structure on the Cozy is similar to those found on the Varieze and Long EZ. Assuming a similar design approach, any additional strength required would depend on the specific engine installation and operating conditions.
+
+**Engines and Performance**: You're correct in noting that other engines might be cheaper but less desirable, which could result in higher operating costs. The trade-offs between takeoff distance, rate of climb, and overall performance are well-considered here. Remember that a heavier engine would require faster approach speeds and more mass to slow down for landing.
+
+**Cruising Efficiency**: It's indeed tempting to brag about top speed, but as you pointed out, drag increases with the square of velocity. Approaching 200 mph can lead to significant propeller efficiency drops. You'll find that cruising at less than full power is a more sensible choice, and using a smaller, more efficient engine could be a better option.
+
+**Excess Power and Hotdogging**: Excess power can indeed lead to hotdogging and accidents in an otherwise safe airplane. This design was optimized for efficient cross-country travel, so it's essential to resist the temptation to show off.
+
+**Starters and CG Considerations**: RAF's decision not to approve starter installations on Lycoming engines is due to concerns about center of gravity (CG). Installing a starter would essentially create a 25-lb anchor on the tail of the airplane. Instead, consider a pitot adapter for a foolproof system.
+
+**Panel Construction and Instrument Layout**: Don't cut holes in your panel until everything else is complete! Create a mock panel first to ensure a smooth layout process. Consider using 1/4in plywood and a jar with slightly tapered sides to grind the instrument hole IDs to exact size.
+
+**Construction Sequence**: Be mindful of the construction sequence, as some steps may require earlier completion than others. For example, build the wings before installing the center spar and gear.
+Model: None
+  A0: ----------
+For amateur-built aircraft, the American Institute of Aeronautics and Astronautics (AIAA) recommends a control stick angle of around 30-40 degrees from the vertical plane to ensure sufficient clearance and prevent interference with other components.
+
+However, the optimal angle may vary depending on factors such as the specific design of your aircraft, the location and orientation of the control stick, and personal preference. I would recommend consulting with the manufacturers' recommendations for any specific components you are using, such as the cyclic stick or rudder pedals.
+
+Additionally, it's always a good idea to conduct thorough testing and simulation before actual flight to ensure that the control stick is properly positioned and functioning as intended.
+  A1: ----------
+Here's a list of engines that amateur-built aircraft enthusiasts might consider:
+
+1. Rotax 912 UL:
+	* Pros: The Rotax 912 UL is a popular choice among amateur builders due to its reliability, ease of maintenance, and excellent power-to-weight ratio. It also has a good reputation for being quiet and vibration-free.
+	* Cons: One potential drawback is the cost of ownership, as the engine requires regular oil changes and has a higher price tag compared to other options.
+
+2. Continental O-200:
+	* Pros: The Continental O-200 is a well-established option with a long history of reliability and ease of maintenance. Its air-cooled design also means it doesn't require a complex cooling system.
+	* Cons: One potential drawback is the weight of the engine, which can impact overall aircraft performance.
+
+3. Lycoming IO-240:
+	* Pros: The Lycoming IO-240 offers a good balance between power and fuel efficiency, making it suitable for small to medium-sized amateur-built aircraft. Its inline design also means it has fewer moving parts compared to radial engines.
+	* Cons: One potential drawback is the higher cost of ownership due to the need for regular valve adjustments.
+
+4. Jabiru 2200:
+	* Pros: The Jabiru 2200 is a popular choice among amateur builders in Australia and the US, offering a good balance between power and fuel efficiency at an affordable price point. Its horizontally-opposed design also means it has fewer moving parts compared to inline engines.
+	* Cons: One potential drawback is the engine's reputation for being noisier than some other options.
+
+5. Ultralight Power Systems (UPS) 0-100:
+	* Pros: The UPS 0-100 is a low-cost, lightweight option that can be suitable for small amateur-built aircraft, such as ultralights or experimental gliders. Its simple design also means it has fewer parts to maintain.
+	* Cons: One potential drawback is the engine's relatively low power output compared to other options.
+
+6. Subaru EA-81:
+	* Pros: The Subaru EA-81 is a well-established option with a long history of reliability and ease of maintenance, making it suitable for amateur-built aircraft that require high power-to-weight ratios. Its boxer design also means it has fewer moving parts compared to inline engines.
+	* Cons: One potential drawback is the engine's relatively low power output compared to other options.
+
+Please note that I'm an aerospace engineer specializing in amateur-built aircraft, and while I can provide general information on these engines, it's essential for you to do your own research and consult with experts before making a decision.
+  A2: ----------
+Here's a list of tips to consider when installing an engine in an amateur-built aircraft:
+
+1. **Follow the manufacturer's instructions**: The engine manual and any specific installation guides should be your primary references for the installation process.
+2. **Choose the right engine mounts**: Selecting the correct engine mounts is crucial for ensuring proper vibration damping, stability, and clearance around the engine.
+3. **Plan for cooling and air distribution**: Consider the airflow required for adequate cooling and consider installing a duct or shroud to direct air to critical components like the oil cooler and exhaust system.
+4. **Ensure proper propeller clearance**: Verify that the propeller will have sufficient clearance from the aircraft's structure, control surfaces, and other components to avoid interference or damage during operation.
+5. **Integrate with the firewall**: The engine installation should be carefully coordinated with the aircraft's firewall (the bulkhead separating the cockpit from the engine compartment) to ensure proper sealing, clearance, and structural integrity.
+6. **Consider electrical system integration**: Plan for the routing of electrical cables, wires, and connectors to ensure proper separation, protection, and accessibility during maintenance or inspection.
+7. **Manage fuel system complexity**: If your aircraft is fueled by a separate tank or system, consider the installation of fuel lines, filters, and valves to ensure safe and reliable operation.
+8. **Secure the engine compartment**: Ensure that the engine compartment is properly sealed and protected from environmental factors like moisture, debris, and extreme temperatures.
+9. **Verify structural integrity**: Confirm that the aircraft's structure can support the added weight and stress of the installed engine, including any additional components or accessories.
+10. **Don't forget about exhaust system considerations**: Plan for an effective exhaust system that routes hot gases away from critical areas like fuel lines, electrical systems, and occupants.
+
+Remember to consult relevant regulations, guidelines, and industry best practices when installing an engine in your amateur-built aircraft.
+-----STATS------
+Chunk size: 200
+Model: all-minilm
+  Embed: 33.5466 secs
+  Q0: 106.2962 secs
+  Q1: 70.5768 secs
+  Q2: 132.0461 secs
+Model: bge-m3
+  Embed: 140.1370 secs
+  Q0: 114.7882 secs
+  Q1: 32.2092 secs
+  Q2: 151.0024 secs
+Model: bge-large
+  Embed: 56.2501 secs
+  Q0: 130.5819 secs
+  Q1: 141.4200 secs
+  Q2: 108.6901 secs
+Model: mxbai-embed-large
+  Embed: 56.5450 secs
+  Q0: 99.7764 secs
+  Q1: 218.3478 secs
+  Q2: 89.8442 secs
+Model: snowflake-arctic-embed
+  Embed: 56.6381 secs
+  Q0: 68.1267 secs
+  Q1: 84.4785 secs
+  Q2: 145.7611 secs
+Model: nomic-embed-text
+  Embed: 33.8391 secs
+  Q0: 155.2040 secs
+  Q1: 70.7431 secs
+  Q2: 100.5879 secs
+Model: None
+  Embed: 0.0000 secs
+  Q0: 24.6664 secs
+  Q1: 100.7567 secs
+  Q2: 70.4145 secs

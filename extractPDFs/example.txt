@@ -1,0 +1,329 @@
+COZY NEWSLETTER #87     Oct. 2004 
+Published quarterly (Jan., April, July, Oct.) by:  
+Co-Z Development Corp. 
+2046 No. 63rd Place Mesa, AZ 85215   Phone/Fax (480) 981-6401 Web page www.cozyaircraft.com
+ 
+Email: cozy@extremezone.com  
+Subscription rate:  $16.00/2 yrs. $20.00/2 yrs. OUS 
+(2-year renewals save us record keeping)  
+     As of January 1, 2004  Aircraft Spruce purchased the intellectual property (copyrighted plans, Construction Manuals, Owner’s Manuals, information kits , etc.) of Co-Z Development 
+and since that date, Aircraft Spru ce is the only one authorized to 
+sell Cozy plans and Construction Manuals, info kits, etc., but Co-Z Development will continue to provide builder support for the 
+Cozy airplanes.      The 3
+rd Edition Cozy Mark IV plans were updated with all 
+changes and corrections through newsletter #73. Since then, there have been no changes or correc tions of any significance, except 
+for revised canard incidence template drawings 80-3 and 80-4. These revised drawings will be included with each new set of plans, and extra copies may be obtained from Aircraft Spruce by sending them a stamped, addressed envelope.      The Cozy newsletter will continue to be published by Co-Z Development. It contains any plans corrections or changes, builder hints, information and updates about our suppliers, shopping info, first flight reports, and other news of interest to builders. It is the principle m eans by which we communicate with 
+builders and support their projects.      The latest copy of the newsletter and older copies of the newsletter, which we can no longer supply, are available on the Unofficial Cozy Web Page, http://www.cozybuilders.org/
+  and 
+also on a CD available at Aircraft Spruce. We will continue to answer telephone calls whenever we are home and personal letters as well, but please enclose a stamped, self-addressed envelope if you expect a reply. We encourage newsletter input from builders (letters and pictures) which would be of interest to other builders. 
+ “Cozy” and “Cozy Mark IV” are trade names of Co-Z 
+Development and are the names gi ven to airplanes built according 
+to the plans and instructions of Co-Z Development. Just because 
+you buy a set of Cozy or Cozy Mark IV plans, does not mean you have to build your airplane exac tly according to plans. It is an 
+experimental airplane and you can, in fact, make whatever 
+changes you desire. But then you have a new, untested design, and shouldn’t register or insure your airplane as a Cozy or a Cozy Mark IV.  
+AUTHORIZED SUPPLIERS  
+     Authorized suppliers are thos e suppliers we selected because of 
+their excellent reputation in the industry, whose parts and materials we proofed in our plans model and who agreed to supply the same parts and materials to our builders. 
+1) Basic Materials 
+Aircraft Spruce West  Aircraft Spruce East   Wicks Aircraft 
+Box 4000         452 Dividend Dr.         410 Pine St. Corona, CA 92880 Peachtree City GA 30269  Highland IL 62249 (909)372-9555       (770)487-2310            (800)221-9425  
+2) Metal Parts                 3) Fiberglass Parts Brock Mfg. Co.                 Feather Lite  
+11852 Western Ave.             1327 S State St,Arpt.             Stanton CA 90680                Ukiah, CA 95482     (714)898-4366                (707)462-2939                                      (707)462-3424 
+4) Canopy & Windows  5) Specialties      6) Exhaust Systems  
+Airplane Plastics Co.      B & C  Spec.       Custom Aircraft   
+9785 Julie Court            PO Box B          14374 Olde Hwy 80 Tipp City, OH 45371   Newton KS 67114   El Cajon CA 92021 
+(937) 669-2677           (316)283-8662     (800)561-1901 
+7) Propellors            8) Prop Hub Exten. 
+Performance Props     Sensenich Props       Saber Mfg. 
+Box 486       2008 Wood Ct.        3601 Nassau Ct. Patagonia AZ 85624  Plant City FL33567  Granbury TX 76049 (520)394-2059      (813)752-3711          (817) 326-6293  
+OTHER  PARTS WE  RECOMMEND:  
+     We can recommend the following items: 
+1) New and rebuilt  Lycoming engines.   Aerosport Power, 
+2965 Airport Drive, Kamloops, B.C. V2B 7W6 Tel (250) 376-2955, Fax (250) 376-1995. 
+2) Luggage pods.  Gary Hunter (Epoxy expert) writes. I 
+have been providing baggage  pods for Variezes and Long 
+Ezs for a number of years now. A few people have ordered them for the COZY. The standard pod is 6.5 ft. long and 12” dia at the fattest section. I am currently working on a slightly larger pod that will look proportionally better on the COZY. They aren't much longer, but they are 1.5" larger in diameter along their entire length. That doesn't sound like much, but they are noticeably larger. They will hold a lot more duffel style 
+baggage. Larger items, like golf bags, will fit much more easily. Incidently, for CG consideration, the tail section of the pod (24”) is not used for carrying luggage. But long, light items, like snow skis, can be carried in the tail section. The pods have a fairly flat bottom, so skis can ride on the bottom, and baggage sits on top of them in the front section. I anticipate completion of the molds in a month or two. Gary gluegaru@earthlink.net
+. 
+3) New TMX Engines.   Teledyne Mattituck Services, 410 
+Airway Drive, PO Box 1432, Mattituck, NY 11952, (800)624-6680. 
+4) Improved Rudder pedals  for lay-down brake cylinders,  
+adjustable both sides. Dennis Oelmann (319) 277-5996. 
+5) Electric speed brake actuator kit.  Wayne Lanza (772) 
+664-8953; wlanza@bellsouth.net 
+6) Switching and breaker panel . Wayne Lanza (772) 664-
+8953, www.CompositeDesignInc.com. 
+7) Fuel sight gages . Vance Atkinson (817) 354-8064. 
+8) Electric nose -lift. Steve Wright (615) 373-8764. 
+9) Electric nose-lift, Spring steel safety catch, and 
+improved MKNG-6 and NG-6 Pivots  with tapered roller 
+bearings. Jack Wilhelmson (843) 884-5061. 
+10) Electric pitch trim . Alex Strong (760) 254-3692. 
+11) Rebuilt flight instruments . Howard Francis (not a Cozy 
+builder) (480) 820-0405. 
+12) Antennas.  RST Jim Weir (530) 272-2203. 
+13) Teflon & Stainless Hinge Pins Replacement.  Gary Hall 
+(954)979-9494. 14) Nosegear crank ratchets.  Bill Theeringer (805) 964-
+5453. 
+15) Featherlite: Their email address is: fthrlite@pacific.net  
+Check there for latest prices.  
+ 
+BUILDER  HINTS  
+1) Extra M drawings.   Some builders have asked if they could 
+buy additional copys of the M-dr awings, to replace those they 
+have cut up. Cozy builder Kenne th Knevel, an architech by 
+profession, has arranged to supply Aircraft Spruce with extra copies. The neat thing is that  he has joined the drawings 
+together so that the bulkheads, jigs, templates and fuselage cross-sections are in one piece and no longer need to be pieced together. Order P/N 01-00570 from AS for $49.95.  
+2) Eyeball vents.  Bulient Aliev says that he found the best, 
+lightest and cheapest eyeball vents are from older model Mercedes. You can get them both for about $10 at a junkyard. 
+3) Eyeball vents.   Al Wick says he bought 2” plastic ones from 
+Spruce. Since they were too la rge cosmetically, he installed 
+them differently than specified. He counterbored the fiberglass panel for the flange to fit behind the panel and so 
+that only the eyeball was showing on the front of the panel. 
+4) Perfect contours:  Jean-Jacques Claus found a method to 
+make the final canard contour perfect per plans. He used the checking contour templates for the canard to cut out (hot wire) a block of styrafoam. Th en he stuck a large piece of 
+sandpaper to it and used it to give the canard a perfect contour over its entire length. The same thing worked fine for the elevators.  
+5) Metering pumps.  Russ Fisher says that he caps off the 
+nozzles of his metering pump with little plastic caps which protect the fiber-optic ports on a network device, because he 
+has a million of them, but fat nails could be used instead. If air can't get into the tube, then the hardner or resin can’t seep 
+back into the tank. It also pr events the fluid from leaking out 
+of the nozzle into your cabinet and makes your first pump as accurate as your fifth. If you use a nail, be sure to cut it very 
+short so it barely sticks into the tube. 
+6) Winter flying:  Ken Brimmer says he just got back from a 
+vacation in the warm sun, but he took off in 27 deg F with no heater. He has been flying this way for 11 years. He dresses in 3 layers, and as he flys south he strips off one layer at a time. This year he used foot warmers that he bought at Wallmart. He used them going down and they worked just fine. However, on the way back one got jammed as he was sliding his boot on. It worked fine in the air, but when he landed and pushed on the brakes, his toes went hard against the heat pad. The pad got quite hot. However he was on the ground and able to get his boot off quickly. In the air, it would have been a problem. He says the pads work fine as long as they are not bunched up, and keeps his feet nice and warm. 
+7) Winter flying:  Eric Westland says that a couple of year ago 
+he bought a “Winterseat”, which is essentially a 12v heated seat cover. He never tried it until recently when it was cloudy and cold (28 deg F). He already had on long underwear and insulated coveralls. He was very toasty during his one-hour flight, in fact too toasty. It didn’t have a thermostat, so he is planning to install one. It didn’t help much with his feet, but 
+only draws 4 amps and weighs almost nothing. It only cost $25. See www.12vautotech.com/winterseat.html. 
+8) MGS cost:  Dan Tomlinson reminds everyone that MGS is 
+priced based on 1 gallon of resi n and .45 gallon of hardner, 
+resulting in almost 1.5 gallons of epoxy. He says it wets out so well that it goes farther than Aeropoxy, making the effective cost about the same. 
+9) Data plates.  Brian DeFord says he took his to a local trophy 
+shop and they engraved it for him. He says it didn’t cost much and looks great. 
+ 
+OSHKOSH  
+     As we normally do, we left early for Oshkosh so we could 
+visit our kids in Minnesota for a week or so on the way. We can make it all the way from Mesa AZ to Duluth MN in one day, with one fuel stop in McCook NE. When we stopped for fuel in McCook, the FBO told us that Geo. W. Bush was also on his way to Duluth. We planned to arrive there about 3:30 pm, but flight service told us they were going to close the airport at 2:30 or 3:00, and you couldn’t be in the air anywhere withing a 30 mile radius. So we decided to land at St. Cloud MN, rent a car, and drive the rest of the way, because we were going to have  a family reunion in St. Cloud 
+in a few days anyway. After the festivities, we flew to Oshkosh and got there a few days before the show opened. We like to do that, to get our exhibit set up before all the semis show up.      The weather was pretty good, except for rain the last couple of days. A lot of builders stopped by. Cozys were coming and going. Our prototype N22CZ was moved from the museum to the main gate. In all, we counted 20 Cozys attended, not all at once, of course. Debbie Merrill displayed Tim Merrill’s Grand Champion N2269H at the John Deere exhibit, thanks to arrangements made by Norm Muzzy. Greg Richter’s jet Cozy (formerly Mazda Cozy) was on display in 
+AeroShell square.       Marc Zeitlin was the featured speaker at the Cozy forum, and did a great job. It was well attended. The Cozy banquet was also well attended—if I remember correctly, about 98 builders and wannabe builders were there. Thank you Kim and Darrell Lueck, who not only handled the banquet, but also relieved us for lunch each day.       We attended the program at the theater in the woods, where Burt and Mike showed movies of Space Ship 1’s record in 
+space. That was most interesting!      We left on the last day. We had to sneak between two fronts with some huge cumulonimbus to get out of Wisconsin and eastern Iowa. After that the weather wasn’t too bad, except for headwinds. Thank goodness for a fast airplane!      We stopped at McCook for an overnight, because we have 
+learned that the best time to cross the Rockies is in the early morning. We got an early 7:00 am start the next day.  We ran into clouds at La Vita pass, but went over the top and soon it was mostly clear. As in past years, both our airplane and engine performed flawlessly. We averaged about 190 mph TAS, burning about 8.5 gpm for the trip. About 10 miles out from Falcon, there was a lot of radio chatter with people overflying the field, shooting t ouch and gos, and arrivals and 
+departures. We tried several times to break in during pauses in the chatter, to announce our return from a 1700 mile trip and 
+get permission to land. After landing about 10:00 am at Falcon field (we gained 2 hours on the way) the tower exchanged terse words with us. In the opinion of the tower, we weren’t patient enough in wa iting our turn on the radio. I 
+guess they though we should have circled a while, but it was hot and I was tired after all that flying. After all, I am almost 80! Our 32
+nd Oshkosh is now in the books! 
+ 
+ACCIDENTS  
+     We don’t like accidents, but when they happen, we 
+investigate them as best we can , to determine the cause, and if 
+a design problem, make any necessary design changes, or if a builder or pilot error, report them to our builders/pilots so that others might not suffer the same fate.      There were two Cozy crashes in France in July. Our 
+information came from several sources, one of whom was Gerard Maurel, a Cozy builder /flyer from France who comes 
+to Oshkosh almost every year and we have gotten to know him quite well. This year he gave  us details of the crashes, and 
+had pictures of the first one. He said what both these crashes had in common was the builders had both purchased “molded” wings from Sc-aero in Bourges, France.       The first crash was in the beginning of July. Benoit Lecoq forwarded the information that he talked to the builder/pilot, JPP (Not sure who this is. Suspect one of Uli’s builders), who is recovering from his injuries. At a speed of 150 – 170 kts, he experienced strong vibrations and his canard started fluttering more than 50 centimeters (20 inches), and made a lot of noise. He cut the speed and the flutter stopped, in the meantime, the rudder was ripped off and he had to use full right stick to keep the plane level. He called the tower to say he was lowering the front wheel in preparation for an emergency landing in a colza 
+field (plants more than 4 ft. high). The damage was extensive. The airplane tipped over and one wing was torn off. The pictures Gerard showed me showed that the skin had almost completely delaminated off the upper winglet, and there was no evidence of micro on the foam . Also it appeared that the 
+reinforcing layup between the wing and the winglet was not as beefy as called out in the plans. There was only a suggestion of a lower winglet—not exactly resembling what is shown in the plans. Where the wing was ripped off at the end of the strake, the picture showed a person’s hand bending the spar cap—which I doubt one could do if it was as thick as shown in the plans. It was known that the rudder on this Cozy reflexed inboard past center, and it is known (Mike Melvill verifies this) that if the rudder on these airplanes reflexes past center, it will flutter at some speed. It is speculated that the cause of this accident was wings which were not built according to plans. Fortunately , there were no fatallities.  
+     Gerard did not have pictures of the second crash, because it 
+was more recent. He did describe it, however. The Cozy  F-pscf, flown by Saul Halter (one of Uli’s Cosy Classic builders) was observed to climb very steeply after takeoff. At about 100m (300 to 400 ft) it made a slight left turn, then rolled on the right wing, then did a roll and a dive at high speed.  He crashed in front of the helicopter hangar where the plane caught fire, as well as the local gas lines. The pilot was killed. His 7 year-old daughter was thrown clear and was in 
+very critical condition at the time of this report. Gerard told me that Halter was a very light-weight male, and his daughter 
+was also very light. He said the airplane had a constant speed prop and it had a ballistic parac hute mounted at the firewall. 
+With 2 light-weight people in the front, and that extra weight so far aft, it is speculated that  there was a very aft c.g. The 
+behavior of the aircraft suggests that the cause of this accident 
+was due to what we demonstrated in our plans-built Cozy Mark IV with no lower winglets and a c.g. that was too far aft. That was Gerard’s opinion as well. The crash was fatal to the pilot, and we don’t know the fate of the passenger at this time.      In our last newsletter, we warned about the danger of leaving off the lower winglets, and we have previously cautioned against allowing either or both rudders to travel inboard past neutral. Several builders, including Marc Zeitlin, 
+have experienced rudder flutter due to a rudder being reflexed 
+inboard, but fortunately it was not violent and they were able to stop the flutter before the rudder ripped off.   
+FIRST  FLIGHTS  
+     In the last 3 months, there were 5 first flights that we have heard about (all Lycoming powered this time): 1) Daryl and Kim Lueck 
+2) Michel Laroche 
+3) Don Herzstein 
+4) Robert Peplinski 
+5) Stan Pengelly 
+ Daryl and Kim Lueck wrote on 7/24/04:      Well, after 11 years, we did it. Cozy N797DL took off this afternoon for our first flight. I ended up doing it myself after spending 2.5 hours wth Chris Esselstyn in his Cozy III. I did 5 landings this morning with Chris, and it felt pretty good. Went to our hangar and got ready. Not a big crowd, just family. Then the local EAA guys starting hanging around. My tech counselor, Gene Zabler, came by. I went over our plan once more with the ground crew, and then taxied out. I never got the nose to rotate with my high speed taxi tests. That’s because I never gave it enough elev ator to do so. Today I gave 
+it the gas and hung on. The nose lifted off at about 60 to 70 kts. I did the classic over rota te, then lower the nose, then 
+raise it again. One more time to lower it, that was just to get the crowd on the ground nervous. By the time I was at mid-field, I settled down and off we went. I had intended on staying over the field, but before I knew it, I was a little west of the airport. I climbed up to 3K ft and held 110 kts. At 3K, I leveled out and reduced power to stay below 140 kts. All engine temps and pressures were good. The old “Lycosaurus” ran great. Thanks Aerosport Power!      I checked the controls, rudders and ailerons. The right rudder didn’t have the authority that the left did. The ailerons are still stiff (because the bearings are all new ????). I did 2 
+practice approaches and then decide d to head back to the field. 
+I made numerous calls back to my ground crew with temps and to let them know that everything was fine.      Back to the field I needed  to get into the pattern. Flew at 
+110kts to enter the pattern, slowed her down to 90 on downwind. A Falcon jet was coming straight in on the cross runway about 10 miles out. I announced that I was on final for the cross runway “first flight, first landing” and the Falcon pilot said “take your time. I’ll circle if I have too!” This was a Johnson Wax  jet, and I know Sam Johnson would have been 
+proud of his crews doing that.      The landing was pretty good. I raised the nose a little too much after getting her down, so there was a little bounce, but not bad.      Thanks to my family, Kim, my Dad, my son Steve, and daughter Jenny. My stepkids, Eric, Steph and Matt. They all helped with the glass and “white stuff”. Thanks to Ron Tremel for his help. Nat for the calls and emails and everyone on this list.       See you at Oshkosh…..no, I’m driving      D a r y l  a n d  K i m       R a c i n e ,  W I  Michel Laroche writes,    8/16/04      Good day Nat. Finally, after 12 years of patience, my Cozy took its maiden flight on Friday the 13
+th (not superstitious). 
+Having no one to fly it, I flew it myself. WHAT A FEELING!      The 45 minute flight went uneventfully. I would like to thank you for your support throughout this project and having designed such a great airp lane!  Michel Laroche 
+     S t - J a c q u e s ,  Q U  Gaetan Roy writes:    8/20/04      Yes, the first Cozy IV and the second Cozy flew successfully last week in Vald’Or (Quebec) Canada. Piloted by his owner, Michel Laroche.  He has accumulated already 9 
+hours on it and he is just thrille d with the plane. The plane 
+was meticulously done by the owner’s friend, Marc Lefebvre, “a Perfectionist” according to Michel over something like 12 
+years. A big “Cheer!” for Michel  & Marc.       Gaetan Roy 
+           Montreal, On Sept 7
+th, Michel wrote: 
+     In Canada we need to do 25 hrs instead of 40 before taking any passengers. I have now accumulated 25+ hours, so when my son who drove down 300 miles to see the Cozy, I took him for a ride.       On my last flight I heard a woooooouuuuuououou while descending from 9,500 ft for landing. IAS was 180 mph and I thought it was a whistling noise coming from the cockpit. I did not worry, as I thought it was my cockpit that was not well sealed. Finally, when I landed, I noticed I had lost a fuel cap 
+on the left wing! Fortunately, the fuel cap did not hit the propellor!      I have Ken Brock’s fuel cap and on my last fill up, as usual, I paid attention to make sure they were well locked in place. I have no idea what happe ned. I looked closely at the 
+fuel cap and did not see anythi ng that caaused this to happen. 
+The spring rod that holds the cap in place seemed to be 
+normal. I have a friend who has flown a Long EZ for the last 10 years and never had a problem with his Brock fuel caps. Now, did I do something wrong? I sure am questioning myself. I’m going to reorder a cap from Brock because I still have confidence in those, and most important, if it is to happen again, I know it will not go through the propellor. My caps do not have a safety chain, but do have a ground wire screwed to them as shown in th e plans.    Michel Laroche 
+           St-Jacques Don Herstein writes:    9/6/04      Today was the day. I picked up Vance Atkinson at Long Beach airport at 9:30 am, droppe d his stuff at my home, and 
+proceeded to Chino to introduce him to N82V.      They seemed to hit it o ff immediately. I showed him those 
+little things that only owner builders know, the particular 
+combination of switches and gauges unique to 82V. Vance took it all in stride, pre-flighted the bird, kicked the tires, climbed in, called “clear” and fired her up.      Vance asked the tower if he could do a high-speed taxi test the wrong way down 26L (8R), a 7,000 ft runway and, if all was OK, turn her around and take off. The temperature was on or about 100 degrees at high noon and he really didn’t want to mess around much on the ground with the new engine if all appeared OK. Tower said fine, he shot by in a high speed taxi, said all was OK and was cleared for takeoff. He had told us that he would hold her on th e ground until about the 2000 ft. 
+mark. Well, he was light with 24 gal of fuel and his 200 lb. body. That combined with the Hoffman CS prop launched him about 1200 ft down the runway. It was hard to estimate, but was well before the expected 2000 ft mark that we were stationed at.      What a thrill! I was happy that 82V was in such good hands, as she smoothly climbed out on its way to 45oo ft. over the airport. Vance was up for an hour as he tested her at slow and high speed, steep turns, as much as 90 degrees, and rung her out.      Tower gave Vance permission for a high speed low pass 100 ft above the active, a subsequent tight close in pattern, and a beautiful slow smooth landing, holding the nose up and letting it settle gently to the pavement.      After removing the cowlings and correcting a few squawks, Vance took her up ag ain in now gusty conditions, 
+greased on a beautiful touch and go, and then a final landing. Try as hard as they could, my friends could not wipe off the big grin on my face.      Vance is asleep now and I don’t have his notes in front of me, so I am going by memory. He reported approach to canard stall at 71 kts. Oil temperature was quite cool, around 160 degrees. CHTs were around 320 degrees with 20 degree deviations from average from all cylinders. The engine ran quite cool considering everything, letting me believe that my 5 hour run-in at Aerosport did set the rings. He flew 75 kts downwind and on final. He was impressed with the takeoff performance of the Hoffman CS prop.      Minor problems with some air in the left brake line, to a high idle (1100 rpm), some precession with the gyro compass, some intermittent trouble w ith the transponder. Most 
+important, N82V gave a very good accounting of herself. She 
+flew well, was very stable with excellent flight characteristics, flew cool, and according to Van ce, handled beautifully on the 
+ground. Apparently my errors on the left compensated for my errors on the right! Great day today! Tomorrow I’ll go up in her.     Don Herzstein On 9/10/04 Don writes:      Lots has happened since Vance first took up 82V on Monday. He subsequently checked me out and I now have several hours in it.      One mishap. I have now joined the nosedragger club. Minor cosmetic damage and back in the air in a couple of hours. First time I’ve come in gear up in 45 years of flying, mostly in retractables. Classi c case, change in procedure, 
+concentrating on other things, and did not GUMP on final.      I now know that the airplane  will take off just fine with the 
+airbrake down ( shame on you, Don!). It makes the engine 
+sound funny with kind of a knock-knock sound on climb out, which goes away as soon as the airbrake is retracted. Got to get used to the multibuttoned grips!      A lot of rust showed in my flying, due to my basically 5 year hiatus while I built 82V. Th e really nice thing about it all 
+is that I am now getting used to the aircraft with its light controls, speed, and slipperiness. So far, a very honest airplane with no vices that will come back to bite me, at least in forward and middle range c.g.s, and I now look at her as an aircraft, which flies and responds to my input like any other aircraft (except better). This is basically a plans-built airplane and it is obvious that Nat did his homework.      I did state a wrong figure from Vance’s first flight in my initial message. He did not approach canard stall at 71 kts, he unstuck and lifted off at that speed on first flight.      The combination of the lighter straight valve Lycoming 0-360 (modified to IO-360 by Bendix fuel injection) and Hoffmann CS prop appears to be a really sweet combination, so far very aggressive on acceleration and takeoff on a 100 
+degree + day at Chino (650’ elevation) with 40 gal and 430 lbs load in the front seat.      So far I have flown approaches at or about 75 kts with 40 gal fue and me (215 lbs) and 85 kts with 430 lbs in the front seat, same fuel. I like to bleed o ff some of that speed to reduce 
+floating on landing. Still a little sl oppy (pilot, not aircraft). 
+Very comfortable with stall delta about 15 kts below those speeds I have flown downwind at those speeds with no handling problems, but I like downwind faster around 90 to 100 kts to lower the nose for visibility reasons.      My Lycoming engine has had no problems, zilch, nada. I had modified the Featherlight cowling to allow for the circular ram air filter below the Bendix controller with a continuation aft of the bottom cowling modi fied in shape to accommodate 
+the change in shape on the cowling. I had installed the two vortex generators at the r ecommended place and angle behind 
+the airbrake and in front of the NACA inlet.      Whatever the reasons, the engine runs cool. CHTs never got above 130 deg C (266F) on the ground and 160 deg C (320F) in flight on 35 deg C (95F) days. This is great! Cooling was my great fear, and it appears to be no problem.      Obviously, if Vance does a high speed flyby on his first flight after an hour of wringing her out, and I’m shooting landings after another hour of te sting at altitude, we both have 
+a lot of confidence in the aircraft/engine/prop combination. This has been so much better than I expected. The smartest 
+thing I did was to have such an experienced (20,000 hour total, 1200 hour Cozy) pilot first fly and then check me out in 82V. Above all, thanks Nat for all of your help.  PS: Now 10.7 hours on the tach.  Don Herzstein      Long Beach, CA    Robert Peplinski writes:    8/26/04      After 4 ½ years of building and 2 weeks of waiting for my airworthiness certificate from the FAA, N56RP took off for the first time at 6:00 PM this evening for a short 20 min flight.      I taxied out to the end of runway 24, checked the mag and electronic ignition, announced my intentions, and pushed the throttle to full for take off. Heavy right braking was needed initially, due to the 12 kt crossw ind, but at about 30 kts, the right rudder took over and I was accelerating rapidly. I lifted 
+the nose at 65 kts and was soon flying. A slight nose bobbing started because I did not have th e Strong electric pitch trim set 
+to the appropriate take off position. I initially thought something was wrong with the canard incidence, but I eventually trimmed and got the plane under control. I let the plane accelerate to 100 kts and st arted a shallow right turning 
+climb to 1000 ft due to right hand traffic on runway 24. By the time I hit 1000 ft, I was pretty much at the base of an overcast and was going downwind. Cylinder temps were good with a high of 330, but oil temp was climbing rapidly and was at 205. I turned right back over the airport and raised the gear 
+thinking it might cause the oil temps to stabilize. I passed over the airport at 120 kts and turned downwind. CHTs remained good at a high of 344, but the oil temp continued to climb to 240. On downwind I looked at the speed and I was at 132 kts indicated at 2300 rpm. I throttled back to 1900 rpm and the oil temp stabilized at 244 degrees. At this point I figured it would be a good idea to land, but I was already out of sight of my ground crew, so I did a shallow left hand turn and started back to the airport. I was a little high approaching, so I chopped the throttle and lowered the gear and decelerated to 90 kts. I 
+trimmed the plane at 90 kts with power off and aimed for approx 1000 ft down the runway. Due to the speed, I held her off the runway for another 1000 ft at approx 10 to 20 ft. The speed decayed and I eventua lly touched down at 75 kts. 
+Surprisingly, the landing seemed the easiest part of the flight. During rollout, the engine quit. I looked down at the mixture lever and I was at cutoff. Somewhere during the approach, I must have pulled the mixture to cutoff, instead of the carburetor heat. I restarted the e ngine and taxied back to the 
+hanger, figuring I had enough excitement for the day.      Thanks to Marcus Collins and his wife Alise, and my wife Victoria, and my children Mike, Craig, and Jackie for support during the flight. Also, thanks to Chris Esselstyn and Marc Zeitlin for cozy flight training. No not try to fly a Cozy without it!      I talked over the high oil temps with Marcus and we figured if I ran scat tubing mounted to the side of the airbox to a plenum on top of the oil cooler, my oil temp should be reduced to a normal level. CHTs were never higher than 350 with bayonet probes. It seems that all the air is going through the cylinder heads and none is making it through the oil cooler. The oil cooler is mounted on the left lower cowling.      Lessons learned:  1) Do not make your first flight with a 12 kt crosswind and 
+low ceiling. 
+2) Know where your pitch trim needs to be set for takeoff. 
+3) Do not get excited and pull your mixture to cutoff instead 
+of the carb heat.   Robert Peplinski 
+On September 4, Robert writes:      I replaced #2 cylinder t oday (he noticed low compression 
+on #2) and took a ½ hour flight tonight around sunset. Pitch control on takeoff was much better with the trim set appropriately. I climbed to 5000 ft and oil temp hit a max of 235. I flew around checking controls and slow flight and oil temp dropped to 215. By the time I landed, oil temp was down to 198. CHTs hit a max of 350. I’m starting to get used to the sensitive pitch control. Next I need to work on my landings because I again floated ar ound 2000 ft down the runway before touching down. I was 90 kts on final, so I plan on 
+trying 75-80 next flight. Stan Pengelly writes: Dear Nat,     8/28/04      I flew my Cozy MKIV for the first time today. Everything went well. Thanks for creating those excellent plans. My only problem seems to be that the pl ane flys slightly sideways. I 
+have to do some troubleshooting to figure that out. The turn coordinator ball was always to the right a bit and it took a lot of right rudder pressure to center it. The plane flew good without the correction, so I didn’t mess with it.  Stan Pengelly      Merritt Island FL  
+KEITH’S  SECOND  FLIGHT  
+On September 2, Keith writes:      Well, that’s more like it! After spending the last 3 months repairing my Cozy, I flew the second flight this morning. I wasn’t quite through with the FAA inspection before, so they wanted to check it out again before I went. I got all signed off again last Monday, thanks to Bill Becker of my local MIDO 
+and my very helpful DAR Jim Dunn. During taxi tests on Thursday, I had an alternator failure. The good news is that the new warning system worked perfectly and I knew instantly that it had failed. I took it into a specialist and he said it was a lousy job of rebuilding and the rotation was backwards for the cooling fan. He rebuilt it and changed the fan. I taxied again last night and all checked out.      Today I did a very relaxed and thorough preflight and waited for Don Herzstein to come out for support. I was ready to go around 11:00 am and it was already 88 degrees in Chino, wind 5 kts variable a nd about 8 miles visi bility. It’s about a 
+mile taxi out to the long runway, but the temps were just up to 200F when I got there. I asked the tower to let me fly up to 5000’ over the field and they assigned a squawk and approved. I rotated at 78 kts and lifted off. The ground roll was long since I’m still not getting full rpm with this prop. Static was only 2100. So the climb out was only about 500 fpm at 90 kts. The temp came up quickly to 220F for the water and 230 for the oil. I leveled off at 2000 agl and flew directly over the traffic pattern. I retracted  the gear to see if it would 
+help the cooling. The water temp came down as I powered back in level flight at 120 kts, but the oil was up to 250F and didn’t come down. I went on up to 140 kts, but the oil temp rose to 270F. The rpm was up to 2400, so the prop was getting down to a more comfortable pitch. I decided to land because of the temperatures. On the way down I checked slow flight at 
+90, 80, and 70 kts. Other than the trim change and an increase in the sluggishness at slow speed, which I knew was typical, it was fine. The airplane doesn’t have any roll trim, but it was perfectly balanced in roll. Pitch trim varies with airspeed, but could be trimmed hands off at all speeds tested. I came in a bit high (that’s way better than too low, as last time) so I put the landing brake down. I approached at 85 and let it float before touching down at 75. It was a very smooth landing. Only minor squawks. OK Marc, list me as a flyer!   Keith Spreuer      Long Beach CA  
+ENGINE  MAINTENANCE       On August 5, 2004, Carl Denk had an emergency landing 
+when a cylinder on his Lycoming failed. He found a 3/16” x ½” hole in the cylinder head as well as a 5” long crack and portions of several fins missing. The history of the engine, as he reported, was: When purchased, 4,000 hrs TT, including one overhaul. At 4100 hrs TT, a second major overhaul, cylinders chromed At 5100 hrs TT, a top overhaul At 5144 hrs TT, new rings installed because of oil useage At 5166 hrs TT, busted cylinder. Comment: 5166 hours total time on a Lycoming engine without replacing cylinders is not only remarkable, but as Carl learned, it is dangerous. 5166 hours at 150 mph is the equivalent of over 750,000 m iles! Not even an auto engine 
+could take that, even if run at 2100 rpm. Several years ago, my 1965 Lycoming 0-360 had its first major overhaul at about 1850 hours since new. Rather than take a chance on chromed cylinders because of their bad reputation, I purchased all new Superior cylinder assemblies. It starts on the first bl ade and purrs like a kitten and no 
+problems before overhaul, or 400 hours since. On 8/10/04 Curt Smith comments:      If you think anything might be wrong with your engine, get the thing on the ground ASAP so you can assess the situation. Carl did this and it saved his and his passenger’s bacon. Good 
+job Carl! I’ve done this twice in the last 20 years of EZ flying and it saved mine too. Listen to that little voice (now, if you are hearing “voices” all the time, that’s another story!) in your 
+head – don’t shrug it off.      Second, a cylinder is not a cylinder, is not a cylinder….I’ve majored a couple of engines and never paid any attention to 
+how many times the cylinders had been rebuilt. As long as they were certified and yellow-tagged – good enough. Never again! Spend the extra money and get new cylinders! Have the old ones melted down. Cylinders are the weak point on these engines, so treat them accordingl y. Becareful out there. This 
+ain’t golf!  
+ENGINE  BREAK-IN  
+     Cozy builder Wayne Hicks summarizes Lycomings 
+recommendations as follows: 1) Use the right oil. If a preserva tive oil has been used, drain 
+it. Use straight mineral oil of the proper viscosity for the first fifty hours or until oil consumption stabilizes. Then 
+switch to ashless dispersant oil. The exceptions to the basic rule above are the 0-320H and O/LO-360E series. These engines may be operated using either straight mineral oil or ashless dispersant oil, however, if the engine is delivered with ashless dispersant oil installed, it must remain on ashless dispersant oil. All Lycoming turbocharged engines must be broken with ashless dispersant oil only. 
+2) Start the engine normally, taxi at normal speeds, warm up 
+the engine sufficiently, but don’t spend inordinate amounts of time on the ground. 
+3) Run the engine at lower de nsity altitudes. 5,000 ft is 
+recommended. Density altitudes in excess of 8000 ft will not provide enough pressure in the cylinders to expand piston rings sufficiently to seat with the cylinder walls. This seating of the rings with the cylinder wall will only occur when pressures inside the cylinder are great enough 
+to cause expansion of the piston rings. 
+4) DO NOT USE low power settings. Pressures in the 
+cylinder only become great enough for a good break-in when power settings above 65% are used. The use of low power settings does not expand the piston rings enough, and a film of oil is left on the cylinder walls. The high temperatures in the combustion chamber will oxidize this oil film so that it creates a condition commonly know as glazing. When this happens, the ring break-in process stops, and excessive oil consumption frequently occurs. The bad news is that extensive glasing can only be corrected by removing the cylinders and re-honing the walls. 
+5) Full power for takeoff and climb during the break-in 
+period is not harmful; it is beneficial, although engine temperatures should be monitored closely to insure that overheating does not occur. Cruise power settings above 65% and preferably in the 70% to 75% of rated power range should be used to achieve a good engine break-in. 
+6) Continue break in operation for 50 hours or until oil 
+consumption stabilizes. These simple procedures should eliminate the possibility of cylinder wall glazing and prepare the engine for a long and satisfactory service life. 
+ 
+LEANING  THE  MIXTURE  
+Curt Smith writes on 8/10/04 
+     So there I was on a beautiful CAVU Sunday afternoon at 8500ft, 30 minutes into a 2 hour trip, enjoying the music, but getting bored sitting up there with nothing to do for the next hour and a half. I had just had a conversation with Nat at Oshkosh about CHTs/leaning/fuel flow, and he was kind enough to share his experience, which I value. I had been reading the GAMI stuff on the intern et for the past year or so 
+(http://www.advancedpilot.com/explore_001.htm)
+, but always 
+got a little (a lot!) timid about pulling that mixture lever too 
+far back. As the GAMI people say, “We’ve been taught that here they be dragons”. Nat’s pretty conservative when it comes to engines and he does it, so I screwed up the courage to try it too.      At 9500 density altitude , Lycoming 0-360 with Ellison and 
+one Rose EI leaned for peak power, CHT on #3 creeping over 400F, #4 not far behind (#3 and #4 run the hottest on this engine in cruise), fuel flow 9.5 gph (the Vision Microsystems is very accurate and responds i mmediately to any change in 
+mixture), throttle wide open,  truing 177 kts, I pushed the 
+mixture up to 10.5 gph. No change in rpm or speed. No improvement in CHT. I give it plenty of time to stabilize. I am running rich of peak. No CHT change. OK. Deep breath. I pull the mixture back to 8.5 gph and pull the throttle back a 
+little (because it seemed a little r ough at full throttle) I lose 30 
+rpm, but truing at 175 kts and the CHTs on #3 and $4 start coming down and stabilize 15 degrees cooler. Hey, this works! 200 mph on 8.5 gph and the engine seems very happy!      Yes, I know all about using EGTs for leaning. The Vision system even has a feature wh ere you push a button, start 
+leaning, and it figures out the leanest cylinder based on rate of delta EGT. I just never found that very helpful or reassuring, for some reason (I’ll pay more attention to it when I have the opportunity again), but I can relate to CHTs and fuel flow. They are both the “bottom Line”, after all. With fuel rapidly 
+heading north of $3.00 per gallon, it is something to think about.   
+PERCENT  POWER  
+Kent Ashton writes on 8/22/04: 
+     I made a little chart from the Lycoming 0-360 manual graphs for a 180 hp normally-asperated engine to relate percent power to altitude and rpm. I stick it on the panel and use it in lieu of a manifold pressure gauge and the Rule of 48. My main use is to show when I can lean the engine (Lycoming says don’t lean above 75% power): 
+Altitude
+         Power/rpm  
+   75%        65%       60%  
+1000’   2000   1600   1450 2000’   2050   1650      1500 3000’   2150   1800   1600 3500’   2195   1850   1650 4500’   2285   1940   1750 5500’   2400   2015   1875 6500’   2525   2100   1950 7500’   2650   2200   1985 8500’   2700   2250   2020  
+MANIFOLD  PRESSURE  
+Ken Miller writes on 8/23/04: 
+Kent,      You brought up a subject I wanted to mention for some time. A manifold pressure (how then got that term I’ll never know) gauge is a great addition to any panel. I use mine all the time for setting power. It is a much more accurate indicator of power setting than an rpm indicator.       I note the static pressure reading before startup, which is the ambient pressure. On the takeoff roll at full throttle, I make sure that the pressure reading (vacuum) is within an inch or so of the ambient. This means I have no intake blockage or engine problems creating a low power situation.      On descent, I simply pull the throttle back to 18 inches, and the airplane comes down at 700 to 800 fpm without any further input from me except ma ybe a little trim change. The 
+airplane’s response to the power  settings using the manifold 
+pressure is repeatable and constant.  
+OIL  SEPARATORS  
+Neil Clayton wrote on 7/7/04: 
+     I’m trying to choose an oil separator. There seem to be two types, one that collect the oil from the breather tube, then allows it to run back down the same tube from whence it came, after shutdown. Another th at collects the oil and then 
+introduces it back into the engi ne through the oil filler tube 
+casing. What fitting does one use at the oil filler tube to connect the return oil pipe, bearing in mind on my engine the filler tube seems to be plastic. Vance Atkinson answers on  7/8/04:      DO NOT CHOOSE AN OIL SPEARATION SYSTEM THAT RETURNS THE OIL TO THE ENGINE! That gunk is the most nastiest, vilest stuff you can imagine. Dump it via a hose, either to the outside, or into the exhaust, or into a small container (like I have). Years ago I used an oil recovery system that put the oil back into the oil pan via the dipstick 
+tube. I ruined my cam because of  that (see the central states 
+story). I now dump the recovered junk into a simple shampoo bottle system. Anyone wanting a picture can email me. The reason I use the bottle is it’s simple, lightweight, and doesn’t dribble oil down the cowl.      The gist of the matter is you take the drainage hose from the oil separator (which is mounted as high in the engine compartment as possible), and run it down about 1 to 2 ft into a small container (mine is a good quality used round shampoo bottle). I empty this every 2 to 3 months or so. If you use this system, smell that stuff the first time you empty it, and you will be glad you’ve treated your engine well. And your engine will treat you well ☺ 
+ 
+ALTERNATE  ENGINES  
+Tom Jacobs write on 7/29/04: 
+     I spent a couple of hours with Delta-Hawk yesterday. This is what I learned: 1) They have two engines (almost) flying. The original 
+upright engine in the Velocity , that was reworked recently 
+is not currently flying, but should be soon. The inverted engine that they had mounted in a skyhawk they were planning to fly to AirVenture, they could not get it signed off by the FAA in time, so they took it out to mount on a dummy Skyhawk airframe to bring along. 
+2) They are building a small set of about a half dozen 
+engines for delivery to “partners” this year. 
+3) They have orders for about  150 engines that will be 
+assembled for delivery about March 05. 
+4) They have production capability  for about 50 engines per 
+month. Parts are built and engines assembled by other companies. 
+5) They are working with anothe r company in Wisconsin to 
+develop installation packages for various aircraft. 
+6) Since the Cozy is so much lik e the Velocity, they expect 
+the installation to be similar. 
+7) For starting the engine, the block temperature should be 
+about the same temp as for the Lycoming. 
+8) Diesel fuel should only be t hought of as a poor substitute 
+for Jet-A. Diesel fuel will start to jell at higher temperatures, which will limit the flying altitude. 
+9) They had some trouble cooling the velocity installation. 
+Not enough cooling air. 
+10) Composite aircraft will probably require a heat exchanger 
+to cool the fuel. 
+11) This company seems to be aiming at a high volume of 
+production, including certified engines, helicopters, and tationary engines. The experimental market is just one piece of their plans. 
+ If all goes well, I will get a tour in a few weeks. I’ll send more info after that.    Tom Jacobs      M a d i s o n ,  W I  
+ 
+BRAKE  HEATING  
+     Cozy builder John Epplin writes on 7/7/04 
+     I have the Cleveland Super Heavy Duty brakes and stopping power is more than adequate. I have a .090 Aluminum heat shield sized to  just greater than the rotor 
+radius for the width of the gear strut plus a little. My wheel pants are about as tight as one  would want. I drilled 5 each ½ 
+in holes just above the roto in  each pant. I also wrapped the 
+gear strut with 1 layer of fi berfrax with aluminum tape over 
+that, held on with tie wraps.      The strut has a type J thermocouple junction attached just opposite the rotor, covered with one layer of BID to keep it in place. After about 100 landings, mos tly with light to moderate 
+braking, a few with as heavy braking as I dared, I have yet to see more than about 20 deg. F ri se at the strut surface. There 
+has not been an aborted take-off or 2 mile crosswind taxi which would be probably the worst case.  I cannot say it cannot be done, but the likelihood of overheating the strut in normal operation is quite small, assuming it is built to plans.      I used an unused CHT input on the AV10 engine monhitor with very small Omega type J wire to the strut. When I put in the soda straw, I also put a small diameter Teflon tube along with it. I fished the wire through that. Total added weight on the order of one ounce. Would I do it again? No, but now I know just what is happening, and would expect the same results from a similar installation.   
+TIRE  WEAR  
+Ken Brimmer writes on 7/7/04: 
+     I hate to do the paper work on our planes – but I do like the analysis. When Nat asked for input on tire wear, I did not want to do the work necessary to see what my tire wear was 
+like, but I really wanted to know what the numbers would show.      I kept my data by the number of landings. As expected, the wear in the beginning was much greater than the current data. 
+Also, I began to rotate my tires (insides to outsides) after the second set. This too helped to get more wear out of the tires. The first three sets of tires were all McCreary tires, and the current ones are Goodyears. What I got were as follows; 1
+st set – 254 landings 
+2nd set – 264 landings 
+3rd set – 309 landings (rotated) 
+4th set – 244 landings to date (rotated) with a lot of tread left 
+on Goodyears.      I was told by a very smart AI that runs a big repair operation at our airport that the cheap tires do not save you anything and that the Goodyears w ill save in the long run. It 
+would seem that he is right as it looks like I will get over 400 landings on these tires. One more variable to throw in the pot is the weight of the plane. Mine started out at 950 lbs and is now 1035. Bigger engine, bigger prop, and other do dads. The 
+majority of the landings were done at my home field which is at 75 ft MSL. I did not keep track of the data on brakes. 
+ 
+LETTERS  FROM BUILDERS  
+Builders,      8/3/04      Wear a Cozy shirt! I flew home from Oshkosh on a commercial flight (Midwest Airlines) out of Milwaukee on Sunday the 1
+st. We arrived in Denver and as I exited the gangway 
+into the concourse, the pilot of the plane I just departed came 
+running up behind me and asked if I was building a Cozy. I was quite startled. How often does a passenger get chased down by the 
+pilot? Turns out I was wearing a Cozy shirt and the pilot noticed it as I passed the cockpit leaving the plane. My apologies, but I forget the pilot’s name. He was from Pittsburg I believe and on chapter 9 (How come I can remember that but not his name?). If you’re reading this – drop me a note.      Five minutes later anothe r guy stopped me as we were getting 
+onto the subway to the terminal. He noticed my shirt too. He’s not building a Cozy but he is building some Russian plane described as a Super Cub on steroids. We had a nice chat all the way to baggage claim. He had just come from Oshkosh too.      I think I’ll wear my Cozy shirt everytime I go to the airport. You meet lots of nice people that way. Rick Maddy      D e n v e r ,  C O  To all,      8/7/04      Barbara was at DuPage (West Chicago), wearing her Cozy 
+shirt when someone came up and asked if she was building a Cozy. She said yes, but she couldn’t talk at the time and the individual disappeared, so she couldn’t follow up. So, long story short, were any Cozy builders at  DPA yesterday? Just curious. 
+              Jeff and Barb Wilson      Carpenterville, IL  Dear Nat,     9/14/04      I purchased and receive d plans for the Cozy MKIV from 
+Aircraft Spruce last week. My plans number is 1321. I live in a small town in France about 150 miles southof Paris and plan on building the Cozy with my wife and son over the next 2 years. I hope I’m not to optimistic here. I can only imagine the neighbors comments about what the crazy Americans are doing now.      Thank you for making such wonderfully detailed plans. I have been building radio control aircraft for the last 30 years since I was 10 and for the last 18 years with my wife, Maureen. Her first comments after looking at the plans were an emphatic “we can do this!” It will also be a nice experience for my son, Olivier, to help a little over the next few years. He’s only 5 ½ but has enjoyed “helping” with the radio control planes this last year.      Our only real problem is obtaining materials. Some things we can order from Aircraft Spruce a nd other approved suppliers, but 
+some of the bulky items such as  the foam or hazardous shipment 
+items like the resins will have to  be bought locally . I think finding 
+equivalents for the foams and resi ns may be difficult because of 
+differing trade names, but I have contacted the French builders whose names you supplied to me and some indicated that they purchased such products locally.       Thanks again for making such a project possible. I know that I and my family will have a lot of fun both building and flying.      B r u c e  A n t o l o v i c h       Neris les Bains Builders,      8/28/04      Having to take a wing off or put one on has never been very easy even with lots of hands to help. Today I put my right wing on in about twenty minutes by my self. To accomplish this, I built a 
+portable table with adjustable le velers at each end  using some 
+scrap wood I had in my hangar a nd some hardware from Lowes. 
+Cost was about $60. It can then be used to move the wing around the shop. Afterwards, the hardware comes off so it becomes a portable work table. If anyone is interested in doing the same, please contact me.    Paul Stowitts      U p l a n d ,  C A   
+       NEWSLETTER #87 
+The number appearing after your name on the address label is the last newsletter you will receive until after y ou renew your subscription. 
+ 
+  
