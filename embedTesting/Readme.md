@@ -1,8 +1,8 @@
-=Embedding Model Testing on Technical Corpus=
+# Embedding Model Testing on Technical Corpus
 
-==Workflow==
+## Workflow
 
-===Set up Docker Containers===
+### Set up Docker Containers
 
 Two docker containers are built.  One for the ChromaDB and one for Ollama and the embedding models.
 Both Docker images will store data (chroma database and downloaded models) within the docker container
@@ -16,8 +16,10 @@ docker exec embedtesting-ollama-1 ollama list
 ```
 *might need to confirm the name of the ollama container for the list*
 
-===Run the Embedding Tests===
-
+### Run the Embedding Tests
+```
+pip install -r requirements. txt
+```
 
 
 
