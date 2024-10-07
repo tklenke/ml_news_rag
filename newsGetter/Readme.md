@@ -1,6 +1,6 @@
-Notes:
+# Notes:
 --------------------------------------------------
-indexer
+## indexer
 --------------------------------------------------
 used bart.degoe.de code and modified
 tool chain is:  
@@ -20,7 +20,7 @@ rev 4 428370 bytes  (200 top english words)
 
 
 --------------------------------------------------
-Indexing Technologies
+## Indexing Technologies
 --------------------------------------------------
 Whoosh  (python search indexer)
 Gensim
@@ -32,7 +32,7 @@ https://bart.degoe.de/building-a-full-text-search-engine-150-lines-of-code/
 
 
 ---------------------------------------------------
-Initial Connection via Selenium with Google login
+## Initial Connection via Selenium with Google login
 ----------------------------------------------------
 chrome.bat    
       This batch file opens a chrome browser with a debugging port.  It stores the session data in c:\selenium\ChromeProfile.
