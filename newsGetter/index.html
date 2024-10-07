@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Cozy Builders Message Search</title>
+  <meta name="Search Page for Cozy Builders Archive" content="">
+  <meta name="tklenke" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+
+</head>
+<body>
+  <div class="container">
+  <div class="row">
+  <table class="header">
+    <tr>
+      <td colspan="2" rowspan="2" class="width-auto">
+        <h1 class="title">Cozy Groups Index</h1>
+        <span class="subtitle">A simple search for cozy builders messages</span>
+      </td>
+      <th>Version</th>
+      <td class="width-min">v1.0</td>
+    </tr>
+    <tr>
+      <th>Updated</th>
+      <td class="width-min"><time style="white-space: pre;">2024-09-19</time></td>
+    </tr>
+    <tr>
+      <th class="width-min">Author</th>
+      <td class="width-auto"><cite>Tom Klenke</cite></td>
+      <th class="width-min">License</th>
+      <td>MIT</td>
+    </tr>
+  </table>
+</div>
+<div class="row">
+  <form action="/cgi-bin/search.py" method="post">
+    <div class="six columns">
+    <label>Search for</label> 
+    <input type="text" name="keywords" placeholder="Keywords..." class="u-full-width" />
+    </div>
+    <div class="one column">
+    <label>AND</label><input type="radio" id="1" name="search_type" value="AND" checked/>
+    </div>
+    <div class="one column">
+    <label>OR</label><input type="radio" id="1" name="search_type" value="OR" />
+    </div>
+    <div class="two columns">
+    <label><br></lable>
+    <input class="button-primary" type="submit" value="Submit">
+    </div>
+  </form>
+</div>
+<div class="row">
+  <nav id="TOC" role="doc-toc">
+  <h2 id="toc-title">Contents</h2>
+  <ul class="incremental">
+  <li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+  <li><a href="#the-basics" id="toc-the-basics">The Basics</a></li>
+  <li><a href="#discussion" id="toc-discussion">Discussion</a></li>
+  </ul>
+  </nav>
+</div>
+<div class="row">
+  <h2 id="introduction">Introduction</h2>
+  <p>I archived the Google Groups for Cozy Builders messages in mid August 2024.  
+    Here is a simple search tool to find messages.</p>
+</div>
+<div class="row">
+  <h2 id="the-basics">The Basics</h2>
+  <p>Pretty simple, just list your key words in the box and select 
+    <b>AND</b> or <b>OR</b></p>
+</div>
+<div class="row"></div>
+  <h2 id="discussion">Discussion</h2>
+  <p>Goal is to use the message data plus the Cozy Newsletters to build a AI model.  
+  </p>
+</div>
+</div>
+</body>
+</html>
