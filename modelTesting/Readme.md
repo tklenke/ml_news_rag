@@ -1,8 +1,13 @@
-=Embedding Model Testing on Technical Corpus=
+# Model Testing on Technical Corpus
 
-==Workflow==
+Script will embed a corpus of test data via one embedding model, see embedTesting, and store 
+the vector data into a ChromaDB. Then will ask three questions and pull relevant data from the 
+ChromaDB to be used in generating the response.  Several LLMs will be evaluated for their
+answers and time required.
 
-===Set up Docker Containers===
+## Workflow
+
+### Set up Docker Containers
 
 Two docker containers are built.  One for the ChromaDB and one for Ollama and the embedding models.
 Both Docker images will store data (chroma database and downloaded models) within the docker container
@@ -12,12 +17,19 @@ Both Docker images will store data (chroma database and downloaded models) withi
 docker-compose build
 docker-compose up -d
 docker-compose ps
-docker exec embedtesting-ollama-1 ollama list
+docker exec modeltesting-ollama-1 ollama list
 ```
 *might need to confirm the name of the ollama container for the list*
 
-===Run the Embedding Tests===
+### Ensure python has required libraries
+```
+pip install -r requirements. txt
+```
 
-
+### Run the Embedding Tests
+```
+python TestModels.py
+```
+*may want to edit Constants section of TestModels.py*
 
 

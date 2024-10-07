@@ -4,7 +4,7 @@ import time
 from chroma_functions import importdocs, getclient, getcollection
 
 #--------- CONSTANTs -------------
-mainModel = "llama3"
+embedModel = "all-minilm"
 sourceDocPath = "../data/test"
 chunck_size = 75
 
@@ -19,36 +19,29 @@ questions = [
     "Give me a list of tips to consider when installing the engine."
 ]
 
-emodels = [
-	"all-minilm",
-	"bge-m3",
-	"bge-large",
-	"mxbai-embed-large",
-	"snowflake-arctic-embed",
-	"nomic-embed-text",
-    None
-]
+
+llmodels = [
+	"phi3.5:3.8b",
+	"gemma2:2b",
+	"ALIENTELLIGENCE/engineeringtechnicalmanuals:latest",
+	"llama3.2:3b"]
 
 #-------------MAIN-------------------
-print(f"Starting EmbedTesting...")
+print(f"Starting ModelTesting...")
 chromaclient = getclient()
 results=[]
 
-for emodel in emodels:
-    stats = {}
-    stats['Model'] = emodel
-    stats['totalanswertime'] = 0
-    print(f"running embed model {emodel}...")
+#embed
+t0 = time.time()
+#get chromacollection
+collection = getcollection(chromaclient,embedModel) 
+importdocs(sourceDocPath, embedModel, collection, chunck_size)
+embed_time = time.time()-t0
 
-    #embed if appropriate
-    t0 = time.time()
-    if emodel is None:
-        print(f" skipping embed for None")
-    else:
-        #get chromacollection
-        collection = getcollection(chromaclient,emodel) 
-        importdocs(sourceDocPath, emodel, collection, chunck_size)
-    stats['Embed time'] = time.time()-t0
+for llmodel in llmodels:
+    stats = {}
+    stats['Model'] = llmodel
+    print(f"running llm {llmodel}...")
 
     print(f" asking questions...")
     #ask the questions
@@ -57,19 +50,15 @@ for emodel in emodels:
         query = questions[i]
 
         t1 = time.time()
-        if emodel is None:
-            prompt = f"{base_prompt} {query}"
-        else:
-            print(f"  getting question {i} related docs...")
-            queryembed = ollama.embed(model=emodel, input=query)['embeddings']
-            relateddocs = '\n\n'.join(collection.query(query_embeddings=queryembed, n_results=10)['documents'][0])
-            prompt = f"{base_prompt} {query} {rag_prompt} {relateddocs}"
+        print(f"  getting question {i} related docs...")
+        queryembed = ollama.embed(model=embedModel, input=query)['embeddings']
+        relateddocs = '\n\n'.join(collection.query(query_embeddings=queryembed, n_results=10)['documents'][0])
+        prompt = f"{base_prompt} {query} {rag_prompt} {relateddocs}"
         
         print(f"  asking question {i}...")
-        answer = ollama.generate(model=mainModel, prompt=prompt, stream=False)
+        answer = ollama.generate(model=llmodel, prompt=prompt, stream=False)
 
         stats[str(i)+"time"] = time.time()-t1
-        stats['totalanswertime'] += time.time()-t1
         stats[str(i)+"answer"] = answer['response']
 
     results.append(stats)
@@ -89,9 +78,9 @@ for r in results:
 
 print(f"-----STATS------")
 print(f"Chunk size: {chunck_size}")
+print(f"Embed Time: {embed_time:.4f} secs")
 for r in results:
     print(f"Model: {r['Model']}")
-    print(f"  Embed: {r['Embed time']:.4f} secs")
     for i in range(0,len(questions)):
         print(f"  Q{i}: {r[str(i)+'time']:.4f} secs")
 

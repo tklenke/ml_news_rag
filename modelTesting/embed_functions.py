@@ -1,6 +1,7 @@
 import os
 import re
 import ollama
+import time
 
 def readtextfiles(path):
   text_contents = {}
@@ -38,6 +39,10 @@ def chunksplitter(text, chunk_size=100):
 
   return chunks
 
-def getembedding(chunks):
-  embeds = ollama.embed(model="nomic-embed-text", input=chunks)
+def getembedding(chunks, model):
+  print(f"  ef:embeding with {model}")
+  t0 = time.time()
+  embeds = ollama.embed(model, input=chunks)
+  t1 = time.time()-t0
+  print(f"  ef:done {t1 } secs")
   return embeds.get('embeddings', [])
