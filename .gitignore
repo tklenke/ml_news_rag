@@ -1,6 +1,8 @@
 #project specific ignores
 data/
 out*.txt
+my_db/
+embedstatus.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

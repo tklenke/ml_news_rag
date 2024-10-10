@@ -28,12 +28,13 @@ pip install -r requirements. txt
 
 ### Run the Embedding Tests
 ```
-<<<<<<< HEAD
 python TestModels.py
-=======
-python TestModelss.py
->>>>>>> 048e69d3858afa223cce80f777b73162c6d8639a
 ```
 *may want to edit Constants section of TestModels.py*
 
+|Model|Context Length|
+|llama3.2:3b|131072|
+|phi3.5:3.8b"|131072|
+|gemma2:2b|8192|
+|ALIENTELLIGENCE/engineeringtechnicalmanuals:latest|131072|
 

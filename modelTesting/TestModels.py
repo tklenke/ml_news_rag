@@ -1,7 +1,7 @@
 import ollama
 import chromadb
 import time
-from chroma_functions import importdocs, getclient, getcollection
+from chroma_functions import getclient, getcollection, importdocs
 
 #--------- CONSTANTs -------------
 embedModel = "all-minilm"

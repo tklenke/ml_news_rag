@@ -4,18 +4,18 @@ services:
     image: chromadb/chroma:latest
     ports:
       - "8000:8000"
+    env_file:
+      - ./.env
     volumes:
-      - ../data/chroma:/app/data
-    environment:
-      - CHROMA_PERSIST_DIR=/app/data
+      - ./my_db:/chroma/my_db
 
 # docker run --gpus=all -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
   ollama-rag:
     build:
       context: .
       dockerfile: ollama.dockerfile
-    volumes:
-      - ollama:/root/.ollama
+    #volumes:
+    #  - ollama:/root/.ollama
     ports:
       - "11434:11434"
     deploy:
@@ -26,7 +26,7 @@ services:
               count: 1
               capabilities: [gpu]
 
-volumes:
-  ollama:
-    name: ollama
-    external: true
+#volumes:
+#  ollama:
+#    name: ollama
+#    external: true
