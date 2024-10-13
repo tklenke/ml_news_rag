@@ -1,6 +1,7 @@
 #project specific ignores
 data/
 out*.txt
+out*.md
 my_db/
 embedstatus.txt
 
