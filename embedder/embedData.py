@@ -4,7 +4,7 @@ from chroma_functions import getclient, getcollection, embed_file
 
 #--------- CONSTANTs -------------
 embedModel = "all-minilm"
-sourceDocPaths = ["./data/msgs","./data/news","./data/aeroelectric"]
+sourceDocPaths = ["./data/news","./data/aeroelectric","./data/msgs",]
 chunk_size = 75
 initialize_embed = False
 completed_embed_file = "embedstatus.txt"
@@ -95,11 +95,14 @@ collection = getcollection(chromaclient, embedModel, initialize_embed)
 nTotalSavedThisSession = 0
 fTotalEmbedTime = 0.
 fpCompleted = open(completed_embed_file,"a")
+#index = 0
 
 while (len(files) > 0) & (nTotalSavedThisSession < max_file_count):
     t0 = time.time()
     random_index = random.randint(0, len(files) - 1)
     random_file = files.pop(random_index)
+    #random_file = files.pop(index)
+    #index += 1
 
     print(f"embedding file: {random_file}{'':>50}", end="\r")
     embed_file(random_file, embedModel, collection, chunk_size)

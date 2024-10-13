@@ -39,6 +39,9 @@ def embed_file(textdocspath, model="nomic-embed-text", chromacollection=None, ch
 
   for filename, text in text_data.items():
     chunks = chunksplitter(text, chunk_size)
+    if len(chunks) == 0:
+       print(f"  zero chunks, skipping embed")
+       continue
     embeds = getembedding(chunks, model)
     chunknumber = list(range(len(chunks)))
     ids = [get_id(filename) + str(index) for index in chunknumber]
