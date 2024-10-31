@@ -4,6 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
+## Require elements install
+# selenium via pip
+# chromedriver for windows see ...
+# https://sites.google.com/chromium.org/driver/
+
 ## Set up
 url = 'https://groups.google.com/g/cozy_builders'  # Replace with your desired URL
 output_file = "href_tags1.txt"
@@ -11,12 +16,10 @@ max_pages = 600
 url_prefix = 'https://groups.google.com/g/cozy_builders/c/'
 nMaxSequentialDupePages = 10
 
-service = Service(executable_path='..//chromedriver-win32//chromedriver.exe')
+service = Service(executable_path='..//..//chromedriver-win64//chromedriver.exe')
 options = webdriver.ChromeOptions()
 options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
 driver = webdriver.Chrome(service=service, options=options)
-
-
 
 f = open(output_file, 'w')
 last_href = ''

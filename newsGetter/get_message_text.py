@@ -12,36 +12,40 @@ import markdownify
 import re
 import os
 
+ids_file = 'href_tags1.txt'
+load_pause = 4
+read_pause = 8
+MESSAGE_DIR = 'msgs_new'
+exe_path = '..\\..\\chromedriver-win64\\chromedriver.exe'
+nMax = 5000
+
 ## Set up
 base_url = 'https://groups.google.com/g/cozy_builders/c/'
 remove_strings = []
 remove_strings.append('Reply to authorForwardDeleteYou do not have permission to delete messages in this groupCopy linkReport messageShow')
 remove_strings.append('Reply all Reply to author Forward')
 remove_strings.append('You received this message because you are subscribed to the Google Groups "COZY Builders Mailing List" group.')
-remove_strings.append('To unsubscribe from this group and stop receiving emails from it, send an email to cozy\_builder...@googlegroups.com.')
 remove_strings.append('To view this discussion on the web visit')
 remove_strings.append('original messageto Canard Aviators, Cozy Builders')
 remove_strings.append('original messageto Cozy Builders')
-remove_strings.append('original messageto canard\-aviators@yahoogroups.com, cozy\_builders@googlegroups.com ')
-remove_strings.append('original messageto cozy\_builders@googlegroups.com')
+remove_strings.append(r'original messageto canard\-aviators@yahoogroups.com, cozy\_builders@googlegroups.com ')
+remove_strings.append(r'original messageto cozy\_builders@googlegroups.com')
 remove_strings.append("original messageto Cozy List")
-remove_strings.append('original messageto cozy\_builders, canard\-aviators@canardzone.groups.io')
+remove_strings.append(r'original messageto cozy\_builders, canard\-aviators@canardzone.groups.io')
 remove_strings.append('original messageto COZY Builders Mailing List')
 remove_strings.append('Mailing List Aviators')
 remove_strings.append('Canard Aviators Mailing List')
 remove_strings.append('original messageto COZY Mailing List')
 remove_strings.append('COZY Builders Mailing List')
-remove_strings.append('cozy\_builders@googlegroups.com')
-remove_strings.append('canard\-aviators')
+remove_strings.append(r'cozy\_builders@googlegroups.com')
+remove_strings.append(r'canard\-aviators')
 #remove_strings.append('original messageto')
 remove_strings.append('Sent from my iPhone')
 remove_strings.append('unread,')
-ids_file = 'href_tags1.txt'
-load_pause = 4
-read_pause = 8
-message_dir = 'msgs'
-nMax = 5000
-
+remove_patterns = []
+remove_patterns.append(r"!\[.*profile photo\]\(.*\)")
+remove_patterns.append(r"\[https://groups\.google\.com\/[a-z]\/msgid\/cozy.*\]\(.*\)")
+remove_patterns.append(r"To unsubscribe.*googlegroups.com")
 # Function to convert HTML to Markdown
 def html_to_markdown(html):
     # Use markdownify to convert HTML to Markdown
@@ -60,7 +64,10 @@ def get_markdown_from_elements(elements):
         #clean up non unicode characters and remove extraneous strings
         markdown_text = re.sub(r'[^\x00-\x7F]', ' ', markdown_text)
         for remove_text in remove_strings:
-            markdown_text = markdown_text.replace(remove_text, "")
+            markdown_text = markdown_text.replace(remove_text, " ") 
+            #use a space to stop unintended word merge
+        for remove_pattern in remove_patterns:
+            markdown_text = re.sub(remove_pattern, ' ', markdown_text)
 
         #add to return text
         rtntxt += " " + markdown_text + " "
@@ -121,10 +128,12 @@ def get_md_filenames(directory):
 
 def save_text_to_file(id, msgtxt):
     filename = id + ".md"
-    if not id[0].isalpha():
-        filename = "msgs/aDigits/" + filename
-    else:
-        filename = "msgs/" + id.upper()[0] + "/" + filename 
+    #if not id[0].isalpha():
+    #    filename = "msgs/aDigits/" + filename
+    #else:
+    #    filename = "msgs/" + id.upper()[0] + "/" + filename 
+
+    filename = os.path.join(MESSAGE_DIR,filename)
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w") as f:
@@ -139,7 +148,7 @@ def save_text_to_file(id, msgtxt):
 nTotalSavedThisSession = 0;
 
 #connect chromedriver
-service = Service(executable_path='..//chromedriver-win32//chromedriver.exe')
+service = Service(executable_path=exe_path)
 options = webdriver.ChromeOptions()
 options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
 driver = webdriver.Chrome(service=service, options=options)
@@ -149,7 +158,7 @@ ids = read_ids_from_file(ids_file)
 print(f"Ids: {len(ids)}")
 
 # get list of message ids that have been saved
-ids_saved = get_md_filenames(message_dir)
+ids_saved = get_md_filenames(MESSAGE_DIR)
 print(f"Msgs saved: {len(ids_saved)}")
 
 #remove the ids that have been saved from the ids

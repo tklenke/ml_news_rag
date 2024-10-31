@@ -10,5 +10,6 @@ RUN nohup bash -c "ollama serve &" \
    && ollama pull snowflake-arctic-embed \
    && ollama pull bge-m3 \
    && ollama pull bge-large \
-   && ollama pull nomic-embed-text \
-   && ollama pull llama3
+   && ollama pull nomic-embed-text
+#   && ollama pull llama3 \  add back if running TestEmbeddingsRev1.py
+

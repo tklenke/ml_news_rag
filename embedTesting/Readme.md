@@ -34,3 +34,26 @@ python TestEmbeddings.py
 *may want to edit Constants section of TestEmbeddings.py*
 
 
+### TestEmbeddingsRev2
+Perhaps a better way to test than gut feel of quality of anwsers, is to look at how well the embedding model finds relevant chunks. Made assumption that a shorter distance from a question to document that has essentiall the same text means the embedding model is working better.
+
+Run all models against 10 newsletters and measureed the time to embed all.  And then for three queries that are made from looking at the text in three newsletters, checked the vector distances.
+
+Subtracted distance from 1 to get a score where higher is better (arbitrary but easier for my brain!)
+
+Results:
+1-Avg     Ratio of 
+Dist	Distance/Embed Time	
+0.51	0.83	Model: all-minilm
+		
+0.62	0.60	Model: bge-m3
+		
+0.69	0.69	Model: bge-large
+		
+0.69	0.64	Model: mxbai-embed-large
+		
+0.70	0.69	Model: snowflake-arctic-embed
+		
+0.67	0.91	Model: nomic-embed-text
+
+Seems that nomic-embed-text provides much faster embedding (a consideration) for only marginal loss of distance.  Note that the distance winner (snowflake) did very poorly in picking the right chunks...so really should be disqualified.

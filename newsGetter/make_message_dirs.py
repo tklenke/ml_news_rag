@@ -1,6 +1,8 @@
 #make message dirs
 import os
 
+msgs_dir = "msgs_new"
+
 def count_first_characters(filename):
   """Counts the occurrences of the first character in each line of a file.
 
@@ -31,7 +33,7 @@ def makethedirs(counts):
     """
 
     # Create the "msgs" directory if it doesn't exist
-    msgs_dir = "msgs"
+
     if not os.path.exists(msgs_dir):
         os.mkdir(msgs_dir)
 
