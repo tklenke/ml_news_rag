@@ -42,6 +42,7 @@ Run all models against 10 newsletters and measureed the time to embed all.  And 
 Subtracted distance from 1 to get a score where higher is better (arbitrary but easier for my brain!)
 
 Results:
+`
 | Avg Dist |    Ratio of Distance/Embed Time	|
 | 0.51 |	0.83 |	Model: all-minilm |		
 | 0.62 |	0.60 |	Model: bge-m3 |
@@ -49,5 +50,5 @@ Results:
 | 0.69 |	0.64 |	Model: mxbai-embed-large |		
 | 0.70 |	0.69 |	Model: snowflake-arctic-embed |		
 | 0.67 | 	0.91 |	Model: nomic-embed-text |
-
+`
 Seems that nomic-embed-text provides much faster embedding (a consideration) for only marginal loss of distance.  Note that the distance winner (snowflake) did very poorly in picking the right chunks...so really should be disqualified.
