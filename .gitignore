@@ -3,8 +3,9 @@ data/
 out*.txt
 out*.md
 my_db/
-embedstatus.txt
-href_tags1.txt
+embedstatus*.txt
+href*.txt
+A*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

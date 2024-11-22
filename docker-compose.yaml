@@ -7,7 +7,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./my_db:/chroma/my_db
+      - ./data/chroma/my_db:/chroma/my_db
 
 # docker run --gpus=all -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
   ollama-rag:

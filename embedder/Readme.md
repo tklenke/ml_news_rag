@@ -28,7 +28,7 @@ pip install -r requirements. txt
 
 ### Run the Embedder
 ```
-python embedData.py
+python embedder.py
 ```
 
 

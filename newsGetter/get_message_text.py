@@ -12,10 +12,10 @@ import markdownify
 import re
 import os
 
-ids_file = 'href_tags1.txt'
+ids_file = 'A_ids.txt'
 load_pause = 4
-read_pause = 8
-MESSAGE_DIR = 'msgs_new'
+read_pause = 25
+MESSAGE_DIR = 'msgs'
 exe_path = '..\\..\\chromedriver-win64\\chromedriver.exe'
 nMax = 5000
 
@@ -46,6 +46,7 @@ remove_patterns = []
 remove_patterns.append(r"!\[.*profile photo\]\(.*\)")
 remove_patterns.append(r"\[https://groups\.google\.com\/[a-z]\/msgid\/cozy.*\]\(.*\)")
 remove_patterns.append(r"To unsubscribe.*googlegroups.com")
+
 # Function to convert HTML to Markdown
 def html_to_markdown(html):
     # Use markdownify to convert HTML to Markdown

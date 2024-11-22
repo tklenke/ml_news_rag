@@ -1,7 +1,9 @@
 #make message dirs
 import os
 
-msgs_dir = "msgs_new"
+# ---  CONSTANTS
+msgs_dir = "msgs"
+filename = "A_ids.txt"  # Replace with your actual file name
 
 def count_first_characters(filename):
   """Counts the occurrences of the first character in each line of a file.
@@ -51,8 +53,7 @@ def makethedirs(counts):
             if not os.path.exists(sub_dir_path):
                 os.mkdir(sub_dir_path)
 
-# Example usage
-filename = "href_tags1.txt"  # Replace with your actual file name
+
 counts, lines = count_first_characters(filename)
 
 print("Character counts:")
