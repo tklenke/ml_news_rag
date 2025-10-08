@@ -8,10 +8,10 @@ SOURCEDOCPATHS = ["../data/msgs","../data/news","../data/aeroelectric","../data/
 #SOURCEDOCPATHS = ["../data/test",]
 COMPLETEDEMBEDFILE = "embedstatus.txt"
 NMAXFILE = 20_000 
-NMAXFILE = 20
+NMAXFILE = 20_000
 
 
-CHUNKSIZE = 75 #initial 75
+CHUNKSIZE = 250 #initial 75
 INITEMBED = False
 EMBEDMODEL = "nomic-embed-text"
 EMBED_PREFIX = "search_document:"  #search_query:
