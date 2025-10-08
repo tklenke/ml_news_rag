@@ -6,7 +6,7 @@ from f_misc import get_id_from_path, get_filepaths_list
 
 def readtextfile(path):
   text_contents = {}
-  with open(path, "r", encoding="utf-8") as file:
+  with open(path, "r", encoding="utf-8", errors="replace") as file:
     content = file.read()
   text_contents[path] = content
   return text_contents
@@ -91,8 +91,9 @@ class Embedder():
         #  print(f"{textdocspath} {len(chunks)} chunks {self.chunk_size}")
         embeds = self.get_embedding(chunks)
         chunknumber = list(range(len(chunks)))
-        ids = [get_id_from_path(filename) + str(index) for index in chunknumber]
-        metadatas = [{"source": filename} for index in chunknumber]
+        id = get_id_from_path(filename)
+        ids = [id + str(index) for index in chunknumber]
+        metadatas = [{"source": id} for index in chunknumber]
         self.chromacollection.add(ids=ids, documents=chunks, embeddings=embeds, metadatas=metadatas)
       return
 
@@ -102,17 +103,18 @@ if __name__ == "__main__":
   files = get_filepaths_list("../data/test_min")
   embdr = Embedder()
 
+  embdr.set_collection("nomic-embed-text",initialize=False)
   embdr.set_prefix("prefix:")
   embdr.set_chunk_size(75)
-  for file in files:
-    embdr.embed_file(textdocspath=file)
+  #for file in files:
+  #  embdr.embed_file(textdocspath=file)
   print(f"Collection count: {embdr.get_collection_count()}")
 
   #below will print out all the records in the db...so be careful or you'll get a 
   # screen full!
-  #r = embdr.get_chroma_get()
-  #for rec in r:
-  #  print(f"{rec}")
-  #  print(f"{r[rec]}")
+  r = embdr.get_chroma_get()
+  for rec in r:
+    print(f"{rec}")
+    print(f"{r[rec]}")
 
   print(f"done")

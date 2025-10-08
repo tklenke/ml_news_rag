@@ -11,7 +11,7 @@ that the script can be stopped and restarted saving progress.
 
 Build two docker containers required.  One for the ChromaDB and one for Ollama and the embedding models.
 ChromaDB will store data persistantly and Ollama will download relevant models for embedding and 
-answer testing.  Run the docker-compose from the parent directory
+answer testing.  Start docker desktop. Run the docker-compose from the parent directory using Windows Command prompt. 
 
 ```
 docker-compose build

@@ -1,5 +1,18 @@
 #### Message Thread Getter
 
+## How to run
+ 1. ensure Chrome is up-to-date.  Check Chome version under "Help"
+ 1. download and unzip matching rev of ChromeDriver from https://googlechromelabs.github.io/chrome-for-testing/
+ 1. unzip chromedriver into directory specified in get_msg_ids.py and process_message.py
+ 1. update startDate in get_msg_ids.py with date of previous run
+ 1. run follow:
+ ```
+ chrome_with_debug.bat
+ python get_msg_ids.py
+ pthon process_messages.py
+ ```
+
+## Notes
 This is the more recent interation than newsGetter.
 
 

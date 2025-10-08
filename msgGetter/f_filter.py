@@ -4,61 +4,96 @@ import re, random, time
 ##----Filters
 remove_strings = []
 remove_patterns = []
-remove_patterns.append(r'Reply\sto\sauthor\sForward\sDelete\sYou\sdo\snot\shave\spermission\sto\sdelete\smessages\sin\sthis\sgroup\sCopy\slink\sReport\smessage\sShow')
-remove_patterns.append(r'Reply\sall\sReply\sto\sauthor\sForward')
-remove_patterns.append(r'You\sreceived\sthis\smessage\sbecause\syou\sare\ssubscribed\sto\sthe\sGoogle\sGroups\s"COZY\sBuilders\sMailing\sList"\sgroup.')
-remove_patterns.append(r'To\sview\sthis\sdiscussion\son\sthe\sweb\svisit')
-remove_patterns.append(r'original\smessageto\sCanard\sAviators,\sCozy\sBuilders')
-remove_patterns.append(r'original\smessageto\sCozy\sBuilders')
-remove_patterns.append(r'original\smessageto\scanard\-aviators@yahoogroups.com,\scozy\_builders@googlegroups.com\s')
-remove_patterns.append(r'original\smessageto\scozy\_builders@googlegroups.com')
-remove_patterns.append(r"original\smessageto\sCozy\sList")
-remove_patterns.append(r'original\smessageto\scozy\_builders,\scanard\-aviators@canardzone.groups.io')
-remove_patterns.append(r'original\smessageto\sCOZY\sBuilders\sMailing\sList')
-remove_patterns.append(r'Mailing\sList\sAviators')
-remove_patterns.append(r'Canard\sAviators\sMailing\sList')
-remove_patterns.append(r'original\smessageto\sCOZY\sMailing\sList')
-remove_patterns.append(r'COZY\sBuilders\sMailing\sList')
-remove_patterns.append(r'cozy\_builders@googlegroups.com')
-remove_patterns.append(r'canard\-aviators')
-remove_patterns.append(r'original\smessage\sto')
-remove_patterns.append(r'Sent\sfrom\smy\siPhone')
-remove_patterns.append(r'unread,')
-remove_patterns.append(r"\[.*profile photo\]\(.*\)")
-remove_patterns.append(r"\[Yahoo! Groups\]\(.*\)")
+remove_patterns.append(r'\u202f|\ufeff|\u200b|\u2003')
+remove_patterns.append(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F780-\U0001F7FF\U0001F800-\U0001F82F\U0001F880-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U00002600-\U000026FF\U000024C2-\U0001F251\u200d\u23cf\u23e9\u23ea\u23e7\u23f0\u23f1\u23f2\u23f3\u23f9-\u23fa\u26a0\u2699\ufe0f]') #emojjis
+remove_patterns.append(r'(\d{1,2}):(\d{2}):(\d{2})\s+(AM|PM)') #time with seconds
+remove_patterns.append(r'(\d{1,2}):(\d{2})\s+(AM|PM)*,*') #time
+remove_patterns.append(r'(\d+)\s+hours\s+ago') #hours ago
+remove_patterns.append(r'((Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b)\s*(\d{1,2}),*\s*(\d{4}),*') #dates
+remove_patterns.append(r'(\d{1,2})\/(\d{1,2})\/(\d{2})')  #dates 3/12/25
+remove_patterns.append(r'<.+?\@.+?>') #email address in brackets and the brackets
+remove_patterns.append(r'\[(.*?)\]\((.*?)\)') #[stuff](stuff)  markdown weblink
+remove_patterns.append(r'https?:\/\/\S+')  #http or https:// and all the non whitespace characters after
+remove_patterns.append(r'###.?') # remove lines with ### (author)
+remove_patterns.append(r'reply\s*all\s*Reply\s*to\s*author\s*Forward\s*Delete')
+remove_patterns.append(r'reply\s*all\s*reply\s*to\s*author\s*forward')
+remove_patterns.append(r'reply\s*to\s*author\s*forward\s*delete')
+remove_patterns.append(r'You\s*do\s*not\s*have\s*permission\s*to\s*delete\s*messages\s*in\s*this\s*group')
+remove_patterns.append(r'Copy\s*link\s*Report\s*message\s*Show')
+remove_patterns.append(r'Reply\s*to\s*group')
+remove_patterns.append(r'unsubscribe')
+remove_patterns.append(r'original\s*message\s*to')
+remove_patterns.append(r'Reply\s*all')
+remove_patterns.append(r'cozy\_builders\@googlegroups\.com')
+remove_patterns.append(r'You\s*received\s*this\s*message\s*because\s*you\s*are\s*subscribed\s*to\s*the\s*Google\s*Groups\s*"COZY\s*Builders\s*Mailing\s*List"\s*group.')
+remove_patterns.append(r'You\s*received\s*this\s*message\s*because\s*you\s*are\s*subscribed\s*to')
+remove_patterns.append(r'To\s*view\s*this\s*discussion\s*on\s*the\s*web\s*visit')
+remove_patterns.append(r'canard\-aviators@yahoogroups.com')
+remove_patterns.append(r"Cozy\s*(email)*\s*List")
+remove_patterns.append(r'canard\-aviators@canardzone.groups.io')
+remove_patterns.append(r'COZY\s*Builders\s*Mailing\s*List')
+remove_patterns.append(r'Mailing\s*List\s*Aviators')
+remove_patterns.append(r'To\s*view\s*this\s*discussion\s*visit')
+remove_patterns.append(r'Canard\s*Aviators\s*Mailing\s*List')
+remove_patterns.append(r'COZY\s*Mailing\s*List')
+remove_patterns.append(r'COZY\s*Builders\s*Mailing\s*List')
+remove_patterns.append(r'canard\-aviators*')
+remove_patterns.append(r'Canard\s*Aa*viators*')
+remove_patterns.append(r'Cozy\s*Groups*')
+remove_patterns.append(r'Canard\s*Groups*')
+remove_patterns.append(r'original\s*message')
+remove_patterns.append(r'Copyright\s*©\s*(\d{4})') #copyright notice
+remove_patterns.append(r'Sent\s*from\s*my\s*(iPhone|samsung|verizon)?')
+remove_patterns.append(r'unread')
+remove_patterns.append(r'\*\*\S+\s*\*\*') #**Subject  ** e.g.
+remove_patterns.append(r'cozy(\s*|_*|\\_*)builders')
+remove_patterns.append(r"\[.*profile\s*photo\]\(.*\)")
+remove_patterns.append(r"\[Yahoo!\s*Groups\]\(.*\)")
 remove_patterns.append(r"\[Privacy\]\(.*\)")
-remove_patterns.append(r"\[Terms of Use\]\(.*\)")
+remove_patterns.append(r"\[Terms\s*of\s*Use\]\(.*\)")
 remove_patterns.append(r"\[https://groups\.google\.com\/[a-z]\/msgid\/cozy.*\]\(.*\)")
-remove_patterns.append(r"To unsubscribe.*googlegroups.com")
-remove_patterns.append(r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{1,2},\s\d{4},\s\d{1,2}:\d{2}:\d{2}\s(AM|PM)\s\d{1,2}/\d{1,2}/\d{2}')
-#remove_patterns.append(r'\d{1,2}/\d{1,2}/\d{2}') #date
-#remove_patterns.append(r'\d{1,2}, \d{4}, \d{1,2}:\d{2}:\d{2}') #date
-#remove_patterns.append(r'\s(AM|PM)\s') #date piece
+remove_patterns.append(r"To\s*unsubscribe.*googlegroups.com")
+remove_patterns.append(r'(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*\d{1,2},\s*\d{4},\s*\d{1,2}:\d{2}:\d{2}\s*(AM|PM)\s*\d{1,2}/\d{1,2}/\d{2}')
 remove_patterns.append(r'\\<([a-zA-Z0-9._%+-\\ ]+@[a-zA-Z0-9.-\\ ]+)\\>') #email address in brackets
 remove_patterns.append(r'[A-Za-z0-9=&_\-]{25,}') #repeating characters in urls
 remove_patterns.append(r'([A-Za-z0-9=\-_])(%)([A-Za-z0-9=\-_])') #spaces in urls
 remove_patterns.append(r'(http|https)') #http
 remove_patterns.append(r'(googlegroups\.com|groups\.google\.com|googleusercontent\.com|google|gmail\.com|groups\.yahoo\.com|yahoogroups\.com|yahoo\.com|\.jpg)') #extra url stuff not
+remove_patterns.append(r'(sbcglobal|aol|verizon|gmail|yahoo|hotmail|earthlink)\.(com|org|net')
+remove_patterns.append(r'msgid')
+remove_patterns.append(r'%[0-9A-Fa-foO]2') #url encoded characters
+remove_patterns.append(r'\s+')
 
+def normalize_quotes(text):
+    """Replaces fancy/curly quotes with basic straight quotes in two re.sub lines."""
+    
+    # 1. Replace all double curly quotes with straight double quotes
+    text = re.sub(r'[“”]', '"', text) 
+    
+    # 2. Replace all single curly quotes/apostrophes with straight single quotes
+    text = re.sub(r'[‘’]', "'", text) 
+    
+    return text
 
 def filter_markdown(markdown_text):
     #remove the first line
     lines = markdown_text.splitlines()
     lines = lines[1:]
     markdown_text = '\n'.join(lines)
+    markdown_text = normalize_quotes(markdown_text)
     for remove_text in remove_strings:
-        markdown_text = markdown_text.replace(remove_text, " ") 
+        markdown_text = markdown_text.replace(remove_text, " ", flags=re.IGNORECASE) 
         #use a space to stop unintended word merge
     for remove_pattern in remove_patterns:
-        markdown_text = re.sub(remove_pattern, ' ', markdown_text)
+        markdown_text = re.sub(remove_pattern, ' ', markdown_text, flags=re.IGNORECASE)
     #replace backslashes with null
     markdown_text = markdown_text.replace('\\','')
     #remove back slashes, fwd slashes, colons, square and curly brackets with a space 
     # (might help break up URLs into useful things)
     #replace any repeating characters with space
-    markdown_text = re.sub(r'(.)\1{5,}|[<>\(\)\\/:{}[\]\-_#@]', ' ', markdown_text)
+    markdown_text = re.sub(r'(.)\1{5,}|[<>\(\)\\/:{}[\]\-_#@]', '  ', markdown_text)
     #make Lycoming engne numbers one word
-    markdown_text = re.sub(r"[oO0]\s?(\d{3})", r"o\1", markdown_text)
+    markdown_text = re.sub(r"[oO0]\s*(\d{3})", r"o\1", markdown_text)
  
     return markdown_text
 

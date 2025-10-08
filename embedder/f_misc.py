@@ -28,6 +28,7 @@ def get_ids_list_from_file(filename):
 
 #given a full path, return the filename without extension
 def get_id_from_path(path):
+    path = path.replace('\\','/')
     filename = path.split("/")[-1]
 
     # Split the filename based on the last dot (.)
