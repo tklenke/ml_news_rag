@@ -5,12 +5,10 @@ services:
     image: chromadb/chroma:1.1.1
     ports:
       - "8000:8000"
-    env_file:
-      - ./.env
     volumes:
-      - ./data/chroma:/data
-#      - my_chroma_data:/data
-
+      - ../site_2024/data/chroma:/data
+    environment:
+      - ANONYMIZED_TELEMETRY=False
 
 # docker run --gpus=all -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
   ollama-rag:
