@@ -24,11 +24,11 @@ Implement image database system following the incremental plan in `image_databas
 ## Phase 1: Image URL Extraction
 
 ### Phase 1.1: URL Pattern Analysis
-- [ ] Manually inspect 10-15 markdown files from data/msgs_md/A/ with images
-- [ ] Document URL patterns for attachments (INCLUDE), profile photos (EXCLUDE), logos/emojis (EXCLUDE)
-- [ ] Document markdown syntax patterns (inline images, links with images)
-- [ ] Create `docs/notes/image_url_patterns.md` with findings
-- [ ] Commit: "Document image URL patterns from A/ directory analysis"
+- [x] Manually inspect 10-15 markdown files from data/msgs_md/A/ with images
+- [x] Document URL patterns for attachments (INCLUDE), profile photos (EXCLUDE), logos/emojis (EXCLUDE)
+- [x] Document markdown syntax patterns (inline images, links with images)
+- [x] Create `docs/notes/image_url_patterns.md` with findings
+- [~] Commit: "Document image URL patterns from A/ directory analysis"
 
 ### Phase 1.2: Create imageGetter Module Structure
 - [ ] Create `imageGetter/` directory
