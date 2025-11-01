@@ -1,0 +1,2 @@
+# Dependencies for imageGetter module
+# Will be populated in later phases as needed

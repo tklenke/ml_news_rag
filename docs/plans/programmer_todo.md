@@ -28,15 +28,18 @@ Implement image database system following the incremental plan in `image_databas
 - [x] Document URL patterns for attachments (INCLUDE), profile photos (EXCLUDE), logos/emojis (EXCLUDE)
 - [x] Document markdown syntax patterns (inline images, links with images)
 - [x] Create `docs/notes/image_url_patterns.md` with findings
-- [~] Commit: "Document image URL patterns from A/ directory analysis"
+- [x] Commit: "Document image URL patterns from A/ directory analysis"
 
 ### Phase 1.2: Create imageGetter Module Structure
-- [ ] Create `imageGetter/` directory
-- [ ] Create `imageGetter/README.md` with ABOUTME comments and module purpose
-- [ ] Create `imageGetter/requirements.txt` (empty initially)
-- [ ] Create `imageGetter/tests/` directory
-- [ ] Create `imageGetter/tests/test_extract_urls.py` (with ABOUTME, empty tests initially)
-- [ ] Commit: "Create imageGetter module structure"
+- [x] Create `imageGetter/` directory
+- [x] Create `imageGetter/README.md` with ABOUTME comments and module purpose
+- [x] Create `imageGetter/requirements.txt` (empty initially)
+- [x] Create `imageGetter/tests/` directory
+- [x] Create `imageGetter/tests/test_extract_urls.py` (with ABOUTME, empty tests initially)
+- [x] Create virtual environment: `python -m venv imageGetter/venv`
+- [x] Add `imageGetter/venv/` to `.gitignore` (already present)
+- [x] Document venv setup in `imageGetter/README.md`
+- [~] Commit: "Create imageGetter module structure with venv"
 
 ### Phase 1.3: URL Extraction - Test Data
 - [ ] Create `imageGetter/tests/fixtures/` directory
