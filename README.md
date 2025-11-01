@@ -1,6 +1,9 @@
 # ml_news_rag
 Python based RAG implementation for expert system based on newgroup corpus
 
+
+
+
 ### Procedure to Update Tool/website
  1. Run msgGetter with range of last run to get google groups traffic since last update
  1. run webGetter against relevant sites. some by hand filtering to be expected
