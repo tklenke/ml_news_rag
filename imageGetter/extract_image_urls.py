@@ -1,0 +1,103 @@
+# ABOUTME: Extracts attachment image URLs from Cozy Builders markdown files
+# ABOUTME: Filters to include only groups.google.com attachments, excludes profile photos and tracking pixels
+
+import re
+from typing import List, Dict
+from urllib.parse import urlparse, parse_qs, unquote
+
+
+def extract_image_urls(strMarkdownContent: str) -> List[Dict[str, str]]:
+    """
+    Extract attachment image URLs from markdown content.
+
+    Filters to include only attachment images from:
+    https://groups.google.com/group/cozy_builders/attach/...
+
+    Excludes:
+    - Profile photos (googleusercontent.com)
+    - Tracking pixels (ci*.googleusercontent.com/proxy)
+    - External site images
+    - Logos and UI elements
+
+    Args:
+        strMarkdownContent: Markdown file content as string
+
+    Returns:
+        List of dicts with keys: url, part, filename
+        Example: [{"url": "https://...", "part": "0.1", "filename": "Image.jpeg"}]
+    """
+    # Regex to find all URLs with image extensions (including query parameters)
+    # Matches http:// or https:// up to whitespace, ), or ]
+    # This captures the full URL including query parameters
+    IMAGE_URL_PATTERN = re.compile(
+        r'https?://[^\s\)\]]+\.(?:jpg|jpeg|png|gif|bmp)(?:\?[^\s\)\]]*)?',
+        re.IGNORECASE
+    )
+
+    # Find all image URLs
+    lstAllUrls = IMAGE_URL_PATTERN.findall(strMarkdownContent)
+
+    # Deduplicate URLs (same image may appear multiple times in markdown)
+    setUniqueUrls = set(lstAllUrls)
+
+    # Filter to only attachment URLs and extract metadata
+    lstResults = []
+    for strUrl in sorted(setUniqueUrls):  # Sort for consistent ordering
+        if strUrl.startswith('https://groups.google.com/group/cozy_builders/attach/'):
+            dctImageData = _parse_attachment_url(strUrl)
+            if dctImageData:
+                lstResults.append(dctImageData)
+
+    return lstResults
+
+
+def _parse_attachment_url(strUrl: str) -> Dict[str, str]:
+    """
+    Parse an attachment URL to extract metadata.
+
+    URL format:
+    https://groups.google.com/group/cozy_builders/attach/{hash}/{filename}?part={part}&view=1
+
+    Args:
+        strUrl: Attachment URL
+
+    Returns:
+        Dict with url, part, filename or None if parsing fails
+    """
+    try:
+        # Parse URL components
+        parsed = urlparse(strUrl)
+
+        # Extract filename from path
+        # Path format: /group/cozy_builders/attach/{hash}/{filename}
+        strPath = parsed.path
+        lstPathParts = strPath.split('/')
+        if len(lstPathParts) >= 5:
+            strFilename = unquote(lstPathParts[-1])  # Last part is filename
+        else:
+            strFilename = "unknown"
+
+        # Extract part number from query string
+        dctQueryParams = parse_qs(parsed.query)
+        strPart = dctQueryParams.get('part', [''])[0]
+
+        return {
+            "url": strUrl,
+            "part": strPart,
+            "filename": strFilename
+        }
+    except Exception as e:
+        # If parsing fails, skip this URL
+        return None
+
+
+if __name__ == "__main__":
+    # Quick test
+    strTestMarkdown = """
+    ![Image](https://groups.google.com/group/cozy_builders/attach/7d6ac224e41ae/Image.jpeg?part=0.1)
+    ![Profile](//lh3.googleusercontent.com/a-/profile=s40-c)
+    """
+    lstResult = extract_image_urls(strTestMarkdown)
+    print(f"Found {len(lstResult)} attachment images:")
+    for dctImg in lstResult:
+        print(f"  {dctImg}")

@@ -69,12 +69,13 @@ Implement image database system following the incremental plan in `image_databas
 - [~] Commit: "Add failing tests for URL extraction (TDD RED phase)"
 
 **GREEN Phase:**
-- [ ] Implement `extract_image_urls(strMarkdownContent: str) -> list[dict]`
-- [ ] Run pytest - verify all tests pass
+- [x] Implement `extract_image_urls(strMarkdownContent: str) -> list[dict]`
+- [x] Run pytest - verify all tests pass (6 passed, 3 skipped)
 
 **REFACTOR Phase:**
-- [ ] Refactor for clarity and maintainability while keeping tests green
-- [ ] Commit: "Implement URL extraction with filtering"
+- [x] Review code for clarity and maintainability
+- [x] Code is clean, no refactoring needed
+- [~] Commit: "Implement URL extraction with filtering (TDD GREEN phase)"
 
 ### Phase 1.5: Message Metadata Extraction (TDD)
 **RED Phase:**
