@@ -216,12 +216,89 @@ def build_image_index(strPath: str) -> Dict[str, Dict]:
 
 
 if __name__ == "__main__":
-    # Quick test
-    strTestMarkdown = """
-    ![Image](https://groups.google.com/group/cozy_builders/attach/7d6ac224e41ae/Image.jpeg?part=0.1)
-    ![Profile](//lh3.googleusercontent.com/a-/profile=s40-c)
-    """
-    lstResult = extract_image_urls(strTestMarkdown)
-    print(f"Found {len(lstResult)} attachment images:")
-    for dctImg in lstResult:
-        print(f"  {dctImg}")
+    import argparse
+    import json
+    import sys
+
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description="Extract image URLs and metadata from Cozy Builders markdown files"
+    )
+    parser.add_argument(
+        "--input",
+        required=True,
+        help="Path to markdown file or directory"
+    )
+    parser.add_argument(
+        "--output",
+        required=True,
+        help="Path to output JSON file"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Preview results without writing to file"
+    )
+
+    args = parser.parse_args()
+
+    # Check if input path exists
+    from pathlib import Path
+    pathInput = Path(args.input)
+    if not pathInput.exists():
+        print(f"Error: Input path does not exist: {args.input}", file=sys.stderr)
+        sys.exit(1)
+
+    # Build image index
+    print(f"Processing: {args.input}")
+    print()
+
+    try:
+        dctIndex = build_image_index(args.input)
+    except Exception as e:
+        print(f"Error building index: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # Calculate statistics
+    intTotalMessages = len(dctIndex)
+    intTotalImages = sum(len(entry["images"]) for entry in dctIndex.values())
+
+    # Display results
+    print(f"Results:")
+    print(f"  Messages with images: {intTotalMessages}")
+    print(f"  Total image URLs: {intTotalImages}")
+    print()
+
+    # Show sample entries (first 3 message IDs)
+    if intTotalMessages > 0:
+        print("Sample entries:")
+        for idx, (strMsgId, dctEntry) in enumerate(list(dctIndex.items())[:3]):
+            print(f"  {strMsgId}:")
+            print(f"    Subject: {dctEntry['metadata']['subject']}")
+            print(f"    Images: {len(dctEntry['images'])}")
+        if intTotalMessages > 3:
+            print(f"  ... and {intTotalMessages - 3} more")
+        print()
+
+    # Write output or dry-run
+    if args.dry_run:
+        print("DRY RUN - No file written")
+        print(f"Would write to: {args.output}")
+    else:
+        try:
+            pathOutput = Path(args.output)
+            # Create parent directory if needed
+            pathOutput.parent.mkdir(parents=True, exist_ok=True)
+
+            # Write JSON
+            with open(pathOutput, 'w', encoding='utf-8') as f:
+                json.dump(dctIndex, f, indent=2, ensure_ascii=False)
+
+            print(f"Wrote index to: {args.output}")
+            print(f"File size: {pathOutput.stat().st_size} bytes")
+        except Exception as e:
+            print(f"Error writing output file: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    print()
+    print("Done!")
