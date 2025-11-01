@@ -139,6 +139,82 @@ def _parse_attachment_url(strUrl: str) -> Dict[str, str]:
         return None
 
 
+def build_image_index(strPath: str) -> Dict[str, Dict]:
+    """
+    Build an image index from markdown file(s).
+
+    Processes single file or all .md files in a directory.
+    Extracts metadata and image URLs from each file.
+    Skips files without attachment images.
+
+    Args:
+        strPath: Path to markdown file or directory
+
+    Returns:
+        Dict keyed by message_id with metadata and images list
+        Format:
+        {
+          "A20JX9PGHII": {
+            "metadata": {
+              "message_id": "A20JX9PGHII",
+              "subject": "WING LEADING EDGE MOLDS",
+              "author": "ted davis",
+              "date": "Feb 11, 2011"
+            },
+            "images": [
+              {
+                "url": "https://...",
+                "part": "0.1",
+                "filename": "image001.gif"
+              }
+            ]
+          }
+        }
+    """
+    from pathlib import Path
+
+    dctIndex = {}
+    pathInput = Path(strPath)
+
+    # Determine if path is file or directory
+    if pathInput.is_file():
+        lstFiles = [pathInput]
+    elif pathInput.is_dir():
+        lstFiles = sorted(pathInput.glob("*.md"))
+    else:
+        return dctIndex  # Path doesn't exist, return empty
+
+    # Process each markdown file
+    for pathFile in lstFiles:
+        try:
+            # Read file content
+            with open(pathFile, 'r', encoding='utf-8', errors='replace') as f:
+                strContent = f.read()
+
+            # Extract metadata
+            dctMetadata = extract_message_metadata(strContent)
+
+            # Extract image URLs
+            lstImages = extract_image_urls(strContent)
+
+            # Skip if no images or no message_id
+            if not lstImages or not dctMetadata.get("message_id"):
+                continue
+
+            # Add to index keyed by message_id
+            strMessageId = dctMetadata["message_id"]
+            dctIndex[strMessageId] = {
+                "metadata": dctMetadata,
+                "images": lstImages
+            }
+
+        except Exception as e:
+            # Skip files that can't be processed
+            continue
+
+    return dctIndex
+
+
 if __name__ == "__main__":
     # Quick test
     strTestMarkdown = """

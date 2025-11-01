@@ -4,10 +4,10 @@
 import pytest
 from pathlib import Path
 
-# Import function to test (will be implemented in GREEN phase)
-# import sys
-# sys.path.insert(0, str(Path(__file__).parent.parent))
-# from extract_image_urls import build_image_index
+# Import function to test
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from extract_image_urls import build_image_index
 
 
 # Test fixtures directory
@@ -23,29 +23,26 @@ class TestBuildImageIndex:
         strFilePath = str(FIXTURES_DIR / "A20JX9PGHII.md")
 
         # Build index
-        # dctIndex = build_image_index(strFilePath)
+        dctIndex = build_image_index(strFilePath)
 
         # Should have one entry keyed by message_id
-        # assert "A20JX9PGHII" in dctIndex
+        assert "A20JX9PGHII" in dctIndex
 
         # Entry should have metadata and images
-        # dctEntry = dctIndex["A20JX9PGHII"]
-        # assert "metadata" in dctEntry
-        # assert "images" in dctEntry
+        dctEntry = dctIndex["A20JX9PGHII"]
+        assert "metadata" in dctEntry
+        assert "images" in dctEntry
 
         # Metadata should match
-        # assert dctEntry["metadata"]["message_id"] == "A20JX9PGHII"
-        # assert dctEntry["metadata"]["subject"] == "WING LEADING EDGE MOLDS"
-        # assert dctEntry["metadata"]["author"] == "ted davis"
-        # assert dctEntry["metadata"]["date"] == "Feb 11, 2011"
+        assert dctEntry["metadata"]["message_id"] == "A20JX9PGHII"
+        assert dctEntry["metadata"]["subject"] == "WING LEADING EDGE MOLDS"
+        assert dctEntry["metadata"]["author"] == "ted davis"
+        assert dctEntry["metadata"]["date"] == "Feb 11, 2011"
 
         # Images should match (1 image)
-        # assert len(dctEntry["images"]) == 1
-        # assert dctEntry["images"][0]["part"] == "0.1"
-        # assert dctEntry["images"][0]["filename"] == "image001.gif"
-
-        # RED: This test should fail
-        pytest.fail("Function build_image_index() not yet implemented")
+        assert len(dctEntry["images"]) == 1
+        assert dctEntry["images"][0]["part"] == "0.1"
+        assert dctEntry["images"][0]["filename"] == "image001.gif"
 
     def test_process_directory_of_markdown_files(self):
         """Should process all markdown files in a directory."""
@@ -53,24 +50,21 @@ class TestBuildImageIndex:
         strDirPath = str(FIXTURES_DIR)
 
         # Build index
-        # dctIndex = build_image_index(strDirPath)
+        dctIndex = build_image_index(strDirPath)
 
         # Should process all .md files in directory
         # Should have entries for files with images
-        # assert "A20JX9PGHII" in dctIndex  # 1 image
-        # assert "a42YFDFx8WY" in dctIndex  # 8 images
+        assert "A20JX9PGHII" in dctIndex  # 1 image
+        assert "a42YFDFx8WY" in dctIndex  # 8 images
 
         # Should NOT have entries for files without images
-        # assert "A0OiG3usNBQ" not in dctIndex  # profile photos only
-        # assert "A2ne3ed8CHE" not in dctIndex  # profile photo only
+        assert "A0OiG3usNBQ" not in dctIndex  # profile photos only
+        assert "A2ne3ed8CHE" not in dctIndex  # profile photo only
 
         # Check one entry in detail
-        # dctEntry = dctIndex["a42YFDFx8WY"]
-        # assert len(dctEntry["images"]) == 8
-        # assert dctEntry["metadata"]["subject"] == "My just overhauled engine"
-
-        # RED: This test should fail
-        pytest.fail("Function build_image_index() not yet implemented")
+        dctEntry = dctIndex["a42YFDFx8WY"]
+        assert len(dctEntry["images"]) == 8
+        assert dctEntry["metadata"]["subject"] == "My just overhauled engine"
 
     def test_skip_files_without_images(self):
         """Should skip markdown files that have no attachment images."""
@@ -78,13 +72,10 @@ class TestBuildImageIndex:
         strFilePath = str(FIXTURES_DIR / "A0OiG3usNBQ.md")
 
         # Build index
-        # dctIndex = build_image_index(strFilePath)
+        dctIndex = build_image_index(strFilePath)
 
         # Should be empty (no attachment images)
-        # assert len(dctIndex) == 0
-
-        # RED: This test should fail
-        pytest.fail("Function build_image_index() not yet implemented")
+        assert len(dctIndex) == 0
 
     def test_handle_malformed_markdown(self):
         """Should handle markdown files with missing or partial metadata gracefully."""
@@ -101,17 +92,13 @@ class TestBuildImageIndex:
 
         try:
             # Build index
-            # dctIndex = build_image_index(strTempPath)
+            dctIndex = build_image_index(strTempPath)
 
             # Should not crash, should skip files without proper metadata
-            # assert len(dctIndex) == 0
-            pass
+            assert len(dctIndex) == 0
         finally:
             # Clean up
             os.unlink(strTempPath)
-
-        # RED: This test should fail
-        pytest.fail("Function build_image_index() not yet implemented")
 
     def test_returns_dict_ready_for_json(self):
         """Should return a dict structure ready to serialize as JSON."""
@@ -119,15 +106,12 @@ class TestBuildImageIndex:
         strFilePath = str(FIXTURES_DIR / "A20JX9PGHII.md")
 
         # Build index
-        # dctIndex = build_image_index(strFilePath)
+        dctIndex = build_image_index(strFilePath)
 
         # Should be JSON-serializable (test by converting to JSON)
-        # import json
-        # try:
-        #     strJson = json.dumps(dctIndex)
-        #     assert len(strJson) > 0
-        # except (TypeError, ValueError) as e:
-        #     pytest.fail(f"Index not JSON-serializable: {e}")
-
-        # RED: This test should fail
-        pytest.fail("Function build_image_index() not yet implemented")
+        import json
+        try:
+            strJson = json.dumps(dctIndex)
+            assert len(strJson) > 0
+        except (TypeError, ValueError) as e:
+            pytest.fail(f"Index not JSON-serializable: {e}")
