@@ -39,17 +39,20 @@ Implement image database system following the incremental plan in `image_databas
 - [x] Create virtual environment: `python -m venv imageGetter/venv`
 - [x] Add `imageGetter/venv/` to `.gitignore` (already present)
 - [x] Document venv setup in `imageGetter/README.md`
-- [~] Commit: "Create imageGetter module structure with venv"
+- [x] Commit: "Create imageGetter module structure with venv"
 
 ### Phase 1.3: URL Extraction - Test Data
-- [ ] Create `imageGetter/tests/fixtures/` directory
-- [ ] Copy 3-5 sample markdown files from A/ directory to fixtures
+- [x] Create `imageGetter/tests/fixtures/` directory
+- [x] Copy 3-5 sample markdown files from A/ directory to fixtures
   - At least one with attachment images
   - At least one with profile photos only
   - At least one with no images
-- [ ] Create expected output JSON for each fixture file
-- [ ] Create `imageGetter/tests/fixtures/README.md` documenting test fixtures
-- [ ] Commit: "Add test fixtures for URL extraction"
+- [x] Create expected output JSON for each fixture file
+- [x] Create scan_image_urls.py to analyze full corpus
+- [x] Run full corpus scan (10,443 files analyzed)
+- [x] Document scan results in image_url_patterns.md
+- [x] Validate simple filter captures 97% of relevant URLs
+- [~] Commit: "Add URL scan results and validate filtering strategy"
 
 ### Phase 1.4: URL Extraction - Core Logic (TDD)
 **RED Phase:**

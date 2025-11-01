@@ -213,16 +213,48 @@ def is_attachment_image(url: str) -> bool:
 
 ## Statistics from Analysis
 
+### Initial Manual Analysis (14 files from A/ directory)
 - **Total files analyzed:** 14
 - **Files with attachments:** 6 (43%)
 - **Total attachment image URLs found:** ~15
 - **Profile photo URLs found:** ~20+
 - **Tracking/logo URLs found:** ~10
 
-**Success rate projection:** If 43% of messages in A/ directory have images, and A/ has ~200 markdown files, we expect ~85 messages with images, potentially 150-200 individual image URLs.
+### Full Corpus Scan (All 10,443 markdown files)
+
+**Scan Date:** 2025-11-01
+**Scan Tool:** `scan_image_urls.py`
+
+**Overall Statistics:**
+- **Total markdown files scanned:** 10,443
+- **Files with image URLs:** 3,491 (33%)
+- **Total image URLs found:** 10,060
+- **Unique image URLs:** 7,643
+- **Unique domains:** 111
+
+**Domain Breakdown (Top domains by count):**
+- `groups.google.com` - **7,406 URLs (97% of unique URLs)**
+- `ci6.googleusercontent.com` - 1,499 (tracking pixels - EXCLUDE)
+- `ci3.googleusercontent.com` - 210 (tracking pixels - EXCLUDE)
+- `lh3.googleusercontent.com` - 146 (profile photos - EXCLUDE)
+- `ci4.googleusercontent.com` - 146 (tracking pixels - EXCLUDE)
+- `ci5.googleusercontent.com` - 143 (tracking pixels - EXCLUDE)
+- `groups.yahoo.com` - 140
+- `ljosnes.no` - 70 (external Cozy calendar site)
+- Other domains - <40 each (external sites, vendor links, etc.)
+
+**Path Pattern Analysis:**
+- **7,396 URLs** match pattern: `https://groups.google.com/group/cozy_builders/attach/...`
+- This is **96.7% of all unique URLs**
+- All other patterns are tracking pixels, external links, or UI elements
+
+**Conclusion:**
+The simple filter `url.startswith('https://groups.google.com/group/cozy_builders/attach/')` captures 97% of relevant attachment images while automatically excluding all tracking pixels, profile photos, and logos.
+
+**Detailed scan results:** See `docs/input/image_url_scan_results.txt`
 
 ## Next Steps
 
-1. Implement `extract_image_urls()` function with filtering
+1. Implement `extract_image_urls()` function with simple filter
 2. Test on fixture files
-3. Run on full A/ directory to validate statistics
+3. Run on full A/ directory to validate implementation
