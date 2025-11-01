@@ -66,7 +66,7 @@ Implement image database system following the incremental plan in `image_databas
 - [x] Write failing test: `test_extract_filename()`
 - [x] Write failing test: `test_handle_url_with_ampersand_view()`
 - [x] Run pytest - verify all tests fail (9/9 failed)
-- [~] Commit: "Add failing tests for URL extraction (TDD RED phase)"
+- [x] Commit: "Add failing tests for URL extraction (TDD RED phase)"
 
 **GREEN Phase:**
 - [x] Implement `extract_image_urls(strMarkdownContent: str) -> list[dict]`
@@ -75,18 +75,22 @@ Implement image database system following the incremental plan in `image_databas
 **REFACTOR Phase:**
 - [x] Review code for clarity and maintainability
 - [x] Code is clean, no refactoring needed
-- [~] Commit: "Implement URL extraction with filtering (TDD GREEN phase)"
+- [x] Commit: "Implement URL extraction with filtering (TDD GREEN phase)"
 
 ### Phase 1.5: Message Metadata Extraction (TDD)
 **RED Phase:**
-- [ ] Write failing test: `test_extract_message_id()`
-- [ ] Write failing test: `test_extract_subject()`
-- [ ] Write failing test: `test_extract_author()`
-- [ ] Write failing test: `test_extract_date()`
-- [ ] Run pytest - verify all tests fail
+- [x] Write failing test: `test_extract_message_id()`
+- [x] Write failing test: `test_extract_subject()`
+- [x] Write failing test: `test_extract_author()`
+- [x] Write failing test: `test_extract_date()`
+- [x] Write failing test: `test_extract_all_metadata()`
+- [x] Write failing test: `test_handle_missing_metadata()`
+- [x] Write failing test: `test_extract_lowercase_message_id()`
+- [x] Run pytest - verify all tests fail (7/7 failed)
+- [~] Commit: "Add failing tests for message metadata extraction (TDD RED phase)"
 
 **GREEN Phase:**
-- [ ] Implement `extract_message_metadata(strMarkdownPath: str) -> dict`
+- [ ] Implement `extract_message_metadata(strMarkdownContent: str) -> dict`
 - [ ] Run pytest - verify all tests pass
 
 **REFACTOR Phase:**
