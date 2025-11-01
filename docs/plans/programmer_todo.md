@@ -52,16 +52,21 @@ Implement image database system following the incremental plan in `image_databas
 - [x] Run full corpus scan (10,443 files analyzed)
 - [x] Document scan results in image_url_patterns.md
 - [x] Validate simple filter captures 97% of relevant URLs
-- [~] Commit: "Add URL scan results and validate filtering strategy"
+- [x] Commit: "Add URL scan results and validate filtering strategy"
 
 ### Phase 1.4: URL Extraction - Core Logic (TDD)
 **RED Phase:**
-- [ ] Write failing test: `test_extract_attachment_urls_from_markdown()`
-- [ ] Write failing test: `test_exclude_profile_photos()`
-- [ ] Write failing test: `test_exclude_logos_and_emojis()`
-- [ ] Write failing test: `test_extract_from_multiple_images()`
-- [ ] Write failing test: `test_handle_markdown_with_no_images()`
-- [ ] Run pytest - verify all tests fail
+- [x] Write failing test: `test_extract_attachment_urls_from_markdown()`
+- [x] Write failing test: `test_exclude_profile_photos()`
+- [x] Write failing test: `test_exclude_logos_and_emojis()`
+- [x] Write failing test: `test_extract_from_multiple_images()`
+- [x] Write failing test: `test_handle_markdown_with_no_images()`
+- [x] Write failing test: `test_extract_single_image()`
+- [x] Write failing test: `test_extract_part_number()`
+- [x] Write failing test: `test_extract_filename()`
+- [x] Write failing test: `test_handle_url_with_ampersand_view()`
+- [x] Run pytest - verify all tests fail (9/9 failed)
+- [~] Commit: "Add failing tests for URL extraction (TDD RED phase)"
 
 **GREEN Phase:**
 - [ ] Implement `extract_image_urls(strMarkdownContent: str) -> list[dict]`
