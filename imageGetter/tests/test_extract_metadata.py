@@ -4,10 +4,10 @@
 import pytest
 from pathlib import Path
 
-# Import function to test (will be implemented in GREEN phase)
-# import sys
-# sys.path.insert(0, str(Path(__file__).parent.parent))
-# from extract_image_urls import extract_message_metadata
+# Import function to test
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from extract_image_urls import extract_message_metadata
 
 
 # Test fixtures directory
@@ -29,100 +29,79 @@ class TestExtractMessageMetadata:
         strMarkdown = load_fixture("A20JX9PGHII.md")
 
         # Extract metadata
-        # dctMetadata = extract_message_metadata(strMarkdown)
+        dctMetadata = extract_message_metadata(strMarkdown)
 
         # Should extract message ID
-        # assert dctMetadata["message_id"] == "A20JX9PGHII"
-
-        # RED: This test should fail
-        pytest.fail("Function extract_message_metadata() not yet implemented")
+        assert dctMetadata["message_id"] == "A20JX9PGHII"
 
     def test_extract_subject(self):
         """Should extract subject from markdown heading."""
         strMarkdown = load_fixture("A20JX9PGHII.md")
 
         # Extract metadata
-        # dctMetadata = extract_message_metadata(strMarkdown)
+        dctMetadata = extract_message_metadata(strMarkdown)
 
         # Should extract subject
-        # assert dctMetadata["subject"] == "WING LEADING EDGE MOLDS"
-
-        # RED: This test should fail
-        pytest.fail("Function extract_message_metadata() not yet implemented")
+        assert dctMetadata["subject"] == "WING LEADING EDGE MOLDS"
 
     def test_extract_author(self):
         """Should extract author name from markdown."""
         strMarkdown = load_fixture("A20JX9PGHII.md")
 
         # Extract metadata
-        # dctMetadata = extract_message_metadata(strMarkdown)
+        dctMetadata = extract_message_metadata(strMarkdown)
 
         # Should extract author
-        # assert dctMetadata["author"] == "ted davis"
-
-        # RED: This test should fail
-        pytest.fail("Function extract_message_metadata() not yet implemented")
+        assert dctMetadata["author"] == "ted davis"
 
     def test_extract_date(self):
         """Should extract date from markdown."""
         strMarkdown = load_fixture("A20JX9PGHII.md")
 
         # Extract metadata
-        # dctMetadata = extract_message_metadata(strMarkdown)
+        dctMetadata = extract_message_metadata(strMarkdown)
 
         # Should extract date (first date occurrence)
-        # assert dctMetadata["date"] == "Feb 11, 2011"
-
-        # RED: This test should fail
-        pytest.fail("Function extract_message_metadata() not yet implemented")
+        assert dctMetadata["date"] == "Feb 11, 2011"
 
     def test_extract_all_metadata(self):
         """Should extract all metadata fields from markdown."""
         strMarkdown = load_fixture("a42YFDFx8WY.md")
 
         # Extract metadata
-        # dctMetadata = extract_message_metadata(strMarkdown)
+        dctMetadata = extract_message_metadata(strMarkdown)
 
         # Should have all fields
-        # assert "message_id" in dctMetadata
-        # assert "subject" in dctMetadata
-        # assert "author" in dctMetadata
-        # assert "date" in dctMetadata
+        assert "message_id" in dctMetadata
+        assert "subject" in dctMetadata
+        assert "author" in dctMetadata
+        assert "date" in dctMetadata
 
         # Check values
-        # assert dctMetadata["message_id"] == "a42YFDFx8WY"
-        # assert dctMetadata["subject"] == "My just overhauled engine"
-        # assert dctMetadata["author"] == "agustin millan"
-        # assert dctMetadata["date"] == "Mar 30, 2020"
-
-        # RED: This test should fail
-        pytest.fail("Function extract_message_metadata() not yet implemented")
+        assert dctMetadata["message_id"] == "a42YFDFx8WY"
+        assert dctMetadata["subject"] == "My just overhauled engine"
+        assert dctMetadata["author"] == "agustin millan"
+        assert dctMetadata["date"] == "Mar 30, 2020"
 
     def test_handle_missing_metadata(self):
         """Should handle markdown with missing metadata gracefully."""
         strMarkdown = "# Some random markdown\n\nNo metadata here."
 
         # Extract metadata
-        # dctMetadata = extract_message_metadata(strMarkdown)
+        dctMetadata = extract_message_metadata(strMarkdown)
 
         # Should return empty or default values
-        # assert dctMetadata["message_id"] == ""
-        # assert dctMetadata["subject"] == ""
-        # assert dctMetadata["author"] == ""
-        # assert dctMetadata["date"] == ""
-
-        # RED: This test should fail
-        pytest.fail("Function extract_message_metadata() not yet implemented")
+        assert dctMetadata["message_id"] == ""
+        assert dctMetadata["subject"] == "Some random markdown"  # Still extracts heading
+        assert dctMetadata["author"] == ""
+        assert dctMetadata["date"] == ""
 
     def test_extract_lowercase_message_id(self):
         """Should handle message IDs that start with lowercase."""
         strMarkdown = load_fixture("a42YFDFx8WY.md")
 
         # Extract metadata
-        # dctMetadata = extract_message_metadata(strMarkdown)
+        dctMetadata = extract_message_metadata(strMarkdown)
 
         # Should preserve case
-        # assert dctMetadata["message_id"] == "a42YFDFx8WY"
-
-        # RED: This test should fail
-        pytest.fail("Function extract_message_metadata() not yet implemented")
+        assert dctMetadata["message_id"] == "a42YFDFx8WY"

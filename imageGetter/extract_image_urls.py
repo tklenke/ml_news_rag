@@ -51,6 +51,54 @@ def extract_image_urls(strMarkdownContent: str) -> List[Dict[str, str]]:
     return lstResults
 
 
+def extract_message_metadata(strMarkdownContent: str) -> Dict[str, str]:
+    """
+    Extract message metadata from Google Groups markdown content.
+
+    Extracts:
+    - message_id: From first line pattern [Original Message ID:...]
+    - subject: From markdown heading (# Subject)
+    - author: From profile section (### author name)
+    - date: From timestamp line (MMM DD, YYYY)
+
+    Args:
+        strMarkdownContent: Markdown file content as string
+
+    Returns:
+        Dict with keys: message_id, subject, author, date
+        Empty strings for missing fields
+    """
+    dctMetadata = {
+        "message_id": "",
+        "subject": "",
+        "author": "",
+        "date": ""
+    }
+
+    # Extract message ID from first line: [Original Message ID:A20JX9PGHII]
+    matchMessageId = re.search(r'\[Original Message ID:([^\]]+)\]', strMarkdownContent)
+    if matchMessageId:
+        dctMetadata["message_id"] = matchMessageId.group(1)
+
+    # Extract subject from markdown heading: # Subject
+    matchSubject = re.search(r'^\s*#\s+(.+?)$', strMarkdownContent, re.MULTILINE)
+    if matchSubject:
+        dctMetadata["subject"] = matchSubject.group(1).strip()
+
+    # Extract author from profile section: ### author name
+    matchAuthor = re.search(r'###\s+(.+?)(?:\s*$)', strMarkdownContent, re.MULTILINE)
+    if matchAuthor:
+        dctMetadata["author"] = matchAuthor.group(1).strip()
+
+    # Extract date from timestamp: > Feb 11, 2011, 2:21:35 AM
+    # Capture only the date part: Feb 11, 2011
+    matchDate = re.search(r'>\s+([A-Za-z]+\s+\d+,\s+\d{4})', strMarkdownContent)
+    if matchDate:
+        dctMetadata["date"] = matchDate.group(1)
+
+    return dctMetadata
+
+
 def _parse_attachment_url(strUrl: str) -> Dict[str, str]:
     """
     Parse an attachment URL to extract metadata.

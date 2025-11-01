@@ -1,2 +1,4 @@
 # Dependencies for imageGetter module
-# Will be populated in later phases as needed
+
+# Testing
+pytest>=8.4.2
