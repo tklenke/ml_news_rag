@@ -1,7 +1,8 @@
 # Image Database Architecture
 
 **Created:** 2025-11-01
-**Status:** Design Phase
+**Last Updated:** 2025-11-02
+**Status:** Phase 2 Implementation Complete
 
 ## Overview
 
@@ -34,24 +35,34 @@ data/
 
 ### 2. Image Index Schema
 
+**Actual Implementation (as built):**
+
 ```json
 {
-  "messageID": "A1NtxlDfY4c",
-  "subject": "Re: [c-a] Van's baffles for Long-ez",
-  "author": "krw...@gmail.com",
-  "date": "2012-07-23",
-  "images": [
-    {
-      "filename": "A1NtxlDfY4c_part0.1.jpg",
-      "url": "https://groups.google.com/group/cozy_builders/attach/.../image.jpg?part=0.1",
-      "part": "0.1",
-      "filesize": 245678,
-      "downloaded": true,
-      "thumbnail_generated": true
-    }
-  ]
+  "A1NtxlDfY4c": {
+    "metadata": {
+      "message_id": "A1NtxlDfY4c",
+      "subject": "Re: [c-a] Van's baffles for Long-ez",
+      "author": "krw...@gmail.com",
+      "date": "Jul 23, 2012"
+    },
+    "images": [
+      {
+        "url": "https://groups.google.com/group/cozy_builders/attach/.../image.jpg?part=0.1",
+        "part": "0.1",
+        "filename": "image.jpg",
+        "local_filename": "A1NtxlDfY4c_part0_1_image.jpg",
+        "keywords": ["landing", "light", "van", "baffles"]
+      }
+    ]
+  }
 }
 ```
+
+**Notes:**
+- Top-level keys are message IDs
+- Keywords extracted from both filename and message subject
+- `local_filename` uses normalized format: `{messageID}_part{X}_{Y}_{filename}`
 
 ### 3. Module Structure
 
@@ -64,11 +75,13 @@ Extracts image URLs from markdown files and downloads images.
 - `generate_thumbnails.py` - Create 200x200px center-cropped thumbnails
 - `image_index.json` - Maintained index of all images
 
-**Filtering Rules:**
+**Filtering Rules (as implemented):**
 - **Include:** URLs matching `groups.google.com/group/cozy_builders/attach/`
 - **Exclude:** Profile photos (lh3.googleusercontent.com)
-- **Exclude:** Logos, emojis, UI elements
-- **Exclude:** Image file size < 10KB (likely icons/logos)
+- **Exclude via Blacklist:** ~400+ junk images filtered by filename:
+  - Exact matches: graycol.gif, UFAC Salutation.jpg, emoticons, animated GIFs
+  - Pattern matches: wlEmoticon-*.png, ~WRD*.jpg, ole*.bmp, hex-named files
+- **Note:** Size filtering removed - blacklist approach more effective
 
 #### imageAsker/
 Query interface for image retrieval.
@@ -233,24 +246,76 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 - Easy to version control and debug
 - Can migrate to SQLite later if needed
 
+## Implementation Details (Phase 1-2 Complete)
+
+### URL Extraction Enhancements
+**Keyword Extraction:**
+- Extract keywords from both filename and message subject line
+- Filter stopwords and noise terms (img, photo, numbers, hex codes)
+- Merge subject keywords with filename keywords for better searchability
+- Example keywords: "landing", "light", "firewall", "cowling", "wing"
+
+**Blacklist Filtering:**
+- ~400+ junk images filtered during extraction (not download)
+- Exact filename blacklist: graycol.gif, emoticons, animated GIFs
+- Pattern blacklist: wlEmoticon-*.png, ~WRD*.jpg, ole*.bmp
+- More effective than size-based filtering
+
+**CLI Enhancements:**
+- Positional arguments: `SOURCE DEST` (not --input/--output)
+- Auto-generated timestamped output files
+- Duplicate filename tracking and statistics
+- Keyword frequency statistics
+
+### Download Strategy (Dual-Path Approach)
+**Google Groups returns two response types:**
+- **Direct binary (56%):** URLs without &view=1 parameter
+  - Chrome downloads to Downloads folder (can't capture in page_source)
+  - Solution: Use requests.get() with extracted cookies from Selenium
+- **HTML wrapper (44%):** URLs with &view=1 parameter
+  - Returns HTML page with embedded <img> tag
+  - Solution: Use Selenium to parse HTML and extract real image URL
+
+**Cookie Management:**
+- Extract cookies once at batch start (not per-image)
+- Avoid "no execution context" errors
+- Fallback strategy: try current page, navigate if needed
+
+**Resume Capability:**
+- Skip files that already exist locally
+- Enables crash recovery and incremental processing
+
+**Size Filtering Removed:**
+- Originally planned HEAD requests to check Content-Length
+- Removed in Phase 2.8.2 - blacklist filtering makes it redundant
+- Simplifies code and speeds up downloads
+
+### Index Format Evolution
+**Initial design:** Flat list of images with metadata
+**As implemented:** Message-centric structure
+- Top-level keys are message IDs
+- Metadata nested under each message
+- Keywords added for searchability
+- local_filename tracks normalized filenames
+
 ## Success Criteria
 
-**Phase 1-3 Complete (A/ Directory Test):**
-- ✓ Successfully extracted 50+ image URLs from A/ directory
-- ✓ Downloaded 80%+ of identified images
-- ✓ Generated thumbnails for all downloaded images
-- ✓ image_index.json accurately reflects status
+**Phase 1 Complete (A/ Directory Test):**
+- ✓ Successfully extracted 217 image URLs from A/ directory (92 messages)
+- ✓ Blacklist filtering removed ~400+ junk images
+- ✓ Keywords extracted and indexed
+- ✓ image_index.json created (76KB)
 
-**Phase 4 Complete (Query Interface):**
-- ✓ Query "firewall" returns relevant images
-- ✓ Query "oil cooler" returns relevant images
-- ✓ Thumbnails display correctly
-- ✓ Full-resolution images accessible
+**Phase 2 Implementation Complete:**
+- ✓ Dual-path download strategy implemented and tested
+- ✓ Resume capability working
+- ✓ Cookie extraction and management working
+- ⏳ Production download run pending (waiting for Chrome debug mode testing)
 
-**Phase 5 Complete (Full Corpus):**
-- ✓ All directories processed
-- ✓ Image database covers full newsgroup corpus
-- ✓ Acceptable download success rate (>75%)
+**Phase 3-5 Pending:**
+- ☐ Thumbnail generation (not started)
+- ☐ Query interface (not started)
+- ☐ Full corpus scaling (not started)
 
 ## Risks and Mitigations
 

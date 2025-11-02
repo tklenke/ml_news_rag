@@ -3,12 +3,12 @@
 **Project:** Image Database for Cozy Builders Newsgroup
 **Architect:** Claude
 **Created:** 2025-11-01
-**Last Updated:** 2025-11-01
+**Last Updated:** 2025-11-02
 
 ## Current Status
 
-Phase: **Design Complete**
-Next: Ready for Programmer implementation
+Phase: **Phase 1-2 Complete, Phase 3-5 Pending**
+Next: Production download testing (Phase 2.9), then Programmer implements Phase 3
 
 ---
 
@@ -23,16 +23,21 @@ Next: Ready for Programmer implementation
 - [x] Create `docs/plans/architect_todo.md` (this file)
 - [x] Create `docs/plans/programmer_todo.md`
 
+### Completed Architectural Tasks (2025-11-02)
+- [x] Review Phase 1 implementation results
+- [x] Validate URL filtering approach (blacklist strategy effective)
+- [x] Review Phase 2 implementation (dual-path download working)
+- [x] Document implementation details in architecture document
+- [x] Prune programmer_todo.md (740 lines → 150 lines)
+- [x] Update architecture document with actual implementation
+
 ### Pending Architectural Tasks
-- [ ] Review Phase 1 results after Programmer completes URL extraction
-- [ ] Validate URL filtering approach based on A/ directory results
-- [ ] Review Phase 2 results (download success rate, error patterns)
-- [ ] Assess whether rate limiting strategy is adequate
+- [ ] Review Phase 2.9 production download results when available
+- [ ] Assess download success rate and error patterns from production run
 - [ ] Review Phase 3 results (thumbnail quality, sizing)
 - [ ] Review Phase 4 integration with existing RAG system
 - [ ] Evaluate retrieval quality and decide if architecture needs revision
 - [ ] Review Phase 5 full corpus statistics
-- [ ] Document any architectural decisions made during implementation
 
 ### Future Architectural Considerations (Post-Phase 5)
 - [ ] Evaluate if text-based retrieval is sufficient
@@ -44,6 +49,26 @@ Next: Ready for Programmer implementation
 ---
 
 ## Decision Log
+
+### 2025-11-02: Phase 1-2 Implementation Review
+
+**Implementation Enhancements Approved:**
+- Blacklist filtering approach (~400+ junk images filtered at extraction time)
+- Keyword extraction from filenames and message subjects for better searchability
+- Dual-path download strategy (requests+cookies vs Selenium based on URL type)
+- Size filtering removed (blacklist makes it redundant)
+- Cookie extraction optimized (once at batch start, not per-image)
+
+**Rationale:**
+- Blacklist approach more precise than size filtering
+- Keywords enable better search without multimodal embeddings
+- Dual-path download handles Google Groups' two response types
+- Optimizations prevent Selenium errors and improve performance
+
+**Architecture Impact:**
+- Index format evolved to message-centric structure with keywords
+- Download strategy more complex but handles all URL types
+- No fundamental architecture changes needed
 
 ### 2025-11-01: Initial Architecture Decisions
 
