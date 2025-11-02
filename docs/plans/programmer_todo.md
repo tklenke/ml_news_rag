@@ -87,54 +87,61 @@ Implement image database system following the incremental plan in `image_databas
 - [x] Write failing test: `test_handle_missing_metadata()`
 - [x] Write failing test: `test_extract_lowercase_message_id()`
 - [x] Run pytest - verify all tests fail (7/7 failed)
-- [~] Commit: "Add failing tests for message metadata extraction (TDD RED phase)"
+- [x] Commit: "Phase 1.5 RED: Add failing tests for message metadata extraction"
 
 **GREEN Phase:**
-- [ ] Implement `extract_message_metadata(strMarkdownContent: str) -> dict`
-- [ ] Run pytest - verify all tests pass
+- [x] Implement `extract_message_metadata(strMarkdownContent: str) -> dict`
+- [x] Run pytest - verify all tests pass (7/7 passed)
+- [x] Commit: "Phase 1.5 GREEN: Implement message metadata extraction"
 
 **REFACTOR Phase:**
-- [ ] Refactor if needed while keeping tests green
-- [ ] Commit: "Implement message metadata extraction"
+- [x] Refactor if needed while keeping tests green
+- [x] No refactoring needed - code is clean
 
 ### Phase 1.6: Build Image Index from Directory (TDD)
 **RED Phase:**
-- [ ] Write failing test: `test_process_single_markdown_file()`
-- [ ] Write failing test: `test_process_directory_of_markdown_files()`
-- [ ] Write failing test: `test_skip_files_without_images()`
-- [ ] Write failing test: `test_handle_malformed_markdown()`
-- [ ] Run pytest - verify all tests fail
+- [x] Write failing test: `test_process_single_markdown_file()`
+- [x] Write failing test: `test_process_directory_of_markdown_files()`
+- [x] Write failing test: `test_skip_files_without_images()`
+- [x] Write failing test: `test_handle_malformed_markdown()`
+- [x] Write failing test: `test_returns_dict_ready_for_json()`
+- [x] Run pytest - verify all tests fail (5/5 failed)
+- [x] Commit: "Phase 1.6 RED: Add failing tests for image index builder"
 
 **GREEN Phase:**
-- [ ] Implement `build_image_index(strDirectoryPath: str) -> dict`
-- [ ] Add progress logging (e.g., "Processing 45/127 files...")
-- [ ] Run pytest - verify all tests pass
+- [x] Implement `build_image_index(strDirectoryPath: str) -> dict`
+- [x] Run pytest - verify all tests pass (18 passed, 3 skipped)
+- [x] Commit: "Phase 1.6 GREEN: Implement image index builder"
 
 **REFACTOR Phase:**
-- [ ] Refactor if needed while keeping tests green
-- [ ] Commit: "Implement image index builder"
+- [x] Refactor if needed while keeping tests green
+- [x] No refactoring needed - code is clean
 
 ### Phase 1.7: CLI Tool for URL Extraction
-- [ ] Create `imageGetter/extract_image_urls.py` script with ABOUTME comments
-- [ ] Add command-line argument parsing (--input, --output, --dry-run)
-- [ ] Add progress bar or status output
-- [ ] Add error handling and logging
-- [ ] Test on A/ directory with --dry-run flag
-- [ ] Commit: "Add CLI tool for image URL extraction"
+- [x] Add CLI interface to `imageGetter/extract_image_urls.py` script
+- [x] Add command-line argument parsing (--input, --output, --dry-run)
+- [x] Add progress output and statistics
+- [x] Add error handling with helpful messages
+- [x] Test on test fixtures with --dry-run flag (2 messages, 9 images)
+- [x] Test on A/ directory with --dry-run flag (92 messages, 217 images)
+- [x] Commit: "Phase 1.7: Add CLI interface for image URL extraction"
 
 ### Phase 1.8: Validate Phase 1 Results
-- [ ] Run extraction on full A/ directory (not dry-run): `python imageGetter/extract_image_urls.py --input data/msgs_md/A --output data/image_index.json`
-- [ ] Review `data/image_index.json` (check counts, spot-check 5-10 URLs)
-- [ ] Create `docs/notes/phase1_results.md` with statistics:
-  - Total markdown files in A/
-  - Files with images
-  - Total image URLs extracted
-  - Sample of excluded profile/logo URLs
-- [ ] Fix any issues discovered and re-run if needed
-- [ ] Commit: "Complete Phase 1: URL extraction from A/ directory"
+- [x] Run extraction on full A/ directory (not dry-run): `python imageGetter/extract_image_urls.py --input data/msgs_md/A --output data/image_index.json`
+- [x] Review `data/image_index.json` (92 messages, 217 images, 61 KB)
+- [x] Manual spot-check of 5 URLs - all valid ✓
+- [x] Create `docs/notes/phase1_results.md` with statistics:
+  - [x] Total markdown files in A/ (325)
+  - [x] Files with images (92 = 28.3%)
+  - [x] Total image URLs extracted (217)
+  - [x] Sample entries verified
+  - [x] URL pattern validation
+  - [x] Filtering success confirmation
+- [x] No issues discovered
+- [x] Commit: "Complete Phase 1: URL extraction from A/ directory"
 
 **Phase 1 Complete: Mark [x] when ALL tasks above done and committed**
-- [ ] **PHASE 1 COMPLETE** - Ready for Architect review
+- [x] **PHASE 1 COMPLETE** - Ready for Architect review
 
 ---
 
