@@ -66,7 +66,6 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
             # Check if URL has &view=1 (returns HTML wrapper with embedded image)
             if '&view=1' in strUrl or '?view=1' in strUrl:
                 # HTML wrapper approach - use Selenium to parse HTML
-                print(f"[HTML WRAPPER PATH] {strOutputPath}")
                 seleniumDriver.get(strUrl)
 
                 # Wait for img element to be present (up to 10 seconds)
@@ -80,8 +79,6 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
                     f.write(response.content)
             else:
                 # Direct binary download approach - use requests with cookies
-                print(f"[DIRECT BINARY PATH] {strOutputPath}")
-
                 # Use provided cookies or extract from Selenium session
                 if dctCookies is None:
                     dctCookies = {}
