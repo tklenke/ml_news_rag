@@ -23,9 +23,8 @@ def create_selenium_driver():
     Returns:
         WebDriver instance connected to existing Chrome session
     """
-    #service = Service(executable_path='../../chromedriver-win64/chromedriver.exe')
-    #C:\Users\tom\Documents\projects\chromedriver-win64
-    service = Service(executable_path='/mnt/c/Users/tom/projects/chromedriver-win64/chromedriver.exe')
+
+    service = Service(executable_path='C:\\Users\\tom\\Documents\\projects\\chromedriver-win64\\chromedriver.exe')
     options = webdriver.ChromeOptions()
     options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
     driver = webdriver.Chrome(service=service, options=options)
