@@ -64,7 +64,6 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
             if '&view=1' in strUrl or '?view=1' in strUrl:
                 # HTML wrapper approach - use Selenium to parse HTML
                 seleniumDriver.get(strUrl)
-                time.sleep(2)
 
                 # Parse HTML to extract real image URL from <img src>
                 imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
