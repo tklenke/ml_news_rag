@@ -431,6 +431,26 @@ git reset --hard 8ac0a03
 - Cookie extraction: `dctCookies = {cookie['name']: cookie['value'] for cookie in seleniumDriver.get_cookies()}`
 - Direct download: `requests.get(strUrl, cookies=dctCookies)`
 
+### Phase 2.8.2: Remove Size Filtering (COMPLETE)
+**Issue:** With aggressive blacklist filtering at extraction time (~400+ junk images removed), size checking during download is redundant.
+
+**Changes Applied:**
+- [x] Remove Content-Length HEAD request checking entirely
+- [x] Remove size_bytes and too_small fields from index updates
+- [x] Remove too_small from statistics dict
+- [x] Update progress and final stats display to not show too_small
+- [x] Update CLI final stats to not show too_small
+- [x] Remove TestSizeFiltering class from test suite (3 tests)
+- [x] Update test_download_single_image_success to mock get_cookies()
+- [x] All tests passing (6 passed, 4 skipped)
+- [x] Commit changes
+
+**Benefits:**
+- Faster downloads (no HEAD request before each image)
+- Simpler code (~40 lines removed from download_batch)
+- Cleaner index (no size metadata clutter)
+- Blacklist filtering already prevents tiny tracking pixels
+
 ### Phase 2.9: Download Full A/ Directory Images
 - [ ] Start Chrome with debug mode: `chrome.exe --remote-debugging-port=9222`
 - [ ] Log into Google Groups in Chrome
@@ -691,6 +711,8 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 - [x] Phase 2.6 - Debugging and Fixes - COMPLETE
 - [x] Phase 2.7 - Extract Image URLs Enhancements - COMPLETE
 - [x] Phase 2.8 - Download Image Enhancements - COMPLETE
+- [x] Phase 2.8.1 - Fix Direct Binary Download Issue - COMPLETE
+- [x] Phase 2.8.2 - Remove Size Filtering - COMPLETE
 - [ ] Phase 2.9 - Download Full A/ Directory Images (waiting for Chrome debug mode testing)
 
 **Next Task:** Phase 2.9 - Tom to test download with Chrome debug mode and analyze debug log
@@ -707,15 +729,14 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 9. Verified download_images.py compatibility with new index format
 10. Changed download_images_cli.py to SOURCE DEST positional args format (consistent with extract_image_urls.py)
 11. Handle HTML wrapper responses for URLs with &view=1 (fixes 2,846 images = 43.8%)
-12. Track actual file sizes and detect duplicate downloads by comparing consecutive file sizes
+12. Implemented dual-path download: cookies+requests for direct binary, Selenium for HTML wrappers
+13. Removed size filtering (HEAD requests, size_bytes, too_small) - no longer needed with blacklist
 
-**Test Results:** 41 passed, 7 skipped
+**Test Results:** 6 passed, 4 skipped (download tests only)
 - All batch download tests passing with mocked Selenium
-- Size filtering tests passing
 - Resume functionality tests passing
-- Build index tests passing with recursive glob
-- Extract URL tests passing with keywords field
-- Keyword extraction validated with realistic filenames
+- Direct binary download tests passing with cookie extraction
+- TestSizeFiltering removed (no longer applicable)
 - Ready for real-world testing with authenticated Chrome session
 
 **Index Format Enhanced:**

@@ -1,0 +1,21 @@
+REQUESTED:
+https://groups.google.com/group/cozy_builders/attach/784efc40ce1b350/IPglareshield.jpg?part=0.1
+RECEIVED:
+IPglareshield.jpg   --- Chrome saved this directly into the Downloads directory...
+REQUESTED:
+https://groups.google.com/group/cozy_builders/attach/b7b89755afd4fbca/image001.gif?part=0.1
+RECEIVED:
+image001.gif  --- Chrome saved this directly into the Downloads directory...
+
+
+
+PREVIOUS INFO::
+REQUESTED:
+https://groups.google.com/group/cozy_builders/attach/1d5f887a16a86/riviera.jpg?part=0.2
+RECEIVED:
+Image file directly
+REQUESTED:
+https://groups.google.com/group/cozy_builders/attach/491ad150c0a0/IMG_0543.jpg?part=0.3&view=1
+RECEIVED:
+<html style="height: 100%;"><head><meta name="viewport" content="width=device-width, minimum-scale=0.1"><title>IMG_0543.jpg (480×640)</title></head><body style="margin: 0px; height: 100%; background-color: rgb(14, 14, 14);"><img style="display: block;-webkit-user-select: none;margin: auto;cursor: zoom-in;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;" src="https://04014316728349228596.googlegroups.com/attach/491ad150c0a0/IMG_0543.jpg?part=0.3&amp;view=1&amp;vt=ANaJVrH-qUrhPMUOFAYsTcScsdkaUGeSiaN7geAvhmpeoh6yDlZXz1BLs4zj9N_vKyNgZXASk-XMDcd7-vi89AyJwpxCvyPeJKFEKESlnPAqgC7Jjiw061g" width="432" height="576"></body></html>
+

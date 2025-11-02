@@ -16,8 +16,9 @@ from download_images import download_image, create_selenium_driver
 class TestDownloadImage:
     """Tests for downloading single image from URL."""
 
-    def test_download_single_image_success(self):
-        """Should download image using Selenium and save to file."""
+    @patch('download_images.requests.get')
+    def test_download_single_image_success(self, mock_requests_get):
+        """Should download image using requests with cookies (direct binary download)."""
         strUrl = "https://groups.google.com/group/cozy_builders/attach/hash/test.jpg?part=0.1"
 
         with NamedTemporaryFile(mode='wb', suffix='.jpg', delete=False) as f:
@@ -32,16 +33,16 @@ class TestDownloadImage:
             img.save(buffer, format='JPEG')
             bytesValidJpeg = buffer.getvalue()
 
-            # Create mock Selenium driver
+            # Create mock Selenium driver with cookies
             mockDriver = Mock()
-            mockDriver.get = Mock()
+            mockDriver.get_cookies = Mock(return_value=[
+                {'name': 'SID', 'value': 'test_session_id'}
+            ])
 
-            # Mock finding an img element with data URL
-            mockImg = Mock()
-            import base64
-            strBase64 = base64.b64encode(bytesValidJpeg).decode('utf-8')
-            mockImg.get_attribute = Mock(return_value=f"data:image/jpeg;base64,{strBase64}")
-            mockDriver.find_element = Mock(return_value=mockImg)
+            # Mock requests.get to return image data
+            mock_response = Mock()
+            mock_response.content = bytesValidJpeg
+            mock_requests_get.return_value = mock_response
 
             # Download image
             boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=mockDriver)
@@ -386,150 +387,3 @@ class TestBatchDownload:
             assert mock_download_image.call_count == 2
 
 
-class TestSizeFiltering:
-    """Tests for filtering images by size."""
-
-    @patch('download_images.requests.head')
-    @patch('download_images.download_image')
-    def test_skip_images_smaller_than_3kb(self, mock_download_image, mock_head):
-        """Should skip images with Content-Length < 3KB."""
-        import tempfile
-        import json
-        from pathlib import Path
-
-        # Mock HEAD request to return small content-length
-        mock_response = Mock()
-        mock_response.headers = {'Content-Length': '2048'}  # 2KB
-        mock_head.return_value = mock_response
-
-        dctIndex = {
-            "MSG001": {
-                "metadata": {"message_id": "MSG001"},
-                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
-            }
-        }
-
-        with tempfile.TemporaryDirectory() as strTempDir:
-            strIndexPath = f"{strTempDir}/index.json"
-            with open(strIndexPath, 'w') as f:
-                json.dump(dctIndex, f)
-
-            from download_images import download_batch
-
-            dctStats = download_batch(
-                strIndexPath,
-                f"{strTempDir}/images",
-                intLimit=None,
-                seleniumDriver=Mock()
-            )
-
-            # Should mark as too_small
-            assert dctStats["too_small"] == 1
-            # Should not download
-            assert mock_download_image.call_count == 0
-
-            # Should update index with size info
-            with open(strIndexPath, 'r') as f:
-                dctUpdatedIndex = json.load(f)
-
-            dctImageInfo = dctUpdatedIndex["MSG001"]["images"][0]
-            assert dctImageInfo["size_bytes"] == 2048
-            assert dctImageInfo["too_small"] == True
-
-    @patch('download_images.requests.head')
-    @patch('download_images.download_image')
-    def test_download_images_larger_than_3kb(self, mock_download_image, mock_head):
-        """Should download images with Content-Length >= 3KB."""
-        import tempfile
-        import json
-
-        # Mock HEAD request to return large content-length
-        mock_response = Mock()
-        mock_response.headers = {'Content-Length': '50000'}  # 50KB
-        mock_head.return_value = mock_response
-
-        # Mock successful download
-        mock_download_image.return_value = True
-
-        dctIndex = {
-            "MSG001": {
-                "metadata": {"message_id": "MSG001"},
-                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
-            }
-        }
-
-        with tempfile.TemporaryDirectory() as strTempDir:
-            strIndexPath = f"{strTempDir}/index.json"
-            with open(strIndexPath, 'w') as f:
-                json.dump(dctIndex, f)
-
-            from download_images import download_batch
-
-            dctStats = download_batch(
-                strIndexPath,
-                f"{strTempDir}/images",
-                intLimit=None,
-                seleniumDriver=Mock()
-            )
-
-            # Should download
-            assert dctStats["success"] == 1
-            assert dctStats["too_small"] == 0
-            assert mock_download_image.call_count == 1
-
-            # Should update index with size info
-            with open(strIndexPath, 'r') as f:
-                dctUpdatedIndex = json.load(f)
-
-            dctImageInfo = dctUpdatedIndex["MSG001"]["images"][0]
-            assert dctImageInfo["size_bytes"] == 50000
-            assert dctImageInfo["too_small"] == False
-
-    @patch('download_images.requests.head')
-    @patch('download_images.download_image')
-    def test_handle_missing_content_length(self, mock_download_image, mock_head):
-        """Should download if Content-Length header is missing."""
-        import tempfile
-        import json
-
-        # Mock HEAD request without Content-Length header
-        mock_response = Mock()
-        mock_response.headers = {}  # No Content-Length
-        mock_head.return_value = mock_response
-
-        # Mock successful download
-        mock_download_image.return_value = True
-
-        dctIndex = {
-            "MSG001": {
-                "metadata": {"message_id": "MSG001"},
-                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
-            }
-        }
-
-        with tempfile.TemporaryDirectory() as strTempDir:
-            strIndexPath = f"{strTempDir}/index.json"
-            with open(strIndexPath, 'w') as f:
-                json.dump(dctIndex, f)
-
-            from download_images import download_batch
-
-            dctStats = download_batch(
-                strIndexPath,
-                f"{strTempDir}/images",
-                intLimit=None,
-                seleniumDriver=Mock()
-            )
-
-            # Should download anyway (can't determine size)
-            assert dctStats["success"] == 1
-            assert dctStats["too_small"] == 0
-            assert mock_download_image.call_count == 1
-
-            # Should record size as null
-            with open(strIndexPath, 'r') as f:
-                dctUpdatedIndex = json.load(f)
-
-            dctImageInfo = dctUpdatedIndex["MSG001"]["images"][0]
-            assert dctImageInfo["size_bytes"] is None
-            assert dctImageInfo["too_small"] == False

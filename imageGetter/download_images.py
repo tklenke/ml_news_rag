@@ -123,10 +123,8 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     """
     Download all images from image index with progress tracking.
 
-    Checks Content-Length before downloading and skips images < 3KB (tracking pixels/emojis).
-    Updates index with size_bytes and too_small flag for each image.
     Skips images that already exist in the output directory (resume functionality).
-    Displays progress stats every 100 images and saves index periodically.
+    Displays progress stats every 10 images and saves index periodically.
 
     Args:
         strIndexPath: Path to image_index.json file
@@ -135,7 +133,7 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         seleniumDriver: Optional Selenium driver (for testing). If None, creates new one.
 
     Returns:
-        Dict with statistics: {"total": int, "success": int, "failed": int, "skipped": int, "too_small": int}
+        Dict with statistics: {"total": int, "success": int, "failed": int, "skipped": int}
     """
     # Open debug log file
     fileDebug = open('download_debug.log', 'w', encoding='utf-8')
@@ -165,16 +163,11 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         "total": len(lstAllImages),
         "success": 0,
         "failed": 0,
-        "skipped": 0,
-        "too_small": 0
+        "skipped": 0
     }
 
     # Counter for periodic stats display and index saving
     intProcessedCount = 0
-
-    # Track file sizes to detect duplicate downloads
-    intLastFileSize = None
-    strLastFilename = None
 
     # Create output directory
     pathOutputDir = Path(strOutputDir)
@@ -205,88 +198,21 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
             dctStats["skipped"] += 1
             continue
 
-        # Check Content-Length before downloading
-        intSizeBytes = None
-        boolTooSmall = False
-        try:
-            response = requests.head(strUrl, timeout=5)
-            fileDebug.write(f"\n[HEAD] {strLocalFilename}\n")
-            fileDebug.write(f"  URL: {strUrl}\n")
-            fileDebug.write(f"  Status: {response.status_code}\n")
-            fileDebug.write(f"  Content-Length present: {'Content-Length' in response.headers}\n")
-
-            # Log all headers for debugging
-            fileDebug.write(f"  All headers:\n")
-            for strHeader, strValue in response.headers.items():
-                fileDebug.write(f"    {strHeader}: {strValue}\n")
-
-            if 'Content-Length' in response.headers:
-                intSizeBytes = int(response.headers['Content-Length'])
-                fileDebug.write(f"  Content-Length: {intSizeBytes} bytes ({intSizeBytes / 1024:.2f} KB)\n")
-
-                # Skip images smaller than 3KB (likely tracking pixels or emojis)
-                if intSizeBytes < 3072:  # 3KB = 3072 bytes
-                    boolTooSmall = True
-                    dctStats["too_small"] += 1
-                    fileDebug.write(f"  DECISION: SKIPPED - Too small (< 3KB)\n")
-                    # Update index
-                    dctImageRef["size_bytes"] = intSizeBytes
-                    dctImageRef["too_small"] = True
-                    fileDebug.flush()  # Ensure written to disk
-                    continue
-                else:
-                    fileDebug.write(f"  DECISION: Size OK, proceeding with download\n")
-            else:
-                fileDebug.write(f"  DECISION: Content-Length not available, proceeding with download\n")
-
-            fileDebug.flush()  # Ensure written to disk
-        except Exception as e:
-            # If HEAD request fails, proceed with download anyway
-            fileDebug.write(f"\n[HEAD] {strLocalFilename}\n")
-            fileDebug.write(f"  URL: {strUrl}\n")
-            fileDebug.write(f"  HEAD request failed: {e}\n")
-            fileDebug.write(f"  DECISION: Proceeding with download anyway\n")
-            fileDebug.flush()  # Ensure written to disk
-            pass
-
         # Download image
         boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3)
 
-        # Update index with size and too_small flag
-        dctImageRef["size_bytes"] = intSizeBytes
-        dctImageRef["too_small"] = boolTooSmall
-
         if boolSuccess:
             dctStats["success"] += 1
-            # Get actual file size from downloaded file
-            if pathOutputFile.exists():
-                intActualSize = pathOutputFile.stat().st_size
-                dctImageRef["size_bytes"] = intActualSize
-
-                # Check for duplicate file sizes (potential problem)
-                if intLastFileSize is not None and intActualSize == intLastFileSize and strLocalFilename != strLastFilename:
-                    fileDebug.write(f"\n⚠️  WARNING: Duplicate file size detected!\n")
-                    fileDebug.write(f"  Previous: {strLastFilename} ({intLastFileSize} bytes)\n")
-                    fileDebug.write(f"  Current:  {strLocalFilename} ({intActualSize} bytes)\n")
-                    fileDebug.write(f"  This may indicate the same image was downloaded twice.\n")
-                    fileDebug.flush()
-                    print(f"\n⚠️  WARNING: Duplicate file size!")
-                    print(f"  {strLastFilename} and {strLocalFilename} both {intActualSize} bytes")
-
-                # Update tracking
-                intLastFileSize = intActualSize
-                strLastFilename = strLocalFilename
         else:
             dctStats["failed"] += 1
 
         # Increment processed counter
         intProcessedCount += 1
 
-        # Display stats every 100 images and save index
+        # Display stats every 10 images and save index
         if intProcessedCount % 10 == 0:
             print(f"\n--- Progress Update ({intProcessedCount}/{dctStats['total']}) ---")
             print(f"  Success: {dctStats['success']}")
-            print(f"  Too small: {dctStats['too_small']}")
             print(f"  Skipped: {dctStats['skipped']}")
             print(f"  Failed: {dctStats['failed']}")
             print()
@@ -303,7 +229,6 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     fileDebug.write(f"\n=== Download Complete ===\n")
     fileDebug.write(f"Total: {dctStats['total']}\n")
     fileDebug.write(f"Success: {dctStats['success']}\n")
-    fileDebug.write(f"Too small: {dctStats['too_small']}\n")
     fileDebug.write(f"Skipped: {dctStats['skipped']}\n")
     fileDebug.write(f"Failed: {dctStats['failed']}\n")
     fileDebug.close()
