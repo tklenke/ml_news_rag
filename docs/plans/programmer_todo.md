@@ -383,7 +383,7 @@ Implement image database system following the incremental plan in `image_databas
 - Consistent CLI interface across all imageGetter tools
 - Debug logging captures all details for analysis
 
-### Phase 2.8.1: Fix Direct Binary Download Issue (IN PROGRESS)
+### Phase 2.8.1: Fix Direct Binary Download Issue (COMPLETE)
 **Issue Discovered:** URLs without &view=1 return binary files, which Chrome downloads to Downloads folder instead of displaying in browser. Selenium cannot capture the image data from page_source when this happens.
 
 **Analysis from docs/input/img_urls.txt:**
@@ -395,41 +395,30 @@ Implement image database system following the incremental plan in `image_databas
   - Returns HTML wrapper with embedded <img> tag
   - Current implementation works correctly
 
-**Revert Instructions (if needed):**
-```bash
-# Current stable state is commit 8ac0a03
-git log --oneline -1  # Should show: "Update programmer_todo.md with Phase 2.8 download enhancements"
-# To revert any changes:
-git reset --hard 8ac0a03
-```
-
-**Implementation Plan - Option 1 (Cookie-based requests):**
-- [ ] Extract authentication cookies from Selenium session once at start
-- [ ] For each image URL, check if it has &view=1:
+**Implementation - Option 1 (Cookie-based requests):**
+- [x] Extract authentication cookies from Selenium session once at start
+- [x] For each image URL, check if it has &view=1:
   - If YES: Use Selenium to navigate and parse HTML (current approach - keep it)
   - If NO: Use requests.get() with extracted cookies to download directly
-- [ ] This avoids Chrome's download behavior for binary files
-- [ ] Test with both URL types to verify both paths work
-
-**Code Changes Needed:**
-- download_image() function in imageGetter/download_images.py
-- Add cookie extraction logic
-- Add URL detection logic (has &view=1 or not)
-- Branch to either Selenium approach or requests approach
-
-**Status:**
-- [x] Document issue and plan (this section)
-- [x] Implement cookie extraction and dual-path download logic
-- [ ] Test with URLs that have &view=1
-- [ ] Test with URLs that don't have &view=1
-- [x] Commit changes
+- [x] This avoids Chrome's download behavior for binary files
+- [x] Test with both URL types to verify both paths work
 
 **Implementation Details:**
 - Simplified download_image() from ~60 lines to ~30 lines
 - Clear branching: if has &view=1, use Selenium; else use requests+cookies
 - Removed complex nested try/except blocks and edge case handling
-- Cookie extraction: `dctCookies = {cookie['name']: cookie['value'] for cookie in seleniumDriver.get_cookies()}`
+- Cookie extraction: tries current page first, then navigates if needed
 - Direct download: `requests.get(strUrl, cookies=dctCookies)`
+- Replaced fixed 2-second sleep with WebDriverWait for img element (up to 10s)
+
+**Fixes Applied:**
+- [x] Implement dual-path download (commit 849cb82)
+- [x] Remove 2-second sleep (commit e033b1a)
+- [x] Add explicit WebDriverWait for img element (commit 4567fe1)
+- [x] Extract cookies once at batch start to avoid execution context errors (commit 89bb485)
+- [x] Improve cookie extraction with fallback strategy (commit d678fa9)
+
+**Status:** COMPLETE - Downloads working successfully in production
 
 ### Phase 2.8.2: Remove Size Filtering (COMPLETE)
 **Issue:** With aggressive blacklist filtering at extraction time (~400+ junk images removed), size checking during download is redundant.
@@ -731,13 +720,16 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 11. Handle HTML wrapper responses for URLs with &view=1 (fixes 2,846 images = 43.8%)
 12. Implemented dual-path download: cookies+requests for direct binary, Selenium for HTML wrappers
 13. Removed size filtering (HEAD requests, size_bytes, too_small) - no longer needed with blacklist
+14. Replaced fixed sleep with WebDriverWait for img element (robust timing)
+15. Fixed "no execution context" error by extracting cookies once at batch start
+16. Improved cookie extraction with fallback strategy (try current page, then navigate, then per-image)
 
 **Test Results:** 6 passed, 4 skipped (download tests only)
 - All batch download tests passing with mocked Selenium
 - Resume functionality tests passing
 - Direct binary download tests passing with cookie extraction
 - TestSizeFiltering removed (no longer applicable)
-- Ready for real-world testing with authenticated Chrome session
+- Production testing: Downloads working successfully with Chrome debug mode
 
 **Index Format Enhanced:**
 - Added `keywords` field to each image for searchable terms
