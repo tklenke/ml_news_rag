@@ -267,20 +267,23 @@ if __name__ == "__main__":
     import argparse
     import json
     import sys
+    from datetime import datetime
+    from collections import Counter
 
     # Parse command-line arguments
     parser = argparse.ArgumentParser(
-        description="Extract image URLs and metadata from Cozy Builders markdown files"
+        description="Extract image URLs and metadata from Cozy Builders markdown files",
+        usage="%(prog)s [options] SOURCE DEST"
     )
     parser.add_argument(
-        "--input",
-        required=True,
+        "source",
+        metavar="SOURCE",
         help="Path to markdown file or directory"
     )
     parser.add_argument(
-        "--output",
-        required=True,
-        help="Path to output JSON file"
+        "dest",
+        metavar="DEST",
+        help="Output directory for index and stats files"
     )
     parser.add_argument(
         "--dry-run",
@@ -292,29 +295,50 @@ if __name__ == "__main__":
 
     # Check if input path exists
     from pathlib import Path
-    pathInput = Path(args.input)
+    pathInput = Path(args.source)
     if not pathInput.exists():
-        print(f"Error: Input path does not exist: {args.input}", file=sys.stderr)
+        print(f"Error: Input path does not exist: {args.source}", file=sys.stderr)
         sys.exit(1)
 
+    # Check if output directory exists, create if needed
+    pathOutputDir = Path(args.dest)
+    if not args.dry_run:
+        pathOutputDir.mkdir(parents=True, exist_ok=True)
+
+    # Generate timestamp-based filenames
+    strTimestamp = datetime.now().strftime("%y%m%d%H%M%S")
+    strIndexFilename = f"index{strTimestamp}.idx"
+    strStatsFilename = f"index_stats_{strTimestamp}.txt"
+    pathIndexFile = pathOutputDir / strIndexFilename
+    pathStatsFile = pathOutputDir / strStatsFilename
+
     # Build image index
-    print(f"Processing: {args.input}")
+    print(f"Processing: {args.source}")
     print()
 
     try:
-        dctIndex = build_image_index(args.input)
+        dctIndex = build_image_index(args.source)
     except Exception as e:
         print(f"Error building index: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # Calculate statistics
+    # Calculate statistics and track filename duplicates
     intTotalMessages = len(dctIndex)
-    intTotalImages = sum(len(entry["images"]) for entry in dctIndex.values())
+    intTotalImages = 0
+    dctFilenameCounts = Counter()  # Track filename occurrences
+
+    for dctEntry in dctIndex.values():
+        for dctImage in dctEntry["images"]:
+            intTotalImages += 1
+            # Track original filename from URL
+            strFilename = dctImage["filename"]
+            dctFilenameCounts[strFilename] += 1
 
     # Display results
     print(f"Results:")
     print(f"  Messages with images: {intTotalMessages}")
     print(f"  Total image URLs: {intTotalImages}")
+    print(f"  Unique filenames: {len(dctFilenameCounts)}")
     print()
 
     # Show sample entries (first 3 message IDs)
@@ -330,22 +354,58 @@ if __name__ == "__main__":
 
     # Write output or dry-run
     if args.dry_run:
-        print("DRY RUN - No file written")
-        print(f"Would write to: {args.output}")
+        print("DRY RUN - No files written")
+        print(f"Would write index to: {pathIndexFile}")
+        print(f"Would write stats to: {pathStatsFile}")
     else:
         try:
-            pathOutput = Path(args.output)
-            # Create parent directory if needed
-            pathOutput.parent.mkdir(parents=True, exist_ok=True)
-
-            # Write JSON
-            with open(pathOutput, 'w', encoding='utf-8') as f:
+            # Write index JSON
+            with open(pathIndexFile, 'w', encoding='utf-8') as f:
                 json.dump(dctIndex, f, indent=2, ensure_ascii=False)
 
-            print(f"Wrote index to: {args.output}")
-            print(f"File size: {pathOutput.stat().st_size} bytes")
+            print(f"Wrote index to: {pathIndexFile}")
+            print(f"Index file size: {pathIndexFile.stat().st_size} bytes")
+            print()
+
+            # Write stats file
+            with open(pathStatsFile, 'w', encoding='utf-8') as f:
+                f.write("=== Image Filename Statistics ===\n")
+                f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"Source: {args.source}\n")
+                f.write(f"\nTotal images: {intTotalImages}\n")
+                f.write(f"Unique filenames: {len(dctFilenameCounts)}\n")
+                f.write("\n")
+
+                # Separate duplicates (count > 1) from uniques (count = 1)
+                lstDuplicates = [(name, count) for name, count in dctFilenameCounts.items() if count > 1]
+                lstUniques = [(name, count) for name, count in dctFilenameCounts.items() if count == 1]
+
+                # Sort duplicates by count descending, then by name
+                lstDuplicates.sort(key=lambda x: (-x[1], x[0]))
+
+                # Sort uniques alphabetically
+                lstUniques.sort(key=lambda x: x[0])
+
+                # Write duplicates section
+                if lstDuplicates:
+                    f.write(f"=== Duplicate Filenames ({len(lstDuplicates)}) ===\n")
+                    f.write("Count  Filename\n")
+                    f.write("-" * 60 + "\n")
+                    for strFilename, intCount in lstDuplicates:
+                        f.write(f"{intCount:5d}  {strFilename}\n")
+                    f.write("\n")
+
+                # Write uniques section
+                if lstUniques:
+                    f.write(f"=== Unique Filenames ({len(lstUniques)}) ===\n")
+                    for strFilename, intCount in lstUniques:
+                        f.write(f"{strFilename}\n")
+
+            print(f"Wrote stats to: {pathStatsFile}")
+            print(f"Stats file size: {pathStatsFile.stat().st_size} bytes")
+
         except Exception as e:
-            print(f"Error writing output file: {e}", file=sys.stderr)
+            print(f"Error writing output files: {e}", file=sys.stderr)
             sys.exit(1)
 
     print()
