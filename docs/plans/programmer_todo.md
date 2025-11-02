@@ -329,6 +329,15 @@ Implement image database system following the incremental plan in `image_databas
   - Filter single letters
   - Results in clean aircraft-focused keywords only
 - [x] Commit: "Improve keyword filtering to remove noise terms"
+- [x] Add subject line keywords to image metadata (Lines 428-445)
+  - Extract keywords from message subject line using same filter function
+  - Merge subject keywords with filename keywords for each image
+  - Deduplicates: only adds subject keywords not in filename keywords
+  - All images in a message share subject keywords
+  - Generic filenames now get meaningful context from subject
+  - Added stopwords: my, just, that, this, all
+  - Example: "WING LEADING EDGE MOLDS" → ["wing", "leading", "edge", "molds"]
+- [x] Commit: "Add subject line keywords to image metadata"
 - [x] Verify download_images.py compatibility with new index format
   - Keywords field preserved during download
   - All existing fields (url, local_filename) still present
@@ -615,7 +624,8 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 5. Added keyword extraction from filenames (searchable terms)
 6. Added duplicate filename and keyword frequency statistics
 7. Improved keyword filtering to remove noise terms
-8. Verified download_images.py compatibility with new index format
+8. Added subject line keywords to each image for better searchability
+9. Verified download_images.py compatibility with new index format
 
 **Test Results:** 41 passed, 7 skipped
 - All batch download tests passing with mocked Selenium
