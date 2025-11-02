@@ -383,6 +383,47 @@ Implement image database system following the incremental plan in `image_databas
 - Consistent CLI interface across all imageGetter tools
 - Debug logging captures all details for analysis
 
+### Phase 2.8.1: Fix Direct Binary Download Issue (IN PROGRESS)
+**Issue Discovered:** URLs without &view=1 return binary files, which Chrome downloads to Downloads folder instead of displaying in browser. Selenium cannot capture the image data from page_source when this happens.
+
+**Analysis from docs/input/img_urls.txt:**
+- URLs WITHOUT &view=1 (e.g., `IPglareshield.jpg?part=0.1`):
+  - Chrome downloads directly to Downloads folder (binary file response)
+  - Selenium's page_source cannot access the binary data
+  - Current implementation will fail for these URLs
+- URLs WITH &view=1 (e.g., `IMG_0543.jpg?part=0.3&view=1`):
+  - Returns HTML wrapper with embedded <img> tag
+  - Current implementation works correctly
+
+**Revert Instructions (if needed):**
+```bash
+# Current stable state is commit 8ac0a03
+git log --oneline -1  # Should show: "Update programmer_todo.md with Phase 2.8 download enhancements"
+# To revert any changes:
+git reset --hard 8ac0a03
+```
+
+**Implementation Plan - Option 1 (Cookie-based requests):**
+- [ ] Extract authentication cookies from Selenium session once at start
+- [ ] For each image URL, check if it has &view=1:
+  - If YES: Use Selenium to navigate and parse HTML (current approach - keep it)
+  - If NO: Use requests.get() with extracted cookies to download directly
+- [ ] This avoids Chrome's download behavior for binary files
+- [ ] Test with both URL types to verify both paths work
+
+**Code Changes Needed:**
+- download_image() function in imageGetter/download_images.py
+- Add cookie extraction logic
+- Add URL detection logic (has &view=1 or not)
+- Branch to either Selenium approach or requests approach
+
+**Status:**
+- [ ] Document issue and plan (this section)
+- [ ] Implement cookie extraction and dual-path download logic
+- [ ] Test with URLs that have &view=1
+- [ ] Test with URLs that don't have &view=1
+- [ ] Commit changes
+
 ### Phase 2.9: Download Full A/ Directory Images
 - [ ] Start Chrome with debug mode: `chrome.exe --remote-debugging-port=9222`
 - [ ] Log into Google Groups in Chrome
