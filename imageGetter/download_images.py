@@ -22,12 +22,13 @@ def create_selenium_driver():
     Returns:
         WebDriver instance connected to existing Chrome session
     """
-    service = Service(executable_path='../../chromedriver-win64/chromedriver.exe')
+    #service = Service(executable_path='../../chromedriver-win64/chromedriver.exe')
+    #C:\Users\tom\Documents\projects\chromedriver-win64
+    service = Service(executable_path='/mnt/c/Users/tom/projects/chromedriver-win64/chromedriver.exe')
     options = webdriver.ChromeOptions()
     options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
     driver = webdriver.Chrome(service=service, options=options)
     return driver
-
 
 def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetries: int = 3) -> bool:
     """
@@ -140,6 +141,8 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     """
     Download all images from image index with progress tracking.
 
+    Skips images that already exist in the output directory (resume functionality).
+
     Args:
         strIndexPath: Path to image_index.json file
         strOutputDir: Directory to save downloaded images
@@ -147,7 +150,7 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         seleniumDriver: Optional Selenium driver (for testing). If None, creates new one.
 
     Returns:
-        Dict with statistics: {"total": int, "success": int, "failed": int}
+        Dict with statistics: {"total": int, "success": int, "failed": int, "skipped": int}
     """
     # Load image index
     with open(strIndexPath, 'r', encoding='utf-8') as f:
@@ -171,7 +174,8 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     dctStats = {
         "total": len(lstAllImages),
         "success": 0,
-        "failed": 0
+        "failed": 0,
+        "skipped": 0
     }
 
     # Create output directory
@@ -195,6 +199,12 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         strUrl = dctImageInfo["url"]
         strLocalFilename = dctImageInfo["local_filename"]
         strOutputPath = str(pathOutputDir / strLocalFilename)
+
+        # Skip if file already exists (resume functionality)
+        pathOutputFile = Path(strOutputPath)
+        if pathOutputFile.exists():
+            dctStats["skipped"] += 1
+            continue
 
         # Download image
         boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3)

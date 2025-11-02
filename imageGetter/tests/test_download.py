@@ -384,6 +384,3 @@ class TestBatchDownload:
 
             # Should only call download_image twice (not for the existing file)
             assert mock_download_image.call_count == 2
-
-        # RED: This test should fail
-        pytest.fail("Resume functionality not yet implemented")
