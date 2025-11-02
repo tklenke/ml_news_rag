@@ -10,16 +10,17 @@ from download_images import download_batch
 def main():
     """CLI entry point for batch image downloads."""
     parser = argparse.ArgumentParser(
-        description="Download images from Google Groups using image index"
+        description="Download images from Google Groups using image index",
+        usage="%(prog)s [options] SOURCE DEST"
     )
     parser.add_argument(
-        "--index",
-        required=True,
-        help="Path to image_index.json file"
+        "source",
+        metavar="SOURCE",
+        help="Path to image index file (*.idx or *.json)"
     )
     parser.add_argument(
-        "--output",
-        required=True,
+        "dest",
+        metavar="DEST",
         help="Directory to save downloaded images"
     )
     parser.add_argument(
@@ -32,16 +33,16 @@ def main():
     args = parser.parse_args()
 
     # Validate input file exists
-    pathIndex = Path(args.index)
+    pathIndex = Path(args.source)
     if not pathIndex.exists():
-        print(f"Error: Index file not found: {args.index}", file=sys.stderr)
+        print(f"Error: Index file not found: {args.source}", file=sys.stderr)
         sys.exit(1)
 
     # Display configuration
     print("Image Batch Download")
     print("=" * 50)
-    print(f"Index file: {args.index}")
-    print(f"Output directory: {args.output}")
+    print(f"Index file: {args.source}")
+    print(f"Output directory: {args.dest}")
     if args.limit:
         print(f"Limit: {args.limit} images")
     print()
@@ -55,8 +56,8 @@ def main():
     # Download batch
     try:
         dctStats = download_batch(
-            strIndexPath=args.index,
-            strOutputDir=args.output,
+            strIndexPath=args.source,
+            strOutputDir=args.dest,
             intLimit=args.limit,
             seleniumDriver=None  # Will create new driver
         )
