@@ -43,6 +43,101 @@ BLACKLIST_PATTERNS = [
 ]
 
 
+def extract_keywords_from_filename(strFilename: str) -> List[str]:
+    """
+    Extract useful keywords from image filename for search/indexing.
+
+    Splits on delimiters (spaces, underscores, camelCase, hyphens).
+    Filters out generic image terms, numbers, and short words.
+
+    Args:
+        strFilename: Image filename (e.g., "Landing_Light_Back.jpg")
+
+    Returns:
+        List of normalized keywords (e.g., ["landing", "light", "back"])
+    """
+    # Stopwords: generic terms to exclude
+    STOPWORDS = {
+        # Generic image terms
+        'img', 'image', 'photo', 'picture', 'pic', 'jpeg', 'jpg', 'png', 'gif', 'bmp',
+        'cimg', 'dsc', 'dscn', 'dscf', 'p1', 'p2', 'p3',
+
+        # Size/quality terms
+        'small', 'large', 'med', 'medium', 'thumb', 'thumbnail', 'hi', 'lo', 'res',
+
+        # Generic modifiers
+        'copy', 'final', 'edited', 'temp', 'new', 'old', 'test', 'draft',
+
+        # Camera/app prefixes
+        'fullsizerender', 'pastedgraphic', 'screenshot', 'capture',
+
+        # Common but not useful
+        'blob', 'attachment', 'download', 'gptemp', 'unknown',
+    }
+
+    # Remove file extension
+    strName = strFilename
+    for ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.JPG', '.JPEG', '.PNG', '.GIF', '.BMP']:
+        if strName.endswith(ext):
+            strName = strName[:-len(ext)]
+            break
+
+    # Split on common delimiters: spaces, underscores, hyphens, dots
+    # Also handle camelCase by inserting spaces before uppercase letters
+    import re
+    # Insert space before uppercase letters (for camelCase)
+    strName = re.sub(r'([a-z])([A-Z])', r'\1 \2', strName)
+    # Split on delimiters
+    lstWords = re.split(r'[_\-\s.]+', strName)
+
+    # Filter and normalize
+    lstKeywords = []
+    for strWord in lstWords:
+        # Skip empty strings
+        if not strWord:
+            continue
+
+        # Normalize to lowercase
+        strWordLower = strWord.lower()
+
+        # Skip stopwords
+        if strWordLower in STOPWORDS:
+            continue
+
+        # Skip pure numbers
+        if strWord.isdigit():
+            continue
+
+        # Skip very short words (< 3 chars) unless they're uppercase acronyms
+        if len(strWord) < 3 and not strWord.isupper():
+            continue
+
+        # Skip hex patterns (like 5f36565)
+        if re.match(r'^[0-9a-fA-F]+$', strWord) and len(strWord) >= 6:
+            continue
+
+        # Skip file path components (contains backslash or colon)
+        if '\\' in strWord or ':' in strWord or '/' in strWord:
+            continue
+
+        # Skip words that are mostly numbers with some letters (like CIMG1025, image001, 0090c)
+        intDigitCount = sum(c.isdigit() for c in strWord)
+        if intDigitCount > len(strWord) / 2:  # More than half digits
+            continue
+
+        # Skip generic "imageNNN" pattern
+        if strWordLower.startswith('image') and any(c.isdigit() for c in strWord):
+            continue
+
+        # Skip camera-style filenames (CIMG1025, DSC0001, IMG0087)
+        if re.match(r'^(cimg|dsc|dscn|dscf|img|p1|p2)[0-9]+$', strWordLower):
+            continue
+
+        lstKeywords.append(strWordLower)
+
+    return lstKeywords
+
+
 def is_blacklisted(strFilename: str) -> bool:
     """
     Check if filename should be filtered out (junk/non-content images).
@@ -83,8 +178,8 @@ def extract_image_urls(strMarkdownContent: str) -> List[Dict[str, str]]:
         strMarkdownContent: Markdown file content as string
 
     Returns:
-        List of dicts with keys: url, part, filename
-        Example: [{"url": "https://...", "part": "0.1", "filename": "Image.jpeg"}]
+        List of dicts with keys: url, part, filename, keywords
+        Example: [{"url": "https://...", "part": "0.1", "filename": "Landing_Light.jpg", "keywords": ["landing", "light"]}]
     """
     # Regex to find all URLs with image extensions (including query parameters)
     # Matches http:// or https:// up to whitespace, ), or ]
@@ -109,6 +204,9 @@ def extract_image_urls(strMarkdownContent: str) -> List[Dict[str, str]]:
                 # Check if filename is blacklisted (junk/non-content)
                 strFilename = dctImageData.get('filename', '')
                 if not is_blacklisted(strFilename):
+                    # Extract keywords from filename for search/indexing
+                    lstKeywords = extract_keywords_from_filename(strFilename)
+                    dctImageData['keywords'] = lstKeywords
                     lstResults.append(dctImageData)
                 # If blacklisted, silently skip (don't add to results)
 
@@ -386,10 +484,11 @@ if __name__ == "__main__":
         print(f"Error building index: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # Calculate statistics and track filename duplicates
+    # Calculate statistics and track filename duplicates and keywords
     intTotalMessages = len(dctIndex)
     intTotalImages = 0
     dctFilenameCounts = Counter()  # Track filename occurrences
+    dctKeywordCounts = Counter()  # Track keyword occurrences
 
     for dctEntry in dctIndex.values():
         for dctImage in dctEntry["images"]:
@@ -398,11 +497,16 @@ if __name__ == "__main__":
             strFilename = dctImage["filename"]
             dctFilenameCounts[strFilename] += 1
 
+            # Track keywords (already lowercase)
+            for strKeyword in dctImage.get("keywords", []):
+                dctKeywordCounts[strKeyword] += 1
+
     # Display results
     print(f"Results:")
     print(f"  Messages with images: {intTotalMessages}")
     print(f"  Total image URLs: {intTotalImages}")
     print(f"  Unique filenames: {len(dctFilenameCounts)}")
+    print(f"  Unique keywords: {len(dctKeywordCounts)}")
     print()
 
     # Show sample entries (first 3 message IDs)
@@ -464,6 +568,25 @@ if __name__ == "__main__":
                     f.write(f"=== Unique Filenames ({len(lstUniques)}) ===\n")
                     for strFilename, intCount in lstUniques:
                         f.write(f"{strFilename}\n")
+
+                # Write keyword statistics section
+                f.write("\n")
+                f.write("=" * 60 + "\n")
+                f.write("=== Keyword Statistics ===\n")
+                f.write(f"\nTotal keywords extracted: {sum(dctKeywordCounts.values())}\n")
+                f.write(f"Unique keywords: {len(dctKeywordCounts)}\n")
+                f.write("\n")
+
+                if dctKeywordCounts:
+                    # Sort keywords by count descending
+                    lstKeywords = [(keyword, count) for keyword, count in dctKeywordCounts.items()]
+                    lstKeywords.sort(key=lambda x: (-x[1], x[0]))
+
+                    f.write(f"=== Keywords by Frequency ===\n")
+                    f.write("Count  Keyword\n")
+                    f.write("-" * 60 + "\n")
+                    for strKeyword, intCount in lstKeywords:
+                        f.write(f"{intCount:5d}  {strKeyword}\n")
 
             print(f"Wrote stats to: {pathStatsFile}")
             print(f"Stats file size: {pathStatsFile.stat().st_size} bytes")

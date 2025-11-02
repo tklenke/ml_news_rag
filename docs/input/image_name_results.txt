@@ -1,0 +1,8 @@
+=== Duplicate Filenames (604) ===
+Count  Filename
+------------------------------------------------------------
+97  graycol.gif
+78  UFAC Salutation.jpg
+19  wlEmoticon-winkingsmile[1].png
+16  Animation1.gif
+ 2  wlEmoticon-thinkingsmile[1].png

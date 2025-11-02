@@ -1,0 +1,4411 @@
+=== Image Filename Statistics ===
+Generated: 2025-11-02 13:00:32
+Source: ../data/msgs_md/.
+
+Total images: 6858
+Unique filenames: 4399
+
+=== Duplicate Filenames (604) ===
+Count  Filename
+------------------------------------------------------------
+  250  image001.jpg
+  189  image.png
+  169  image002.jpg
+  105  image0.jpeg
+   97  graycol.gif
+   87  image1.jpeg
+   78  UFAC Salutation.jpg
+   73  201.jpg
+   69  image001.png
+   55  image1.JPG
+   52  image001.gif
+   48  image.jpeg
+   42  image003.jpg
+   41  image2.jpeg
+   30  Image1.jpg
+   26  image002.png
+   25  image.jpg
+   25  image004.jpg
+   25  image2.JPG
+   19  wlEmoticon-winkingsmile[1].png
+   18  image[1].png
+   17  photo.JPG
+   16  Animation1.gif
+   16  image3.jpeg
+   14  image003.png
+   13  0090cCanopyOnIn.jpg
+   12  image006.jpg
+   11  Image.jpeg
+   11  image005.jpg
+   10  image0011183.jpg
+   10  image002561.jpg
+   10  ~WRD000.jpg
+    9  image3.JPG
+    9  ole0.bmp
+    8  image1.png
+    7  Image2.jpg
+    7  alaska test flightsaa.jpg
+    7  ecblank.gif
+    7  image_123986672.JPG
+    6  CIMG1025.jpg
+    6  Image3.jpg
+    6  MS switch.jpg
+    6  PastedGraphic-1.png
+    6  image004.png
+    6  image008.jpg
+    6  image4.jpeg
+    5  0035aNoseHotwireTmplts.jpg
+    5  0065eReady2Glass.jpg
+    5  03aWingRtBearingNutplates.jpg
+    5  1.jpg
+    5  2.jpg
+    5  AndairElectricFuelSelector.jpg
+    5  Brake Line_small.jpg
+    5  C:\Users\Keith Spreuer\Documents\Cozy Sal.jpg
+    5  Cozy nose + dihed.jpeg
+    5  IMG_0108.jpg
+    5  Image5.jpg
+    5  No photo description available..jpeg
+    5  attachment.php.jpg
+    5  image002.gif
+    5  image007.jpg
+    5  image1.PNG
+    5  image4.JPG
+    5  image_6483441.JPG
+    5  photo.jpg
+    4  0045ProfilesCut.jpg
+    4  1210765.jpg
+    4  15483624084373d55b5c82d.gif
+    4  1669211847066blob.jpg
+    4  16f3cd8.jpg
+    4  21dRtLevlJigsTop.jpg
+    4  34986109.gif
+    4  Capture.PNG
+    4  Cozy VI.jpg
+    4  GPTempDownload.jpg
+    4  Landing Light Back.jpg
+    4  VEZ1.jpg
+    4  blob.jpg
+    4  dancing-banana.gif
+    4  email.jpg
+    4  image005.png
+    4  image5.jpeg
+    4  image[3].png
+    4  photo 1.JPG
+    4  photo 2.JPG
+    4  photo1.jpg
+    4  wlEmoticon-smile[1].png
+    4  wow_waving_md_wht.gif
+    3  0002Glass Statn Hanging Closd.jpg
+    3  0003Glass Statn Open.jpg
+    3  0013 Feb AeroplanFactry.jpg
+    3  0021NG30AdditGlassd.jpg
+    3  0042bVinylTubeConduit.jpg
+    3  0064bFoamInPlace.jpg
+    3  0065aCarveFrame.jpg
+    3  0071aPedalsMCsInstald.jpg
+    3  0071cSwingersOpen.jpg
+    3  08Rotissierie.jpg
+    3  0F475117.gif
+    3  10ecba33.jpg
+    3  14 Brace4turn.JPG
+    3  2021-08-20 21.24.29.jpg
+    3  20210308_200655.jpg
+    3  28bRtTieDownTube.jpg
+    3  29a RuddrInstald.jpg
+    3  3.0 liter cozy cowl 003.JPG
+    3  3.jpg
+    3  5f36565.jpg
+    3  5f36575.jpg
+    3  5f36585.jpg
+    3  630e5dc.png
+    3  Corrosion x P1010273 Lo.jpg
+    3  Cover.JPG
+    3  Cozy Electrical.png
+    3  CozyEIcoils.jpg
+    3  CozyIVcowl.jpeg
+    3  DEWCHAT38-82-03-22__61995.1560350678__68417.1560352087__40402.1578425679.jpg
+    3  EZ roll+circle.gif
+    3  Emoticon1.gif
+    3  FullSizeRender.jpg
+    3  IMG-6880.JPG
+    3  IMG_0002.jpeg
+    3  IMG_0003.jpeg
+    3  IMG_0007.jpeg
+    3  IMG_0084.jpeg
+    3  IMG_0087.JPG
+    3  IMG_0087.jpeg
+    3  IMG_0087.jpg
+    3  IMG_0089.jpeg
+    3  IMG_0103.jpeg
+    3  IMG_0141.jpeg
+    3  IMG_0830.jpeg
+    3  IMG_0864.jpg
+    3  IMG_0874.jpg
+    3  IMG_0911.jpeg
+    3  IMG_0912.jpeg
+    3  IMG_1019.jpg
+    3  IMG_1329.jpeg
+    3  IMG_1574.jpg
+    3  IMG_20170709_202541.jpg
+    3  IMG_3260.JPG
+    3  IMG_5201.jpeg
+    3  IMG_5202.jpeg
+    3  IMG_5586.JPG
+    3  Landing Light front.jpg
+    3  Langley.jpg
+    3  Nose Hatch x 20130108_092019.jpg
+    3  PICT2080.jpg
+    3  Panel vents.jpg
+    3  PastedGraphic-4.png
+    3  PitchTrim.jpg
+    3  Quiteflite wiring diagram.jpg
+    3  Roncz graph.jpg
+    3  Unknown.jpeg
+    3  Varieze_Static_Test_Setup.jpg
+    3  Varieze_Test_Failure.jpg
+    3  a786d78.jpg
+    3  breather pipe 1.jpg
+    3  coins.jpg
+    3  console 1.JPG
+    3  dancing_cactus_lg_wht_3429.gif
+    3  eductor2.JPG
+    3  f2b72a8.jpg
+    3  face-smile-big.png
+    3  image006.png
+    3  image007.gif
+    3  image5.JPG
+    3  image_6487327.JPG
+    3  kamp_kozy.bmp
+    3  photo 3.JPG
+    3  soapbox.gif
+    3  test2_1.jpeg
+    3  variez_load_test.jpg
+    2  -8962571551160618E.png
+    2  -CyhPcM4ZaorbGiNO8RUvKGFCrtb1EwVZ840KHYLp9iTUebziCoI_4o1fYh9QX3kGr9wJd_kUvkOQOwL02u1y_IWInILAf5eFsZ7K4ueX8KiietPuyPZD-wwaXku_3gD6OIBkxPYX3FVW1bQrNlUrTIuK0qrdKVJJuQhfeEqycR6vsFAbCWJOaiCEwGPq2gF3rcTojD9qkQDvkGuSU7dSklvWCeYlJYS_-H-iNY7Eg-ZX1O9tfPMzWMweTN5ltMDo-8xavNm2R-BRR5FGlKOF-E45Ry7OnoY3xCDKFRD3bEvYX5MRJQ_GvFwzpcThRvFoyVGFsSMRdru-AIoKlZDnStcOxXRuoxP1wi0ol_vf9-CwAU8vgKASPSd8AM5qAkIw-l_rpTLZ6LwbM1GqiJaaCIK5iOb1pd08WiLR0uYj0nH_QAl6hNAS8nqsrAFa3rolpLiSYRazsWuE7KTgqbYDaKE2Ztpj_lyAcGZ4Zj4mkaRcc0n6bsCQ9V4CBg7S4dtpxZr1sjDqLsYKP_DbGgmvFUQyVh7V2eRudd1ezvEOj0_qn7JJlqAvHbsCz9j9a7wzbQ7gGEwi1sx8zfKm2Oe8KGHlkrgel9r9mKNpabB6xY7NDP8CfT5RCswoTEm6TTilemGt1xFvwh8ywBUP3GQ6BgPa_2ddzfgvfOF0gAtO_ekQ_zuFPAWLL75GoZGTJdmoCe4npioYpWNeXsh43_XUimH8_QWmBLKvG1LBCtuvw_2luSeem9CGmvR6c5aCQ=w3164-h2372-no.jpeg
+    2  0017Ready4ShearWeb.jpg
+    2  0021DoingShearWeb.jpg
+    2  0039cNoseBoxCovrGlasdPP.jpg
+    2  0040Inside Nose Area.jpg
+    2  0041TaperPinReamers.jpg
+    2  0048NoseTopCCGlasd2.jpg
+    2  0059TopContourProblem.jpg
+    2  0068RollngPinPPmethd.jpg
+    2  00Hand Saws n Sanders2.jpg
+    2  017.jpg
+    2  018.jpg
+    2  019.jpg
+    2  020.jpg
+    2  021.jpg
+    2  022.jpg
+    2  023.jpg
+    2  024.jpg
+    2  025.jpg
+    2  026.jpg
+    2  027.jpg
+    2  028.jpg
+    2  029.jpg
+    2  02Flxbl SandBlox.jpg
+    2  030.jpg
+    2  03aBulkheadsSized.jpg
+    2  0610171800a.jpg
+    2  07sCt9SgTWCEfGqAx 0hhw.jpg
+    2  09-01631.jpg
+    2  0MxqjLL7Sz6JXy0tGm3QZA.jpg
+    2  1 - Shroud.jpg.jpg
+    2  100_4146.jpg
+    2  100_4149.jpg
+    2  102_5103.JPG
+    2  102_5291.JPG
+    2  12RtAlignJigs.jpg
+    2  12SparBoxInterLayup.jpg
+    2  1542812990055blob.jpg
+    2  1549208594663blob.jpg
+    2  1556716601332blob.jpg
+    2  1556716612045blob.jpg
+    2  1556716968170blob.jpg
+    2  157ce8e8.JPG
+    2  1622641_814831385246015_6744349913946604013_n.jpg
+    2  1646920360902blob.jpg
+    2  1669211742728blob.jpg
+    2  169.jpg
+    2  1762360523585BC1D.png
+    2  18d6252.jpg
+    2  18d6262.jpg
+    2  19bRtBotmHardShlSand.jpg
+    2  1A5.gif
+    2  1E3.gif
+    2  1\" 100º 6 flute countersink.jpg
+    2  2 - First pinhole.jpg
+    2  2012-05-08 10.20.46.jpg
+    2  2012-08-09_20-14-15_305 (Medium).jpg
+    2  2012-12-03_16-04-11_785.jpg
+    2  2013-01-18_23-04-58_285.jpg
+    2  20141102_083223.jpg
+    2  20141102_083340.jpg
+    2  20141102_083513.jpg
+    2  20150321_095312_Richtone(HDR).jpg
+    2  2016-01-16 12.32.26.jpg
+    2  2019-6-4-SmarttFlooding1.jpg
+    2  20210702_191657.jpg
+    2  20220216_105805.jpg
+    2  20220508_155446.jpg
+    2  23SI1-1 Apr-May 1989 The Oil Maze by John McAvoy.jpg
+    2  23SI1-2 The Oil Maze.jpg
+    2  23SI1-3 The Oil Maze.jpg
+    2  23SI1-4 The Oil Maze.jpg
+    2  23SI8-1 Feb-Mar'86 pg 12 Builders Hint on using shielded wire to the Mag from Dick Kreidel.jpg
+    2  23SI8-2 using shielded wirel.jpg
+    2  28b ClickbondCovr.jpg
+    2  2925623573585BC1D.png
+    2  3 - Second pinhole.jpg.jpg
+    2  30cLeftWJigSetup.jpg
+    2  32B.gif
+    2  33702-2DWG[2].jpg
+    2  33702-2[2].jpg
+    2  354.JPG
+    2  369.gif
+    2  37AMatchDrillJigParts.jpg
+    2  40Inside Nose Area.jpg
+    2  42aBL31BearingBase.jpg
+    2  4EFFEF66.jpg
+    2  5 temp fuel cap.JPG
+    2  56bAileronInstalTechnq.jpg
+    2  58aAileronLinkageL.jpg
+    2  62bSandSTrut3.jpg
+    2  65aLevlStrut.jpg
+    2  68aWaxFillBushngs.jpg
+    2  68bBushings.jpg
+    2  68cBushngsInstald.jpg
+    2  71cSwingersOpen.jpg
+    2  75bLaserMark.jpg
+    2  75cLasrPlacmnt.jpg
+    2  7b6f09.jpg
+    2  7b6f19.jpg
+    2  90degbid.PNG
+    2  A81AB894-ECC4-4AB6-BEBA-D7FC2502FB32.jpg
+    2  AFwd1rvxSYKtTAY9awC sQ.jpg
+    2  ATT00002.jpeg
+    2  ATT00003.jpeg
+    2  ATT00004.jpeg
+    2  ATT00005.jpeg
+    2  ATT00006.jpeg
+    2  ATT00007.jpeg
+    2  ATT00008.jpeg
+    2  Aircraft Spruce cost.jpg
+    2  Arrrgghh_11535.gif
+    2  B04.gif
+    2  Baffles.jpg
+    2  Bolt Review.png
+    2  Boost_pump_wires.jpg
+    2  Bottom1.jpg
+    2  Buly Silverhawk.jpg
+    2  CZ4CowlRamps.jpeg
+    2  Canard noise b4 after.jpg
+    2  CenterSpar-UpperFirewallLayupMistake.jpeg
+    2  Cozy 072.JPG
+    2  Cozy Covered at OSH.jpg
+    2  Cozy.jpg
+    2  Cozy75CZ.JPG
+    2  DSC00007.jpeg
+    2  DSC00018.JPG
+    2  DSC03165.jpeg
+    2  DSCN0027.JPG
+    2  DSCN4267.JPG
+    2  DYNON-SKYVIEW1[1].jpg
+    2  Drip rail - Removable Fuselage Top Chapter 18 Step 15.jpg
+    2  Dsub-Pin_Splice_3.jpg
+    2  EZ Drone.JPG
+    2  EZ%20roll%2Bcircle.gif
+    2  EZPoxyScale.jpg
+    2  Electric trim small.jpg
+    2  Electric trim spring.jpg
+    2  F22-NoseBrace.jpg
+    2  Far-Side What to do.jpg
+    2  First Flight approaching pattern.jpeg
+    2  Fitzgerald_Ad.jpeg
+    2  Fuel Inj cable arm.jpg
+    2  Fuel01.jpg
+    2  Fuel02.jpg
+    2  Fuel03.jpg
+    2  Fuel04.jpg
+    2  Fuel05.jpg
+    2  Fuel06.jpg
+    2  Fuel07.jpg
+    2  Fuel08.jpg
+    2  FuelLinePenetrations.jpg
+    2  FuelLineRoutingFuseSide.jpg
+    2  Gap1.jpg
+    2  Hand saw Irwin.jpg
+    2  HolleyInTankFuelPumpPickup.jpg
+    2  IMG_0004.jpeg
+    2  IMG_0005.JPG
+    2  IMG_0006.jpeg
+    2  IMG_0008.jpeg
+    2  IMG_0032.JPG
+    2  IMG_0032.jpg
+    2  IMG_0053.jpeg
+    2  IMG_0061.jpg
+    2  IMG_0092.jpeg
+    2  IMG_0093.jpeg
+    2  IMG_0120.JPG
+    2  IMG_0233.JPG
+    2  IMG_0237.JPG
+    2  IMG_0297.jpg
+    2  IMG_0310.jpeg
+    2  IMG_0311.jpeg
+    2  IMG_0312.jpeg
+    2  IMG_0316.jpg
+    2  IMG_0363.jpeg
+    2  IMG_0420.jpeg
+    2  IMG_0445.jpeg
+    2  IMG_0487.jpeg
+    2  IMG_0519.jpeg
+    2  IMG_0549.jpg
+    2  IMG_0577a.jpg
+    2  IMG_0580a.jpg
+    2  IMG_0588.JPG
+    2  IMG_0590.jpg
+    2  IMG_0642.JPG
+    2  IMG_0694.jpg
+    2  IMG_0720.jpg
+    2  IMG_0726.jpg
+    2  IMG_0733.jpg
+    2  IMG_0742.jpeg
+    2  IMG_0831.JPG
+    2  IMG_0869.jpg
+    2  IMG_0872.jpg
+    2  IMG_0873.jpg
+    2  IMG_0892.jpg
+    2  IMG_0910.jpeg
+    2  IMG_0922.JPG
+    2  IMG_0962.jpg
+    2  IMG_0967.jpg
+    2  IMG_0970_LI.jpg
+    2  IMG_1021.JPG
+    2  IMG_1065.jpg
+    2  IMG_1114.jpg
+    2  IMG_1128.jpg
+    2  IMG_1145.jpeg
+    2  IMG_1273.JPG
+    2  IMG_1333.JPG
+    2  IMG_1355.jpeg
+    2  IMG_1389.jpg
+    2  IMG_1522.JPG
+    2  IMG_1531.JPG
+    2  IMG_1532.JPG
+    2  IMG_1562.jpeg
+    2  IMG_1592.jpeg
+    2  IMG_1593.jpeg
+    2  IMG_1602.JPEG
+    2  IMG_1609.jpg
+    2  IMG_1715.jpeg
+    2  IMG_1718.jpeg
+    2  IMG_1719.jpeg
+    2  IMG_1725.jpeg
+    2  IMG_1725.jpg
+    2  IMG_1750.jpg
+    2  IMG_1751.jpg
+    2  IMG_1809.jpg
+    2  IMG_1810.jpg
+    2  IMG_1988.jpg
+    2  IMG_1995.JPG
+    2  IMG_20180421_154614.jpg
+    2  IMG_2067.jpg
+    2  IMG_2103.jpg
+    2  IMG_2131.jpeg
+    2  IMG_2179.jpg
+    2  IMG_2350.jpeg
+    2  IMG_2351.jpeg
+    2  IMG_2352.jpeg
+    2  IMG_2503.jpg
+    2  IMG_2682_1.JPG
+    2  IMG_3096.jpg
+    2  IMG_3097.jpg
+    2  IMG_3098.jpg
+    2  IMG_3136.jpg
+    2  IMG_3257 (1).JPG
+    2  IMG_3525.JPG
+    2  IMG_3921.jpg
+    2  IMG_4185.jpg
+    2  IMG_4740.JPG
+    2  IMG_5019.JPG
+    2  IMG_5207.jpeg
+    2  IMG_5274.JPG
+    2  IMG_5278.JPG
+    2  IMG_5319.JPG
+    2  IMG_5389.JPG
+    2  IMG_5393.JPG
+    2  IMG_5414.JPG
+    2  IMG_5585.JPG
+    2  IMG_5593_1.JPG
+    2  IMG_6058.JPG
+    2  IMG_6385.JPG
+    2  IMG_6391.JPG
+    2  IMG_6392.JPG
+    2  IMG_6583.JPG
+    2  IMG_6585.JPG
+    2  IMG_7053.jpg
+    2  IMG_7257.JPG
+    2  IMG_7485.jpeg
+    2  IMG_7486.jpeg
+    2  IMG_7628.JPG
+    2  IMG_7709_1a.jpg
+    2  IMG_8356.jpeg
+    2  IMG_8980.jpg
+    2  IMG_9265.jpeg
+    2  IMG_9266.jpeg
+    2  Image1a.jpg
+    2  Image1b.jpg
+    2  Image1c.jpg
+    2  Image4.jpg
+    2  KLCQ Landing Light.JPEG
+    2  Landing Gear Circuit.jpg
+    2  Landing Light.jpg
+    2  Latch1.jpeg
+    2  Light down.JPEG
+    2  Light old new.jpeg
+    2  Light retracted.JPEG
+    2  LongTablTop.JPG
+    2  LxvHA3ciMsolkZSF.png
+    2  MATCO Wheel set.JPG
+    2  MarcZ-StrakeFuelSO&Fltr.jpg
+    2  Mobius-UAS.jpg
+    2  N91DR radiator 4-25.jpg
+    2  N91DR top of radiator 4-25.jpg
+    2  N95BJ James big wheels from 10 o'clock 8-15.jpg
+    2  NACA.jpg
+    2  NG5small.JPG
+    2  Native EZ cave art.jpg
+    2  Oil pan.jpg
+    2  OilFittingDry.png
+    2  OilFittingWet.png
+    2  Osh7.jpg
+    2  Oxygen small.jpg
+    2  P1030086.JPG
+    2  P1030088.JPG
+    2  PIC00023.jpg
+    2  Picture 002.jpg
+    2  Picture%20011a_1[1].jpg
+    2  Picture%20018a_1[1].jpg
+    2  PlansFuelSplyLctn.jpg
+    2  RHgNxK7qVme1m0fl.png
+    2  RIMG5694a.JPG
+    2  RIMG5700.JPG
+    2  RIMG5701.JPG
+    2  RIMG5704.JPG
+    2  RIMG5705.JPG
+    2  RIMG5706.JPG
+    2  RIMG5707.JPG
+    2  RIMG5710.JPG
+    2  Randi-Red_Flyer1.jpg
+    2  RedFlyer2016-2.jpg
+    2  RedFlyer2016.jpg
+    2  Safe on the Ground.jpeg
+    2  Screen Shot 2019-06-17 at 10.30.29 PM.png
+    2  Screen Shot 2019-06-17 at 10.30.43 PM.png
+    2  Screen Shot 2022-02-05 at 7.32.38 AM.png
+    2  Seatbelt Reinforcement 002 - Copy.JPG
+    2  Sound Proofing.jpg
+    2  StarLite June 9 001c_1.jpg
+    2  Strakes.jpg
+    2  Stripped Bolt.jpg
+    2  Structural Temp Indicator.jpg
+    2  ThrottleLimitSwitch1Small.jpg
+    2  Top overhaul.jpg
+    2  Trim sys.jpg
+    2  TrimElevator.jpeg
+    2  UFACSalutation.jpg
+    2  Varieze gear up.jpg
+    2  Warrenvale x P1010533.jpg
+    2  WaxPaperUse.jpg
+    2  Wel_pant_bracket_2.JPG
+    2  XP_1207.jpg
+    2  ZeitlinsChart-2.jpg
+    2  agcceghd.jpg
+    2  ahigfadf.jpg
+    2  aircraft flipper.jpeg
+    2  alaska test flights.jpg
+    2  bbaiajeg.png
+    2  biggergrin.png
+    2  brokenAntenna.jpg
+    2  caliper email.jpg
+    2  coleacokglgcbdni.png
+    2  compression spring.jpg
+    2  cozy IV armrestR.jpeg
+    2  cozy interior.jpeg
+    2  crank seal retainer 002.jpg
+    2  cut off nose.jpg
+    2  d1bfc9.jpg
+    2  datauri-file.jpeg
+    2  dbejcjea.png
+    2  deidjejb.jpg
+    2  dynon[1].jpg
+    2  ehedgiee.jpg
+    2  ejceaidh.bmp
+    2  engine mount.jpg
+    2  fe4a9c2.gif
+    2  fuel flow  wiers.jpg
+    2  fuel flow.jpg
+    2  fuel ga fix.jpg
+    2  fuse block 2.jpg
+    2  fuse block on radio stack.jpg
+    2  ghfcbech.jpg
+    2  grndplat.jpg
+    2  hcaeahjh.jpg
+    2  hchfghib.bmp
+    2  heater 1.JPG
+    2  heater 3.JPG
+    2  heater 3.jpg
+    2  heater2.JPG
+    2  heater2.jpg
+    2  hjichhjh.jpg
+    2  icon[1].jpg
+    2  ighhicgf.jpg
+    2  image003.gif
+    2  image6.JPG
+    2  image[2].png
+    2  image[3].gif
+    2  image[5].gif
+    2  image[5].png
+    2  image_123650291.JPG
+    2  image_6546160.JPG
+    2  jcbacdag.jpg
+    2  koterba.jpg
+    2  latch spring.JPG
+    2  mntHole.jpg
+    2  n716cz_mt_shasta.jpg
+    2  new nose.jpg
+    2  nose.jpg
+    2  ped01.jpg
+    2  photo 1.jpg
+    2  photo 2.jpg
+    2  photo 3.jpg
+    2  photo 4.JPG
+    2  photo 5.JPG
+    2  photo 7.JPG
+    2  photo1.JPG
+    2  photo2.JPG
+    2  picasaweblogo-en_US.gif
+    2  plan_01.jpg
+    2  pppfokifdckialga.png
+    2  pump.jpg
+    2  qpyN7AmjjBEEr6STMeOQ7v1IbrZkF9sszrjBQNGaVwIMdu6ITiITczelsm4a4unMEimM3p6TG8lplN1BZCCWWP9lfcOey3I9d0A3kuTWSc0lXH2PZPka52Q_-uVwCMnabY2bPxgKxBYCAmkOkegz5IeXODfukCvakGJvNbQfgGbThlqT4sNDreiu6X6RL_kq3wUA9j2FLAVfFH3bp4sWjPoPwSaFMs9YrQB3YQtLgITk99ASjL0G1n7kfS8bGtjuY8fSemAfwzcJt2nzs0OS62eV8cRXoHtJpv6ZKmOL1NzLEUi_9AAHpK158z4hqUo9tw2VYCkE6F4k1a_oBHAbYVcuZFDnRaz9UepaeB-e3rm1Eh2Y9p5tbjLDR23ww32bMx7v2EUFie0CLr_C7a1VT2KspLmn64lRaXddJwl6hUeir6tBtctNRy8LdBgzyqWl6ERIWWNe5K8U_ObN0XdF_naPP6EfBOYCI-Lp6I3VEyt2a6y5nLh-U4VNpbTZjvl1WtDiYyixop5ZfP2Unlex6KM27Fon6D8evXaF_X9lGz2nxz3OwijOm1H4FtguuakqtSCkhRgGw7D_doDKIqZqk_o3weo-WBtQv1U4wyM5SahVfic-C6MxM938C8hpoUTiHUS6jajw9Exiz41r9gCQHkf5HGaTXQCKpr7ZW1WmokP_t-FbewiBaCX6OZPzdoRMCZt69bKTZSBZHla5tcvnzw2Jbnm83axRqMiIreLgzcAyS4QsxLi_gFDGDm4CqA=w3164-h2372-no.jpeg
+    2  ratio.png
+    2  springboard.jpg
+    2  step size.jpg
+    2  strong trim.jpg
+    2  test1_2.jpeg
+    2  throttle 2.jpg
+    2  throttle.jpg
+    2  trailer1.jpg
+    2  trailer2.jpg
+    2  trailer3.jpg
+    2  uma_bezel_light (2).jpg
+    2  valve rear.PNG
+    2  velo twin.jpg
+    2  wind speed.jpg
+    2  winglet.jpg
+    2  wlEmoticon-eyerollingsmile[1].png
+    2  wlEmoticon-openmouthedsmile[1].png
+    2  wlEmoticon-rollingonthefloorlaughing[1].png
+    2  wlEmoticon-thinkingsmile[1].png
+    2  xp-12:07.jpg
+    2  Öljyn läpiviennit apulaitekotelossa.jpg
+
+=== Unique Filenames (3795) ===
+ me in cozy.jpeg
+#4exhaust.jpg
+$_1.JPG
+(null).jpg
+0-235 flywheel.jpeg
+00002a.jpg
+0007HotwirePowrSupply.jpg
+0007Jig w Angle.jpg
+0007LRearArmrestReinf.jpg
+000TBJigAbove.jpg
+000_0002.jpg
+001.JPG
+001.jpg
+0011CoreLocatingPins.jpg
+0013CoresJoined.jpg
+0014InJigwStraightedge.jpg
+0016FinishedArmrstsInside.jpg
+001small.jpg
+002.JPG
+002.jpg
+0022SeatsnArmrestsInstald.jpg
+003.JPG
+0039bReady2GlasBoxCovr.jpg
+003a.jpg
+003b.jpg
+004.jpg
+0046cAlmostDone.jpg
+005.jpg
+0053cFairingSetup3.jpg
+0053dFairingSetup2degr.jpg
+0054jUNDaroundLenses.jpg
+0056NoseCon n Lenss.jpg
+0058aCanopyGlasd.jpg
+006.jpg
+0063FoamPcsInside.jpg
+0069CanopyTBGlasd.jpg
+007.jpg
+0070DidtheTrick.jpg
+0071RepairFinished.jpg
+0071bMCsRight.jpg
+0077cCanopySealGrvGlasdPP.jpg
+0078aCanSealGrvL.jpg
+008.JPG
+008.jpg
+0081UnderTEContour3.jpg
+0082UnderTEContour4.jpg
+009.jpg
+0091cLiftHandlInPlc_resized.jpg
+00928000000-1.jpeg
+00BID Taping 01.jpg
+00BID Taping 2.jpg
+00BID Taping 3.jpg
+00bulkhead_pass5426077.jpg
+01 Camlock components (Large).jpg
+01 Original raw plane.JPG
+01 TK Panel bulkhead cut.jpeg
+010.jpg
+011.jpg
+0110_hpc_FOD5.jpg
+012.JPG
+012.jpg
+013.jpg
+014.jpg
+015.jpg
+016.jpg
+017.JPG
+01LiftTabsrough.jpg
+01_Copilot_Window.jpeg
+01bMakeBlkhdTmplts.jpg
+02 Aztec Cowling camlocs placement IMG_20130917_164417_689 (Large).jpg
+02 Corel possible paint scheme.jpg
+02 Piaggio Avanti II at Sanford Airport (750x500).jpg
+02 TK IP brace view.jpeg
+021 (2).JPG
+027.JPG
+02MapPocktFlangInstald.jpg
+02_Pilot_Window.jpeg
+03 Completed Aztec-new paint.jpg
+03 IMG_20130919_165448_232 (Large).jpg
+0329221026_HDR.jpg
+033-menor.jpg
+03570.jpg
+03DrillThruNos.jpg
+03F025FF-EB7D-43C4-87C4-6E115FD1128F.jpeg
+03bGlassdOutrSkin.jpg
+03fFloxCorners.jpg
+04 IMG_20130919_165407_257 (Large).jpg
+04 Special gear mod.jpg
+04-Marine-Wire-Termination.jpg
+0405220835.jpg
+04BBA87D-340B-48E8-8087-E610BA5FB62F_1_105_c.jpeg
+04C14C8E-C8A1-4702-B2C3-185DFC5D6459.jpeg
+04GlueFoamBlocks.jpg
+04aCornersFloxd.jpg
+05 IMG_20130919_165214_213 (Large).jpg
+05D4E6C7-F1FE-41E8-8A78-299BD99A0FBF.JPG
+06 IMG_20130919_170529_643 (Large).jpg
+0610171748a.jpg
+0610171748b.jpg
+0610171752.jpg
+0610171752a.jpg
+0610171753.jpg
+0610171805.jpg
+0610171806.jpg
+0610171806a.jpg
+0610171806b.jpg
+0618171234b.jpg
+0618171235a.jpg
+0618171236.jpg
+0618171236a.jpg
+07 IMG_20130919_170539_851 (Large).jpg
+07 Piaggio Avanti II at Sanford Airport (750x500).jpg
+08-01311.jpg
+0819162123[1].jpg
+08Jig w Angle2.jpg
+08LFrontArmrstInsidReinf.jpg
+08ShldrRestPcs 4nAft.jpg
+08TBJigLath.jpg
+08aMatchDrillJigParts.jpg
+0904chp_03_z+erl_dowel_pins+installing_erl_dowel_pins.jpg
+0910211111a.jpg
+0910211526.jpg
+09B07NIAHUJD5U5t.png
+09aCores Cut.jpg
+0B99F120-38C2-45D8-AFDA-C65CC14B3A95.jpeg
+0C32555A-526F-4F31-9089-388C8EF8E25D.jpeg
+0C8940F9-E290-4F47-B877-511441547A8D.jpeg
+0CF418B1-CF10-4192-82E5-3E35950B6C38_1_105_c.jpeg
+0qLdEvZem8azK1Uy.png
+0rm62ZWbkrJSPxBB.png
+1 contoured outside.JPG
+1 top strake skin.JPG
+1.14 after tuning.jpg
+1.14 before tuning small.jpg
+1.14 before tuning.jpg
+10 Piaggio Avanti II at Sanford Airport (750x500).jpg
+10 SCarterXtraEZ2.jpg
+10-27093.jpg
+1000000948.png
+1000001020.jpg
+1000001892.jpg
+1000001893.jpg
+1000001894.jpg
+1000001895.jpg
+1000001896.jpg
+1000001897.jpg
+1000001898.jpg
+1000001899.jpg
+1000002278.jpg
+1000007808.jpg
+100120111128.jpg
+100_1512.jpeg
+100_1514.jpeg
+100_1709.JPG
+100_1710.JPG
+100_1723.jpg
+100_1837.JPG
+100_1839.JPG
+100_1843.JPG
+100_1932.JPG
+100_2535.JPG
+100_4152.jpg
+100_4153.jpg
+102B5333.JPG
+102_5350.JPG
+102_5351.JPG
+102_5352.JPG
+1048c8b.jpg
+10600.gif
+10ControlLinkgParts.jpg
+10LRearArmrestInstald.jpg
+10ShldrSuptRearInstl.jpg
+10_Main_Gear_Strut.jpeg
+1102667_208463835943994_1127036391_o.jpg
+110d374e.jpg
+112722_test.PNG
+113e41bb.jpg
+113e4209.jpg
+113e4247.jpg
+113e4286.jpg
+113e42d4.jpg
+113e4312.jpg
+113e4360.jpg
+113e439e.jpg
+11ShldrSuptFrtInstl.jpg
+11dRtAlignJigs.jpg
+12 BittnerCozy3.JPG
+12-00879.jpg
+12-01582.jpg
+121msdplugwire.jpg
+122315004.jpg
+1270962298[1].jpg
+12a Cutout4Winglt.JPG
+12fRtAlignTECores.jpg
+13-01300.jpg
+1381451a.jpg
+13RMapPcktuncut.jpg
+13a Layup4.JPG
+13nosegear100.jpg
+1417406A-C43F-4E7E-B8C5-8A65AD8C281D.jpeg
+1497131556714.jpg
+1497131842566.jpg
+1497132345617.jpg
+1514946498828blob.jpg
+1515445045883blob.jpg
+1523583421027blob.jpg
+1537020623713blob.jpg
+1538140029928blob.jpg
+1553218306880blob.jpg
+1557166606771blob.jpg
+1557250541595blob.jpg
+1581440586710blob.jpg
+1590008329268blob.jpg
+15FL Landing Light.JPEG
+15IncidTubeInstald.jpg
+15LeftLinkagParts.jpg
+1605214782600blob.jpg
+1606167567896blob.jpg
+1617283684649blob.jpg
+1617983828195blob.jpg
+1617983957101blob.jpg
+1617984074286blob.jpg
+1631301141095blob.jpg
+1634283421309blob.jpg
+1638380772421blob.jpg
+1666185974063blob.jpg
+1666185984999blob.jpg
+1671312184317blob.jpg
+1685585422442blob.jpg
+1685585456535blob.jpg
+1692390598863blob.jpg
+16FinishedArmrstsInside.jpg
+16_7_15-Moving-XEZ-home.jpg
+16_7_15-back-at-base.jpg
+16_Rear_Seat_Vent.jpeg
+17d019d.jpg
+17d01ac.jpg
+18NG30sDone.jpg
+19-57.jpg
+19196109-1434-4401-B550-034DBCC660FE.jpeg
+1969664.jpeg
+19997.jpg
+19b PositnBellhrn.JPG
+1C604934-F1D9-43A3-B73B-3EE812124769.jpeg
+1CDCDFA6-F56E-49FD-9F1C-EC6F5DADA113.jpg
+1PJ4BvQAQqgw9DO2.png
+1cz11-05.jpg
+1seatback.JPG
+2 after glassing outside.JPG
+2 hard shell and peel ply prep for  glass.JPG
+2-33-landing.jpg
+20.9 hinge with pin retainer.JPG
+200-1.jpg
+2010-03-31 16.11.50.jpg
+2010-05-09 15.59.14.jpg
+2012-01-13_15-06-19_150 (Large).jpg
+2012-02-08_22-15-31_211 (Large).jpg
+2012-02-08_22-15-41_31 (Large).jpg
+2012-02-08_22-15-58_154 (Large).jpg
+2012-02-08_22-16-05_401 (Large).jpg
+2012-02-08_22-16-13_236 (Large).jpg
+2012-02-08_22-16-13_236.jpg
+2012-02-08_22-20-10_454 (Large).jpg
+2012-02-08_22-20-23_395 (Large).jpg
+2012-02-12_20-55-16_991.jpg
+2012-09-27_19-19-04_v1[1].jpg
+2012-11-17 14.59.38.jpg
+2012-11-17 16.32.33.jpg
+2012-11-18 11.05.10.jpg
+2012-11-22_11-56-46_647.jpg
+2012-11-22_11-57-09_296.jpg
+2012-11-22_11-57-36_581.jpg
+20120113_151140_small.jpg
+20120113_151152_small.jpg
+20120307_194403.jpg
+20120307_194636_small.jpg
+20120307_194810_small.jpg
+20120308_120252.jpg
+20120310_131431_small.jpg
+20120310_131443_small.jpg
+20120310_131505.jpg
+20120310_131505_small.jpg
+20120310_131532_small.jpg
+20120310_140136_sample.jpg
+20120326_191020_small.jpg
+20120326_201022_small.jpg
+20120326_201113_small.jpg
+20120708_161703.jpg
+20121208_092308.jpg
+2013-01-18_23-06-58_23.jpg
+2013-01-20_14-53-29_5.jpg
+2013-01-20_14-54-14_234.jpg
+2013_10_17 Verizon Plan.jpg
+2014-07-31 14.23.00.jpg
+20140607_142555.jpg
+20140607_142610.jpg
+20140607_142618.jpg
+20140723_182930_1.jpg
+20140723_183016.jpg
+20140723_183523.jpg
+20140929_204154.jpg
+20141004_092603 (1024x768).jpg
+20141004_092632 (1024x768).jpg
+20141004_094821 (1024x768).jpg
+20141004_094826 (1024x768).jpg
+20141004_095505 (1024x768).jpg
+20141004_095843 (1024x768).jpg
+20141004_100026 (1024x768).jpg
+20141004_100259 (1024x768).jpg
+20141004_100721 (1024x768).jpg
+20141004_100734 (1024x768).jpg
+20141004_100828 (1024x768).jpg
+20141004_101407 (1024x768).jpg
+20141004_101712 (1024x768).jpg
+20141004_101808 (1024x768).jpg
+20141004_102334 (1024x768).jpg
+20141004_102407 (1024x768).jpg
+20141004_102428 (1024x768).jpg
+20141016_101039.jpg
+20141016_101103.jpg
+20141115_211128_resized.jpg
+20141116_102347.jpg
+2015-05-01 007.jpg
+20150222_072818.jpg
+20150702_113543.jpg
+20150913_221833[1].jpg
+20150913_221851[1].jpg
+20150917_131529.jpg
+20150917_135027.jpg
+20150919_145259_resized.jpg
+20151008_122352.jpg
+20151011_151151.jpg
+20151029_183749.jpg
+20151206_111538.jpg
+2015_04_18 N-341AC Jeff Russell and Simon in 2000_03_24.jpg
+2015_04_18 N-341AC on 1997_01_27 IP.jpg
+2015_04_18 N-341AC on 1997_01_27 in Hangar.jpg
+2016-01-16 13.55.06.jpg
+2016-03-12 09.45.07.jpg
+2016-03-14 19.59.38.jpg
+2016-10-15 15.09.46.jpg
+20160122_210057_resized.jpg
+20160122_210106_resized.jpg
+20160122_210115_resized.jpg
+20160209_174601.jpg
+20160325_072731.jpg
+20160414_184907.jpg
+20160414_185405.jpg
+20160418_183558.jpg
+20160423_123745 (1280x960).jpg
+20160517_144639.jpg
+20160517_144653.jpg
+20160517_144712.jpg
+20160517_151144.jpg
+20160517_155644.jpg
+20160518_114106.jpg
+20160518_114544.jpg
+20160519_120438.jpg
+20160719_120808_001.jpg
+20160719_120957.jpg
+20160719_121022_001.jpg
+20160720_185315.jpg
+20161014_173529.jpg
+2016_06_07 Excel Spreadsheet AWG V Drop Comparison.jpg
+2016_12_22 Vance Adkins Macho Tube.jpg
+2017-09-23 18.31.41.jpg
+2017-09-28 20.55.46.jpg
+20170101_114608_resized.jpg
+20170101_114700_resized.jpg
+20170112_171528.jpg
+20170112_171745.jpg
+20170113_164404.jpg
+20170114_190834.jpg
+20170114_190857.jpg
+20170602_185415.jpg
+20170617_162453_resized.jpg
+20170808_090009.jpg
+20170901_071410.jpg
+20171109_152747.jpg
+20171124_182206.jpg
+20171216_124127.jpg
+2018-12-30 15.54.24.jpg
+20180113_092235.jpg
+20180113_092351.jpg
+20180113_092714.jpg
+20180113_150649.jpg
+20180414_161253_resized.jpg
+20180729_170151.jpg
+20181118_140812.jpg
+20181118_141114.jpg
+20181224_111820.jpg
+2019-04-12 17_04_59-CATIA V5R19 SP9 x64 Daimler AG - [ZB_LONG_EZ_PAM121006.CATProduct].png
+20190216_122739.jpg
+20190308_141543.jpg
+20190308_141549.jpg
+20190315_151824_resized.jpg
+20190420_090019.jpg
+20190420_090244.jpg
+20190717_084525.jpg
+20190717_084618.jpg
+20190720_130034.jpg
+20190905_073743_resized.jpg
+20190905_073751_resized.jpg
+20190905_073751_resized_3.jpg
+20190905_073819_resized.jpg
+20190905_073819_resized_3.jpg
+20190907_170616_resized_3.jpg
+20190907_170621_resized.jpg
+20190907_170702_resized_3.jpg
+20190908_140545_resized.jpg
+20190909_074919.jpg
+20190913_131952.jpg
+20191001_161204.jpg
+20191101_230203.jpg
+2020-05-16 #01.jpg
+20200131_141313.jpg
+20200131_154056.jpg
+20200131_173555.jpg
+20200221_141053.jpg
+20200221_141103.jpg
+20200222_185008.jpg
+20200223_001730.jpg
+20200326_140635.jpg
+20200416_192835.jpg
+20200430_132948.jpg
+20200430_133003.jpg
+20200502_122305.jpg
+20200512_151449.jpg
+20200512_151601.jpg
+20200528_150709.jpg
+20200610_135522.jpg
+20200611_200945.jpg
+20200612_224303.jpg
+20200801_143511.jpg
+20200801_143539.jpg
+20200801_143558.jpg
+20200801_200541.jpg
+20200818_192050.jpg
+20200820_173844.jpg
+20200921_171147.jpg
+20201109_191236.jpg
+2021-08-20 21.24.50.jpg
+20210105_161450.jpg
+20210125_081609765_iOS.jpg
+20210125_081631391_iOS.jpg
+20210311_162241.jpg
+20210414_172941.jpg
+20210416_130412.jpg
+20210426_193141a.jpg
+20210513_094754.jpg
+20210513_094823.jpg
+20210516_111935.jpg
+20210720_135016.jpg
+20210913_211316.jpg
+20211213_105615.jpg
+20220111_125510.jpg
+20220112_134929.jpg
+20220220_122337_resized.jpg
+20220220_122628_resized.jpg
+20220304_191653.jpg
+20220304_202434.jpg
+20220509_130053.jpg
+20220509_130235.jpg
+20220602_095555.jpg
+20220801_203038.jpg
+20220907_093406.jpg
+20221204_180846.jpg
+20221218_002719.jpg
+20221230_104605.jpg
+20230113_200009.jpg
+20230113_200311.jpg
+20230120_135618.jpg
+20230221_233305.jpg
+20230221_233557.jpg
+20230223_113644.jpg
+20230502_110823.jpg
+20230502_110917.jpg
+20230502_110951.jpg
+20230502_111112.jpg
+20230502_111659.jpg
+20230703_142021.jpg
+20230703_142055.jpg
+20230706_095838.jpg
+20230719_011552.jpg
+20231007_095542.jpg
+20231011_140258.jpg
+20231107_150146.jpg
+20231211_222601.jpg
+2024 race results.png
+20240125_231838.jpg
+20240130_173851.jpg
+20240205_125755.jpg
+20240222_231414.jpg
+20240416_200032.jpg
+20240516_161925.jpg
+20240516_161941.jpg
+20240516_162005.jpg
+20240612_072129.jpg
+20240612_072147.jpg
+20240627_213043.jpg
+20240709_124128.jpg
+20240709_124614.jpg
+20240831_212722.jpg
+20240831_212738.jpg
+20240831_212757.jpg
+20240831_212819.jpg
+20250119_194441.jpg
+20250318_192645.jpg
+20250601_165737.jpg
+20250718_111416.jpg
+20250718_111848.jpg
+20250731_142650.jpg
+20250812_010223.jpg
+20250823_163617.jpg
+20250823_163635.jpg
+20250826_212040.jpg
+20250827_073300.jpg
+209-1.jpg
+21-2.png
+21CE6461-A9C6-40E9-A04E-22BF81C8F1E1.jpeg
+23-2530.png
+23838546-5F05-465F-B444-F396AD558BD6.jpeg
+23CS27 when CS-21 Finding Oil Leaks with Cornstarch suggested by Vance Atkinson.jpg
+23CS35 Oct'92  CS28 pg 8 Cowl cooling exist and adjustable oil pressure switch by Singleton and Wilde.jpg
+24 Assy Jig Firewall braces.jpg
+24RtTopSkinLayupPP.jpg
+250202135936.jpg
+25aWheelPantMolds.jpg
+2611168_1_IMG-2464.JPG
+276B1892C9254337B25B7307DAEDB00A.jpg
+27dRtBL31LWA6Layup.jpg
+28 Assy Floxd w Laser.jpg
+28032010193.jpg
+28LRearTubeAssy.jpg
+28bRtTieDownTube_resized.jpg
+28cRtTiedownTubeInstald.jpg
+28f ClickbondCovr.jpg
+290.JPG
+295C5389-BA5D-425E-8EE6-9C127C3A2E96.jpeg
+297BC01A-D02A-4694-BA26-7561A3FC24D7.jpeg
+298247965_1434962260340974_954885844430812158_n.jpg
+29d RudrComplt.jpg
+2A8BEE29-01FC-4D7D-BB42-DE3E002FB1A4.jpeg
+2C8FD787-5D05-4B40-9628-5B7384E2439A.jpeg
+2D757393.gif
+2E019207-EC44-46CE-8FCA-DD950B80ED0C.JPG
+2F50ADBF-1917-4021-BFD9-E23E1470665E.jpeg
+2MS2 Brock Catalogue Pg 45 Nose gear parts.JPG
+2ndday.png
+2seatbeack.JPG
+3 U channels.JPG
+3 sticky tape in hole.JPG
+3 view.jpg
+3.0 muffler.JPG
+3.JPG
+302.JPG
+304.JPG
+30A7947A-7306-4AAA-8EF2-24E57692C321_4_5005_c.jpeg
+30bLeftWJigSetup.jpg
+30bPants.JPG
+30dLeftWJigAlign.jpg
+320.JPG
+328.png
+32LandgBrakTapd.jpg
+32aPrepCutLWinglt.JPG
+32bCutLWinglt.JPG
+32cNoseSidesShapd2.jpg
+330.gif
+332.gif
+334.gif
+33F.gif
+33aAdjustblWingltProps.JPG
+33cAttachProps.JPG
+34106315.gif
+35bBotmSparCapPrep.jpg
+35cWngltMicrod.JPG
+360.gif
+36bL Layup4.JPG
+37F65D91-6ACA-40E5-A31F-B09269130ADB.jpeg
+37MarkBoxonTabl.jpg
+37aLBotmTiedownHdptInstal.jpg
+38508C5B-BA56-41AF-8524-EEB683D0FF2F.jpeg
+38745868.gif
+38978880.gif
+38bLHardshelTopAlign.jpg
+38cLHardshelTopAlign.jpg
+38dLTopLEAlign.jpg
+391.jpg
+394E7661-2262-428D-8CD2-7CD39E47129C.jpeg
+39aLTopSparCapLayup.jpg
+39bReady2GlasBoxCovr.jpg
+39eGlassUpprPockts.JPG
+3A168C3A05654B849EF7281D94BC7B6A.jpg
+3A4B5562-8980-49D9-9EF3-68925EC9F679.JPG
+3AJ5tuKoZhInNc9Z.png
+3D-radiation-pattern-of-the-Turnstile-antenna-for-matching-circular-polarization.png
+3D36DF62-DDEC-4A01-96E9-22EDDBCA938E.jpeg
+3DFB.jpg
+3E0B.jpg
+3E0C.jpg
+3EM2 Jan 2000 Gary Hunter on Old Epoxy.jpg
+3M-471.jpg
+3a76313c634853dd6e4dc3c602d6cda7940b1413_2_1035x517.jpeg
+3bottominlets.jpg
+3view11_c.jpg
+4 glassed underside.JPG
+4 sticky tape caught all the  debris.JPG
+4.1 3.5 4 Slick Tire.JPG
+4.jpg
+40733_1655393471591_1439716520_31704156_4714612_n[1].jpg
+40bLLevlBoard2.jpg
+40cTrimBelhrnFill.JPG
+42C12E1D-9677-4FAA-B3DD-160C077CA186.jpeg
+42bBL31Rib.jpg
+42cLwrWngltAttchGlas.JPG
+42e12dc64a37a92f0e2ca53927057b1d_mob.jpg
+430.jpg
+4386DD30.JPG
+43Secnd4LayupLEPP_resized.jpg
+440F94D4-1FB3-485D-AAED-635FE2C31BEA.jpeg
+45116029.gif
+45645242.gif
+45FF7790DC29482DB2E7FDE6F73D2D7F.png
+45aFlorJigStrutCorrections.jpg
+45aPlanewCanardwings.jpg
+46bShapingNoseFoam.jpg
+4779260808730115081.jpeg
+479.jpg
+47aMountonTablSweepAlign.jpg
+48GlasdOutsRotis.JPG
+48cHingesInstald.JPG
+48dHingesInstaldTemp.JPG
+49CE7C5B-2331-4F41-86EB-4EF66AA30D2D.jpeg
+4C873836ACD94467AE504EBDF2D545AA.jpg
+4DE4D823-47E1-47A8-B6FF-5398B384AEA5.png
+4EFFEEF8.jpg
+4EFFF01C.jpg
+4EFFF099.jpg
+4EFFF10C.jpg
+4EFFF10F.jpg
+4F4.gif
+5 Finished.JPG
+50 cal Cozy drawing side.jpg
+50bLensesShaped.jpg
+51bAttachAileronCounterwght.jpg
+522e315.jpg
+53CC3D02-3E7C-4887-B743-90B9D517A94F.jpeg
+5471.jpg
+54aNosConInterReady2Glas.jpg
+550x207.jpeg
+55E0A06C-F6E1-47C7-8D5E-3DA5F194352C_1_105_c.jpeg
+55d3f5c.jpg
+55d3fb9.jpg
+55d40b3.jpg
+55d414f.jpg
+55d41fb.jpg
+56aAileronInstalTechnq.jpg
+56dTightenNuts.jpg
+57AileronClips1.jpg
+57cAileronClips3.jpg
+58AileronLinkage.jpg
+58B67A6E-D85E-4FEB-8A6D-C2EA2F11A2C9.jpeg
+58bAileronLinkageR.jpg
+59 KIAS PO Stall.png
+5A020430-6EE4-43C4-90C5-F62A46EC2817.jpeg
+5E163C66-D8C5-428A-8AD2-B328A680B624.jpeg
+5FF60C39BC294D54A3EBE5BBFA2F9284.png
+6 airtight strake.JPG
+605a7e1.png
+60SideRdy2Glass.jpg
+610D1000-7982-4DA6-9D81-B16555189935.jpeg
+61J8sWCsUCL._AC_SL1001_.jpg
+63606810887__7190E694-47AC-4F01-AFF0-BFCA4C0331B6.jpg
+63BF11A8-4EF9-4647-8D2E-247D8F7AEDDB.jpeg
+63NewLEContrTmplt.jpg
+64696995435__07F99E01-04A2-43FC-A96F-A842CD3CD33C.jpeg
+64aDraw108qline.jpg
+64dUse108qline.jpg
+64eStrutTipLocatn.jpg
+66070AEC6FC14131B8C851BD2781CF46.jpg
+6607EF22-B40C-4F97-98CA-B73E13728C1F.jpeg
+6608760F-F355-4664-B247-8577AE6FAB37.jpeg
+67358_1674307704435_1439716520_31742671_2497605_n[1].jpg
+6742DBBD3BA34D30936F82B645B126A9.png
+67TopLEContrRepair.jpg
+67bNosewheel CrankPartsnDiag.jpg
+67cNosewheelCrankAssembly.jpg
+687a16e.gif
+6A35A018-874B-4B7A-94D1-9C8F35963D02.jpeg
+6B6-20N.png
+6BD3E17B83344A6EB5B09EBD4B163905.jpg
+6BEF2CF459824EF190466EC8E2328083.jpg
+6D5DF838-9698-41BD-92EA-8DC0E5A94026.JPG
+6a2c41b.gif
+6cz11-05.jpg
+6d2baf8.jpg
+7022BD7D-081C-4AA8-A7F9-52EE2A6DE65A.jpeg
+7091F886-FD0F-476A-BBE7-39E0A2FC0593_1_105_c.jpeg
+70aPedalAssyPaintedaft.jpg
+71bMCsRight.jpg
+73151_1707157245653_1439716520_31811178_2185030_n[1].jpg
+73dCarvCanopyHardpts_resized.jpg
+74dAxlShape.jpg
+75019710443__86E38CA2-D181-409A-B8BD-F3E478C7F7C2.jpg
+75779_1707151525510_1439716520_31811166_4447077_n[1].jpg
+758E3C03-39A4-4065-ADA9-31B6CEB662D1.jpeg
+75cWindowTrialFit.jpg
+76593_1715199366701_1439716520_31826747_4571070_n[1].jpg
+77bApplyFairing Foam.jpg
+77cCarvFairings.jpg
+78bGlassFairingTop.jpg
+79UndrTEContour.jpg
+79aPrepFairingBotm.jpg
+79bGlassFairingBotm.jpg
+79dFairingBotmsGlasd.jpg
+7b9158.jpg
+7tr104.jpg
+803EE8B9-2581-43DD-8852-A822A03648E1.jpeg
+80bCutFairingsTrim.jpg
+80cCutStrutFairing.jpg
+811&910antistatic.jpg
+81UnderTEContour3.jpg
+81aStrutRemovd.jpg
+8217C377-4A0E-41B6-98E9-F328D22DA839.jpeg
+82aStrut FairingsFuselag.jpg
+83 HonedTip.JPG
+86815_p180evocpiaggioaerospace_987571_1.jpg
+86BC6F9DE96F4E6AA1213B33492ADCA0.png
+89 WaxBushngs.JPG
+8A8D8201-13E3-4333-81D9-1035312230FD.jpeg
+8AF9CF2C-40F3-46E5-8F35-7CA1610BBC74.jpeg
+8E35E9CC-0DA3-4079-B7B1-7B5490AA72E2.jpeg
+8F92BE2E-F651-445E-9EEA-BC0F4C30BF3A.jpeg
+8YZUTEUlH86oid0z.png
+9022EA31-1F75-4AA3-8991-CCA391AA48B6.jpeg
+9091A_Rockies.JPG
+9091A_meteor_crater.JPG
+90cCanopyOnIn.jpg
+91768AD6651649A8BFE57E6FC79FA2D6.png
+92B53D4E-1A62-4633-BBEC-06B179E0002C-5285-0000090CA5805EBE.jpg
+94996C4FF5984A4BBF3ACE92705DCD93.jpg
+95gGlassFusTopCanopyCut.jpg
+970YAyiQNdqvPIQN.png
+978 Annular NanoVGA.jpg
+97CFC393F2DB45D3B5FA91AF7C6CF2FD.jpg
+97aFwdCutLineMicrod.jpg
+981CDD88-D963-403E-A571-943732331B3E.jpeg
+9CS19 Jan 1998, CS49-20 Brake Heat Shield - heavier by Ken Merker..jpg
+9CS6 Jul 1992, CS27-12 Brake Heat Shield, by Robin du Bois..jpg
+9EmcxfQG9rbjWTht.png
+A12C15A0AF6B40E38B3716ED62D13597.png
+A28D096A-2EAA-44C7-80A5-A1DDBD60FD22.jpeg
+A80CBD3D-D88C-4995-83C8-E2FE83F9C6DB.jpeg
+A855EEEE-ADCC-4B45-9CA0-EF0C2F3CFE01.jpeg
+A860A371-F19F-4C5B-88D8-3CABDF0CCABC_4_5005_c.jpeg
+ABD4457D-3D94-4B5C-ACEF-18B38B0CBE28.jpeg
+ACCover.JPG
+ACS 10600.jpg
+ACS-DeckCloth.jpg
+AD List.jpg
+ADS-B BNC.jpg
+ADS-B J-Pole Antenna.jpg
+AHRS Mount-1.jpg
+AL QAEDA.jpg
+AM-JKLV0BktH6Ed3Ow5DTg0zSPBg5h2bAOp1p3ZHIr-xw2gALzowLlz1ww-i1zgERFsfNshb4yCoFwBLjA4VvIVaIczcf0G7u8nieMEjEj48Q8FkblYgaYhOKQ03nnHWy46MjHtSyt4dInTy9D_9TrGL7BGsyw=w1192-h894-no.jpeg
+AN833-5D.jpg
+AN840C.jpg
+AN867-3-WeldFlange2.jpg
+AN8671[1][2].jpg
+ANswivelcoupler.jpg
+AP1GczNbjxYu_EcJdWJFgrdRRMUSp7jpYT-eIbxz-GqPV0XdcIt22jLgC_hyCPwz6IQ7M19fG1E-iwifSKV0IBzHRtE0lgPFMcbPfpqq_JVB2o5yKFgLR_SwuBByE1KZk_0m9qlGYmHyOg6jzKLkEMlitcOfb2cVrnug3eUUrr1V_rEqSEhw4_hJ9MRzZAwJDxxc-zTA7GQ5m_okpawtFmQqxpR6SO7oVCOrREk5FM_hrGOyT9zxzBgU3S2HFlEauNKq_3-0mLBYL0kNXxFOEQQ8dnYSNS2Do_bDlcs1IVi8WiR6GHQvhHfSDIXT-tCKTtlUVGq866_6ptSK0QKVIsdK6E1bqDlzqp_KTYNm8SqJJzLhayT1pPGWxWw0HnBAAscQrS2n9XQ30NjokO-MZdDQosykCdCos6yxb0pJBQ4WriAuXAmg1qP794ZD93WIdo-Uq5D25JCOuhT9x2qpV8pxpFKoddY-a9emlnE_TPMJitakjj1eWQAAluHApfRM53WixhlGVDxA-LuzOWyK8FAFS9aYXltwH-ZAxy3f8xNV6Zd8OmMI6rmiXyHCrBD0BxeGRcT8STQIsdJDd3ixQOkXpLjfhSpSSO9wTfAahwV8CpJ9s9udaM_hogNPo_6xdzfqZGPAcnYZqGsyyL1iNWiSgt9xbxwEtHYPExEtS-acLZuecD8XTRILcF12RK2R6vFpeFI3YaCouWujCcOBuIb1AyZxoFXClvtmfZfmDjC9ULi6IJckRQuVCl3-ijkWpnZXNcRV4tWe1sF2koEMShlnTT0aa-SdZUq637z9g_siJO-gBlKFtGx4wvzlSmXogxvL0D12SUjngiKxrH3wqEjIgPqef3tNLTB8MeS-asErCl4HROH8M90LZVHpiLpMJyDZwa9y1k-ZF5EFJ4UPDZYJlAND-lKPHOiAumj_t84fjF9mwW7-CZ8er2f2CyUu2A=w1197-h898-s-no.jpeg
+AP1GczNvNlfcswQHjFuo9bvgQAYIm8cUgHzpWb6FFgLkFLN6ytSCWSPPQoVVdtpzz7nTV97nI7n_0gjkGjppeBK7la-eE0yzktUpiI6vt4FRWtoP3hyi9rLmMLnM4oFBJH4Th9upT8MORP0x8AtzlWnbLCV9ma5QHbjTKFibHw6Ol3YQpvcJnUy9w_GKah0o_6gs9AazkbTHgQNIFCa1ZdaGoGzieukWaafnD0M4Izwk_nTfvf5gt6YVU7SDHgluauBVhx627Hh8d7FAC7zqsHjaezFiCcCqBKDjBhUqq705aGxX9ZaiAb_1kAyt1Th0yLm7TnA8-34LdHy4mlElf3wbrpmHtOKNRHSdNNsAZC4Bqur8PZsvuwOu9fMIDvnXKGJGzfQIWRtfYsauOJ5h-t9i_XnwYmBuokUnE4QGXnaKeoF6UGKhU5JWAf4Xnqu4ec5OyTQrWdEd5DA3kjTuR7JUWQIdriAeAIDAzk4SzZlhsnb3U6bKHrKT1I_-rDaUBLtca9Bp5GWhalYJNcIWBMsTr2iTDU2osAZDhJQ7k4y02OC0O3P4DBIiOyKAHVaRtTcJF0_kQry4f_pIGU89ijoZGOtVZG0clogN4gEgx2Ut9T64NXDQtxR6CSvKJxdog0OmATEyJGZv04vZY4bDsJcf5sDsGH-erPsHSWNPZIXel0N3rv8lUXtAIKEq6xKV_kdvzHALnvHVt0RAF2SIxrpYD-hhrFfn2KvkYI_jkH2qgN_Y_4msF4fnTuHdT3Be8yyhER5mwpzhgqpuiWeras283JzhXQj02YVDGugd-V4ZnetwNBnyCuKD7UaN-s_tMy7O0cYxtir0H1_bkoIG_qoAaye4a55ReKWlR9kp4iA6Y5sENK6scfX0a8_zBTZ2sje2QhC4eKw1_6ndrwPmKtg-qEnm7Nsqk_1AoZzx2eVTDf2VMSZLTvatKGhVwyvr9g=w1197-h898-s-no.jpeg
+ARI-1.png
+ASK-21.jpg
+ATT00007.jpg
+ATT00819.jpg
+AUX TANK LAYOUT.jpg
+Above Alt.jpg
+ActutAdjuster1.JPG
+ActutAdjuster2.JPG
+Advert.jpg
+Aero Classics 8000215.JPG
+AeroElec.JPG
+Aeroplane 1 - Copy.jpg
+AerosportBuildSchool.jpg
+AftBaffle.jpg
+Ahaa.jpg
+AileronBalance[2].jpg
+Airport_Heat Map.png
+AirspeedVsTime_AprilMay2021.png
+Allen Valve 01.jpg
+Allen Valve 03.jpg
+AltitudeVsDistance_AprilMay2021.png
+AltitudeVsTime_AprilMay2021.png
+Amazon Transponder1.JPG
+Amazon Transponder2.JPG
+Andair front.jpg
+AndairValveDesc.jpg
+Andrew.JPG
+Angel.jpg
+AngleFinder.jpeg
+Animated GIF-downsized_large.gif
+Antenna +foil.jpg
+Aptera.jpg
+ArlSW.jpg
+AttachPoints.jpg
+August 2021 v2.jpg
+August 2021.jpg
+Aurora Experi-6place.jpg
+AutoExtend 01.JPG
+AutoExtend 02.JPG
+Axle Flange Interference 1.jpg
+Axle Flange Interference 2.jpg
+Axle flange clears brake casting 1.jpg
+Axle flange clears brake casting 2.jpg
+AxleLift.jpeg
+Ayres Rock x 111-1169_IMG.jpg
+B05.gif
+B1048-grid-fin-073018-Pauline-Acalin-1c.jpg
+B3B2AF8B.JPG
+B5E5CADE-71BF-4BAD-8474-80DEAC6BED9D.jpeg
+B76DCF08-3958-4684-B43B-699CB34D1053.jpeg
+B94CB8E0-507B-4991-87AB-0EE6648B4FD2.jpeg
+BA092E47-AA54-4914-BB61-208794F1E647.JPG
+BB4A60D9-B77D-4D1B-B481-920A00518F85.jpeg
+BDB501B6-FA27-4C16-85AB-761F34A6486A.jpeg
+BID.jpg
+BRAKE.jpg
+BRAKE_2.jpg
+Back Half.JPG
+Bad cooling flow.JPG
+Badvalve.jpg
+Balance Scale w pennies.JPG
+Battery compartment 2 .jpg
+Baxter S2RI throttle quadrant.jpg
+Beach Starship - Version 2.jpeg
+Bearing1.JPG
+Bearing2.JPG
+Bernie'sVent.jpg
+Bernie.jpg
+Big cloud resize.JPG
+Bildschirmfoto 2022-05-02 um 09.40.42.png
+Bildschirmfoto 2022-05-02 um 09.40.51.png
+BingelisOnCables&Thimbles.jpeg
+Birds_all_pointing_north.jpg
+Birdsville Pub 2.jpg
+Blast Gate.jpg
+Bolt in Lug.jpg
+Bottom_EZ-Truck.jpg
+Boxes Delivered.jpg
+Brake setup.jpeg
+Brake sys 1.jpg
+Brake sys 2.jpg
+BrakeLine.jpg
+BrakeLineType.JPG
+Breather.jpg
+Brock stick grip.JPG
+Broken Wright Spring slider .jpg
+Broken.jpg
+BrowPanel.png
+Builder 1 - BentBolt1.jpg
+Builder 2 - picture-1.jpg
+Buildinginside.jpg
+Buly Silverhawk email.jpg
+Bumper.jpg
+Burt & Dick speaking (sm).jpg
+Burt & Dick's Birthday Bash '23 (sm).jpg
+Burt & models (sm).jpg
+Burt_R..jpg
+Burunda yedek teker   (the auxilary wheel in the nose).JPG
+BusCard.jpeg
+C-GPLE Fuel Pumps.JPG
+C2843509-3931-4F67-96BC-BB0EA99DA314.JPG
+C4F4AD3C-3629-4B04-BF6D-DDE926E1033F.jpeg
+C6EB3A57-BA8A-41E7-B7AA-36575BFB2A93.jpeg
+C77DJbcGxXekixDDRBMB82TtRKhfcqBI7YK3Kx8D0x_qSBhzBuwWJtgvN8eNKe5oLGiFNHaucPxIC657DH7M4TYgmQRC72JTA68vxC9nz5s47OOyLe1U7TAdTjbU-e3LXc4CPo1U7GholO2DBNeEumr5xGLnhIHpTfaWFZOIAhfsmo0hqYCHRplOxCUwLARA_0Y8jdRB01Yb9qAJXB2dKnK2Qosd7LS75UhVKnLAIEyDrc3X9iRHJUWz-zp8aoZBIq8gwVtREiY9k6gj1i7D4zqV6sG03ln177_zM3gUDWGN32jnTPlMgKYv_pWFeoFu4peCU35gcPuOjh5iXCc_5oIARL2gLCwzX7f9pEyn-bDvSgzvTx7HtptwzC9UJUNUpI_jp8yXMu3qc0Ot9O7tMnkgSW3pw2LiOEpS2yoKnUGGBAhkNOwsMsrePLNdntyYMWLMqdtAH_DqXyjEvQACzHKeKeBacnJCzOMcDZrfnEvCaaApXUpwpGsQsorjt3G6Q9XFvi-O_FJzrIz-k-cjerWeIvKTpmfCciVvgvrtxJ57FO78vMWuEeQ7WDI1lhjzwP2oSpI_4ehZrDV6SMj1j1JW-lxTz4k85DuC2lINTL-UABp67kdq0OxSI_YLyW72Ts3K37-Pb5gJ-iZCNY4V-fLjJLKODFXwefMi141pVD8VNTZTE4lL0mPc9ZFSsBQABebW2qAyHwhctN8hUs3RdLXC2nUFtm4UqpfnUqCnS6kZOUxu2cO_ycCZb5mlKg=w3340-h2506-no.jpeg
+C8 Front.JPG
+C995297F24944C5EB83A1B108BDD474C.png
+C:/Users/KEITHS~1/AppData/Local/Temp/msoclip1/01/clip_image002.jpg
+CANOPY HANDLE.jpg
+CB4BED4F-D8CB-468C-BB96-BA9AC42B1B78.jpeg
+CF Wheel Pants.JPG
+CF6E3610-B3E8-4732-986B-061A74F49E63.jpeg
+CGS.jpg
+CHART_vet.jpg
+CHPT2316.jpg
+CHT and OIL TEMP.PNG
+CHT.jpg
+CHT1.jpg
+CIMG0308.JPG
+CIMG0482.jpeg
+CIMG0521.JPG
+CIMG0530.JPG
+CIMG0537.JPG
+CIMG05381.jpg
+CIMG0883.JPG
+CIMG0887.JPG
+CIMG0893.JPG
+CIMG0943.jpg
+CIMG0996.JPG
+CIMG2450.jpg
+CIMG2622.JPG
+CIMG2624.JPG
+CLickbonds.jpg
+COM element width tests.jpg
+COZ Downunder.jpg
+COZ at LRE x P1010529.jpg
+COZY BOXES LAYOUT.jpg
+COZYStat.jpg
+COZY_line_s.gif
+CQ_86481_fuel_filter.jpg
+CRIMPER 1.jpg
+CRIMPER 2.jpg
+CROSS-STICH.jpg
+CU of balancer wheels.jpeg
+CZ G405.JPG
+CZ MkIV panel backside.jpg
+CZ3 w: FHC #2.jpeg
+CZ4 FHC hinges.jpeg
+CZ4 plans rudder pedals #1.jpg
+CZ4 plans rudder pedals #2.jpg
+CZ4 plans rudder pedals #3.jpg
+CZ4 rudder pedal motion ratios.jpg
+CZSA Stick Assy - Bushing Dimensions 2024-02-17..PNG
+Camloc straps.JPG
+Canard Calendar nov2021.jpg
+Canard HF antenna.jpg
+Canard noise spectrum.jpg
+Canardtest.jpg
+Canopy French style F-PGEV canopy details 9-10 [Orr].JPG
+Canopy French style F-PGEV from 12 o'clock 9-10 [Orr].JPG
+Canopy French style closed 9-10.JPG
+Canopy aft end with rope installed 10-17.JPG
+Canopy breaker #1.jpg
+Canopy breaker #2.jpg
+Canopy front + sleek wheel pantz IV.jpg
+Canopy latch.jpg
+Canopy too long.jpg
+Canopy with Spar Cap Tape Installed.jpg
+Canopy.jpg
+Cape_Canaveral.JPG
+Capture 16-3 plans change.JPG
+Capture.JPG
+Capture100.png
+Cardboard.JPG
+Carp Fly-Over.JPG
+Carter bird crash1.jpg
+Carter bird crash2.jpg
+Carter bird crash3.jpg
+Carter bird crash4.jpg
+Catch bottle sm.jpg
+CenterSpar-UpperFirewallLayupMistake2.jpeg
+CenterSparJointsTapes.jpg
+Cessna TTX.jpg
+Cessna-172.jpeg
+Ch6VertUni.JPG
+Chapt 11.JPG
+Chapt 12.JPG
+Chapt 15.JPG
+Chapt 16.JPG
+Chapt 17.JPG
+Chapt 19.JPG
+Chapt 20.JPG
+Chapt9.JPG
+Chapter 21 strakes 143.jpg
+Chapter 21 strakes 147.jpg
+ChecklistDevice.jpeg
+Christensen - OPAS 3.jpg
+Cirrus SR20.jpg
+CkListPanel.png
+Clamp1.jpg
+Clamp2.jpg
+Clear coat.jpeg
+Clear coat.jpg
+Click bond 1.JPG
+Click bond 2.JPG
+Click bond 3.JPG
+Click bond 4.JPG
+Closed.JPG
+Coils (3).jpg
+Cold sump.jpg
+Combo Nose Light and Skid.jpeg
+Cooler duct.jpg
+Cooler ramp.jpg
+Core sanding.jpg
+CosyClassic_14_7.jpg
+Cowel intererence.jpg
+Cowl (Berkut lower O-540 cowl) 11-16.JPG
+Cowl inlet door.jpg
+Cozy 5V USB.jpg
+Cozy 75CZ.jpeg
+Cozy CamLock Closeup1.JPG
+Cozy DownTheHatch1.JPG
+Cozy Fiberglass & CamLock1.JPG
+Cozy Glide.JPG
+Cozy Hatch1.JPG
+Cozy MK IV Rear Bearing.jpg
+Cozy MK IV Stick Config.jpg
+Cozy MKIV wing templates shipping box 1.JPG
+Cozy MKIV wing templates shipping box 2.JPG
+Cozy MKIV wing templates.JPG
+Cozy NACA.jpg
+Cozy Nose Hatches1.JPG
+Cozy Pics 0204048 053 (2).jpg
+Cozy Pics 0204048 057 (2).jpg
+Cozy Pics 0204048 057.JPG
+Cozy Pics 0204048 061.JPG
+Cozy Pics 0204048 061.jpg
+Cozy Pics 0204048 062.jpg
+Cozy Seats.bmp
+Cozy Tire Jack .jpg
+Cozy air plenum sketch.jpeg
+Cozy model.JPG
+Cozy new panel.jpg
+Cozy panel lighting.jpg
+Cozy retract wiring dia.JPG
+Cozy starter MZ 6222.jpg
+Cozy trailered.jpg
+CozyEIcoils-2.jpg
+CozyEIcoils.jpeg
+CozyIII-Reno.JPG
+CozyM4.png
+CozyOilPress.gif
+Cozy_Instruments.JPG
+Cozy_air_inlet.jpg
+CrackSmall.JPG
+Crank plug.jpg
+Cross Section.jpg
+Cross over cyl connected to support bar.JPG
+Crude Tools.JPG
+CurvedCowling.png
+Cut line moved back to 2.25.JPG
+Cyl with Res installed.JPG
+CzyIV-VentLocation.jpg
+D0FAECA4-F1A4-4A03-8CC1-C8E656B13E8C.jpeg
+D165CF917B214292A6D9B806707CC9A7.png
+D77A48C5-8DA2-43D6-A40D-CFBFC8612A95.jpeg
+DC-motor-reversing-switch-schematic-wiring-diagram-285x275.jpg
+DCP_2361.JPG
+DEFAULT.BMP
+DH84 Old Station x IMG_2210.jpg
+DSC00002.JPG
+DSC00003.JPG
+DSC00010.JPG
+DSC00011.JPG
+DSC00015.JPG
+DSC01893.JPG
+DSC02002.JPG
+DSC02348 (1).JPG
+DSC02352.JPG
+DSC02353.JPG
+DSC02354 (2).JPG
+DSC02361_half.jpg
+DSC03057_half.jpg
+DSC03166.jpeg
+DSC03167.jpeg
+DSC03179_small.jpg
+DSC03197_small.jpg
+DSC03217_small.jpg
+DSC03218_small.jpg
+DSC03585.JPG
+DSC03900_small.jpg
+DSC03915_small.jpg
+DSC03947.JPG
+DSC03948.JPG
+DSC04008_SMALL.jpg
+DSC04019_SMALL.jpg
+DSC04309.JPG
+DSC04571.JPG
+DSC04591.JPG
+DSC04621_small.jpg
+DSC070441.jpg
+DSC070451.jpg
+DSCF0519.jpg
+DSCF1764.JPG
+DSCF1773.JPG
+DSCF1867.jpg
+DSCF2870.JPG
+DSCF3611.JPG
+DSCF3804.jpeg
+DSCF3810.JPG
+DSCF3810.jpeg
+DSCF5015.JPG
+DSCN0028.JPG
+DSCN0080.JPG
+DSCN0145.JPG
+DSCN0178.JPG
+DSCN0274.jpg
+DSCN0314.JPG
+DSCN0426.jpeg
+DSCN0428.jpeg
+DSCN0616.JPG
+DSCN1383.jpg
+DSCN2181.JPG
+DSCN3290.JPG
+DSCN3291.JPG
+DSCN3292.JPG
+DSCN3512.jpg
+DSCN3523.JPG
+DSCN3725.JPG
+DSCN3726.JPG
+DSCN3741.JPG
+DSCN3748.JPG
+DSC_0002a.JPG
+DSC_0003a.JPG
+DSC_0003b.JPG
+DSC_0004a.JPG
+DSC_0005.JPG
+DSC_0007a.JPG
+DSC_0035_20090918_150.jpg
+DSC_0152.jpg
+DSC_0249 (1).JPG
+DSC_0264 (1).JPG
+DSC_0267 (1).JPG
+DSC_0310_small.jpg
+DSC_0335a.JPG
+DSC_0336a.JPG
+DSC_0362.jpg
+DSC_0600.JPG
+DSC_0662.JPG
+DSC_1060.jpg
+DSC_1061.jpg
+DSC_1062.jpg
+DSC_1063.jpg
+DSC_1064.jpg
+DSC_1065.jpg
+DSC_1066.jpg
+DSC_1067.jpg
+DSC_3842.JPG
+DSC_3863.JPG
+DSC_9746.JPG
+DSC_9749.JPG
+DSC_9751.JPG
+DSC_9752.JPG
+DW031176.jpg
+DW031210.jpg
+D_09_98_03_0127.gif
+Damage to nose small.jpg
+DaytonaFlat.JPG
+DaytonaFlat2.JPG
+DelamSmall.JPG
+Delaminator.jpg
+Dembs1.jpg
+DepartingRendezvous12.jpg
+Diamond DA40.jpg
+Diamond DA50.jpg
+DickKoehlerWireChart.jpg
+Digi flow position.jpg
+Digi miniflo.jpg
+Digiflow.jpg
+Door - Figure 71 and Text.jpg
+Dual Oil Coolers.jpg
+Duff-Norton LT100-1-100 actuator.jpg
+Dynon screen.jpg
+Dzus  spring tool.png
+Dzus EHF self ejecting.jpg
+E3C67171-065C-4D46-8D92-49F479625769.jpeg
+E4A1B18A966A4586BBDBF6FDBDC2FE9D.png
+E521B996-5D68-443D-A2F3-A81FBDBE6185_1_105_c.jpeg
+E5DCD0B2-E31D-4301-9981-5EC90DEEDC39.jpeg
+E7C2411B-5473-4535-8A8B-17B50EBB4603.jpeg
+EAAEngineWebinar.jpg
+EAA_April20_3840x2160_rgb.jpg
+EFA23A11767F4980A07A394CA6E870BD.png
+EFII arrangement in front seat of Berkut 3-18 [Ronneberg].jpeg
+EFIS (1).jpg
+EGT.jpg
+EGT_Sender.jpg
+EZ drone 2.jpg
+EZ hangar.jpg
+EZNoselift_Orig.jpg
+EarlsFuelShutoffVavle.jpg
+Eductor-Nozzle.jpg
+Elec Wiring.jpg
+Electric_Range.png
+Electrical.jpg
+Elevator TE Detail.bmp
+Elevator pic.jpg
+Elevator_Stops.png
+En Route.JPG
+Eng.jpg
+Engine Mount2.jpg
+EngineRun.JPG
+Engine_Mount_Repaired.jpg
+Epoxy Cup Rack.jpg
+Exhaust.jpg
+ExistingCooler.jpg
+Extra Parts.png
+Eyeball vent canopy open.JPG
+Eyeball vents crop.jpg
+EyeballAdapter.png
+F-PFBM from 10 o'clock 9-09.jpg
+F-PYSM from 2 o'clock landing 6-15 [Tobarra].jpg
+F02249E1-6003-43D1-BB12-D37AEDE95C9E.jpeg
+F22.jpg
+F23AC37C-BCBA-4943-94D8-D064A53F42A7.jpeg
+F8039B16F87348029CA8907A0618145B.jpg
+F8CE21714EFC4E28929C834ADD4F30E2.png
+FA9EF9BD-4B3A-4B6C-86B1-5A6F23DA7EEB.jpeg
+FB72C6EE-84F3-414A-A8FF-2D8A8ACEEF8F.png
+FB_IMG_1505136884316.jpg
+FD0BD39E-6983-4DAD-9114-23C625276341.jpeg
+FE5C5BE180EF484A8FC61F489C0D629D.png
+FILE10749.GIF
+FILE15040.JPG
+FP02122014A0001P.jpg
+FSM.jpg
+FUEL GA UL100 #2 AT 45 DAYS.jpg mesg.jpg
+FUEL GA UL100 #3.jpg
+FUEL GA UL100 15 DAYS.jpg
+FWD GAUGES.jpg
+FWD and AFT FUEL GAUGES LEZ.jpg
+Feb_2016_trip.jpg
+Fedex 1.jpg
+Fedex 2.jpg
+Fernando, Walter and Curtz - new friends-1.jpg
+Fig 49.bmp
+Fig 50.bmp
+Fig-2-positive-vs-negative-castor-angle.jpg
+Fig9Ch24Ed3.jpg
+Figure 2 - revised.jpg
+Figure 8.PNG
+File_000(1).jpeg
+File_000.jpeg
+File_000.jpg
+File_001.jpeg
+Filter on Suction Side of Fuel Pump.jpg
+Filtration_Image_1.png
+First Flight Landing.png
+First plug adaptor failure.jpg
+Fixed.jpg
+Foam Plug.JPG
+FoamSheetCutup.jpg
+Foot warmer 2011-11-21_20-41-59_101.jpg
+For_Sale.jpg
+Forgot fuel ga depression fix.jpg
+Front view.jpg
+FrontView.JPG
+Ft_Seats.jpeg
+Fuel Cap.jpg
+Fuel Servo.jpg
+Fuel Valve Mount-1.png
+Fuel Valve Mount-2.png
+Fuel Valve Plumbing.JPG
+Fuel cap large.jpg
+Fuel cap lg2.jpg
+Fuel pump.jpg
+FuelRetrofit_04.jpg
+Fuse block.jpg
+Fuseblockloc1.JPG
+Fuseblockloc2.JPG
+G405.jpg
+GAMI FLIGHT.PNG
+GAMI GROUND.PNG
+GGPnuTpDQlfktZRA.png
+GROUND CHT.PNG
+GRT resize.JPG
+Gear Doors.jpg
+Gear Leg.jpg
+Gear Warning circuit.jpg
+Gear ckt.jpg
+GearDoors.jpg
+GeplakteAfbeelding-1.png
+Glass Statn  Open 2.JPG
+Glass Statn Hanging Closd.JPG
+Good VG cooling.JPG
+Gordon.JPG
+Guy Terren Crash1.jpg
+Guy Terren Crash2.jpg
+Guy crash zone.JPG
+H-F_97420crimper.jpg
+HEAT  MUFF SYS.jpg
+HF Winch Gate Lift.jpg
+HSI.jpg
+HUD1.png
+HUD2.png
+HYA-6B6.png
+Harbor Freight Model 38778, 38779.jpg
+HarborFreightWingHelperLeveler.JPG
+Hardpoint closeup.JPG
+Hardware 3.JPG
+Hartford_small.jpg
+Heated Pitot Dwg.jpg
+Heated Seat.jpg
+Height Setters.jpg
+Hella LED at night.jpg
+Hershey kiss spinner.jpg
+Hicks Brakes 1.jpg
+Hicks Brakes 3.jpg
+Hinges%20side%20view.JPG
+Hole Saw.JPG
+Hole Saw.jpg
+Hole in Spar End Cap.JPG
+Hole_in_earth.jpg
+Hot wire circuit diagram.jpg
+Hot wire machine.jpg
+Hughs canard filler.jpg
+I'm Bad.jpg
+I'm Bad.jpg smaller.jpg
+IMAG0023.jpg
+IMAG0024 (2).jpg
+IMAG0304.jpg
+IMAG0645.jpg
+IMAG0647.jpg
+IMAG0850.jpg
+IMAG0852.jpg
+IMAG0854.jpg
+IMG-0023.JPG
+IMG-1099.jpg
+IMG-1100.jpg
+IMG-1505.JPG
+IMG-3962.jpg
+IMG-6773.jpg
+IMG00091-20100829-1400.jpeg
+IMG00291-20110727-1749.jpeg
+IMG00293-20110727-1750.jpeg
+IMG00294-20110727-1753.jpeg
+IMG00295-20110727-1754.jpeg
+IMG00298-20110727-1754.jpeg
+IMG00299-20110727-1755.jpeg
+IMG00300-20110727-1755.jpeg
+IMG00301-20110727-1755.jpeg
+IMG00438.jpg
+IMG00442.jpg
+IMG2781.jpg
+IMGP1717.jpg
+IMG_0001.JPG
+IMG_0002.JPG
+IMG_0003.JPG
+IMG_0005.jpeg
+IMG_0005.jpg
+IMG_00054.jpg
+IMG_0009.jpeg
+IMG_0013.jpeg
+IMG_0014.jpeg
+IMG_0024.jpeg
+IMG_0025.jpeg
+IMG_0026.thumb.jpg.2a521ed741d7da005e14095e5aae3125.jpeg
+IMG_0030.jpg
+IMG_0031.jpg
+IMG_0034.JPG
+IMG_0036.jpeg
+IMG_0037 2.jpeg
+IMG_0037.jpg
+IMG_0038.jpeg
+IMG_0042.jpeg
+IMG_0043.jpeg
+IMG_0044.jpeg
+IMG_0045.jpeg
+IMG_0049.jpeg
+IMG_0052.jpeg
+IMG_0055.jpeg
+IMG_0060.JPG
+IMG_0060.jpg
+IMG_0061.JPG
+IMG_0062.jpg
+IMG_0064.jpeg
+IMG_0067.JPG
+IMG_0070.JPG
+IMG_00761.jpg
+IMG_0077.JPG
+IMG_0080.jpeg
+IMG_0081.JPG
+IMG_0083.jpeg
+IMG_0084.jpg
+IMG_0085.JPG
+IMG_0085.jpg
+IMG_0086.jpg
+IMG_0088.jpeg
+IMG_0089_Original.jpg
+IMG_0091_Original.jpg
+IMG_0093.jpg
+IMG_0099.jpeg
+IMG_0099[1].JPG
+IMG_0101.JPG
+IMG_0101[1].JPG
+IMG_0104.jpeg
+IMG_0104[1].JPG
+IMG_0105.JPG
+IMG_0105[1].JPG
+IMG_0106.JPG
+IMG_0109.jpeg
+IMG_0112.JPG
+IMG_0112.jpeg
+IMG_0123.jpeg
+IMG_0128.jpeg
+IMG_0133.JPG
+IMG_0133.jpg
+IMG_0136.jpg
+IMG_0137.PNG
+IMG_0138.jpeg
+IMG_0144.JPG
+IMG_0145.JPG
+IMG_0155.JPG
+IMG_0155.jpeg
+IMG_0157.JPG
+IMG_0157.jpeg
+IMG_0161 m.JPG
+IMG_0161.JPG
+IMG_0162.JPG
+IMG_0162.jpg
+IMG_0163.jpg
+IMG_0174.jpeg
+IMG_0176.JPG
+IMG_0177.JPG
+IMG_0182_1.JPG
+IMG_0185.jpeg
+IMG_0186.jpeg
+IMG_0187.JPG
+IMG_0188a.jpg
+IMG_0189.JPG
+IMG_0189.jpg
+IMG_0190 (1).jpg
+IMG_0200.JPG
+IMG_0204.jpeg
+IMG_0205.jpeg
+IMG_0206.JPG
+IMG_0207.jpg
+IMG_0219.jpg
+IMG_0231.JPG
+IMG_0232.JPG
+IMG_0239.jpg
+IMG_0240.JPG
+IMG_0241.JPG
+IMG_0241.jpg
+IMG_0242.JPG
+IMG_0251.JPG
+IMG_0252.JPG
+IMG_0254.JPG
+IMG_0254.jpeg
+IMG_0256.JPG
+IMG_0257.jpeg
+IMG_0257_Original.jpg
+IMG_0261.jpeg
+IMG_0261.jpg
+IMG_0265.jpeg
+IMG_0265.jpg
+IMG_0272-3.jpg
+IMG_0273.JPG
+IMG_0274.JPG
+IMG_0275.JPG
+IMG_0277.JPG
+IMG_0278.JPG
+IMG_0282.JPG
+IMG_0283.JPG
+IMG_0296.jpg
+IMG_0298.jpeg
+IMG_0298.jpg
+IMG_0299.jpeg
+IMG_0316.JPG
+IMG_0316[1].JPG
+IMG_0320.JPG
+IMG_0320.jpg
+IMG_0331.jpeg
+IMG_0332.jpeg
+IMG_0333.jpeg
+IMG_0334.JPG
+IMG_0335.JPG
+IMG_0335.jpeg
+IMG_0343.JPG
+IMG_0343.jpeg
+IMG_0345.JPG
+IMG_0345.jpeg
+IMG_0347.JPG
+IMG_0350.JPG
+IMG_0352.JPG
+IMG_0361.jpg
+IMG_0362.JPG
+IMG_0363.jpg
+IMG_0363.png
+IMG_0364.jpg
+IMG_0369.png
+IMG_0373.jpeg
+IMG_0377.JPG
+IMG_0377.jpeg
+IMG_0391.JPG
+IMG_0393.JPG
+IMG_0403.JPG
+IMG_0404.JPG
+IMG_0418.jpg
+IMG_0422.jpeg
+IMG_0437.jpg
+IMG_0440.jpeg
+IMG_0443.JPG
+IMG_0443.jpeg
+IMG_0447 2.jpeg
+IMG_0448.jpeg
+IMG_0459.JPG
+IMG_0460.jpg
+IMG_0464.jpg
+IMG_0467.jpeg
+IMG_0475.jpeg
+IMG_0482.JPG
+IMG_0488.JPG
+IMG_0494.jpeg
+IMG_0495.jpeg
+IMG_0495a.jpg
+IMG_0496.JPG
+IMG_0497.jpeg
+IMG_0497a.jpg
+IMG_0499a.jpg
+IMG_0505.jpeg
+IMG_0509.jpg
+IMG_0519.JPG
+IMG_0522.JPG
+IMG_0525.JPG
+IMG_0526.JPG
+IMG_0527.JPG
+IMG_0528.JPG
+IMG_0535.jpeg
+IMG_0541.JPG
+IMG_0543.JPG
+IMG_0543.jpg
+IMG_0547.jpg
+IMG_0555.jpg
+IMG_0556.jpg
+IMG_0557.jpg
+IMG_0558.jpg
+IMG_0559.jpg
+IMG_0560.jpg
+IMG_0572.jpeg
+IMG_0574_1.JPG
+IMG_0575.jpg
+IMG_0575_1.JPG
+IMG_0576.jpg
+IMG_0576_1.JPG
+IMG_0577.jpg
+IMG_0582.jpeg
+IMG_0582.jpg
+IMG_0586.JPG
+IMG_0587.JPG
+IMG_0589.JPG
+IMG_0590.JPG
+IMG_0591.JPG
+IMG_0593.JPG
+IMG_0598.jpeg
+IMG_0606.jpg
+IMG_0615.jpg
+IMG_0619.JPG
+IMG_0620.JPG
+IMG_0630.jpg
+IMG_0632.jpg
+IMG_0641.JPG
+IMG_0646.JPG
+IMG_0650.jpeg
+IMG_0651.jpeg
+IMG_0655.JPG
+IMG_0671.jpg
+IMG_0673.jpeg
+IMG_0686.jpg
+IMG_0688.JPG
+IMG_0688.jpg
+IMG_0695.jpeg
+IMG_0697.jpg
+IMG_0698.jpeg
+IMG_0702.jpeg
+IMG_0705.jpeg
+IMG_0706.jpeg
+IMG_0707.jpeg
+IMG_0708.jpeg
+IMG_0708.png
+IMG_0710.JPG
+IMG_0710.jpeg
+IMG_0711.jpeg
+IMG_0714.JPG
+IMG_0715.jpeg
+IMG_0719.jpg
+IMG_0722.jpeg
+IMG_0723_2.JPG
+IMG_0724.jpeg
+IMG_0729.jpeg
+IMG_0730.jpeg
+IMG_0740.jpeg
+IMG_0743.jpeg
+IMG_0746.jpeg
+IMG_0747.jpg
+IMG_0759.jpg
+IMG_0760.jpg
+IMG_0762.jpeg
+IMG_0793.jpg
+IMG_0818.jpeg
+IMG_0819.jpeg
+IMG_0829.jpg
+IMG_0831.jpeg
+IMG_0845.JPG
+IMG_0853.JPG
+IMG_0856.JPG
+IMG_0880.JPG
+IMG_0885.JPG
+IMG_0885.jpeg
+IMG_0896.JPG
+IMG_0898.JPG
+IMG_0899.jpg
+IMG_0909.JPG
+IMG_0911.JPG
+IMG_0916.jpeg
+IMG_0921.jpeg
+IMG_0926.JPG
+IMG_0927.JPG
+IMG_0932.jpeg
+IMG_0933.jpeg
+IMG_0934.jpeg
+IMG_0939.jpeg
+IMG_0944.jpeg
+IMG_0946.jpeg
+IMG_0947.jpeg
+IMG_0949%202.JPG
+IMG_0949.JPG
+IMG_0949.jpeg
+IMG_0950.jpeg
+IMG_0961.jpeg
+IMG_0961.jpg
+IMG_0962.jpeg
+IMG_0963.jpeg
+IMG_0963.jpg
+IMG_0965.jpg
+IMG_0968.jpg
+IMG_0981.jpeg
+IMG_0999.jpg
+IMG_1015.JPG
+IMG_1015.jpeg
+IMG_1017.JPG
+IMG_1021.jpeg
+IMG_1021.jpg
+IMG_1023.jpg
+IMG_1024.JPG
+IMG_1025.JPG
+IMG_1029.jpeg
+IMG_1037.JPG
+IMG_1037.jpg
+IMG_1052.JPG
+IMG_1052.jpg
+IMG_1058a_1.jpg
+IMG_1062.JPG
+IMG_1065.JPG
+IMG_1066.jpg
+IMG_1070.JPG
+IMG_1070.jpg
+IMG_1071.JPG
+IMG_1071.jpeg
+IMG_1072.jpeg
+IMG_1073.JPG
+IMG_1076.jpg
+IMG_1079.jpg
+IMG_1082.jpeg
+IMG_1084.jpeg
+IMG_1086.JPG
+IMG_1087.JPG
+IMG_1088.JPG
+IMG_1103.jpeg
+IMG_1106.JPG
+IMG_1111_1.JPG
+IMG_1122-1.jpg
+IMG_1123-1.jpg
+IMG_1125-1.jpg
+IMG_1137.jpeg
+IMG_1152.jpeg
+IMG_1155.JPG
+IMG_1161.jpg
+IMG_1190.jpg
+IMG_1192.jpg
+IMG_1193.JPG
+IMG_1217.jpg
+IMG_1230.jpeg
+IMG_1243.jpg
+IMG_1247.jpeg
+IMG_1248.jpeg
+IMG_1250.jpeg
+IMG_1257 2.jpeg
+IMG_1258.jpeg
+IMG_1268.JPG
+IMG_1269.JPG
+IMG_1278.jpeg
+IMG_1281_7_1 - Copy.JPG
+IMG_1283.jpg
+IMG_1286_7_1 - Copy.JPG
+IMG_1289.jpg
+IMG_1291_6_1 - Copy.JPG
+IMG_1293.jpg
+IMG_1295.jpeg
+IMG_1296_8_1 - Copy.JPG
+IMG_1304.jpeg
+IMG_1306.jpeg
+IMG_1308.jpeg
+IMG_1314.jpeg
+IMG_1325.jpeg
+IMG_1328.jpeg
+IMG_1328.jpg
+IMG_1333.jpg
+IMG_1334.JPG
+IMG_1334.jpg
+IMG_1335.jpg
+IMG_1340.JPG
+IMG_1341.JPG
+IMG_1341.jpg
+IMG_1342.jpeg
+IMG_1343.jpeg
+IMG_1344.jpeg
+IMG_1363.JPG
+IMG_1365.JPG
+IMG_1368.jpg
+IMG_1379.jpeg
+IMG_1383.JPG
+IMG_1384.JPG
+IMG_1388.jpg
+IMG_1399.jpg
+IMG_1400.JPG
+IMG_1401.JPG
+IMG_1402.JPG
+IMG_1412.JPG
+IMG_1414.jpg
+IMG_1415.JPG
+IMG_1417.jpg
+IMG_1420.jpg
+IMG_1426.jpg
+IMG_1450.thumb.jpg.afbb2d093b54c5beb2341a1caa61abda.jpeg
+IMG_1459.jpg
+IMG_1464.jpg
+IMG_1465.JPG
+IMG_1468.jpeg
+IMG_1497.jpg
+IMG_1501a.jpg
+IMG_1502.jpeg
+IMG_1523.JPG
+IMG_1523.jpg
+IMG_1524.JPG
+IMG_1525.jpg
+IMG_1530.jpg
+IMG_1531.jpg
+IMG_1532.jpg
+IMG_1544S.jpg
+IMG_1557.JPG
+IMG_1561.JPG
+IMG_1564.jpeg
+IMG_1565.jpeg
+IMG_1568.jpeg
+IMG_1572.jpeg
+IMG_1573.jpeg
+IMG_1574.jpeg
+IMG_1575.jpeg
+IMG_1577.jpg
+IMG_1581.jpg
+IMG_1593.jpg
+IMG_1596.jpg
+IMG_1599.jpg
+IMG_1600.jpg
+IMG_1602.jpg
+IMG_1606.jpg
+IMG_1610.jpg
+IMG_1612.JPG
+IMG_1615.jpg
+IMG_1619.jpeg
+IMG_1620.jpeg
+IMG_1622.jpeg
+IMG_1634.JPG
+IMG_1641.jpeg
+IMG_1644.jpeg
+IMG_1647_1.JPG
+IMG_1650.jpg
+IMG_1692.JPG
+IMG_1694.jpeg
+IMG_1716.jpeg
+IMG_1717.JPG
+IMG_1733.jpg
+IMG_1734.jpg
+IMG_1749.jpg
+IMG_1752.jpg
+IMG_1753.jpg
+IMG_1754.jpg
+IMG_1757 2.jpeg
+IMG_1758 2.jpeg
+IMG_1759 2.jpeg
+IMG_1760 2.jpeg
+IMG_1766.jpeg
+IMG_1773-menor.jpg
+IMG_1774-menor.jpg
+IMG_1793.jpeg
+IMG_1804.jpg
+IMG_1823.jpeg
+IMG_1823.jpg
+IMG_1867.jpg
+IMG_1902.jpeg
+IMG_1908.JPG
+IMG_1909.JPG
+IMG_1934.JPG
+IMG_1967.JPG
+IMG_1971.JPG
+IMG_1972.JPG
+IMG_1985.jpg
+IMG_1987.JPG
+IMG_1987.jpg
+IMG_1995.jpg
+IMG_2009-2020-08-29-12-12-1.jpg
+IMG_20120506_173535.jpg
+IMG_20130105_123706.jpg
+IMG_20131019_190018_909.jpg
+IMG_20140414_224616_688.jpg
+IMG_20141019_155031.jpg
+IMG_20170131_194617.jpg
+IMG_20170131_194705.jpg
+IMG_20170310_152906.jpg
+IMG_20170310_222250.jpg
+IMG_20170319_010837.jpg
+IMG_20170506_164024.jpg
+IMG_20170529_124424.jpg
+IMG_20170807_221200.jpg
+IMG_20170823_102539.jpg
+IMG_20170823_102556.jpg
+IMG_20170903_114515.jpg
+IMG_20170905_232710.jpg
+IMG_20170908_100048.jpg
+IMG_20170909_165102.jpg
+IMG_20170928_142432.jpg
+IMG_20180610_154215.jpg
+IMG_20190306_121644.jpg
+IMG_20190901_093955027.jpg
+IMG_20190922_155222.jpg
+IMG_20191224_105723175.jpg
+IMG_20200117_075357.jpg
+IMG_20200614_170137.jpg
+IMG_20200616_174819.jpg
+IMG_20200920_173425977.jpg
+IMG_20210115_194542169.jpg
+IMG_20210214_143751673.jpg
+IMG_20210214_143953758.jpg
+IMG_20210516_203225.jpg
+IMG_20210711_231333286.jpg
+IMG_20211110_111239841.jpg
+IMG_20220513_112817.jpg
+IMG_20220725_130328329.jpg
+IMG_20220725_130332273.jpg
+IMG_20220725_130337945.jpg
+IMG_20220830_125737.jpg
+IMG_20220830_125952.jpg
+IMG_20230111_220315207.jpg
+IMG_20230112_215212142.jpg
+IMG_20230123_191645324.jpg
+IMG_20230919_092728.jpg
+IMG_20231007_115447.jpg
+IMG_20231009_124036.jpeg
+IMG_20231009_124036.jpg
+IMG_20241227_141235655.jpg
+IMG_2030.jpeg
+IMG_2059.jpeg
+IMG_2061.JPG
+IMG_2063.jpeg
+IMG_2063.jpg
+IMG_2064.JPG
+IMG_2064.jpeg
+IMG_2065.JPG
+IMG_2065.jpg
+IMG_2066.jpg
+IMG_2068.jpg
+IMG_2069.jpg
+IMG_2098.jpeg
+IMG_2103.JPG
+IMG_2110.jpeg
+IMG_2110.jpg
+IMG_2113.jpg
+IMG_2120.JPG
+IMG_2122.JPG
+IMG_2127.jpg
+IMG_2128.jpg
+IMG_2140.JPG
+IMG_2141.JPG
+IMG_2150.jpg
+IMG_2154 copy 2.jpeg
+IMG_2155.jpg
+IMG_2157.jpg
+IMG_2159.jpeg
+IMG_2162.JPG
+IMG_2164.jpg
+IMG_2166.JPG
+IMG_2168.jpg
+IMG_2173.jpeg
+IMG_2183.jpeg
+IMG_2184.jpg
+IMG_2185.jpg
+IMG_2186.jpg
+IMG_2188.jpg
+IMG_2189.JPG
+IMG_2189.jpg
+IMG_2190.JPG
+IMG_2191.JPG
+IMG_2192.JPG
+IMG_2196.jpeg
+IMG_2203.jpg
+IMG_2204.jpg
+IMG_2205.jpg
+IMG_2206.jpg
+IMG_2207.jpg
+IMG_2210.jpg
+IMG_2211.jpg
+IMG_2215.JPG
+IMG_2216.JPG
+IMG_2217.JPG
+IMG_2219.png
+IMG_2222.JPG
+IMG_2223.JPG
+IMG_2224.JPG
+IMG_2242.jpeg
+IMG_2252.jpg
+IMG_2274.jpeg
+IMG_2277.jpg
+IMG_2330.JPG
+IMG_2332.jpg
+IMG_2337.jpg
+IMG_2353.jpg
+IMG_2386.JPG
+IMG_2394.JPG
+IMG_2395.JPG
+IMG_2396.JPG
+IMG_2424.jpeg
+IMG_2425.JPG
+IMG_2425.jpeg
+IMG_2448.jpg
+IMG_2449.JPG
+IMG_2488.jpg
+IMG_2493.JPG
+IMG_2497.jpg
+IMG_2505.jpeg
+IMG_2506.jpg
+IMG_2509.JPG
+IMG_2517 (Small).JPG
+IMG_2533.JPEG
+IMG_2552.JPG
+IMG_2563.JPG
+IMG_2564.JPG
+IMG_2573.jpg
+IMG_2575.JPG
+IMG_2617.jpg
+IMG_2625.JPG
+IMG_2636_1.JPG
+IMG_2652.jpg
+IMG_2653.jpg
+IMG_2655.jpg
+IMG_2658.jpg
+IMG_2659.JPG
+IMG_2659.jpg
+IMG_2660.jpg
+IMG_2661.jpg
+IMG_2663a.jpg
+IMG_2673.JPG
+IMG_2679.JPG
+IMG_2691.JPG
+IMG_2695.JPG
+IMG_2714_1.JPG
+IMG_2757.JPG
+IMG_2761.jpg
+IMG_2783.jpg
+IMG_2800.JPG
+IMG_2824.JPG
+IMG_2839.JPG
+IMG_2846.jpg
+IMG_2847.jpg
+IMG_2850.JPG
+IMG_2852.JPG
+IMG_2869R.JPG
+IMG_2870.jpg
+IMG_2872R.JPG
+IMG_2873.JPG
+IMG_2874.jpg
+IMG_2874abc_1.jpg
+IMG_2874bb.jpg
+IMG_2889.jpg
+IMG_2894.JPG
+IMG_2998.JPG
+IMG_2999.JPG
+IMG_3043.jpeg
+IMG_3048.jpg
+IMG_3079.JPG
+IMG_3098.jpeg
+IMG_3107.jpeg
+IMG_3112.JPG
+IMG_3113.JPG
+IMG_3114.jpg
+IMG_3122.jpeg
+IMG_3135.png
+IMG_3137.png
+IMG_3139.png
+IMG_3228.jpeg
+IMG_3276.jpg
+IMG_3291.jpeg
+IMG_3292.jpeg
+IMG_3318.jpeg
+IMG_3326.jpeg
+IMG_3327.jpeg
+IMG_3328.jpg
+IMG_3341.jpg
+IMG_3347.jpg
+IMG_3353.jpeg
+IMG_3354.jpeg
+IMG_3358.jpg
+IMG_3359.jpg
+IMG_3367.jpg
+IMG_3386.jpg
+IMG_3387.jpg
+IMG_3401.jpg
+IMG_3402.JPG
+IMG_3420.jpg
+IMG_3486.JPG
+IMG_3512.JPG
+IMG_3513.JPG
+IMG_3513a.jpg
+IMG_3514.JPG
+IMG_3514a.jpg
+IMG_3515.JPG
+IMG_3516.JPG
+IMG_3527.JPG
+IMG_3528.JPG
+IMG_3530.JPG
+IMG_3531.JPG
+IMG_3534.JPG
+IMG_3568.jpg
+IMG_3586.JPG
+IMG_3596.JPG
+IMG_3618.jpg
+IMG_3648.JPG
+IMG_3656.JPG
+IMG_3684.jpg
+IMG_3685.JPG
+IMG_3686.JPG
+IMG_3687.JPG
+IMG_3688.JPG
+IMG_3708.jpeg
+IMG_3709.jpg
+IMG_3719.jpeg
+IMG_3731.jpeg
+IMG_3755.jpeg
+IMG_3771.jpg
+IMG_3783.jpeg
+IMG_3797.JPG
+IMG_3798.JPG
+IMG_3808.jpeg
+IMG_3820.jpg
+IMG_3835.jpg
+IMG_3881.jpeg
+IMG_3882.jpeg
+IMG_3914.JPG
+IMG_3916.JPG
+IMG_3918.JPG
+IMG_3942.jpeg
+IMG_3946.jpeg
+IMG_3948.JPG
+IMG_3994.JPG
+IMG_3995.JPG
+IMG_4006.JPG
+IMG_4035.jpg
+IMG_4054.jpeg
+IMG_4056.jpg
+IMG_4063.JPG
+IMG_4064.JPG
+IMG_4098.jpeg
+IMG_4121-300x225.jpg
+IMG_4125-300x225.jpg
+IMG_4134.jpeg
+IMG_4158.jpeg
+IMG_4180.jpeg
+IMG_4182.JPG
+IMG_4188.jpg
+IMG_4189.jpg
+IMG_4213.jpg
+IMG_4230.JPG
+IMG_4246.jpg
+IMG_4247.jpeg
+IMG_4247.jpg
+IMG_4248.jpeg
+IMG_4259.JPG
+IMG_4288.jpg
+IMG_4320.jpeg
+IMG_4360.JPG
+IMG_4384.jpeg
+IMG_4388.jpeg
+IMG_4388.png
+IMG_4417.JPG
+IMG_4418.JPG
+IMG_4427.jpg
+IMG_4494.JPG
+IMG_4537.jpeg
+IMG_4538.jpeg
+IMG_4540.jpeg
+IMG_4541.jpeg
+IMG_4547.jpeg
+IMG_4609.JPG
+IMG_4610.JPG
+IMG_4653.jpeg
+IMG_4658.jpeg
+IMG_4661.jpeg
+IMG_4713.jpg
+IMG_4737.JPG
+IMG_4774.jpeg
+IMG_4775.jpeg
+IMG_4776.jpeg
+IMG_4794.jpg
+IMG_4829.jpeg
+IMG_4833.jpeg
+IMG_4834.jpg
+IMG_4835.jpg
+IMG_4837.jpg
+IMG_4861.jpg
+IMG_4862.jpg
+IMG_4883.JPG
+IMG_4893.jpeg
+IMG_4895.jpeg
+IMG_4896.jpeg
+IMG_4918.jpg
+IMG_4925.JPG
+IMG_4937.jpg
+IMG_4951.jpeg
+IMG_4952.jpeg
+IMG_5014.jpg
+IMG_5021.JPG
+IMG_5025.JPG
+IMG_5026.JPG
+IMG_5031.jpg
+IMG_5032.jpg
+IMG_5033.jpg
+IMG_5034.jpg
+IMG_5035.jpg
+IMG_5036.jpg
+IMG_5037.jpg
+IMG_5038.jpg
+IMG_5039.jpg
+IMG_5053.JPG
+IMG_5064.jpg
+IMG_5065.jpg
+IMG_5068.jpg
+IMG_5069.jpg
+IMG_5070.jpg
+IMG_5073.jpg
+IMG_5078.jpg
+IMG_5092.JPG
+IMG_5098.jpg
+IMG_5099.jpg
+IMG_5100.jpg
+IMG_5101.jpg
+IMG_5102.jpg
+IMG_5128.JPG
+IMG_5165.jpg
+IMG_5174.jpeg
+IMG_5272.JPG
+IMG_5275.JPG
+IMG_5275.png
+IMG_5277.JPG
+IMG_5288.jpeg
+IMG_5295.PNG
+IMG_5325.jpg
+IMG_5326.jpg
+IMG_5390.jpg
+IMG_5391.jpg
+IMG_5407.JPG
+IMG_5409.JPG
+IMG_5409.jpg
+IMG_5410.JPG
+IMG_5412.JPG
+IMG_5413.jpg
+IMG_5416.jpg
+IMG_5417.jpeg
+IMG_5436.jpg
+IMG_5464.jpeg
+IMG_5507.jpg
+IMG_5508.JPG
+IMG_5512.jpeg
+IMG_5517.jpeg
+IMG_5517.jpg
+IMG_5518.jpeg
+IMG_5523.jpeg
+IMG_5524.jpeg
+IMG_5536.jpg
+IMG_5543.jpg
+IMG_5556.JPG
+IMG_5580.JPG
+IMG_5590.jpg
+IMG_5591.jpg
+IMG_5595a_1.jpg
+IMG_5598a_1.jpg
+IMG_5599a_1.jpg
+IMG_5600.jpg
+IMG_5601.JPG
+IMG_5605.jpg
+IMG_5659_1.JPG
+IMG_5700.JPG
+IMG_5826.jpg
+IMG_5829-W800.jpg
+IMG_5830-W800.jpg
+IMG_5936.JPG
+IMG_5937.JPG
+IMG_5938.JPG
+IMG_5939.JPG
+IMG_5942.JPG
+IMG_5946.JPG
+IMG_5949.jpg
+IMG_5950.jpg
+IMG_5967.JPG
+IMG_5968.JPG
+IMG_5969.JPG
+IMG_5980.jpg
+IMG_5984.jpg
+IMG_6038.JPG
+IMG_6067.JPG
+IMG_6138.jpeg
+IMG_6139.jpeg
+IMG_6152.jpeg
+IMG_6208.jpeg
+IMG_6210.jpeg
+IMG_6219.jpeg
+IMG_6223.jpeg
+IMG_6224.jpeg
+IMG_6283.jpg
+IMG_6299.jpeg
+IMG_6371.JPG
+IMG_6372.JPG
+IMG_6373.JPG
+IMG_6374.JPG
+IMG_6378.JPG
+IMG_6382.JPG
+IMG_6383.JPG
+IMG_6389.jpg
+IMG_6390.jpg
+IMG_6394.jpg
+IMG_6409.JPG
+IMG_6414.JPG
+IMG_6439.jpg
+IMG_6441.JPG
+IMG_6441.jpg
+IMG_6563.jpg
+IMG_6618.jpeg
+IMG_6658.jpeg
+IMG_6662.jpeg
+IMG_6847.jpg
+IMG_6850.jpg
+IMG_6853.jpg
+IMG_6880.jpeg
+IMG_6881.jpeg
+IMG_6964.jpg
+IMG_6979.JPG
+IMG_6980.JPG
+IMG_6984.JPG
+IMG_70.JPG
+IMG_7022.JPG
+IMG_7043.jpeg
+IMG_7045.JPG
+IMG_7077.jpeg
+IMG_7079.jpeg
+IMG_7119.jpg
+IMG_7121.JPG
+IMG_7155.jpg
+IMG_7157.jpg
+IMG_7162.JPG
+IMG_7170.JPG
+IMG_7196.jpeg
+IMG_7294.JPG
+IMG_7295.JPG
+IMG_7298.JPG
+IMG_7319.JPG
+IMG_7371.JPG
+IMG_7373.JPG
+IMG_7424C.JPG
+IMG_7451.JPG
+IMG_7469.jpeg
+IMG_7470.jpg
+IMG_7471.jpg
+IMG_7473.jpg
+IMG_7478.jpg
+IMG_7529.jpeg
+IMG_7530.jpeg
+IMG_7554.jpg
+IMG_7577.jpeg
+IMG_7577a.jpeg
+IMG_7649.jpg
+IMG_7650.jpg
+IMG_7657.jpeg
+IMG_7658.jpeg
+IMG_7659.jpeg
+IMG_7660.jpeg
+IMG_7696.JPG
+IMG_7738.jpeg
+IMG_7754.JPG
+IMG_7777.jpeg
+IMG_7778.jpeg
+IMG_7780.jpeg
+IMG_7782.jpeg
+IMG_7828.JPG
+IMG_7842rev11200.jpg
+IMG_7851 (2).JPG
+IMG_7868.JPG
+IMG_7898.JPG
+IMG_7899.JPG
+IMG_7966.jpeg
+IMG_7978.jpeg
+IMG_7982.JPG
+IMG_8019.jpg
+IMG_8024.JPG
+IMG_8030.jpeg
+IMG_8031.jpeg
+IMG_8169.JPG
+IMG_8185.JPG
+IMG_8281.jpeg
+IMG_8571.jpeg
+IMG_8636.jpg
+IMG_8638.jpg
+IMG_8667.jpeg
+IMG_8772.jpeg
+IMG_9024.JPG
+IMG_9025.JPG
+IMG_9068.jpeg
+IMG_9071.jpeg
+IMG_9157.jpeg
+IMG_9158.jpeg
+IMG_9202.jpeg
+IMG_9330.jpeg
+IMG_9346.jpg
+IMG_9355.jpg
+IMG_9356.jpg
+IMG_9357.jpg
+IMG_9434.jpeg
+IMG_9561.jpeg
+IMG_9562.jpeg
+IMG_9563.jpeg
+IMG_9627.jpeg
+IMG_9630.jpeg
+IMG_9690.jpeg
+IMG_9691.jpeg
+IMG_9744.JPG
+IMG_9745.JPG
+IMG_9808.JPG
+IMG_9815.JPG
+IMG_9928.jpg
+IMG_999.jpg
+IP Modular.png
+IP Plans.png
+IP Stifnrs.JPG
+IP Topless.png
+IPglareshield.jpg
+IdZtGkzs06uLoOsZ.png
+Ign switches.jpg
+Image-1.jpeg
+Image-2.jpeg
+Image-5.png
+Image-6.png
+Image-7.png
+Image0.jpg
+Image0b.jpg
+Image11.jpg
+Image12d.jpg
+Image14.jpg
+Image15.jpg
+Image16.jpg
+Image17.jpg
+Image18.jpg
+Image1d.jpg
+Image1e.jpg
+Image20.jpg
+Image21.jpg
+Image23.jpg
+Image26.jpg
+Image6.jpg
+Image639.png
+Image677.png
+Image681.png
+Image685.png
+Image689.png
+Image693.png
+Image719.png
+Image731.png
+Image736.png
+Image747.png
+Image8.jpg
+Image9.jpg
+Image_250314_162007.jpeg
+Infinity Grips.jpg
+InletAdapter.png
+Inside Strake.JPG
+Intake_Filter.jpg
+Interference.jpg
+Invoice Travers 17Apr06.jpg
+J G Lambert234.jpg
+J G Lambert497.jpg
+J-pole.JPG
+JPEG_20150731_205956_1211943721.jpg
+JPEG_20150731_210023_1460060862.jpg
+JPEG_20150731_210050_-1667769907.jpg
+JPEG_20150731_210128_1564098758.jpg
+JackLift.jpg
+Jackpot 2.jpg
+Jackpot.jpg
+Jacks Dan Charles Saw horse based jacks....jpg
+Jacks Emons built for us.jpg
+July 2021 Canard Calendar v2.jpg
+Jun03$11.JPG
+Jun03$13.JPG
+June 2021.jpg
+KIMG3269.JPG
+KOGD.jpg
+KSFM-KLRU_Oct_31.jpg
+KSFM-KLRU_Oct_31_ADDS_Icing_Tool.jpg
+KSGU.jpg
+KTSP-KMKC.png
+Kanab 2012 flight crop small.jpg
+Kanab Flyby 2011.jpg
+Ken Laundrie.jpg
+Kit.JPG
+Kouns from 9 o'clock.JPG
+KyleFowlerSDSInstl1.jpg
+KyleFowlerSDSInstl2.jpg
+KyleFowlerSDSInstl3.jpg
+L ADS-B SWR.jpg
+L&V in diego.jpg2.jpg
+LB-JP01.jpg
+LB-JP02.jpg
+LB-JP03.jpg
+LB-JP04.jpg
+LED PWM Dimmer.PNG
+LED rotating beacon SCHEMATIC.jpg
+LG cover 1.jpg
+LG.jpg
+LL 7:8 MR-16 lighting light kit #1.jpg
+LL 7:8 MR-16 lighting light kit #2.jpg
+LL 7:8 MR-16 lighting light kit #3.jpg
+LOGO - 2015-0627 NorthEast EXPERIMENTAL Fly-In logo - w header -50pct.jpg
+LWYandUpperLongeron.jpeg
+L_cylinder_small.jpg
+L_pads_small.jpg
+Landing Light install.jpg
+Landing brake 100 kts Mach.jpg
+Landing brake 100 kts pressure.jpg
+Landing light1.jpg
+Landing_Brake_Circuit-rev1.jpg
+Leaning EMS data.JPG
+Leaving Home.JPG
+Left Aileron Balance 2.jpg
+Left Lwr Spar Cap BL 61.PNG
+LeftBulbSmall.jpg
+LeftTop.jpeg
+LeftTop.jpg
+Lets Go Flying.jpg
+Lift cover Rh2.jpg
+Light lit.jpg
+Light on across.JPEG
+LmhMY09EZ6v89kWA.png
+Loading the Tool.JPG
+Lockablecap.jpg
+Locked from outside.gif
+Long Table top.jpg
+Long-EZ_ASC.JPG
+LongTablBotm.JPG
+Lunch.jpeg
+Lyc Before Paint.jpg
+Lyc Paint 1.jpg
+Lyc Paint 2.jpg
+Lyc Paint 3.jpg
+Lyc Paint 4.jpg
+Lyc Paint 5.jpg
+Lycoming-O-320-Owners-Manual-Illustration-.png
+Lycoming_Nameplate_Template.jpg
+M-25.jpg
+M0rlBpLZ26LVHbN5.jpg
+M7-AA.JPG
+M9 MLG.PNG
+MCMC-5A master cylinder.jpg
+MGA.jpg
+MKCS-124L, MKCS-124R, BC4W10.jpg
+MLGS Clarification 1.png
+MLGS Clarification 2.png
+MS20001 hinges.jpg
+MS20257 hinges.jpg
+MVC-197S.JPG
+MY FhC opened.jpg
+Manual Pitch Trim 1.jpg
+MarkRieger-FuelLinePassThru.jpg
+MarkRieger-FuelLinePassThruInstl.jpg
+Master Cylinder Setup.jpg
+Matco Axle.jpg
+Matco brake.jpeg
+MatcoBrakeRsrvr.jpg
+MatcoOldStyleRes.jpg
+Me in shorts.jpg
+Melville LE.jpg
+Melville cooler ramp.jpg
+Message_1610678895913.jpg
+Micro magnified web size.jpg
+Mike and Sally at Canabe 2012.jpg
+MikeSatchell-SDSAftInlet.jpg
+MikeSatchellCowl-IMG_4120.jpg
+Mirror.jpg
+Mode C SWR.jpg
+Modified Pitot Thermostat circuit.jpg
+MonroeAirportPlan.jpg
+Most of forward part removed.JPG
+MubeaCompositeSpring.jpg
+My center column mockup.JPG
+My wide back seatz.jpg
+MyMVnSDSSCU1Fzw3.png
+N166PT - 11.jpg
+N166PT - 13.jpg
+N166PT - 14.jpg
+N204TF.jpg
+N22AZ gear limit switches.JPG
+N22AZ_1.jpeg
+N22AZ_2.jpeg
+N22AZ_3.jpeg
+N22AZ_4.jpeg
+N22AZ_Left_Canard_Bolt_1.jpg
+N22AZ_Left_Canard_Bolt_2.jpg
+N22AZ_Right_Canard_Bolt_1.jpg
+N22AZ_Right_Canard_Bolt_2.jpg
+N22AZ_Right_Canard_Bolt_3.jpg
+N22AZ_Right_Canard_Bolt_Persuader.jpg
+N22AZ_Tanks_1.jpg
+N249KJ20140619T121436small.JPG
+N34YN_Cowl_Scoops.jpg
+N34YN_EGT_Data.jpg
+N34YN_NACA_VGs.jpg
+N34YN_Nose_Gear.jpg
+N400AV from 1 o'clock 12-14.JPG
+N509MS-cover.jpeg
+N509msInstPanel.jpeg
+N540CZ EFII fuel lines between rear seats 1-19.JPG
+N540CZ EFII fuel lines on back of fuel selector 1-19.JPG
+N540CZ Nose box reinforcement 10-15.JPG
+N540CZ fuel selector 1-19.JPG
+N540CZ overlapping baffle seal in corner 4-17.JPG
+N624AC NJ.jpg
+N624AC Panel.jpg
+N73EZ new panel courtesy Chris Randall 3-13.JPG
+N787T Seatbelt seatback attachment.jpeg
+N83MZ_IP_R4.png
+N999LE Lower cowl augmenter tube for 4 into 1 pip and breather 9-13.JPG
+NACA inlet launch.jpg
+NACA scoop.jpg
+NACA size.JPG
+NACA.JPG
+NACA_Inlet.png
+NACAflo.jpg
+NG cover_Original.jpg
+NG-6 ASSY-500.jpg
+NG3 failure small.jpg
+NG5small.jpg
+NGDoorMech.jpeg
+NGDoorMech1.jpeg
+NLG wheel on balancer.jpeg
+NLG wheel w: weight.jpeg
+NOT+A+DRONE.jpg
+Narrow profile.jpg
+Nat & Shirley x IMG_2363.jpg
+Nats weight moving device.jpg
+Nats weight moving device2.jpg
+NatsJabNoLwrWinglts yet.jpg
+New lip added.JPG
+New pads and drip rail.JPG
+NewNoseWheelFoot.jpg
+Newark1_small.jpg
+Newark2_small.jpg
+Nice clouds.JPG
+Nose Gear Arrangement.JPG
+Nose Gear x P1000620.jpg
+Nose Hatch Lock Open.jpg
+Nose Hatch opening.JPG
+Nose Landing.jpg
+Nose wheel cover + strut.jpg
+Nose wheel window.jpg
+Nose.jpg
+NoseGearInstall.JPG
+NoseRepairedSmall.jpg
+Nose_small.jpg
+Noses.jpg
+Nosewheel Bearing 2.jpg
+Nosewheel Bearing.jpg
+Nosewheel caster.JPG
+Note.jpg
+Nov 2007.JPG
+O2 tank.JPG
+O21.jpg
+O22.jpg
+O235 1.jpg
+O235 2.jpg
+O235 3.jpg
+O235 4.jpg
+OC reverse scoop.jpg
+OC1.jpg
+OC2.jpg
+OFM_Ren_top.jpg
+OH Santa.jpg
+OSH 09 x P1000044.jpg
+OSH 10 xP1000718.jpg
+OSH25.jpg
+October_9_2006 004.jpeg
+Oil Breather.jpg
+Oil Cooler duct.jpg
+Oil Sump N123LE new oil sump (Yoshikane).jpg
+Oil cooler fan.jpg
+Oil cooler rinse.jpg
+Oil on hangar floor.JPG
+OilCooler.jpg
+OilCooler2.jpg
+OilPressureSenderSmall.jpg
+Oil_Cooler_Exhaust.gif
+Oil_Cooler_Exit.png
+Oil_Cooling_Deta_P.jpg
+Oil_Deflector.jpg
+Old Station '11 x P1010350.jpg
+Original latch design.gif
+Osh crash 2.jpg
+Osh6.jpg
+OshkoshCrash-thumb-1200x800-30587.jpg
+Outboard Torque Tube Hole.jpg
+Outletscoop.jpg
+OutlookEmoji-😊.png
+OzjK3R2IP9t9FAUu.png
+P1.JPG
+P1010012.JPG
+P1010013.JPG
+P1010036.jpeg
+P1010061.jpeg
+P1010065.jpg
+P1010066.jpg
+P1010222.JPG
+P1020502.JPG
+P1020984.JPG
+P1030052.JPG
+P1030053.JPG
+P1030055.JPG
+P1030084.JPG
+P1030087.JPG
+P1030090.JPG
+P1030094.JPG
+P1050061_1.JPG
+P1110023.JPG
+P1120001.JPG
+P1290004.JPG
+P1290007.JPG
+P2140041.JPG
+P2140042.JPG
+P2150001.JPG
+P2150002.JPG
+P3.JPG
+P3150039.JPG
+P3200057.JPG
+P3240005.JPG
+P3270018.JPG
+P3270020.JPG
+P38 1.jpg
+P38 3.jpg
+P4.JPG
+P4190003.JPG
+P5060039.JPG
+P5310047.JPG
+P5310048.JPG
+P6260126.JPG
+P6300017.JPG
+P6300018.JPG
+P7140007.JPG
+P7180035.JPG
+P79KMYIjTe4K0sWa.png
+P8230005.JPG
+P8310005.JPG
+P9100029.JPG
+P9130009.JPG
+P9215612.JPG
+PA080017.JPG
+PB220002.JPG
+PC130002.JPG
+PIC 1.JPG
+PICT0001.JPG
+PICT0019.jpeg
+PICT0125.jpg
+PICT0127.jpg
+PIlotdream.jpg
+PO67015202-front.png
+PO67015202-front_hoodie.png
+PO67015202-front_ls.png
+PO67015202-front_v.png
+PO67015202-front_womens.png
+PO67015202-front_youth.png
+PRESSURE%20DATA%20OIL%20SCAVENGE.jpg
+PROGRAM published.JPG
+PXL_20210222_182404552.jpg
+PXL_20210222_184709054.jpg
+PXL_20210222_220924180.jpg
+PXL_20210729_020214958.jpeg
+PXL_20210729_020243017.jpeg
+PXL_20210729_020308139.jpeg
+PXL_20210729_020430886.jpeg
+PXL_20210815_184133032.jpg
+PXL_20231119_165005731.MP.jpg
+PXL_20240910_180731692.jpg
+PXL_20250728_143701089.jpg
+PXL_20250728_143709087.jpg
+PXL_20250728_143722879.jpg
+PXL_20250728_143731803.jpg
+PXL_20250728_143738422.jpg
+PXL_20250728_143750325.jpg
+PXL_20250728_144040910.jpg
+PXL_20250728_144732229.jpg
+PXL_20250728_163521670.jpg
+P_09_98_03_0127.jpg
+Paint.jpg
+PaintColorCurveChart.gif
+Panel Full_DEC18.png
+Panel Lighting.jpg
+Panel Update DEC18.png
+Panel(4).JPG
+Panel_iPad.jpg
+PastedGraphic-2.png
+PastedGraphic-3.png
+PastedGraphic-5.png
+PastedGraphic-6.png
+PedalFullyDepressed.JPG
+PedalNotDepressed.JPG
+Peel Ply Rack.jpg
+PhenixStrtSwivel.jpg
+Phillip2.JPG
+Photo0027.jpg
+Photo1.jpg
+Photo2.jpg
+Piccalo tubes.jpg
+Picture 001.jpg
+Picture 003.jpg
+Picture 041.jpg
+Picture 161.jpg
+Picture 22.jpg
+Picture2910.jpg
+Pile of Nose Gear Struts.jpg
+Pitch Angle vs. KIAS.png
+PitchTrim.jpeg
+PitchTrimIdea.JPG
+PitchTrimIdea.jpeg
+Pitot x P1000670 Lo.jpg
+PlansFeedLine.jpg
+PlansHeadrestSketch.jpg
+Plate inside the Main Spar.PNG
+Polson at night.jpg
+PortNavLightSmall.jpg
+Pos_Indcat_1.jpg
+Positech Oil Cooler.jpg
+Pox.jpg
+Prelubtimer.jpg
+Pressure reducer.jpg
+PrintedInlet.jpg
+Prius Donk x P1020282.jpg
+Prop balancer.JPG
+Prop1.jpg
+Prop2.jpg
+Prop3.JPG
+Prop3.jpg
+Prop4.jpg
+Proper Tool.JPG
+QG9Q3UPOoKd4AYi8.png
+Quiteflite intercom.jpg
+R ADS-B SWR.jpg
+R1112361.jpeg
+R1112406.jpeg
+RESINS.jpg
+RG400.jpg
+RIMG2165a.jpg
+RIMG3273.JPG
+RIMG3274.JPG
+RIMG3275.JPG
+RIMG3276.JPG
+RIMG3441.JPG
+RIMG5782.jpg
+RR 9-26-14.jpg
+RR_Cozy_Flyer_2025.1.png
+R_cylinder_small.jpg
+Radio Rack.jpeg
+RadioShack-ImpedanceMatchTransformers.jpg
+Rain Takeoff.JPG
+Ratio pump.jpg
+Ready To Go.png
+Rear Fuel Valves with Returns.jpg
+Redacted Invoice Travers 17Apr06 (2).jpg
+Reducer.jpg
+Reflector assembly.jpeg
+Relay-Pinout.png
+RelaySmall.jpg
+Removable Fuselage Top.jpg
+Removed material under forward part.JPG
+Reservoir 1.JPG
+Reservoir 2.JPG
+Retracted.JPG
+Revised AA.jpg
+Right Aileron Balance 1.jpg
+Right Aileron Balance 2.jpg
+Right Aileron Balance 3 hours additional sanding.jpg
+Right Aileron Balance Initial Sanding.jpg
+Right Wing Lwr Surf Aileron Outbd Error 2022-08-28.PNG
+RightBulbSmall.jpg
+Right_Canard_Bolt_F22.jpg
+Right_canard_bolt_1.jpg
+RkStwZWbExmhlNR0.png
+Robinson, Daniel after hard hell hole sanding%2011-17.JPG
+Rock Braud.jpg
+Rod Ends.jpg
+RollTrimDiag.jpg
+RollTrimSpringLength.JPG
+RollTrimThimble.JPG
+Roncz data.jpg
+Rotary off the CZ.jpg
+RoundTheWorldStrakes.jpg
+Rudder 1.JPG
+Rudder 2.JPG
+Rudder Pedal Adaptor Bracket.jpg
+Rudder pedal mods.JPG
+Russ Glass.jpg
+RussellShutOffVavle.jpg
+Rutan Passenger Warning.jpg
+SAP horizontal Cold Air induction.jpg
+SDS incl wiring.PNG
+SDS included docs.PNG
+SDSFuelFilterInstl1.jpg
+SDSFuelFilterInstl2.jpg
+SDSKyleFowlerInst2.jpg
+SDSKyleFowlerInstl.jpg
+SDSMikeSatchellInstl1.jpg
+SS Grommet.png
+SSPX0796.jpg
+SSPX0797.jpg
+SSPX0798.jpg
+SSPX0799.jpg
+SSPX0802.jpg
+SSPX0828.jpg
+SSPX0829.jpg
+SSPX0859.jpg
+SSPX0860.jpg
+SSPX0861.jpg
+STEP.jpg
+Safety Wire 2.JPG
+Safety Wire.JPG
+Santa and P-51 small.jpg
+Savier_mod.jpg
+Scan copy.jpg
+Scan.jpeg
+Schermafbeelding 2023-01-25 om 11.54.52.png
+Scott 4240 parking brake valve.jpg
+Scott's panel.PNG
+Screen Shot 2014-12-27 at 10.35.16 AM.png
+Screen Shot 2014-12-30 at 10.39.22 PM.png
+Screen Shot 2015-08-23 at 9.31.23 PM.png
+Screen Shot 2016-01-17 at 1.07.38 PM.png
+Screen Shot 2016-05-13 at 2.41.28 PM.png
+Screen Shot 2016-08-23 at 4.42.41 PM.png
+Screen Shot 2016-09-22 at 8.45.10 AM.png
+Screen Shot 2016-10-07 at 4.23.09 PM.png
+Screen Shot 2016-10-07 at 4.23.30 PM.png
+Screen Shot 2017-01-29 at 8.08.06 AM.png
+Screen Shot 2018-01-07 at 8.13.05 PM.png
+Screen Shot 2018-04-22 at 7.32.41 PM.png
+Screen Shot 2019-04-28 at 9.59.42 PM.png
+Screen Shot 2019-07-07 at 12.31.44 PM.png
+Screen Shot 2020-01-14 at 6.46.19 AM.png
+Screen Shot 2020-08-15 at 1.20.21 PM.png
+Screen Shot 2020-10-18 at 11.21.58 AM.png
+Screen Shot 2021-07-04 at 10.23.03 AM.png
+Screen Shot 2021-08-03 at 7.50.37 AM.png
+Screen Shot 2021-10-24 at 9.53.40 AM.png
+Screen Shot 2021-11-29 at 9.20.21 AM.png
+Screen Shot 2022-01-02 at 1.00.47 PM.png
+Screen Shot 2022-04-13 at 8.29.32 AM.png
+Screen Shot 2022-08-22 at 5.53.39 PM.png
+Screen shot 2009-09-11 at 9.10.32 AM.png
+Screenshot 2023-08-17 at 12.18.50 PM.png
+Screenshot 2023-10-19 at 12.31.43 PM.jpg
+Screenshot 2024-08-03 at 11.24.24 PM.png
+Screenshot 2024-08-03 at 11.36.57 PM.png
+Screenshot 2024-08-03 at 11.42.07 PM.png
+Screenshot 2024-09-05 at 5.05.30 PM.png
+Screenshot 2024-09-05 at 5.11.58 PM.jpg
+Screenshot 2024-09-14 at 7.28.40 PM.jpg
+Screenshot 2024-09-15 at 9.30.03 AM.jpg
+Screenshot 2024-09-15 at 9.51.13 AM.jpg
+Screenshot 2024-09-25 at 10.25.43 AM.png
+Screenshot 2025-06-15 145512.png
+Screenshot 2025-06-29 at 6.47.51 PM.png
+Screenshot 2025-07-25 at 3.04.24 PM.png
+Screenshot 2025-09-06 134739.png
+Screenshot 2025-09-06 134924.png
+Screenshot_2015-11-18-15-15-28.png
+Screenshot_2017-01-29-09-14-14.png
+Screenshot_2018-03-24-08-11-12.png
+Screenshot_20180414-122810.jpg
+Screenshot_20180422-183734_Chrome.jpg
+Screenshot_2019-08-31-12-10-43.png
+Screenshot_20210706-043246_AliExpress.jpg
+Screenshot_20210819-105043_Firefox.jpg
+Screenshot_20220301_135738.png
+Screenshot_20230708_024408_Gallery.jpg
+Second problem.jpg
+Section IV.JPG
+Sender 303DGT.jpg
+Sensenich.jpg
+SfEAOtmQTv9BsMbF.png
+Shore Power.PNG
+Side_window.jpg
+SideofLWYandUpperLongeronEdit.jpeg
+Sight Gauge Instructions.jpeg
+SittingInTheFuselage.jpg
+Skid1.jpg
+Skid3.jpg
+SkyTec.C12ST2S.jpg
+SmallBrakePic1.JPG
+SmallBrakePic2.JPG
+SnipImage.JPG
+SnipImage.jpg
+Snoopy tool.png
+Spar Drilled.JPG
+Spar tape.jpg
+Spar2.jpg
+SparkWireClearance_After.JPG
+SparkWire_Retention.JPG
+SpruceMiniValve.jpg
+StarboardNavLightSmall.jpg
+Starship.png
+Sterba-Cozy_Prop.jpg
+Still0011.jpg
+Strake Bottom.png
+Strake Flox.JPG
+Strake interior.jpg
+StrakeFoamJoints?.jpg
+Stratus Components.jpg
+Streetview of the crash zone.JPG
+Sump.JPG
+SumpTankBulkheads.jpg
+SumpTankHardPointLocations.jpg
+Sunnen_Line_Hone_Align_Honing.jpg
+SuperTandem2022.jpg
+SuperTandem2024.jpg
+SuperiorAccessoryCoverAttachments.jpg
+SuperiorColdIndSump.jpg
+Suppl support brace against NG bulkhead.JPG
+Swagelok_expensive_shipping_charge.png
+Sweet_Tailwind.JPG
+TAXI and CLIMB.PNG
+TB with Spar Cap Tape Installed.jpg
+TE.jpg
+TE1-mod.jpg
+TE1.jpg
+TE2.jpg
+TIG.jpg
+TK 787T.jpeg
+TQ_1.JPG
+TQ_2.JPG
+TQ_3.JPG
+TRIM2.jpg
+TS1000_strainer.jpg
+TablonGear.JPG
+Tail wheel.jpg
+Takeoff.png
+Tank - 1.jpeg
+Tank - 2.jpeg
+Tank - 3.jpeg
+Tapering question.jpg
+TeardropSchematic.png
+Temp profile.JPG
+Template1.jpg
+Template2.jpg
+The big I.JPG
+The cut line that works..jpg
+The trees.JPG
+Thermostat x P1000672 Lo.jpg
+ThimbleShortening.JPG
+Tie-downs.jpg
+Tiny tach hook up.jpg
+Top cowling1.jpg
+TransponderPg 2-9small.jpg
+Tranverse_bolt.jpg
+Trial fit of canopy.JPG
+Trim motor interface circuit.jpg
+Trim motor.jpg
+Trim-Fergelli.jpeg
+Trio Roll Servo small.jpg
+Tru Trac components.JPG
+UND.jpg
+UNI and peelply.jpg
+USB adaptor.JPG
+Ultra Galactica.jpg
+Unlocked canopy.gif
+Untitled.jpg
+Untitled.png
+VENT 3.jpg
+VENT LOCATION 1.jpg
+VENT LOCATION 2.jpg
+VEZ flt.jpg
+VH-COZ YWBN lo.jpg
+VI_SumpTank01_Small.jpg
+VI_SumpTank02Small.jpg
+VP.jpg
+VW Passat deck lid hinges.png
+Vac Press Table WIP.jpg
+Valkirie cooling.jpg
+Valkirie2.jpg
+Vance Lyn x P1020061.jpg
+Vari-eze strut 030.JPG
+Vari-eze strut 031.JPG
+VariEzeFullMonty.jpg
+VariEzeHeroShotfromRear.jpg
+VariEzePaintWonderFilandPrimer.jpg
+Varieze_Test_Failure.jpeg
+Velocity L:H I:B rudder pedal.JPG
+Velocity L:H mount.JPG
+Velocity Latches.jpg
+Velocity R:H mount.JPG
+Velocity hanging rudder pedals.jpg
+Velocity rudder pedal assy.JPG
+Vent Manifold.jpg
+VentManifold.jpg
+Visio1.png
+WIND.jpg
+WOES-1.JPG
+Wallace.jpg
+Wayne.jpg
+WebBobInst3.jpg
+WebBobInst9.jpg
+Weir 121+406.JPG
+Well_smalla.JPG
+Wells MBC reservoir location.jpg
+Westach 2A3-1 carb temp.jpg
+Westach 2A9-2 oil temp.jpg
+Westach 2AB-1 oil press.jpg
+WhatsApp Image 2023-01-29 at 5.58.50 PM.jpeg
+WheelPantScrewHoleDamageSmall.jpg
+WheelWell1small.JPG
+WheelWellsmall.JPG
+Wheelpant venting in primer.jpeg
+Whelen A600PR.jpg
+Wilhelmson Latches.jpg
+WilhelmsonNoseLift.JPG
+Wind Turbine Airfoil Mold Primer.jpg
+Window-Regulator.jpg
+WindowFrame_Vinyl.jpg
+WindowFrame_Vinyl[1].jpg
+Wing Jacks by Kurt Boyle - foam on top 4-19.jpg
+Wing Support 2 3-18.JPG
+Wing Supports 3-18.JPG
+Wing attach bolt. [Redmon].jpg
+Wing-spar mating-2.jpg
+Wing-spar mating.jpg
+WingAlignJig2.jpg
+WingAlignTool.jpg
+WingTE.jpg
+Wingtip light and socket 5-19.JPG
+With wrapping.jpeg
+With_Izzy_and_Ray_at_KLUK.JPG
+WoFuUtK9vCZ71JLD.png
+WpantsCF.jpg
+Wright telitube.jpg
+XO-360_2.jpg
+XPCHEECKS1.jpeg
+Y1d41pT036SivJfk.png
+Yar Gil's FHC hinge #1.png
+Yar Gil's FHC hinge #2.png
+Yellow-Crowned_Night_Heron.jpg
+ZeitlinsChart-1.jpg
+ZolatonePainting.jpg
+_98546480_img_7200.jpeg
+_DSC4933.jpg
+_DSC5112.jpg
+_DSC5125.jpg
+_DSC5138.jpg
+_DSC5153.jpg
+_DSC5185.jpg
+_DSC5211.jpg
+_DSC5233.jpg
+_DSC5244.jpg
+_DSC5272.jpg
+a058485.jpg
+a058495.jpg
+a0584a4.jpg
+a0584b4.jpg
+a0584c4.jpg
+a1465.jpg
+actuators.jpg
+adbjjffe.png
+after_45_days_sight_gauge_samples_in_100LL_and_g100ul.jpg
+aileron.jpg
+air cleaner.jpg
+air vent lead in.jpg
+air vent transition.jpg
+aircrafts.jpg
+airfilter1_before.JPG
+airfilter2_before.JPG
+airfilter_after.JPG
+alaska test flights bb.jpg
+alignment.jpg
+alum panel 1.jpg
+analog fuel flow.jpg
+anti_seize_meme.jpeg
+armpit Starfighter scoop.bmp
+attachment inst panel.jpg
+aurora 4b.gif
+auto_bowden_cable.jpg
+b72f9b.gif
+b_skin04.JPG
+ba2bacf.gif
+back 10600.jpg
+bahamas_route.PNG
+bccoglecfcmombae.png
+benson.jpg
+bf4222a.jpg
+bfeeijgg.jpg
+blue_foam.jpg
+bmenkodccdhpfmad.png
+bolt.jpg
+bottom.jpg
+bracket_mod.jpeg
+brake fuel.JPG
+brake slider 1.jpg
+brake_line (4).jpg
+brake_line.jpg
+breather%20pipe%201.jpg
+brightness table.png
+brokenSmall.jpg
+brokenspring.jpg
+c%20neon.gif
+c9p5.jpg
+cSQbQlSoi2h0vRRi.png
+cables 1.JPG
+cables 2.JPG
+cables 3.JPG
+calipers.jpg
+calvin.gif
+calvin2.gif
+camarillo_vtol_large.jpg
+canard (9).jpg
+canard gear location.jpg
+canard logo.png
+canopy  turtleback align.jpg
+canopy extra.jpg
+canopy frame.jpg
+canopy-hinges(2).jpg
+canopy-hinges.jpg
+canopy.jpg
+canopy1.jpg
+canopy2.JPG
+canopy2.jpg
+canopy3.jpg
+canopy5.jpg
+canvas.png
+canvas2.png
+canvas3.png
+canvas4.png
+canvas5.png
+canvas6.png
+carbClearanceFront.jpg
+carbClearanceRear.jpg
+cat frizzled 2.jpg
+catto fences.jpg
+cbibffhj.jpg
+center sub panel.jpg
+chapt7.01.JPG
+clickbond-wing-aileron.png
+clip_image001.jpg
+clip_image002.jpg
+clip_image002[2].jpg
+close clearance.JPG
+close up canopy latch.jpg
+closeup1.jpg
+closeup2.jpg
+cnenfaniobjikgbi.png
+cockpit1.jpg
+comically_large_breaker_bar.jpg
+comp.png
+complete.jpg
+conflictalert-small.png
+console 2.JPG
+controller1.jpg
+controller2.jpg
+corner03.JPG
+cover 2.jpg
+cowl cooling deflector.jpg
+cowl cooling.jpg
+cowl issue 001.jpg
+cowl issue 002.jpg
+cowl issue 004.jpg
+cowl slot 1.jpg
+cowl slot 3.jpg
+cowl slot 4.jpg
+cowl_painting (2).jpg
+cozy - 1.jpeg
+cozy - 2.jpeg
+cozy - 3.jpeg
+cozy - 4.jpeg
+cozy - 5.jpeg
+cozy 02 photo.JPG
+cozy for sale (1).jpg
+cozy for sale (2).jpg
+cozy for sale (3).jpg
+cozy for sale (4).jpg
+cozy lear.jpg
+cozy side view.jpeg
+cozy tub panel assy crop.jpg
+cozy wiire.jpg
+cozy-chapter-13-step-06-003.jpg
+cozy-chapter-13-step-06-005.jpg
+cozy-chapter-13-step-07-007.jpg
+cozy.jpg
+cozy_mkiv_logo3_wk3.jpg
+cp42-p3.gif
+cpmdjgmcnlcgmbjh.png
+crank seal retainer 003.jpg
+crash.jpeg
+cross_bolt.jpg
+cross_bolt_nut.jpeg
+cup example.jpg
+curved_seatback_1.jpg
+curved_seatback_2.jpg
+cushion_1.JPG
+cushion_2.JPG
+cushion_3.JPG
+cushion_4.JPG
+custom engine wrench.JPG
+cylinder attach.jpg
+dacichja.jpg
+damper.jpg
+darthvsluke_e0.gif
+datauri-file.png
+dbinhicfpbhlppap.jpg
+dd-2.jpg
+decal.jpg
+decfpmocpkaianjp.png
+dembs2.jpg
+dembs3.jpg
+der-15850_uq_xl.jpg
+determinator.jpg
+dfiihhcg.jpg
+dgP3460GwfYC0hR8.png
+display4.JPG
+diy-hwc000003__1.jpg
+dlabmliagoegbabi.png
+dm9HJ74U4efN16Q3.png
+doorinside.jpg
+dooroutside.jpg
+downunda for Mike.jpg
+drawing.png
+dscn5728.jpg
+dual feed O2 regulator.jpg
+e8b2b0.JPG
+e8b2bf.jpg
+eagles_roost_eagle_eye_20221104 (14).jpg
+eagles_roost_sand_storm_20221104 (17).jpg
+eagles_roost_shirl_dickey_20221104 (10).jpg
+early psru1.jpg
+early-firewall .JPG
+edefcaea.jpg
+eductor.jpg
+efis.jpg
+efs_blowup.jpg
+ehkemlpkcldlfgdo.png
+ejjhfbiibcgdbgdc.png
+ekjeckebagjonpme.png
+elec retract gr.jpg
+elec trim.jpg
+elect trim pilots side 1.jpg
+elect trim pilots side 2.jpg
+elev trim pin 1.jpg
+email canard crate.jpg
+emoji_u00a9.png
+emoji_u1f60a.png
+emoji_u1f60e.png
+emoji_u1f631.png
+eng nose rt.jpg
+engine baffle clip.jpg
+engine stand.JPG
+enigne-lower1.jpg
+ex_a.png
+ex_b.png
+exhaust details.jpg
+exhaust pipes.jpg
+exhaust.jpg
+extended nose gr strut.jpg
+extra Support Bar mount position wide base micro distribute weight.JPG
+f00f.jpg
+f22.jpg
+f22_bushing.JPG
+f22ca59.jpg
+f22ca69.jpg
+f22ca78.jpg
+f22ca88.jpg
+f22ca98.jpg
+f3f02.gif
+fONaMLpZvx2EkNRU.png
+fPNuVnFFrdg4Fd3y.png
+face-smile.png
+failed plug adaptor.jpg
+faldpignoadlehmj.png
+feb 2008 161.jpg
+fedex.jpg
+feel lucky gringo 2.jpg
+ferrite.JPG
+fhc1_edited.jpg
+figjgbei.png
+filter-pump unit.png
+finished tiny tach.jpg
+firewall_right_view.JPG
+fisheagle_2010 (1).jpg
+fkT8utvj0EsxU8HH.png
+flanges.png
+flaring.png
+ford-starter-relay-terminals.jpeg
+fr_138_size640[1].jpg
+fr_139_size640[1].jpg
+fr_151_size880[1].jpg
+front gear (2).JPG
+fs1.jpg
+fs7.jpg
+fs8.jpg
+ftwcontrails.PNG
+fuel cap small.jpg
+fuel cap.jpg
+fuel ga depression fix.jpg
+fuel level sensor.jpg
+fuel off-on switch.jpg
+fuel selector extension.jpg
+fuel shut off.jpg
+fuel_psi.png
+fuel_vent (7).jpg
+fuelcap.jpg
+fuelpump.png
+fusalage.JPG
+fuse.jpg
+fuselage side construction.jpg
+fuselage_aft07.JPG
+gbfbbefa.jpg
+gearboard3.5x.PNG
+ggcddhcc.jpg
+ghgcgeib.png
+gogigapjpnpfhffb.png
+grad.gif
+groucho.gif
+hEKYeoTX96UeZdKw.png
+hardpoint layup.JPG
+headrest.PNG
+headrest:mirror.jpeg
+heat sheld from above.jpeg
+heat valve.jpg
+heated pitot tube ready.jpg
+heater 1.jpg
+heater.JPG
+heattent.jpg
+heattentB.jpg
+hendrickslatchright.jpg
+hendrickslatchs2.jpg
+hennaanhopejoklo.png
+hidden_rudder_bellhorn.jpg
+hinge hard point.JPG
+hinge_geometry_101.jpg
+hobbs.jpg
+hole.jpeg
+holy crap.jpg
+hose fits.JPG
+hose size.JPG
+hotbox.jpg
+hqdefault.jpg
+hudson-miracle-approach-chart.jpg
+hyd crimp.PNG
+i0lUFk8JGciDCH0B.png
+iZhDmxfu0bzjn52a.png
+ibckgapnblnijhkf.png
+icon.JPG
+icubipadpanel.jpg
+igubal_efoi_1.jpg
+ikcfledhbdomddge.png
+image.gif
+image0 (2).jpeg
+image0.png
+image004.gif
+image005.gif
+image006.gif
+image008.gif
+image01.JPG
+image012.jpg
+image013.jpg
+image014.jpg
+image015.jpg
+image016.jpg
+image017.jpg
+image018.jpg
+image019.jpg
+image02.JPG
+image020.jpg
+image021.jpg
+image022.jpg
+image03.JPG
+image066.jpg
+image10.JPG
+image2.jpg
+image2.png
+image3.png
+image4.PNG
+image6 (3).JPG
+image7 (3).JPG
+image7.JPG
+image8.JPG
+image_13682.jpg
+image_167814913.JPG
+image_20081.jpg
+image_50405633.JPG
+image_50427905.JPG
+image_50443009.JPG
+image_67173377.JPG
+image_67188737.JPG
+images.jpeg
+images.jpg
+img11.jpg
+img600.jpg
+img_20200318_154518_1024.jpg
+inara.jpg
+initial_setup.jpg
+inplace.jpg
+inside.jpg
+instrument data.jpg
+intercylinder base.jpg
+intercylinder bottom.jpg
+intercylinder outbrd.jpg
+intercylinder top view.jpg
+ip.jpg
+iyFYfjYqWqCC0kjU.png
+j channel.jpg
+jZvZ5dJgQ-iQIIz8MHKltA[1].jpg
+jack point.jpg
+jack stand 2.PNG
+jack.jpeg
+james_russell_trip_report_20240612 (1).jpg
+jccodiceaolekknf.gif
+jfmcpbnpndflflhn.png
+jgdaflcbhplfphok.png
+jhdhicaj.png
+jiadgcjg.png
+jm1.jpg
+jm2.jpg
+jmmmobeolpolhomb.png
+k471_4.jpg
+kbefohgifgaenbeo.png
+kchfkiadjjcpbmlk.png
+kidelacccbilojkp.png
+kit contents.JPG
+koddnplpincklfjj.png
+ku-xlarge.jpg
+kyleHoward.gif
+lDggxu32ywCQN30d.png
+l_549884407_2.jpeg
+laminate samples.JPG
+landing gear 1.jpg
+landing gear 2.jpg
+landing.jpg
+landing_light_hole (1).jpg
+landing_light_hole (2).jpg
+large_snowflakes_falling_lg_clr.gif
+latch parts email.JPG
+left wing and winglet.jpg
+level1.jpg
+level2.jpg
+lgcover_after.JPG
+lhodgndngpknocfi.png
+light1.jpg
+light2.jpg
+light3.jpg
+light4.jpg
+limitSwitchSmall.jpg
+lithium Ion bat.jpg
+lithiumIonbat.jpg
+lng-45700_w_ml.jpg
+lnjhebpfinhjoefb.png
+locking switch.jpg
+longeron transition bulkheads fitted.jpg
+longeron transition fitted.jpg
+longeron transition.jpg
+longerons1.jpg
+longerons2.jpg
+longerons3.jpg
+low fuel sensor1.jpg
+m-25.jpg
+m7.jpg
+manifold.jpg
+map1.jpg
+map2.jpg
+map3.jpg
+master cylinder after.jpg
+master cylinder before.jpg
+master cylinder installation.JPG
+matco MC-4.jpg
+matco bleeder base.jpg
+mcfpdjahehdndoio.png
+midair2.jpg
+midair4.jpg
+midair5.jpg
+midair6.jpg
+midair7.jpg
+midair8.jpg
+midair9.jpg
+mkng6e_ng6e_0resize3.jpg
+model cowl.jpg
+molding fuel ga bubble.jpg
+molex.JPG
+more clearance.JPG
+move strut.jpg
+movestrut.jpg
+mr jims p38.jpg
+mud mud.jpg
+mummy.jpg
+my_naca.PNG
+naca vent .jpg
+naca_after.JPG
+naca_before.JPG
+naca_mod.png
+nacanew.jpg
+nacaorig.jpg
+new balll mount.JPG
+new cowling.jpg
+new firewall 3.jpg
+new_nose_1.jpg
+new_nose_2.jpg
+new_nose_3.jpg
+nfffkfcabhicnkcl.png
+nfmadbnhhfaihbnd.jpg
+ng15.jpg
+ng_pivot.PNG
+nose door.jpg
+nose gear ext.jpg
+nose wheel.JPG
+nose wheel.jpg
+nose_gear_ng50.jpg
+nosewheelGeometry.jpeg
+ns-3.jpg
+nut.jpg
+oil air seperation.jpg
+oil cooler 1.jpg
+oil cooler 2.jpg
+oil-cooler-016.jpg
+oilfilter08.JPG
+old nose.jpg
+open.JPG
+opening.jpg
+ord tca.jpg
+originalF.jpg
+overall view engine.oil sep..jpg
+p-lead wiring.gif
+p4020001.jpg
+pFmAiJp11zSm2pWi.png
+paddle spring.jpg
+page1image256.png
+page26image2558291824.png
+pallet1.jpeg
+pallet2.jpeg
+panel while sitting.jpeg
+panel_small.jpg
+pants.png
+parking_brake_mod.jpg
+pcb fab studio.jpg
+peace.jpg
+phone pics 371.JPG
+photo (1).JPG
+photo (15).jpg
+photo (2).JPG
+photo 6.JPG
+photo 8.JPG
+photo.PNG
+photo01.jpg
+photo02.JPG
+photo03.JPG
+photo04.JPG
+photo05.JPG
+photo06.JPG
+photo07.JPG
+photo08.JPG
+photo09.JPG
+photo10.JPG
+photo11.JPG
+photo12.JPG
+photo13.JPG
+photo14.JPG
+photo15.JPG
+photo16.JPG
+photo17.JPG
+photo18.JPG
+photo19.JPG
+photo20.JPG
+photo3.JPG
+photo4.JPG
+photo_2015-05-02_13-05-06 (2).jpg
+photo_2015-05-02_13-05-06.jpg
+photo_2015-05-02_13-05-07 (2).jpg
+photo_2015-05-02_13-05-07.jpg
+photo_2015-05-02_13-05-08 (2).jpg
+photo_2015-05-02_13-05-08.jpg
+photo_2015-05-02_13-05-09.jpg
+photo_2015-05-02_13-05-12 (3).jpg
+photo_2015-05-02_13-05-13 (2).jpg
+photo_2015-05-02_13-05-13.jpg
+photo_2015-05-02_13-05-14 (2).jpg
+photo_2015-05-02_13-05-14 (3).jpg
+photo_2015-05-02_13-05-14.jpg
+photo_2015-05-02_13-05-15 (2).jpg
+photo_2015-05-02_13-05-15.jpg
+photo_2015-05-02_13-05-16.jpg
+photo_2015-05-02_13-05-17.jpg
+photo_2015-05-02_13-05-18 (2).jpg
+photo_2015-05-02_13-05-20.jpg
+photo_2015-05-02_13-05-21.jpg
+photo_2017-08-11_10-09-46.jpg
+photo_2017-12-11_14-24-34.jpg
+photosHeaderCamera.jpg
+photosHeaderLogo.jpg
+pic 12.JPG
+pic 4.JPG
+pic08016.gif
+pic20239.gif
+pic22480.gif
+pic34986.jpg
+pic40643.gif
+pic43407.gif
+pic50733.gif
+piccolo tube .png
+pins.jpg
+pitchServo.jpeg
+pitot04 phenolic collar.jpg
+plugs.jpg
+pressure%20data.jpg
+price_2025.png
+processed.jpeg
+prop herztler.JPG
+prop.jpg
+prop1.jpg
+prop2.jpg
+prop3.jpg
+prop4.jpg
+pulsar-ns.jpg
+pure jet.jpg
+pure%20jet.jpg
+quadrant knobs.JPG
+rant.gif
+ready to ship.jpg
+rear part of canopy.jpg
+rear.JPG
+removing old nose.jpg
+review.jpg
+rht strake assy.JPG
+riviera.jpg
+rocket cone.jpg
+rocket cozy.jpeg
+rockface.jpg
+rod end.jpg
+rollbar3.JPG
+rps.jpg
+rudder1.jpg
+s2jy4kEDlaIkoi0f.png
+s7LCIPhmkJyFAYxt.png
+safety catch.jpg
+sanding.JPG
+sc.PNG
+scaled.jpg
+scan0029.jpg
+screen1.jpg
+sds hdwr.PNG
+seatback.JPG
+sep18 TF (4).jpg
+sep18 TF (5).jpg
+servo_mount_holes1.jpg
+sharp_angle.PNG
+sheared_bolt.JPG
+ships pwr solinoid.jpg
+short seats with storage under.jpg
+side1.jpg
+side2.jpg
+side3.jpg
+sight_gauge02.jpg
+sight_gauges_in_g100ul_and_100ll_01.jpg
+sight_gauges_in_g100ul_and_100ll_02.jpg
+ski_accident_lg_nwm.gif
+sl shop interior 1.jpg
+small_tuesday_AM.jpg
+smallbox.jpg
+snubber 2.jpg
+snubber 3.jpg
+snubber2.jpg
+solberg-airport.jpg
+spaceshiip one.jpg
+spaceshipone-1a.jpg
+spar_screw.JPG
+speed brake2.jpg
+speed brakes.jpg
+spring.jpg
+springboard pitch sys3.jpg
+squeeze-build7-shrink-hs.jpg
+sta-bil.jpeg
+stampa_girl_line_en.gif
+starlite test flights.jpg
+static diss.jpeg
+str39oq5g2i31.jpg
+strainer.jpg
+strainers.JPG
+strake assy.JPG
+strake.jpg
+strake1.jpg
+strake2.jpg
+strake3.jpg
+strake_access.JPG
+streaks.jpg
+strong_flaw10.jpg
+sunshade.jpg
+super_zoom.jpg
+surfaceaircraft-small.png
+swage fork.jpg
+switch box.jpg
+switchBoth2.jpg
+switches 9.08.03 AM.jpeg
+t3sKqCx9QieyOt_DP0WOkw[1].jpg
+t6c texan cockpit 2.jpg
+tape.PNG
+tape1.jpeg
+tape2.jpeg
+tape_x_6.jpeg
+tapping manifold pres..jpg
+test pilot school L.jpg
+test result.JPG
+test set up.JPG
+test1_3 copy.jpeg
+test2_4.jpeg
+test3_3.jpeg
+testing the 1090 antenna.PNG
+thread_comparison.jpg
+thread_detail.jpg
+three latches.gif
+throttle cable.jpg
+thru tube headed to heat duct.JPG
+thumb_monty-python-french-knight-oh-yes-its-very-nice_1024.jpg
+thumbnail-education-011.jpg
+tinytach 2.jpg
+top.jpg
+topcomp.jpg
+torquetube%20insulate[2].jpg
+tranant978_small.jpg
+trans cal wire.jpeg
+trigger bracket.jpg
+trim sw 1.jpg
+trim sw 2.jpg
+trim sw 3.jpg
+trip.png
+truck.gif
+tug 2.jpg
+tug.jpg
+twin  oaks dining place.jpg
+ubend_after.JPG
+ubend_before.JPG
+ul-vs-lyco.jpg
+unnamed.jpg
+untitled2.jpg
+ups.jpg
+usaf drone pic.jpg
+usps.jpg
+vSsP_tmQSvCdEfU6mMHBuQ[1].jpg
+vacuum_stuff.JPG
+valve mount.jpg
+vance%20rough%20river.jpg
+ve_lg_fittings.png
+velo.JPG
+vent.jpg
+vez1.jpg
+vez2.jpg
+visio outputs.png
+vnace 2.jpg
+vortex jig.JPG
+watermarked_f95e7d2118074f166e871df0b145c165.jpg
+wheel pant mod 1.jpg
+wheel pant mod 2.jpg
+wheel pants $75.00.jpg
+whpt_1.jpg
+whpt_2.jpg
+whpt_3.jpg
+wilhelmson gear schematic001.jpg
+willcall.jpg
+window 1.jpg
+window 2.jpg
+wing Jig.JPG
+wing Jig.jpg
+wing foam 1.png
+wing foam 2.png
+winglets Vertical Stabalizers.jpg
+wings-stay-on.jpg
+wings.JPG
+wire spec detail.JPG
+wlEmoticon-confusedsmile[1].png
+wlEmoticon-disappointedsmile[1].png
+wlEmoticon-smilewithtongueout[1].png
+wlEmoticon-surprisedsmile[1].png
+wng1cylvviikx7u.jpeg
+wpid-CIMG1519-2012-10-20-20-30.jpeg
+xoqXxyPYROeVs0oo.png
+xp-12:07.JPG
+z32_016-09-05 17.58.47.jpg
+{8CA0EF59-1930-47EB-BDDC-181EE6689D22}.png
+~WRD0000.jpg
+~WRD001.jpg
+~WRD244.jpg
+אגזוז.jpg
+מכסה דלק.jpg
