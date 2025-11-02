@@ -10,6 +10,8 @@ from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from tqdm import tqdm
 
 
@@ -65,8 +67,9 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
                 # HTML wrapper approach - use Selenium to parse HTML
                 seleniumDriver.get(strUrl)
 
-                # Parse HTML to extract real image URL from <img src>
-                imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
+                # Wait for img element to be present (up to 10 seconds)
+                wait = WebDriverWait(seleniumDriver, 10)
+                imgElement = wait.until(EC.presence_of_element_located((By.TAG_NAME, "img")))
                 strSrc = imgElement.get_attribute("src")
 
                 # Download from the extracted src URL
