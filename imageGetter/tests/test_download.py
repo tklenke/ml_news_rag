@@ -329,3 +329,61 @@ class TestBatchDownload:
 
             # Should have called download_image twice
             assert mock_download_image.call_count == 2
+
+    @patch('download_images.download_image')
+    def test_skip_existing_files(self, mock_download_image):
+        """Should skip files that already exist in output directory."""
+        import tempfile
+        import json
+        from pathlib import Path
+
+        # Mock download_image to always succeed
+        mock_download_image.return_value = True
+
+        dctIndex = {
+            "MSG001": {
+                "metadata": {"message_id": "MSG001"},
+                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
+            },
+            "MSG002": {
+                "metadata": {"message_id": "MSG002"},
+                "images": [{"url": "http://test2.jpg", "local_filename": "test2.jpg"}]
+            },
+            "MSG003": {
+                "metadata": {"message_id": "MSG003"},
+                "images": [{"url": "http://test3.jpg", "local_filename": "test3.jpg"}]
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as strTempDir:
+            strIndexPath = f"{strTempDir}/index.json"
+            with open(strIndexPath, 'w') as f:
+                json.dump(dctIndex, f)
+
+            # Create output directory and pre-create test1.jpg (already downloaded)
+            strOutputDir = f"{strTempDir}/images"
+            Path(strOutputDir).mkdir(parents=True, exist_ok=True)
+            Path(f"{strOutputDir}/test1.jpg").write_text("fake image data")
+
+            from download_images import download_batch
+
+            dctStats = download_batch(
+                strIndexPath,
+                strOutputDir,
+                intLimit=None,
+                seleniumDriver=Mock()
+            )
+
+            # Should have 3 total images
+            assert dctStats["total"] == 3
+            # Should skip the existing one
+            assert dctStats["skipped"] == 1
+            # Should download the 2 that don't exist
+            assert dctStats["success"] == 2
+            assert dctStats["failed"] == 0
+
+            # Should only call download_image twice (not for the existing file)
+            assert mock_download_image.call_count == 2
+
+        # RED: This test should fail
+        pytest.fail("Resume functionality not yet implemented")
