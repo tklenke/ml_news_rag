@@ -60,19 +60,30 @@ def extract_keywords_from_filename(strFilename: str) -> List[str]:
     STOPWORDS = {
         # Generic image terms
         'img', 'image', 'photo', 'picture', 'pic', 'jpeg', 'jpg', 'png', 'gif', 'bmp',
-        'cimg', 'dsc', 'dscn', 'dscf', 'p1', 'p2', 'p3',
+        'cimg', 'dsc', 'dscn', 'dscf', 'p1', 'p2', 'p3', 'photo1', 'photo2', 'photo3',
 
         # Size/quality terms
         'small', 'large', 'med', 'medium', 'thumb', 'thumbnail', 'hi', 'lo', 'res',
+        'resized', 'size',
 
         # Generic modifiers
         'copy', 'final', 'edited', 'temp', 'new', 'old', 'test', 'draft',
 
         # Camera/app prefixes
-        'fullsizerender', 'pastedgraphic', 'screenshot', 'capture',
+        'fullsizerender', 'pastedgraphic', 'screenshot', 'capture', 'pasted', 'graphic',
 
         # Common but not useful
-        'blob', 'attachment', 'download', 'gptemp', 'unknown',
+        'blob', 'attachment', 'download', 'gptemp', 'unknown', 'email',
+
+        # Image editing/display terms
+        'shot', 'screen', 'view', 'file',
+
+        # Common English words
+        'the', 'and', 'for', 'with', 'from', 'after', 'before', 'of', 'in', 'on', 'at',
+        'to', 'a', 'an', 'by', 'or',
+
+        # Time indicators
+        'pm', 'am',
     }
 
     # Remove file extension
@@ -108,8 +119,20 @@ def extract_keywords_from_filename(strFilename: str) -> List[str]:
         if strWord.isdigit():
             continue
 
+        # Skip single letters (unless uppercase acronyms in original)
+        if len(strWord) == 1:
+            continue
+
         # Skip very short words (< 3 chars) unless they're uppercase acronyms
         if len(strWord) < 3 and not strWord.isupper():
+            continue
+
+        # Skip parenthetical expressions like (2), (large), (sm)
+        if strWord.startswith('(') and strWord.endswith(')'):
+            continue
+
+        # Skip bracketed expressions like n[1], 1[1]
+        if '[' in strWord and ']' in strWord:
             continue
 
         # Skip hex patterns (like 5f36565)
