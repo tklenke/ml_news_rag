@@ -155,6 +155,10 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     Returns:
         Dict with statistics: {"total": int, "success": int, "failed": int, "skipped": int, "too_small": int}
     """
+    # Open debug log file
+    fileDebug = open('download_debug.log', 'w', encoding='utf-8')
+    fileDebug.write("=== Image Download Debug Log ===\n\n")
+
     # Load image index
     with open(strIndexPath, 'r', encoding='utf-8') as f:
         dctIndex = json.load(f)
@@ -220,18 +224,43 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         boolTooSmall = False
         try:
             response = requests.head(strUrl, timeout=5)
+            fileDebug.write(f"\n[HEAD] {strLocalFilename}\n")
+            fileDebug.write(f"  URL: {strUrl}\n")
+            fileDebug.write(f"  Status: {response.status_code}\n")
+            fileDebug.write(f"  Content-Length present: {'Content-Length' in response.headers}\n")
+
+            # Log all headers for debugging
+            fileDebug.write(f"  All headers:\n")
+            for strHeader, strValue in response.headers.items():
+                fileDebug.write(f"    {strHeader}: {strValue}\n")
+
             if 'Content-Length' in response.headers:
                 intSizeBytes = int(response.headers['Content-Length'])
+                fileDebug.write(f"  Content-Length: {intSizeBytes} bytes ({intSizeBytes / 1024:.2f} KB)\n")
+
                 # Skip images smaller than 3KB (likely tracking pixels or emojis)
                 if intSizeBytes < 3072:  # 3KB = 3072 bytes
                     boolTooSmall = True
                     dctStats["too_small"] += 1
+                    fileDebug.write(f"  DECISION: SKIPPED - Too small (< 3KB)\n")
                     # Update index
                     dctImageRef["size_bytes"] = intSizeBytes
                     dctImageRef["too_small"] = True
+                    fileDebug.flush()  # Ensure written to disk
                     continue
-        except Exception:
+                else:
+                    fileDebug.write(f"  DECISION: Size OK, proceeding with download\n")
+            else:
+                fileDebug.write(f"  DECISION: Content-Length not available, proceeding with download\n")
+
+            fileDebug.flush()  # Ensure written to disk
+        except Exception as e:
             # If HEAD request fails, proceed with download anyway
+            fileDebug.write(f"\n[HEAD] {strLocalFilename}\n")
+            fileDebug.write(f"  URL: {strUrl}\n")
+            fileDebug.write(f"  HEAD request failed: {e}\n")
+            fileDebug.write(f"  DECISION: Proceeding with download anyway\n")
+            fileDebug.flush()  # Ensure written to disk
             pass
 
         # Download image
@@ -253,7 +282,7 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         intProcessedCount += 1
 
         # Display stats every 100 images and save index
-        if intProcessedCount % 100 == 0:
+        if intProcessedCount % 10 == 0:
             print(f"\n--- Progress Update ({intProcessedCount}/{dctStats['total']}) ---")
             print(f"  Success: {dctStats['success']}")
             print(f"  Too small: {dctStats['too_small']}")
@@ -268,6 +297,15 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     # Save final index
     with open(strIndexPath, 'w', encoding='utf-8') as f:
         json.dump(dctIndex, f, indent=2, ensure_ascii=False)
+
+    # Close debug log
+    fileDebug.write(f"\n=== Download Complete ===\n")
+    fileDebug.write(f"Total: {dctStats['total']}\n")
+    fileDebug.write(f"Success: {dctStats['success']}\n")
+    fileDebug.write(f"Too small: {dctStats['too_small']}\n")
+    fileDebug.write(f"Skipped: {dctStats['skipped']}\n")
+    fileDebug.write(f"Failed: {dctStats['failed']}\n")
+    fileDebug.close()
 
     # Close driver if we created it
     if boolCloseDriver:
