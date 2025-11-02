@@ -436,9 +436,6 @@ class TestSizeFiltering:
             assert dctImageInfo["size_bytes"] == 2048
             assert dctImageInfo["too_small"] == True
 
-        # RED: This test should fail
-        pytest.fail("Size filtering not yet implemented")
-
     @patch('download_images.requests.head')
     @patch('download_images.download_image')
     def test_download_images_larger_than_3kb(self, mock_download_image, mock_head):
@@ -488,9 +485,6 @@ class TestSizeFiltering:
             assert dctImageInfo["size_bytes"] == 50000
             assert dctImageInfo["too_small"] == False
 
-        # RED: This test should fail
-        pytest.fail("Size filtering not yet implemented")
-
     @patch('download_images.requests.head')
     @patch('download_images.download_image')
     def test_handle_missing_content_length(self, mock_download_image, mock_head):
@@ -539,6 +533,3 @@ class TestSizeFiltering:
             dctImageInfo = dctUpdatedIndex["MSG001"]["images"][0]
             assert dctImageInfo["size_bytes"] is None
             assert dctImageInfo["too_small"] == False
-
-        # RED: This test should fail
-        pytest.fail("Size filtering not yet implemented")

@@ -142,7 +142,10 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     """
     Download all images from image index with progress tracking.
 
+    Checks Content-Length before downloading and skips images < 3KB (tracking pixels/emojis).
+    Updates index with size_bytes and too_small flag for each image.
     Skips images that already exist in the output directory (resume functionality).
+    Displays progress stats every 100 images and saves index periodically.
 
     Args:
         strIndexPath: Path to image_index.json file
@@ -151,20 +154,21 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         seleniumDriver: Optional Selenium driver (for testing). If None, creates new one.
 
     Returns:
-        Dict with statistics: {"total": int, "success": int, "failed": int, "skipped": int}
+        Dict with statistics: {"total": int, "success": int, "failed": int, "skipped": int, "too_small": int}
     """
     # Load image index
     with open(strIndexPath, 'r', encoding='utf-8') as f:
         dctIndex = json.load(f)
 
-    # Collect all images from all messages
+    # Collect all images from all messages (with reference to original dict for updates)
     lstAllImages = []
     for strMessageId, dctEntry in dctIndex.items():
         for dctImage in dctEntry["images"]:
             lstAllImages.append({
                 "message_id": strMessageId,
                 "url": dctImage["url"],
-                "local_filename": dctImage["local_filename"]
+                "local_filename": dctImage["local_filename"],
+                "image_ref": dctImage  # Reference to update size_bytes and too_small
             })
 
     # Apply limit if specified
@@ -176,8 +180,12 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         "total": len(lstAllImages),
         "success": 0,
         "failed": 0,
-        "skipped": 0
+        "skipped": 0,
+        "too_small": 0
     }
+
+    # Counter for periodic stats display and index saving
+    intProcessedCount = 0
 
     # Create output directory
     pathOutputDir = Path(strOutputDir)
@@ -200,6 +208,7 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         strUrl = dctImageInfo["url"]
         strLocalFilename = dctImageInfo["local_filename"]
         strOutputPath = str(pathOutputDir / strLocalFilename)
+        dctImageRef = dctImageInfo["image_ref"]
 
         # Skip if file already exists (resume functionality)
         pathOutputFile = Path(strOutputPath)
@@ -207,13 +216,59 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
             dctStats["skipped"] += 1
             continue
 
+        # Check Content-Length before downloading
+        intSizeBytes = None
+        boolTooSmall = False
+        try:
+            response = requests.head(strUrl, timeout=5)
+            if 'Content-Length' in response.headers:
+                intSizeBytes = int(response.headers['Content-Length'])
+                # Skip images smaller than 3KB (likely tracking pixels or emojis)
+                if intSizeBytes < 3072:  # 3KB = 3072 bytes
+                    boolTooSmall = True
+                    dctStats["too_small"] += 1
+                    # Update index
+                    dctImageRef["size_bytes"] = intSizeBytes
+                    dctImageRef["too_small"] = True
+                    continue
+        except Exception:
+            # If HEAD request fails, proceed with download anyway
+            pass
+
         # Download image
         boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3)
 
+        # Update index with size and too_small flag
+        dctImageRef["size_bytes"] = intSizeBytes
+        dctImageRef["too_small"] = boolTooSmall
+
         if boolSuccess:
             dctStats["success"] += 1
+            # Update size with actual file size if we didn't get it from HEAD
+            if intSizeBytes is None and pathOutputFile.exists():
+                dctImageRef["size_bytes"] = pathOutputFile.stat().st_size
         else:
             dctStats["failed"] += 1
+
+        # Increment processed counter
+        intProcessedCount += 1
+
+        # Display stats every 100 images and save index
+        if intProcessedCount % 100 == 0:
+            print(f"\n--- Progress Update ({intProcessedCount}/{dctStats['total']}) ---")
+            print(f"  Success: {dctStats['success']}")
+            print(f"  Too small: {dctStats['too_small']}")
+            print(f"  Skipped: {dctStats['skipped']}")
+            print(f"  Failed: {dctStats['failed']}")
+            print()
+
+            # Save index
+            with open(strIndexPath, 'w', encoding='utf-8') as f:
+                json.dump(dctIndex, f, indent=2, ensure_ascii=False)
+
+    # Save final index
+    with open(strIndexPath, 'w', encoding='utf-8') as f:
+        json.dump(dctIndex, f, indent=2, ensure_ascii=False)
 
     # Close driver if we created it
     if boolCloseDriver:

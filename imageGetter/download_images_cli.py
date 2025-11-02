@@ -67,6 +67,7 @@ def main():
         print("Download Complete")
         print(f"  Total images: {dctStats['total']}")
         print(f"  Successful: {dctStats['success']}")
+        print(f"  Too small (< 3KB): {dctStats['too_small']}")
         print(f"  Skipped (already exist): {dctStats['skipped']}")
         print(f"  Failed: {dctStats['failed']}")
         print()
