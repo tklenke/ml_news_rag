@@ -60,61 +60,31 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
     # Attempt download with retries
     for intAttempt in range(intRetries):
         try:
-            # Navigate to image URL
-            seleniumDriver.get(strUrl)
+            # Check if URL has &view=1 (returns HTML wrapper with embedded image)
+            if '&view=1' in strUrl or '?view=1' in strUrl:
+                # HTML wrapper approach - use Selenium to parse HTML
+                seleniumDriver.get(strUrl)
+                time.sleep(2)
 
-            # Wait for page to load
-            time.sleep(2)
+                # Parse HTML to extract real image URL from <img src>
+                imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
+                strSrc = imgElement.get_attribute("src")
 
-            # Get page source and check if it's an image
-            # Google Groups might display image directly or embed it
-            try:
-                # Check if URL has &view=1 (returns HTML wrapper with embedded image)
-                if '&view=1' in strUrl or '?view=1' in strUrl:
-                    # Parse HTML to extract real image URL from <img src>
-                    imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
-                    strSrc = imgElement.get_attribute("src")
+                # Download from the extracted src URL
+                response = requests.get(strSrc)
+                with open(strOutputPath, 'wb') as f:
+                    f.write(response.content)
+            else:
+                # Direct binary download approach - use requests with cookies
+                # Extract cookies from Selenium session for authentication
+                dctCookies = {}
+                for cookie in seleniumDriver.get_cookies():
+                    dctCookies[cookie['name']] = cookie['value']
 
-                    # Download from the extracted src URL
-                    import requests
-                    response = requests.get(strSrc)
-                    with open(strOutputPath, 'wb') as f:
-                        f.write(response.content)
-                else:
-                    # Try to find img tag with the actual image
-                    imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
-                    strSrc = imgElement.get_attribute("src")
-
-                    # If it's a data URL, extract the image
-                    if strSrc.startswith("data:image"):
-                        import base64
-                        # Extract base64 data
-                        strData = strSrc.split(",")[1]
-                        bytesData = base64.b64decode(strData)
-
-                        # Save to file
-                        with open(strOutputPath, 'wb') as f:
-                            f.write(bytesData)
-                    else:
-                        # It's a regular URL - download it
-                        import requests
-                        response = requests.get(strSrc)
-                        with open(strOutputPath, 'wb') as f:
-                            f.write(response.content)
-
-            except Exception:
-                # If no img tag, try to get the page content directly
-                # (sometimes Google Groups serves the image directly)
-                strPageSource = seleniumDriver.page_source
-
-                # Check if this looks like binary image data
-                if len(strPageSource) > 100 and not strPageSource.strip().startswith("<"):
-                    # Might be raw image - save it
-                    with open(strOutputPath, 'wb') as f:
-                        f.write(strPageSource.encode('latin1'))
-                else:
-                    # Not an image - might need different approach
-                    raise Exception("Could not extract image from page")
+                # Download directly with requests (avoids Chrome Downloads folder)
+                response = requests.get(strUrl, cookies=dctCookies)
+                with open(strOutputPath, 'wb') as f:
+                    f.write(response.content)
 
             # Validate image
             try:

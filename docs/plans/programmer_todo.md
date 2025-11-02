@@ -418,11 +418,18 @@ git reset --hard 8ac0a03
 - Branch to either Selenium approach or requests approach
 
 **Status:**
-- [ ] Document issue and plan (this section)
-- [ ] Implement cookie extraction and dual-path download logic
+- [x] Document issue and plan (this section)
+- [x] Implement cookie extraction and dual-path download logic
 - [ ] Test with URLs that have &view=1
 - [ ] Test with URLs that don't have &view=1
-- [ ] Commit changes
+- [x] Commit changes
+
+**Implementation Details:**
+- Simplified download_image() from ~60 lines to ~30 lines
+- Clear branching: if has &view=1, use Selenium; else use requests+cookies
+- Removed complex nested try/except blocks and edge case handling
+- Cookie extraction: `dctCookies = {cookie['name']: cookie['value'] for cookie in seleniumDriver.get_cookies()}`
+- Direct download: `requests.get(strUrl, cookies=dctCookies)`
 
 ### Phase 2.9: Download Full A/ Directory Images
 - [ ] Start Chrome with debug mode: `chrome.exe --remote-debugging-port=9222`
