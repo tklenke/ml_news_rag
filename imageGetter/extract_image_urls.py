@@ -219,7 +219,7 @@ def build_image_index(strPath: str) -> Dict[str, Dict]:
     if pathInput.is_file():
         lstFiles = [pathInput]
     elif pathInput.is_dir():
-        lstFiles = sorted(pathInput.glob("*.md"))
+        lstFiles = sorted(pathInput.rglob("*.md"))  # Recursive glob to search subdirectories
     else:
         return dctIndex  # Path doesn't exist, return empty
 
