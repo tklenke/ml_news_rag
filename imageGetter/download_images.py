@@ -32,7 +32,7 @@ def create_selenium_driver():
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
-def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetries: int = 3) -> bool:
+def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetries: int = 3, dctCookies: Optional[Dict] = None) -> bool:
     """
     Download a single image from URL using Selenium.
 
@@ -41,6 +41,7 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
         strOutputPath: Local filesystem path to save image
         seleniumDriver: Optional Selenium driver (for testing). If None, creates new one.
         intRetries: Number of retry attempts (default 3)
+        dctCookies: Optional pre-extracted cookies dict for direct binary downloads
 
     Returns:
         True if successful, False otherwise
@@ -65,6 +66,7 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
             # Check if URL has &view=1 (returns HTML wrapper with embedded image)
             if '&view=1' in strUrl or '?view=1' in strUrl:
                 # HTML wrapper approach - use Selenium to parse HTML
+                print(f"[HTML WRAPPER PATH] {strOutputPath}")
                 seleniumDriver.get(strUrl)
 
                 # Wait for img element to be present (up to 10 seconds)
@@ -78,10 +80,13 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
                     f.write(response.content)
             else:
                 # Direct binary download approach - use requests with cookies
-                # Extract cookies from Selenium session for authentication
-                dctCookies = {}
-                for cookie in seleniumDriver.get_cookies():
-                    dctCookies[cookie['name']] = cookie['value']
+                print(f"[DIRECT BINARY PATH] {strOutputPath}")
+
+                # Use provided cookies or extract from Selenium session
+                if dctCookies is None:
+                    dctCookies = {}
+                    for cookie in seleniumDriver.get_cookies():
+                        dctCookies[cookie['name']] = cookie['value']
 
                 # Download directly with requests (avoids Chrome Downloads folder)
                 response = requests.get(strUrl, cookies=dctCookies)
@@ -187,6 +192,20 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
             dctStats["failed"] = dctStats["total"]
             return dctStats
 
+    # Extract cookies once at the beginning (for direct binary downloads)
+    # Navigate to Google Groups first to establish valid context
+    print("Extracting authentication cookies from Chrome session...")
+    try:
+        seleniumDriver.get("https://groups.google.com")
+        time.sleep(1)  # Brief wait for page to load
+        dctCookies = {}
+        for cookie in seleniumDriver.get_cookies():
+            dctCookies[cookie['name']] = cookie['value']
+        print(f"Extracted {len(dctCookies)} cookies")
+    except Exception as e:
+        print(f"Warning: Failed to extract cookies: {e}")
+        dctCookies = {}
+
     # Download each image with progress bar
     for dctImageInfo in tqdm(lstAllImages, desc="Downloading images", unit="image"):
         strUrl = dctImageInfo["url"]
@@ -201,7 +220,7 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
             continue
 
         # Download image
-        boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3)
+        boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3, dctCookies=dctCookies)
 
         if boolSuccess:
             dctStats["success"] += 1
