@@ -327,11 +327,31 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 | Text retrieval poor quality | Collect feedback, iterate on query approach, consider multimodal Phase 6 |
 | Download takes too long | Implement parallel downloads, resume capability |
 
+## Phase Revisions
+
+### Phase 4-5 Revision (2025-11-02)
+
+**Original Plan:** ChromaDB semantic search with metadata filtering
+**Revised Plan:** LLM keyword tagging + simple keyword lookup
+
+**Reason for Change:**
+- Tom proposed: Use LLM to tag messages with curated keywords at index-time
+- Provides semantic understanding (LLM handles synonyms) without query-time complexity
+- Simpler, more interpretable, faster queries
+- Debuggable - can review keyword assignments
+
+**New Phase 4:** Build keyword list (LLM-assisted), tag messages, create message_keywords.json
+**New Phase 5:** Keyword-based query interface with HTML viewer
+
+**Old Phase 5 (Scale to Full Corpus) removed** - already scaling organically
+
+---
+
 ## Open Questions
 
-1. Should we store original message markdown path in image_index.json for reference?
-2. Do we need image versioning if re-downloading improves quality?
-3. Should thumbnail size be configurable or fixed at 200x200?
+1. Keyword list size: 50-200 terms optimal? (Phase 4 will determine)
+2. Should we store original message markdown path in image_index.json for reference?
+3. Do we need image versioning if re-downloading improves quality?
 4. Web interface framework preference (Flask, FastAPI, static HTML)?
 
 ---

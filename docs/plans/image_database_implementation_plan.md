@@ -448,261 +448,279 @@ python imageGetter/generate_thumbnails_cli.py \
 
 ---
 
-## Phase 4: Query Interface
+## Phase 4: LLM Keyword Tagging
 
-**Goal:** Query interface that returns images based on text search
+**Goal:** Use local LLM to tag messages with curated aircraft-building keywords
 
-**IMPORTANT NOTE:** Phase 4 uses a metadata update approach (adding `has_images: True` to existing ChromaDB records) rather than creating a separate collection or re-embedding. This is simpler and reuses existing embeddings. **However, this approach may not work as expected** - ChromaDB metadata filtering behavior with existing collections needs validation. If filtering doesn't work well or retrieval quality is poor, we may need to re-embed the subset of the corpus that has images into a separate collection. Document findings in Phase 4.6 validation.
+**REVISED 2025-11-02:** This approach provides semantic understanding at index-time (one-time cost) rather than query-time, making queries fast and results debuggable. The LLM identifies which keywords (or close approximations) appear in each message.
 
-### Phase 4.1: Create imageAsker Module
-**Deliverable:** Module structure for image queries
+### Phase 4.1: Build Master Keyword List
+**Deliverable:** Curated list of 50-200 aircraft-building keywords
+
+**Approach:** Iterative LLM-assisted curation
+1. Take 100 random messages from corpus
+2. Ask local LLM: "Extract keywords related to Cozy experimental aircraft building from these messages"
+3. Review LLM output, prune irrelevant terms
+4. Repeat with different 100-message batches until keyword list stabilizes
+5. Final human review and cleanup
 
 **Tasks:**
 1. ☐ Create `imageAsker/` directory
-2. ☐ Create `imageAsker/README.md`
-3. ☐ Create `imageAsker/query_images.py`
-4. ☐ Create `imageAsker/tests/` directory
-5. ☐ Create `imageAsker/tests/test_query.py`
-6. ☐ Add ABOUTME comments
+2. ☐ Create `imageAsker/build_keyword_list.py` script
+3. ☐ Sample 100 messages from data/msgs_md/
+4. ☐ Send to local LLM (via Ollama) with prompt to extract keywords
+5. ☐ Manual review: keep aircraft-specific terms, remove generic terms
+6. ☐ Repeat with 3-5 different 100-message batches
+7. ☐ Save master keyword list to `imageAsker/master_keywords.txt`
+8. ☐ Document keyword curation process in `docs/notes/keyword_curation.md`
 
-**Test:** Module structure exists
-**Commit:** "Create imageAsker module structure"
+**Expected Keywords:** firewall, cowling, baffles, spar, canard, winglet, fuselage, avionics, panel, engine mount, landing gear, nose gear, fuel tank, etc.
+
+**Test:** Keyword list contains 50-200 terms, all relevant to aircraft building
+**Commit:** "Build master keyword list via LLM-assisted curation"
 
 ---
 
-### Phase 4.2: Image Index Loading (TDD)
-**Deliverable:** Load and query image_index.json
+### Phase 4.2: LLM Keyword Tagger (TDD)
+**Deliverable:** Function that tags messages with matching keywords
 
 **Tasks:**
-1. ☐ Write failing test: `test_load_image_index()`
-2. ☐ Write failing test: `test_get_images_for_message_id()`
-3. ☐ Write failing test: `test_get_images_for_multiple_message_ids()`
-4. ☐ Write failing test: `test_filter_messages_with_images()`
-5. ☐ Run tests - verify all fail
-6. ☐ Implement `load_image_index(strPath: str) -> dict`
-7. ☐ Implement `get_images_for_messages(lstMessageIds: list[str], dctImageIndex: dict) -> list[dict]`
-8. ☐ Run tests - verify all pass
+1. ☐ Create `imageAsker/tag_keywords.py` with ABOUTME
+2. ☐ Create `imageAsker/tests/test_tag_keywords.py`
+3. ☐ Write failing test: `test_tag_single_message()`
+4. ☐ Write failing test: `test_handle_synonyms()` (e.g., "cowl" matches "cowling")
+5. ☐ Write failing test: `test_handle_variations()` (e.g., "baffle" matches "baffles")
+6. ☐ Write failing test: `test_no_false_positives()` (unrelated "spar" mention doesn't match)
+7. ☐ Run tests - verify all fail
+8. ☐ Implement `tag_message_with_keywords(strMessageText: str, lstKeywords: list[str]) -> list[str]`
+   - Send message + keyword list to local LLM via Ollama
+   - Prompt: "Which of these keywords (or close approximations) appear in this message?"
+   - Parse LLM response to extract matched keywords
+   - Return list of matched keywords
+9. ☐ Run tests - verify all pass
+
+**Prompt Template:**
+```
+You are analyzing a message from the Cozy Builders aircraft newsgroup.
+
+Keywords: [firewall, cowling, baffles, spar, ...]
+
+Message: [message text]
+
+Which of these keywords (or their close approximations/synonyms) are discussed in this message?
+Return ONLY the matching keywords as a comma-separated list.
+```
+
+**Test:** All tests pass, LLM correctly identifies keywords
+**Commit:** "Implement LLM keyword tagger"
+
+---
+
+### Phase 4.3: Batch Tag All Messages (TDD)
+**Deliverable:** Tag all messages with keywords and save to index
+
+**Tasks:**
+1. ☐ Write failing test: `test_tag_batch_of_messages()`
+2. ☐ Write failing test: `test_save_keyword_index()`
+3. ☐ Write failing test: `test_resume_from_partial_completion()`
+4. ☐ Run tests - verify all fail
+5. ☐ Implement `tag_all_messages(strMessagesDir: str, lstKeywords: list[str], strOutputFile: str) -> dict`
+   - Load all message markdown files
+   - For each message, call `tag_message_with_keywords()`
+   - Build keyword index: `{messageID: [keyword1, keyword2, ...]}`
+   - Save progress every 50 messages (crash recovery)
+   - Add progress bar (tqdm)
+6. ☐ Run tests - verify all pass
+
+**Output Format (message_keywords.json):**
+```json
+{
+  "A1NtxlDfY4c": ["firewall", "baffles", "engine mount"],
+  "a42YFDFx8WY": ["cowling", "panel", "landing gear"]
+}
+```
 
 **Test:** All tests pass
-**Commit:** "Implement image index loading and lookup"
+**Commit:** "Implement batch keyword tagging with progress tracking"
 
 ---
 
-### Phase 4.3: Update ChromaDB Metadata for Image Messages
-**Deliverable:** Add "has_images" flag to ChromaDB records for messages with images
-
-**Background:**
-Existing ChromaDB structure stores message chunks with metadata: `{"source": "messageID"}`.
-Each message has multiple chunks (e.g., "A1NtxlDfY4c0", "A1NtxlDfY4c1", etc.).
-We'll update ALL chunks for messages that have images to add `"has_images": True`.
+### Phase 4.4: Tag Messages from A/ Directory
+**Deliverable:** Keyword index for A/ directory messages
 
 **Tasks:**
-1. ☐ Review existing embedder code (`embedder/f_embed.py`) to understand ChromaDB structure
-2. ☐ Write failing test: `test_get_all_chunks_for_message_id()`
-3. ☐ Write failing test: `test_update_chunk_metadata()`
-4. ☐ Write failing test: `test_update_all_message_chunks_with_image_flag()`
-5. ☐ Run tests - verify all fail
-6. ☐ Implement `get_chunks_for_message(strMessageId: str, chromaCollection) -> list[str]`
-   - Query ChromaDB by metadata: `where={"source": "messageID"}`
-   - Return list of chunk IDs
-7. ☐ Implement `update_metadata_for_chunks(lstChunkIds: list[str], dctNewMetadata: dict, chromaCollection) -> bool`
-   - Update metadata for list of chunk IDs
-   - Add/merge `has_images: True` to existing metadata
-8. ☐ Implement `add_image_flags_to_chromadb(dctImageIndex: dict, chromaCollection) -> dict`
-   - For each message_id in image_index.json
-   - Get all chunks for that message
-   - Update their metadata with `has_images: True`
-   - Log progress and statistics
+1. ☐ Create `imageAsker/tag_messages_cli.py` script
+2. ☐ Add command-line arguments:
+   - `--messages` (path to messages directory)
+   - `--keywords` (path to master_keywords.txt)
+   - `--output` (path for message_keywords.json)
+   - `--limit` (for testing, default None)
+3. ☐ Test on 10 messages first with --limit 10
+4. ☐ Review 10-message results manually - are keyword matches accurate?
+5. ☐ Run on full A/ directory (~325 messages, estimate 10-15 minutes)
+6. ☐ Review keyword index for quality
+7. ☐ Document results in `docs/notes/phase4_results.md`:
+   - Processing time
+   - Keywords per message (average)
+   - Spot-check 10 messages for accuracy
+
+**Usage:**
+```bash
+python imageAsker/tag_messages_cli.py \
+  --messages data/msgs_md/A \
+  --keywords imageAsker/master_keywords.txt \
+  --output data/message_keywords.json \
+  --limit 10
+```
+
+**Test:** Keyword index created, spot-checks show accurate tagging
+**Commit:** "Tag A/ directory messages with keywords"
+
+---
+
+### Phase 4.5: Validate Phase 4 Results
+**Deliverable:** Assessment of keyword tagging quality
+
+**Tasks:**
+1. ☐ Manual review of 20 random messages:
+   - Are assigned keywords accurate?
+   - Any false positives (keywords that don't match)?
+   - Any false negatives (obvious keywords missed)?
+2. ☐ Check keyword distribution:
+   - Which keywords are most common?
+   - Are there any keywords that never match? (prune from master list)
+3. ☐ Test a few searches manually:
+   - Find all messages tagged with "firewall"
+   - Find all messages tagged with "cowling"
+   - Do results make sense?
+4. ☐ Document assessment in `docs/notes/phase4_results.md`
+5. ☐ If quality is poor, iterate on prompt or keyword list
+
+**Test:** Keyword tagging achieves >80% accuracy on manual review
+**Commit:** "Complete Phase 4: LLM keyword tagging validated"
+
+---
+
+## Phase 5: Keyword-Based Query Interface
+
+**Goal:** Simple query interface using keyword index from Phase 4
+
+**NOTE:** This phase builds on Phase 4's LLM keyword tagging. No ChromaDB integration needed - just simple keyword lookup.
+
+### Phase 5.1: Query Function (TDD)
+**Deliverable:** Function to search messages by keyword
+
+**Tasks:**
+1. ☐ Create `imageAsker/query_images.py` with ABOUTME
+2. ☐ Create `imageAsker/tests/test_query.py`
+3. ☐ Write failing test: `test_query_by_single_keyword()`
+4. ☐ Write failing test: `test_query_by_multiple_keywords()` (AND logic)
+5. ☐ Write failing test: `test_return_images_for_matching_messages()`
+6. ☐ Write failing test: `test_handle_keyword_not_found()`
+7. ☐ Run tests - verify all fail
+8. ☐ Implement `query_images_by_keywords(lstQueryKeywords: list[str], dctKeywordIndex: dict, dctImageIndex: dict) -> list[dict]`
+   - Find all messages tagged with any of the query keywords
+   - Lookup images for those messages in image_index.json
+   - Return list of image results with message metadata
 9. ☐ Run tests - verify all pass
-10. ☐ Create CLI script to update existing ChromaDB collection
-11. ☐ Test on A/ directory messages
-
-**Test:** All chunks for image messages have has_images=True metadata
-**Commit:** "Update ChromaDB metadata with image flags"
-
-**Note:** If ChromaDB doesn't support metadata updates well, may need to re-embed messages with updated metadata.
-
----
-
-### Phase 4.4: Query ChromaDB with Image Filter (TDD)
-**Deliverable:** Query function that filters to only messages with images
-
-**Tasks:**
-1. ☐ Write failing test: `test_query_chromadb_with_image_filter()`
-2. ☐ Write failing test: `test_extract_message_ids_from_results()`
-3. ☐ Write failing test: `test_deduplicate_message_ids()` (multiple chunks per message)
-4. ☐ Write failing test: `test_query_returns_no_results_when_no_images()`
-5. ☐ Run tests - verify all fail
-6. ☐ Implement `query_images(strQueryText: str, intMaxResults: int = 50) -> list[dict]`
-   - Get query embedding using ollama.embed()
-   - Query ChromaDB with: `collection.query(query_embeddings=..., n_results=..., where={"has_images": True})`
-   - Extract unique message IDs from results (deduplicate chunks from same message)
-   - Lookup images in image_index.json for those message IDs
-   - Return image data with message context and relevance scores
-7. ☐ Run tests - verify all pass
 
 **Output Format:**
 ```python
 [
   {
     "message_id": "A1NtxlDfY4c",
-    "subject": "Re: [c-a] Van's baffles...",
-    "thumbnail_path": "data/images/thumbs/A1NtxlDfY4c_part0.1_thumb.jpg",
-    "full_path": "data/images/full/A1NtxlDfY4c_part0.1.jpg",
-    "relevance_score": 0.87
+    "subject": "Re: Firewall installation",
+    "matched_keywords": ["firewall", "engine mount"],
+    "images": [
+      {
+        "thumbnail_path": "data/images/thumbs/A1NtxlDfY4c_part0_1_thumb.jpg",
+        "full_path": "data/images/full/A1NtxlDfY4c_part0_1.jpg"
+      }
+    ]
   }
 ]
 ```
 
-**Test:** All tests pass, queries filter correctly
-**Commit:** "Implement image query with ChromaDB metadata filter"
+**Test:** All tests pass
+**Commit:** "Implement keyword-based image query"
 
 ---
 
-### Phase 4.5: CLI Image Query Tool
-**Deliverable:** Command-line tool to query and display image results
+### Phase 5.2: CLI Query Tool
+**Deliverable:** Command-line tool to search for images by keyword
 
 **Tasks:**
-1. ☐ Create `imageAsker/query_images_cli.py` script with ABOUTME
+1. ☐ Create `imageAsker/query_images_cli.py` script
 2. ☐ Add command-line arguments:
-   - Query text (positional arg)
+   - Query keywords (positional args)
+   - `--keywords-index` (path to message_keywords.json)
+   - `--images-index` (path to image_index.json)
    - `--max-results` (default 50)
-   - `--index` (path to image_index.json)
-   - `--collection` (ChromaDB collection name, default from existing config)
 3. ☐ Display results:
-   - List thumbnail paths
-   - Show message subject and ID
-   - Show relevance score
-4. ☐ Test with queries:
-   - "firewall"
-   - "oil cooler"
-   - "panel"
-   - "wing"
+   - Message subject and ID
+   - Matched keywords
+   - List of thumbnail paths
+   - Total results count
+4. ☐ Test with sample queries
 
 **Usage:**
 ```bash
-python imageAsker/query_images_cli.py "firewall installation" --max-results 20
+python imageAsker/query_images_cli.py firewall cowling \
+  --keywords-index data/message_keywords.json \
+  --images-index data/image_index.json
 ```
 
 **Test:** Returns relevant images for test queries
-**Commit:** "Add CLI tool for image queries"
+**Commit:** "Add CLI tool for keyword-based image queries"
 
 ---
 
-### Phase 4.6: Simple Thumbnail Viewer (Optional)
-**Deliverable:** Script to display thumbnails in terminal or simple GUI
+### Phase 5.3: Simple Thumbnail Viewer
+**Deliverable:** HTML page to view thumbnail grid
 
 **Tasks:**
-1. ☐ Decide on approach:
-   - Option A: Terminal (use ASCII art or similar)
-   - Option B: Simple GUI (tkinter, pygame)
-   - Option C: Generate HTML file to open in browser
-2. ☐ Implement chosen approach
-3. ☐ Test with A/ directory results
+1. ☐ Create `imageAsker/generate_thumbnail_page.py` script
+2. ☐ Takes query results and generates static HTML file
+3. ☐ HTML displays:
+   - Thumbnail grid (3-4 columns)
+   - Message subject/ID under each thumbnail
+   - Click thumbnail to view full resolution
+   - Matched keywords highlighted
+4. ☐ Test with firewall query results
 
-**Note:** HTML option is simplest and most practical
+**Usage:**
+```bash
+python imageAsker/query_images_cli.py firewall --output results.json
+python imageAsker/generate_thumbnail_page.py results.json --output results.html
+```
 
-**Test:** Can view thumbnail grid from query results
-**Commit:** "Add thumbnail viewer for query results"
+**Test:** HTML page displays thumbnails correctly
+**Commit:** "Add HTML thumbnail viewer"
 
 ---
 
-### Phase 4.7: Validate Phase 4 Results
-**Deliverable:** Working query interface tested on A/ directory with assessment of metadata approach
+### Phase 5.4: Validate Phase 5 Results
+**Deliverable:** Assessment of query quality
 
 **Tasks:**
-1. ☐ Verify metadata updates worked:
-   - Check that has_images flag exists on updated chunks
-   - Verify query with `where={"has_images": True}` returns only image messages
-   - Compare result count to expected (number of messages with images)
-2. ☐ Test queries on A/ directory:
-   - "engine" - expect engine/installation photos
-   - "panel" - expect panel/avionics photos
-   - "cowling" - expect cowling photos
-   - "firewall" - expect firewall photos
-3. ☐ Assess retrieval quality:
-   - Are results relevant to query?
-   - Do images match what was requested?
-   - Any false positives (irrelevant images)?
-   - Any false negatives (missing relevant images)?
-4. ☐ Document results in `docs/notes/phase4_results.md`:
+1. ☐ Test queries:
+   - "firewall" - expect firewall/bulkhead photos
+   - "cowling" - expect cowling/engine cowl photos
+   - "panel" - expect instrument panel/avionics photos
+   - "landing gear" - expect landing gear photos
+2. ☐ Assess results:
+   - Are returned images relevant?
+   - Any false positives?
+   - Any obvious missing results?
+3. ☐ Compare to manual search (grep through messages)
+4. ☐ Document in `docs/notes/phase5_results.md`:
    - Query examples and results
-   - Retrieval quality assessment
-   - Metadata filtering effectiveness
-   - **Decision: Does metadata approach work well enough?**
-   - If NO: Plan to re-embed image messages into separate collection
-5. ☐ Collect feedback from Tom on retrieval quality
-6. ☐ Iterate on query logic if needed OR plan Phase 4B (re-embedding)
+   - Precision/recall estimates
+   - User experience assessment
+5. ☐ Get Tom's feedback on query quality
 
-**Test:** Queries return relevant images, system is usable, metadata approach validated
-**Commit:** "Complete Phase 4: Image query interface on A/ directory"
-
-**DECISION POINT:** If metadata filtering doesn't work well:
-- Create Phase 4B to re-embed messages with images into separate collection
-- Use existing embedder code with modified metadata
-- Query separate collection instead of filtering main collection
-
----
-
-## Phase 5: Scale to Full Corpus
-
-**Goal:** Process all directories (B/ through Z/) and create complete image database
-
-### Phase 5.1: Estimate Full Corpus Scale
-**Deliverable:** Projections for full corpus processing
-
-**Tasks:**
-1. ☐ Calculate statistics from A/ directory:
-   - Images per markdown file (average)
-   - Download success rate
-   - Disk space per 100 images
-2. ☐ Count total markdown files across all directories
-3. ☐ Project for full corpus:
-   - Estimated total images
-   - Estimated disk space needed
-   - Estimated download time
-4. ☐ Document in `docs/notes/phase5_projections.md`
-5. ☐ Check available disk space
-
-**Test:** Have clear estimates before proceeding
-**Commit:** "Document full corpus projections"
-
----
-
-### Phase 5.2: Process All Directories
-**Deliverable:** Complete image database for all directories
-
-**Tasks:**
-1. ☐ Run URL extraction on all directories (B/ through Z/)
-2. ☐ Merge results into single image_index.json
-3. ☐ Run image download (consider running overnight)
-4. ☐ Monitor progress and handle errors
-5. ☐ Run thumbnail generation
-6. ☐ Verify final image_index.json
-
-**Test:** All directories processed, statistics match projections
-**Commit:** "Complete Phase 5: Full corpus image database"
-
----
-
-### Phase 5.3: Final Validation and Documentation
-**Deliverable:** Complete, documented image database
-
-**Tasks:**
-1. ☐ Generate final statistics:
-   - Total markdown files processed
-   - Total images found
-   - Total images downloaded successfully
-   - Download success rate
-   - Total disk space used
-   - Common failure reasons
-2. ☐ Test queries on full database
-3. ☐ Document in `docs/notes/phase5_final_results.md`
-4. ☐ Update `docs/project_info.md` with image database details
-5. ☐ Create user guide for image query system
-
-**Test:** System fully functional on complete corpus
-**Commit:** "Complete Phase 5: Full image database operational"
+**Test:** Queries return relevant images, system is usable
+**Commit:** "Complete Phase 5: Keyword-based query interface validated"
 
 ---
 

@@ -64,40 +64,47 @@
 
 ---
 
-## Phase 4: Query Interface
+## Phase 4: LLM Keyword Tagging
 
-**Goal:** Query images based on text search
+**Goal:** Use local LLM to tag messages with curated keywords
+
+**REVISED 2025-11-02:** LLM provides semantic understanding at index-time, not query-time.
 
 ### High-Level Tasks
-1. Create `imageAsker/` module structure
-2. Implement image index loading and lookup
-3. **IMPORTANT:** Review ChromaDB metadata approach from implementation plan
-   - May need to add `has_images` flag to ChromaDB records
-   - Or create separate collection for messages with images
-4. Implement query function that returns images for text queries
-5. Create CLI query tool
-6. Test queries: "firewall", "panel", "cowling", "engine"
-7. Document results and retrieval quality in `docs/notes/phase4_results.md`
+1. Build master keyword list (50-200 terms)
+   - Sample 100-message batches from corpus
+   - Ask local LLM to extract aircraft-building keywords
+   - Tom reviews and prunes list
+   - Iterate until stable
+2. Create LLM keyword tagger (TDD)
+   - Prompt: "Which of these keywords appear in this message?"
+   - LLM handles synonyms (e.g., "cowl" = "cowling")
+3. Tag all A/ directory messages (~325 messages, 10-15 min)
+4. Create message_keywords.json: `{messageID: [keywords]}`
+5. Validate tagging quality (>80% accuracy on manual review)
+6. Document in `docs/notes/phase4_results.md`
 
-**Deliverable:** Working CLI query tool
-
-**Decision Point:** If metadata filtering doesn't work well, escalate to Architect
+**Deliverable:** message_keywords.json with LLM-tagged keywords per message
 
 ---
 
-## Phase 5: Scale to Full Corpus
+## Phase 5: Keyword-Based Query Interface
 
-**Goal:** Process all directories (B/ through Z/)
+**Goal:** Simple query interface using Phase 4 keywords
+
+**NOTE:** No ChromaDB integration - just keyword lookup
 
 ### High-Level Tasks
-1. Estimate full corpus scale from A/ directory results
-2. Get Tom's approval to proceed
-3. Run URL extraction on all directories
-4. Run downloads (may need overnight)
-5. Run thumbnail generation
-6. Document final results in `docs/notes/phase5_final_results.md`
+1. Create query function (TDD)
+   - Input: keyword(s)
+   - Output: messages+images matching those keywords
+2. Create CLI query tool
+3. Create HTML thumbnail viewer
+4. Test queries: "firewall", "cowling", "panel", "landing gear"
+5. Validate query quality
+6. Document in `docs/notes/phase5_results.md`
 
-**Deliverable:** Complete image database
+**Deliverable:** Working keyword-based image search
 
 ---
 

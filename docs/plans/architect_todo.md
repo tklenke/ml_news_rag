@@ -35,9 +35,13 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 - [ ] Review Phase 2.9 production download results when available
 - [ ] Assess download success rate and error patterns from production run
 - [ ] Review Phase 3 results (thumbnail quality, sizing)
-- [ ] Review Phase 4 integration with existing RAG system
-- [ ] Evaluate retrieval quality and decide if architecture needs revision
-- [ ] Review Phase 5 full corpus statistics
+- [ ] Review Phase 4 LLM keyword tagging approach
+  - [ ] Assess keyword list quality (coverage, precision)
+  - [ ] Evaluate tagging accuracy
+  - [ ] Decide if LLM prompts need refinement
+- [ ] Review Phase 5 keyword-based query results
+  - [ ] Assess query precision/recall
+  - [ ] Evaluate if keyword approach sufficient or need ChromaDB fallback
 
 ### Future Architectural Considerations (Post-Phase 5)
 - [ ] Evaluate if text-based retrieval is sufficient
@@ -49,6 +53,29 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 ---
 
 ## Decision Log
+
+### 2025-11-02: Phase 4-5 Architecture Revision - LLM Keyword Tagging
+
+**Decision:** Replace ChromaDB semantic search (old Phase 4) with LLM keyword tagging approach
+
+**Rationale:**
+- **Simpler architecture** - No ChromaDB integration needed for image search
+- **More interpretable** - Know exactly why images matched (keyword present)
+- **Better precision** - Curated keyword list + LLM semantic matching at index-time
+- **Faster queries** - Simple keyword lookup vs embedding computation
+- **One-time cost** - LLM processing during indexing, not per-query
+- **Debuggable** - Can review and refine keyword assignments
+
+**New Phase Structure:**
+- **Phase 4: LLM Keyword Tagging** - Build keyword list, tag messages, create message_keywords.json
+- **Phase 5: Keyword-Based Query** - Simple lookup and HTML viewer
+- **Old Phase 5 removed** - "Scale to full corpus" already happening organically
+
+**Architecture Impact:**
+- No ChromaDB metadata updates needed
+- No embedding computation during queries
+- New data file: message_keywords.json
+- Query interface significantly simplified
 
 ### 2025-11-02: Phase 1-2 Implementation Review
 
