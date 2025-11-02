@@ -93,12 +93,11 @@ def extract_keywords_from_filename(strFilename: str) -> List[str]:
             strName = strName[:-len(ext)]
             break
 
-    # Split on common delimiters: spaces, underscores, hyphens, dots
-    # Also handle camelCase by inserting spaces before uppercase letters
-    import re
     # Insert space before uppercase letters (for camelCase)
+    import re
     strName = re.sub(r'([a-z])([A-Z])', r'\1 \2', strName)
-    # Split on delimiters
+
+    # Split on common delimiters
     lstWords = re.split(r'[_\-\s.]+', strName)
 
     # Filter and normalize
@@ -106,6 +105,17 @@ def extract_keywords_from_filename(strFilename: str) -> List[str]:
     for strWord in lstWords:
         # Skip empty strings
         if not strWord:
+            continue
+
+        # Remove ALL punctuation from word (keeps only alphanumeric)
+        strWord = ''.join(c for c in strWord if c.isalnum())
+
+        # Skip if empty after cleaning
+        if not strWord:
+            continue
+
+        # Skip single characters (catches apostrophes, commas, etc.)
+        if len(strWord) == 1:
             continue
 
         # Normalize to lowercase
@@ -117,10 +127,6 @@ def extract_keywords_from_filename(strFilename: str) -> List[str]:
 
         # Skip pure numbers
         if strWord.isdigit():
-            continue
-
-        # Skip single letters (unless uppercase acronyms in original)
-        if len(strWord) == 1:
             continue
 
         # Skip very short words (< 3 chars) unless they're uppercase acronyms
