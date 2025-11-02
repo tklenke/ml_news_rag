@@ -276,8 +276,26 @@ Implement image database system following the incremental plan in `image_databas
 - [x] Help output tested with --help flag
 - [x] Commit: "Phase 2.5: Create CLI tool for batch downloads"
 
-### Phase 2.6: Download Full A/ Directory Images
-- [ ] **NEXT TASK:** Start Chrome with debug mode: `chrome.exe --remote-debugging-port=9222`
+### Phase 2.6: Debugging and Fixes
+**Issue:** Content-Length checking not working during downloads; extract_image_urls not recursing into subdirectories
+
+**Fixes Applied:**
+- [x] Add debug logging to download_batch() to diagnose Content-Length header issues
+  - Writes all HEAD request details to download_debug.log
+  - Logs HTTP status, all headers, Content-Length presence/value
+  - Logs decision (skip vs download) for each image
+  - Changed stats display frequency to every 10 images for testing
+- [x] Commit: "Add debug logging for Content-Length header diagnostics"
+- [x] Fix recursive directory search in extract_image_urls.py
+  - Changed glob("*.md") to rglob("*.md") for recursive subdirectory search
+  - Now properly processes all markdown files in subdirectories
+  - Fixes issue where running on data/msgs_md/ would miss A/, B/, etc.
+- [x] Commit: "Fix recursive directory search in extract_image_urls"
+- [ ] **TESTING:** Tom to test extract_image_urls on full data/msgs_md directory
+- [ ] **TESTING:** Tom to run download with debug logging and share download_debug.log for analysis
+
+### Phase 2.7: Download Full A/ Directory Images
+- [ ] Start Chrome with debug mode: `chrome.exe --remote-debugging-port=9222`
 - [ ] Log into Google Groups in Chrome
 - [ ] Run download with --limit 5 first for testing
 - [ ] Verify 5 test images download successfully
@@ -297,7 +315,8 @@ Implement image database system following the incremental plan in `image_databas
 
 **Phase 2 Implementation Complete - Waiting for Real Download Testing**
 - [x] **PHASE 2 IMPLEMENTATION COMPLETE** - All code written and tested with mocks
-- [ ] **PHASE 2 VALIDATION COMPLETE** - Waiting for actual download with Chrome debug mode (Phase 2.6)
+- [x] **PHASE 2 DEBUGGING FIXES** - Debug logging and recursive directory search fixes applied
+- [ ] **PHASE 2 VALIDATION COMPLETE** - Waiting for actual download with Chrome debug mode (Phase 2.7)
 
 ---
 
@@ -530,14 +549,20 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 
 **Currently Working On:**
 - [x] Phase 2.1 through 2.5 - COMPLETE (implementation and unit tests)
-- [ ] Phase 2.6 - Download Full A/ Directory Images (waiting for Chrome debug mode testing)
+- [x] Phase 2.6 - Debugging and Fixes - COMPLETE
+- [ ] Phase 2.7 - Download Full A/ Directory Images (waiting for Chrome debug mode testing)
 
-**Next Task:** Phase 2.6 - Test actual image downloads with Chrome debug mode
+**Next Task:** Testing fixes - Tom to test extract_image_urls recursive search and download debug logging
+
+**Recent Fixes (2025-11-02):**
+1. Added debug logging to diagnose Content-Length header issues (download_debug.log)
+2. Fixed recursive directory search in extract_image_urls.py (glob -> rglob)
 
 **Test Results:** 34 passed, 7 skipped
 - All batch download tests passing with mocked Selenium
 - Size filtering tests passing
 - Resume functionality tests passing
+- Build index tests passing with recursive glob
 - Ready for real-world testing with authenticated Chrome session
 
 ---
