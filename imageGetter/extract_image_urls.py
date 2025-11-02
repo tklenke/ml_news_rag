@@ -240,8 +240,17 @@ def build_image_index(strPath: str) -> Dict[str, Dict]:
             if not lstImages or not dctMetadata.get("message_id"):
                 continue
 
-            # Add to index keyed by message_id
+            # Add local_filename to each image
             strMessageId = dctMetadata["message_id"]
+            for dctImage in lstImages:
+                strLocalFilename = generate_filename(
+                    strMessageId,
+                    dctImage["url"],
+                    dctImage["part"]
+                )
+                dctImage["local_filename"] = strLocalFilename
+
+            # Add to index keyed by message_id
             dctIndex[strMessageId] = {
                 "metadata": dctMetadata,
                 "images": lstImages
