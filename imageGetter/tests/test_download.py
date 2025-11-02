@@ -384,3 +384,161 @@ class TestBatchDownload:
 
             # Should only call download_image twice (not for the existing file)
             assert mock_download_image.call_count == 2
+
+
+class TestSizeFiltering:
+    """Tests for filtering images by size."""
+
+    @patch('download_images.requests.head')
+    @patch('download_images.download_image')
+    def test_skip_images_smaller_than_3kb(self, mock_download_image, mock_head):
+        """Should skip images with Content-Length < 3KB."""
+        import tempfile
+        import json
+        from pathlib import Path
+
+        # Mock HEAD request to return small content-length
+        mock_response = Mock()
+        mock_response.headers = {'Content-Length': '2048'}  # 2KB
+        mock_head.return_value = mock_response
+
+        dctIndex = {
+            "MSG001": {
+                "metadata": {"message_id": "MSG001"},
+                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as strTempDir:
+            strIndexPath = f"{strTempDir}/index.json"
+            with open(strIndexPath, 'w') as f:
+                json.dump(dctIndex, f)
+
+            from download_images import download_batch
+
+            dctStats = download_batch(
+                strIndexPath,
+                f"{strTempDir}/images",
+                intLimit=None,
+                seleniumDriver=Mock()
+            )
+
+            # Should mark as too_small
+            assert dctStats["too_small"] == 1
+            # Should not download
+            assert mock_download_image.call_count == 0
+
+            # Should update index with size info
+            with open(strIndexPath, 'r') as f:
+                dctUpdatedIndex = json.load(f)
+
+            dctImageInfo = dctUpdatedIndex["MSG001"]["images"][0]
+            assert dctImageInfo["size_bytes"] == 2048
+            assert dctImageInfo["too_small"] == True
+
+        # RED: This test should fail
+        pytest.fail("Size filtering not yet implemented")
+
+    @patch('download_images.requests.head')
+    @patch('download_images.download_image')
+    def test_download_images_larger_than_3kb(self, mock_download_image, mock_head):
+        """Should download images with Content-Length >= 3KB."""
+        import tempfile
+        import json
+
+        # Mock HEAD request to return large content-length
+        mock_response = Mock()
+        mock_response.headers = {'Content-Length': '50000'}  # 50KB
+        mock_head.return_value = mock_response
+
+        # Mock successful download
+        mock_download_image.return_value = True
+
+        dctIndex = {
+            "MSG001": {
+                "metadata": {"message_id": "MSG001"},
+                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as strTempDir:
+            strIndexPath = f"{strTempDir}/index.json"
+            with open(strIndexPath, 'w') as f:
+                json.dump(dctIndex, f)
+
+            from download_images import download_batch
+
+            dctStats = download_batch(
+                strIndexPath,
+                f"{strTempDir}/images",
+                intLimit=None,
+                seleniumDriver=Mock()
+            )
+
+            # Should download
+            assert dctStats["success"] == 1
+            assert dctStats["too_small"] == 0
+            assert mock_download_image.call_count == 1
+
+            # Should update index with size info
+            with open(strIndexPath, 'r') as f:
+                dctUpdatedIndex = json.load(f)
+
+            dctImageInfo = dctUpdatedIndex["MSG001"]["images"][0]
+            assert dctImageInfo["size_bytes"] == 50000
+            assert dctImageInfo["too_small"] == False
+
+        # RED: This test should fail
+        pytest.fail("Size filtering not yet implemented")
+
+    @patch('download_images.requests.head')
+    @patch('download_images.download_image')
+    def test_handle_missing_content_length(self, mock_download_image, mock_head):
+        """Should download if Content-Length header is missing."""
+        import tempfile
+        import json
+
+        # Mock HEAD request without Content-Length header
+        mock_response = Mock()
+        mock_response.headers = {}  # No Content-Length
+        mock_head.return_value = mock_response
+
+        # Mock successful download
+        mock_download_image.return_value = True
+
+        dctIndex = {
+            "MSG001": {
+                "metadata": {"message_id": "MSG001"},
+                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as strTempDir:
+            strIndexPath = f"{strTempDir}/index.json"
+            with open(strIndexPath, 'w') as f:
+                json.dump(dctIndex, f)
+
+            from download_images import download_batch
+
+            dctStats = download_batch(
+                strIndexPath,
+                f"{strTempDir}/images",
+                intLimit=None,
+                seleniumDriver=Mock()
+            )
+
+            # Should download anyway (can't determine size)
+            assert dctStats["success"] == 1
+            assert dctStats["too_small"] == 0
+            assert mock_download_image.call_count == 1
+
+            # Should record size as null
+            with open(strIndexPath, 'r') as f:
+                dctUpdatedIndex = json.load(f)
+
+            dctImageInfo = dctUpdatedIndex["MSG001"]["images"][0]
+            assert dctImageInfo["size_bytes"] is None
+            assert dctImageInfo["too_small"] == False
+
+        # RED: This test should fail
+        pytest.fail("Size filtering not yet implemented")
