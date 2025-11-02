@@ -5,6 +5,65 @@ import re
 from typing import List, Dict
 from urllib.parse import urlparse, parse_qs, unquote
 
+# Blacklist: Filenames to exclude (UI elements, emoticons, signatures, temp files)
+# These are non-content images that appear in email threads but aren't aircraft photos
+BLACKLIST_EXACT = {
+    # UI Elements and dividers
+    'graycol.gif',
+    'ecblank.gif',
+
+    # Email signatures
+    'UFAC Salutation.jpg',
+    'UFACSalutation.jpg',
+
+    # Animated GIFs / emoticons
+    'Animation1.gif',
+    'dancing-banana.gif',
+    'dancing_cactus_lg_wht_3429.gif',
+    'wow_waving_md_wht.gif',
+    'soapbox.gif',
+    'Emoticon1.gif',
+    'EZ roll+circle.gif',
+    'EZ%20roll%2Bcircle.gif',
+    'Arrrgghh_11535.gif',
+
+    # Temporary/embedded files
+    'GPTempDownload.jpg',
+    'kamp_kozy.bmp',
+}
+
+# Blacklist: Filename patterns to exclude (regex patterns)
+BLACKLIST_PATTERNS = [
+    r'^wlEmoticon-.*\.png$',           # Windows Live emoticons
+    r'^~WRD\d+\.jpg$',                 # Word temp files
+    r'^ole\d+\.bmp$',                  # OLE embedded objects
+    r'^[0-9A-F]{3,4}\.gif$',           # Hex-named GIFs (tracking pixels)
+    r'^[a-f0-9]{7}\.jpg$',             # 7-char hex filenames (generic/tracking)
+    r'^[a-f0-9]{7}\.gif$',             # 7-char hex GIF filenames
+]
+
+
+def is_blacklisted(strFilename: str) -> bool:
+    """
+    Check if filename should be filtered out (junk/non-content images).
+
+    Args:
+        strFilename: Image filename to check
+
+    Returns:
+        True if filename is blacklisted, False otherwise
+    """
+    # Check exact matches
+    if strFilename in BLACKLIST_EXACT:
+        return True
+
+    # Check pattern matches
+    for strPattern in BLACKLIST_PATTERNS:
+        if re.match(strPattern, strFilename, re.IGNORECASE):
+            return True
+
+    return False
+
 
 def extract_image_urls(strMarkdownContent: str) -> List[Dict[str, str]]:
     """
@@ -18,6 +77,7 @@ def extract_image_urls(strMarkdownContent: str) -> List[Dict[str, str]]:
     - Tracking pixels (ci*.googleusercontent.com/proxy)
     - External site images
     - Logos and UI elements
+    - Blacklisted files (emoticons, signatures, temp files, animated GIFs)
 
     Args:
         strMarkdownContent: Markdown file content as string
@@ -46,7 +106,11 @@ def extract_image_urls(strMarkdownContent: str) -> List[Dict[str, str]]:
         if strUrl.startswith('https://groups.google.com/group/cozy_builders/attach/'):
             dctImageData = _parse_attachment_url(strUrl)
             if dctImageData:
-                lstResults.append(dctImageData)
+                # Check if filename is blacklisted (junk/non-content)
+                strFilename = dctImageData.get('filename', '')
+                if not is_blacklisted(strFilename):
+                    lstResults.append(dctImageData)
+                # If blacklisted, silently skip (don't add to results)
 
     return lstResults
 
