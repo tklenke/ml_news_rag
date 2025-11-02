@@ -291,10 +291,61 @@ Implement image database system following the incremental plan in `image_databas
   - Now properly processes all markdown files in subdirectories
   - Fixes issue where running on data/msgs_md/ would miss A/, B/, etc.
 - [x] Commit: "Fix recursive directory search in extract_image_urls"
-- [ ] **TESTING:** Tom to test extract_image_urls on full data/msgs_md directory
+- [x] **TESTING:** Tom to test extract_image_urls on full data/msgs_md directory
 - [ ] **TESTING:** Tom to run download with debug logging and share download_debug.log for analysis
 
-### Phase 2.7: Download Full A/ Directory Images
+### Phase 2.7: Extract Image URLs Enhancements
+**Goal:** Improve image extraction with blacklist filtering, keyword extraction, and better statistics
+
+**Enhancements Applied:**
+- [x] Add blacklist filter to exclude junk images during extraction (Lines 8-65)
+  - BLACKLIST_EXACT: Exact filename matches (graycol.gif, UFAC Salutation.jpg, emoticons, animated GIFs)
+  - BLACKLIST_PATTERNS: Regex patterns (wlEmoticon-*.png, ~WRD*.jpg, ole*.bmp, hex-named files)
+  - is_blacklisted() function checks filenames during extraction
+  - Filters ~400+ junk images based on analysis of 6,858 images
+- [x] Commit: "Add blacklist filter to exclude junk images during extraction"
+- [x] Enhance CLI to positional args and auto-generate timestamped filenames
+  - Changed from --input/--output to SOURCE DEST positional args
+  - Auto-generate: indexYYMMDDHHMMSS.idx and index_stats_YYMMDDHHMMSS.txt
+  - DEST is now a directory (creates both files there)
+  - Track duplicate filenames and output statistics
+- [x] Commit: "Enhance extract_image_urls with duplicate tracking and new CLI"
+- [x] Add keyword extraction from filenames (Lines 46-161)
+  - extract_keywords_from_filename() parses filenames for searchable terms
+  - Splits on delimiters: spaces, underscores, hyphens, camelCase
+  - Filters stopwords: img, image, photo, common English words, time indicators
+  - Filters noise: numbers, hex codes, camera filenames, single letters, parentheticals
+  - Returns lowercase keywords for consistency
+  - Keywords added to each image dict in index
+- [x] Add keyword statistics to output (Lines 491-588)
+  - Track keyword counts across all images
+  - Stats file includes keyword frequency section sorted by count descending
+  - Console shows unique keyword count
+- [x] Commit: "Add keyword extraction from filenames with statistics"
+- [x] Improve keyword filtering to remove noise terms
+  - Expanded stopwords: the, and, for, pm, am, shot, screen, pasted, graphic
+  - Filter parentheticals: (2), (large), (sm)
+  - Filter bracketed expressions: n[1], 1[1]
+  - Filter single letters
+  - Results in clean aircraft-focused keywords only
+- [x] Commit: "Improve keyword filtering to remove noise terms"
+- [x] Verify download_images.py compatibility with new index format
+  - Keywords field preserved during download
+  - All existing fields (url, local_filename) still present
+  - No code changes needed to download_images.py
+- [x] Update test expected outputs to include keywords field
+  - Updated A20JX9PGHII_expected.json
+  - Updated a42YFDFx8WY_expected.json
+  - All tests passing (11 passed, 3 skipped)
+
+**Results:**
+- Blacklist reduces noise by ~400+ junk images
+- Keywords enable searchable image index (cozy, fuel, nose, canopy, landing, gear, wing)
+- Duplicate filename stats show most repeated files
+- Keyword frequency stats show most common aircraft terms
+- Index format: {"url": "...", "filename": "...", "local_filename": "...", "keywords": ["landing", "light"]}
+
+### Phase 2.8: Download Full A/ Directory Images
 - [ ] Start Chrome with debug mode: `chrome.exe --remote-debugging-port=9222`
 - [ ] Log into Google Groups in Chrome
 - [ ] Run download with --limit 5 first for testing
@@ -316,7 +367,8 @@ Implement image database system following the incremental plan in `image_databas
 **Phase 2 Implementation Complete - Waiting for Real Download Testing**
 - [x] **PHASE 2 IMPLEMENTATION COMPLETE** - All code written and tested with mocks
 - [x] **PHASE 2 DEBUGGING FIXES** - Debug logging and recursive directory search fixes applied
-- [ ] **PHASE 2 VALIDATION COMPLETE** - Waiting for actual download with Chrome debug mode (Phase 2.7)
+- [x] **PHASE 2 EXTRACTION ENHANCEMENTS** - Blacklist filtering, keyword extraction, improved CLI
+- [ ] **PHASE 2 VALIDATION COMPLETE** - Waiting for actual download with Chrome debug mode (Phase 2.8)
 
 ---
 
@@ -550,20 +602,34 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 **Currently Working On:**
 - [x] Phase 2.1 through 2.5 - COMPLETE (implementation and unit tests)
 - [x] Phase 2.6 - Debugging and Fixes - COMPLETE
-- [ ] Phase 2.7 - Download Full A/ Directory Images (waiting for Chrome debug mode testing)
+- [x] Phase 2.7 - Extract Image URLs Enhancements - COMPLETE
+- [ ] Phase 2.8 - Download Full A/ Directory Images (waiting for Chrome debug mode testing)
 
-**Next Task:** Testing fixes - Tom to test extract_image_urls recursive search and download debug logging
+**Next Task:** Phase 2.8 - Tom to test download with Chrome debug mode and analyze debug log
 
-**Recent Fixes (2025-11-02):**
-1. Added debug logging to diagnose Content-Length header issues (download_debug.log)
+**Recent Enhancements (2025-11-02):**
+1. Added debug logging for Content-Length header diagnostics (download_debug.log)
 2. Fixed recursive directory search in extract_image_urls.py (glob -> rglob)
+3. Added blacklist filter to exclude junk images (~400+ filtered)
+4. Enhanced CLI with positional args and timestamped output files
+5. Added keyword extraction from filenames (searchable terms)
+6. Added duplicate filename and keyword frequency statistics
+7. Improved keyword filtering to remove noise terms
+8. Verified download_images.py compatibility with new index format
 
-**Test Results:** 34 passed, 7 skipped
+**Test Results:** 41 passed, 7 skipped
 - All batch download tests passing with mocked Selenium
 - Size filtering tests passing
 - Resume functionality tests passing
 - Build index tests passing with recursive glob
+- Extract URL tests passing with keywords field
+- Keyword extraction validated with realistic filenames
 - Ready for real-world testing with authenticated Chrome session
+
+**Index Format Enhanced:**
+- Added `keywords` field to each image for searchable terms
+- Format: {"url": "...", "filename": "...", "local_filename": "...", "keywords": ["landing", "light"]}
+- Backward compatible with download_images.py
 
 ---
 
