@@ -4,15 +4,159 @@
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
+from tempfile import NamedTemporaryFile
+import os
 
 # Import function to test (will be implemented in Phase 2.2)
 # import sys
 # sys.path.insert(0, str(Path(__file__).parent.parent))
-# from download_images import download_image
+# from download_images import download_image, create_selenium_driver
 
 
 class TestDownloadImage:
     """Tests for downloading single image from URL."""
 
-    # Tests will be added in Phase 2.2 RED phase
-    pass
+    def test_download_single_image_success(self):
+        """Should download image using Selenium and save to file."""
+        strUrl = "https://groups.google.com/group/cozy_builders/attach/hash/test.jpg?part=0.1"
+
+        with NamedTemporaryFile(mode='wb', suffix='.jpg', delete=False) as f:
+            strOutputPath = f.name
+
+        try:
+            # Create mock Selenium driver
+            # mockDriver = Mock()
+            # mockDriver.get = Mock()
+            # mockDriver.page_source = "<html><img src='data:image/jpeg;base64,...'/></html>"
+
+            # Download image
+            # boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=mockDriver)
+
+            # Should succeed
+            # assert boolSuccess == True
+            # assert Path(strOutputPath).exists()
+            # assert Path(strOutputPath).stat().st_size > 0
+
+            # RED: This test should fail
+            pytest.fail("Function download_image() not yet implemented")
+        finally:
+            if os.path.exists(strOutputPath):
+                os.unlink(strOutputPath)
+
+    def test_handle_download_failure(self):
+        """Should return False when download fails."""
+        strUrl = "https://groups.google.com/group/cozy_builders/attach/hash/nonexistent.jpg?part=0.1"
+
+        with NamedTemporaryFile(mode='wb', suffix='.jpg', delete=False) as f:
+            strOutputPath = f.name
+
+        try:
+            # Create mock Selenium driver that raises exception
+            # mockDriver = Mock()
+            # mockDriver.get = Mock(side_effect=Exception("Page not found"))
+
+            # Download image
+            # boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=mockDriver, intRetries=1)
+
+            # Should fail gracefully
+            # assert boolSuccess == False
+
+            # RED: This test should fail
+            pytest.fail("Function download_image() not yet implemented")
+        finally:
+            if os.path.exists(strOutputPath):
+                os.unlink(strOutputPath)
+
+    def test_retry_on_failure(self):
+        """Should retry specified number of times on failure."""
+        strUrl = "https://groups.google.com/group/cozy_builders/attach/hash/test.jpg?part=0.1"
+
+        with NamedTemporaryFile(mode='wb', suffix='.jpg', delete=False) as f:
+            strOutputPath = f.name
+
+        try:
+            # Create mock that fails twice then succeeds
+            # mockDriver = Mock()
+            # mockDriver.get = Mock(side_effect=[Exception("Timeout"), Exception("Timeout"), None])
+
+            # Download with 3 retries
+            # boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=mockDriver, intRetries=3)
+
+            # Should succeed on third try
+            # assert boolSuccess == True
+            # assert mockDriver.get.call_count == 3
+
+            # RED: This test should fail
+            pytest.fail("Function download_image() not yet implemented")
+        finally:
+            if os.path.exists(strOutputPath):
+                os.unlink(strOutputPath)
+
+    def test_validate_image_after_download(self):
+        """Should validate downloaded file is a valid image."""
+        strUrl = "https://groups.google.com/group/cozy_builders/attach/hash/test.jpg?part=0.1"
+
+        with NamedTemporaryFile(mode='wb', suffix='.jpg', delete=False) as f:
+            strOutputPath = f.name
+            # Write invalid image data
+            f.write(b"<html>Not an image</html>")
+
+        try:
+            # Download should fail validation
+            # mockDriver = Mock()
+            # boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=mockDriver)
+
+            # Should return False for invalid image
+            # assert boolSuccess == False
+
+            # RED: This test should fail
+            pytest.fail("Function download_image() not yet implemented")
+        finally:
+            if os.path.exists(strOutputPath):
+                os.unlink(strOutputPath)
+
+    def test_create_output_directory_if_needed(self):
+        """Should create parent directory if it doesn't exist."""
+        import tempfile
+
+        # Create temp directory that we'll delete
+        strTempDir = tempfile.mkdtemp()
+        strSubDir = os.path.join(strTempDir, "subdir", "images")
+        strOutputPath = os.path.join(strSubDir, "test.jpg")
+
+        try:
+            # Delete the temp dir
+            import shutil
+            shutil.rmtree(strTempDir)
+
+            # Directory should not exist
+            # assert not Path(strSubDir).exists()
+
+            # Download should create directory
+            # mockDriver = Mock()
+            # boolSuccess = download_image("http://test.com/img.jpg", strOutputPath, seleniumDriver=mockDriver)
+
+            # Directory should now exist
+            # assert Path(strSubDir).exists()
+
+            # RED: This test should fail
+            pytest.fail("Function download_image() not yet implemented")
+        finally:
+            if os.path.exists(strTempDir):
+                import shutil
+                shutil.rmtree(strTempDir)
+
+
+class TestSeleniumDriver:
+    """Tests for Selenium driver creation."""
+
+    def test_create_selenium_driver(self):
+        """Should create Selenium driver connected to Chrome debug port."""
+        # This is integration test - will be mocked in unit tests
+
+        # driver = create_selenium_driver()
+        # assert driver is not None
+        # driver.quit()
+
+        # RED: This test should fail
+        pytest.fail("Function create_selenium_driver() not yet implemented")
