@@ -69,26 +69,38 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
             # Get page source and check if it's an image
             # Google Groups might display image directly or embed it
             try:
-                # Try to find img tag with the actual image
-                imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
-                strSrc = imgElement.get_attribute("src")
+                # Check if URL has &view=1 (returns HTML wrapper with embedded image)
+                if '&view=1' in strUrl or '?view=1' in strUrl:
+                    # Parse HTML to extract real image URL from <img src>
+                    imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
+                    strSrc = imgElement.get_attribute("src")
 
-                # If it's a data URL, extract the image
-                if strSrc.startswith("data:image"):
-                    import base64
-                    # Extract base64 data
-                    strData = strSrc.split(",")[1]
-                    bytesData = base64.b64decode(strData)
-
-                    # Save to file
-                    with open(strOutputPath, 'wb') as f:
-                        f.write(bytesData)
-                else:
-                    # It's a regular URL - download it
+                    # Download from the extracted src URL
                     import requests
                     response = requests.get(strSrc)
                     with open(strOutputPath, 'wb') as f:
                         f.write(response.content)
+                else:
+                    # Try to find img tag with the actual image
+                    imgElement = seleniumDriver.find_element(By.TAG_NAME, "img")
+                    strSrc = imgElement.get_attribute("src")
+
+                    # If it's a data URL, extract the image
+                    if strSrc.startswith("data:image"):
+                        import base64
+                        # Extract base64 data
+                        strData = strSrc.split(",")[1]
+                        bytesData = base64.b64decode(strData)
+
+                        # Save to file
+                        with open(strOutputPath, 'wb') as f:
+                            f.write(bytesData)
+                    else:
+                        # It's a regular URL - download it
+                        import requests
+                        response = requests.get(strSrc)
+                        with open(strOutputPath, 'wb') as f:
+                            f.write(response.content)
 
             except Exception:
                 # If no img tag, try to get the page content directly
@@ -190,6 +202,10 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     # Counter for periodic stats display and index saving
     intProcessedCount = 0
 
+    # Track file sizes to detect duplicate downloads
+    intLastFileSize = None
+    strLastFilename = None
+
     # Create output directory
     pathOutputDir = Path(strOutputDir)
     pathOutputDir.mkdir(parents=True, exist_ok=True)
@@ -272,9 +288,24 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
 
         if boolSuccess:
             dctStats["success"] += 1
-            # Update size with actual file size if we didn't get it from HEAD
-            if intSizeBytes is None and pathOutputFile.exists():
-                dctImageRef["size_bytes"] = pathOutputFile.stat().st_size
+            # Get actual file size from downloaded file
+            if pathOutputFile.exists():
+                intActualSize = pathOutputFile.stat().st_size
+                dctImageRef["size_bytes"] = intActualSize
+
+                # Check for duplicate file sizes (potential problem)
+                if intLastFileSize is not None and intActualSize == intLastFileSize and strLocalFilename != strLastFilename:
+                    fileDebug.write(f"\n⚠️  WARNING: Duplicate file size detected!\n")
+                    fileDebug.write(f"  Previous: {strLastFilename} ({intLastFileSize} bytes)\n")
+                    fileDebug.write(f"  Current:  {strLocalFilename} ({intActualSize} bytes)\n")
+                    fileDebug.write(f"  This may indicate the same image was downloaded twice.\n")
+                    fileDebug.flush()
+                    print(f"\n⚠️  WARNING: Duplicate file size!")
+                    print(f"  {strLastFilename} and {strLocalFilename} both {intActualSize} bytes")
+
+                # Update tracking
+                intLastFileSize = intActualSize
+                strLastFilename = strLocalFilename
         else:
             dctStats["failed"] += 1
 
