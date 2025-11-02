@@ -139,6 +139,45 @@ def _parse_attachment_url(strUrl: str) -> Dict[str, str]:
         return None
 
 
+def generate_filename(strMessageId: str, strUrl: str, strPart: str) -> str:
+    """
+    Generate standardized local filename for downloaded image.
+
+    Format: {message_id}_part{part}_{filename}
+    - Replaces dots in part number with underscores (0.1 -> 0_1)
+    - Replaces spaces in filename with underscores
+    - Preserves file extension case
+    - Preserves message_id case
+
+    Args:
+        strMessageId: Message ID (e.g., "a42YFDFx8WY")
+        strUrl: Full image URL (used to extract filename if needed)
+        strPart: Part number (e.g., "0.1", "0.2")
+
+    Returns:
+        Standardized filename (e.g., "a42YFDFx8WY_part0_1_Image.jpeg")
+    """
+    from urllib.parse import urlparse, unquote
+
+    # Extract filename from URL
+    parsed = urlparse(strUrl)
+    strPath = parsed.path
+    lstPathParts = strPath.split('/')
+    if len(lstPathParts) >= 5:
+        strFilename = unquote(lstPathParts[-1])  # Last part is filename
+    else:
+        strFilename = "unknown"
+
+    # Replace dots in part number with underscores
+    strPartNormalized = strPart.replace('.', '_')
+
+    # Replace spaces in filename with underscores
+    strFilenameNormalized = strFilename.replace(' ', '_')
+
+    # Build final filename
+    return f"{strMessageId}_part{strPartNormalized}_{strFilenameNormalized}"
+
+
 def build_image_index(strPath: str) -> Dict[str, Dict]:
     """
     Build an image index from markdown file(s).

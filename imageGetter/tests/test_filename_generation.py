@@ -4,10 +4,10 @@
 import pytest
 from pathlib import Path
 
-# Import function to test (will be implemented in GREEN phase)
-# import sys
-# sys.path.insert(0, str(Path(__file__).parent.parent))
-# from extract_image_urls import generate_filename
+# Import function to test
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from extract_image_urls import generate_filename
 
 
 class TestFilenameGeneration:
@@ -21,13 +21,10 @@ class TestFilenameGeneration:
         strOriginalFilename = "image001.gif"
 
         # Generate filename
-        # strFilename = generate_filename(strMessageId, strUrl, strPart)
+        strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Should be: message_id + part + filename
-        # assert strFilename == "A20JX9PGHII_part0_1_image001.gif"
-
-        # RED: This test should fail
-        pytest.fail("Function generate_filename() not yet implemented")
+        assert strFilename == "A20JX9PGHII_part0_1_image001.gif"
 
     def test_replace_spaces_with_underscores(self):
         """Should replace spaces in filename with underscores."""
@@ -37,13 +34,10 @@ class TestFilenameGeneration:
         strOriginalFilename = "p-lead wiring.gif"
 
         # Generate filename
-        # strFilename = generate_filename(strMessageId, strUrl, strPart)
+        strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Spaces should be replaced with underscores
-        # assert strFilename == "ABC123_part0_1_p-lead_wiring.gif"
-
-        # RED: This test should fail
-        pytest.fail("Function generate_filename() not yet implemented")
+        assert strFilename == "ABC123_part0_1_p-lead_wiring.gif"
 
     def test_replace_dots_in_part_number(self):
         """Should replace dots in part number with underscores."""
@@ -53,13 +47,10 @@ class TestFilenameGeneration:
         strOriginalFilename = "image.jpg"
 
         # Generate filename
-        # strFilename = generate_filename(strMessageId, strUrl, strPart)
+        strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Part number dot should be replaced
-        # assert strFilename == "XYZ789_part0_2_image.jpg"
-
-        # RED: This test should fail
-        pytest.fail("Function generate_filename() not yet implemented")
+        assert strFilename == "XYZ789_part0_2_image.jpg"
 
     def test_preserve_file_extension(self):
         """Should preserve the file extension correctly."""
@@ -69,13 +60,10 @@ class TestFilenameGeneration:
         strOriginalFilename = "Photo.JPEG"
 
         # Generate filename
-        # strFilename = generate_filename(strMessageId, strUrl, strPart)
+        strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Extension should be preserved (case-sensitive)
-        # assert strFilename == "TEST123_part0_1_Photo.JPEG"
-
-        # RED: This test should fail
-        pytest.fail("Function generate_filename() not yet implemented")
+        assert strFilename == "TEST123_part0_1_Photo.JPEG"
 
     def test_handle_multiple_spaces(self):
         """Should handle multiple consecutive spaces."""
@@ -85,13 +73,10 @@ class TestFilenameGeneration:
         strOriginalFilename = "Screenshot 2025-06-15 145512.png"
 
         # Generate filename
-        # strFilename = generate_filename(strMessageId, strUrl, strPart)
+        strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # All spaces replaced
-        # assert strFilename == "ABC_part0_1_Screenshot_2025-06-15_145512.png"
-
-        # RED: This test should fail
-        pytest.fail("Function generate_filename() not yet implemented")
+        assert strFilename == "ABC_part0_1_Screenshot_2025-06-15_145512.png"
 
     def test_handle_filename_from_url(self):
         """Should extract filename from URL when passed separately."""
@@ -101,13 +86,10 @@ class TestFilenameGeneration:
         strOriginalFilename = "Image.jpeg"
 
         # Generate filename
-        # strFilename = generate_filename(strMessageId, strUrl, strPart)
+        strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Should work with query parameters in URL
-        # assert strFilename == "a42YFDFx8WY_part0_1_Image.jpeg"
-
-        # RED: This test should fail
-        pytest.fail("Function generate_filename() not yet implemented")
+        assert strFilename == "a42YFDFx8WY_part0_1_Image.jpeg"
 
     def test_handle_lowercase_message_id(self):
         """Should preserve case of message_id."""
@@ -117,10 +99,7 @@ class TestFilenameGeneration:
         strOriginalFilename = "test.jpg"
 
         # Generate filename
-        # strFilename = generate_filename(strMessageId, strUrl, strPart)
+        strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Case should be preserved
-        # assert strFilename == "a42YFDFx8WY_part0_3_test.jpg"
-
-        # RED: This test should fail
-        pytest.fail("Function generate_filename() not yet implemented")
+        assert strFilename == "a42YFDFx8WY_part0_3_test.jpg"
