@@ -9,5 +9,8 @@ Pillow>=10.0.0
 # HTTP requests
 requests>=2.31.0
 
+# Browser automation (for authenticated downloads)
+selenium>=4.0.0
+
 # Progress bars
 tqdm>=4.65.0
