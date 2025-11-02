@@ -2,3 +2,12 @@
 
 # Testing
 pytest>=8.4.2
+
+# Image processing
+Pillow>=10.0.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Progress bars
+tqdm>=4.65.0

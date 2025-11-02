@@ -59,7 +59,12 @@ pip install -r requirements.txt
 
 ### For Image Download (Phase 2)
 
-You must have Chrome running in debug mode with Google Groups authentication:
+**Phase 2.2-2.4:** Uses standard HTTP requests (requests library)
+- Most Google Groups attachment URLs are publicly accessible
+- Includes retry logic with exponential backoff
+- Validates images after download
+
+**Fallback (if needed):** If attachments require authentication, we'll use Selenium with Chrome debug mode:
 
 ```bash
 # Windows
@@ -69,9 +74,9 @@ chrome.exe --remote-debugging-port=9222
 google-chrome --remote-debugging-port=9222
 ```
 
-**Important:** Log into Google Groups in this Chrome instance before running download scripts.
+**Important:** Log into Google Groups in the Chrome instance before running download scripts.
 
-### ChromeDriver
+### ChromeDriver (only if Selenium needed)
 
 ChromeDriver must be available at `../../chromedriver-win64/chromedriver.exe` (relative to this directory).
 
