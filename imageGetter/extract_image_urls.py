@@ -80,7 +80,7 @@ def extract_keywords_from_filename(strFilename: str) -> List[str]:
 
         # Common English words
         'the', 'and', 'for', 'with', 'from', 'after', 'before', 'of', 'in', 'on', 'at',
-        'to', 'a', 'an', 'by', 'or',
+        'to', 'a', 'an', 'by', 'or', 'my', 'just', 'that', 'this', 'all',
 
         # Time indicators
         'pm', 'am',
@@ -425,7 +425,11 @@ def build_image_index(strPath: str) -> Dict[str, Dict]:
             if not lstImages or not dctMetadata.get("message_id"):
                 continue
 
-            # Add local_filename to each image
+            # Extract keywords from subject line (applies to all images in this message)
+            strSubject = dctMetadata.get("subject", "")
+            lstSubjectKeywords = extract_keywords_from_filename(strSubject) if strSubject else []
+
+            # Add local_filename and merge subject keywords with filename keywords
             strMessageId = dctMetadata["message_id"]
             for dctImage in lstImages:
                 strLocalFilename = generate_filename(
@@ -434,6 +438,11 @@ def build_image_index(strPath: str) -> Dict[str, Dict]:
                     dctImage["part"]
                 )
                 dctImage["local_filename"] = strLocalFilename
+
+                # Combine subject keywords with filename keywords (deduplicate)
+                lstFilenameKeywords = dctImage.get("keywords", [])
+                lstCombinedKeywords = lstFilenameKeywords + [kw for kw in lstSubjectKeywords if kw not in lstFilenameKeywords]
+                dctImage["keywords"] = lstCombinedKeywords
 
             # Add to index keyed by message_id
             dctIndex[strMessageId] = {
