@@ -179,3 +179,144 @@ class TestSeleniumDriver:
 
         # RED: This test should fail
         pytest.fail("Function create_selenium_driver() not yet implemented")
+
+
+class TestBatchDownload:
+    """Tests for batch downloading multiple images."""
+
+    def test_download_batch_basic(self):
+        """Should download multiple images and track progress."""
+        import tempfile
+        import json
+
+        # Create minimal image index
+        dctIndex = {
+            "MSG001": {
+                "metadata": {"message_id": "MSG001", "subject": "Test 1"},
+                "images": [
+                    {
+                        "url": "https://groups.google.com/group/test/attach/hash/img1.jpg?part=0.1",
+                        "part": "0.1",
+                        "filename": "img1.jpg",
+                        "local_filename": "MSG001_part0_1_img1.jpg"
+                    }
+                ]
+            },
+            "MSG002": {
+                "metadata": {"message_id": "MSG002", "subject": "Test 2"},
+                "images": [
+                    {
+                        "url": "https://groups.google.com/group/test/attach/hash/img2.jpg?part=0.1",
+                        "part": "0.1",
+                        "filename": "img2.jpg",
+                        "local_filename": "MSG002_part0_1_img2.jpg"
+                    }
+                ]
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as strTempDir:
+            # Save index to temp file
+            strIndexPath = f"{strTempDir}/index.json"
+            with open(strIndexPath, 'w') as f:
+                json.dump(dctIndex, f)
+
+            # Download batch
+            from download_images import download_batch
+
+            dctStats = download_batch(
+                strIndexPath,
+                f"{strTempDir}/images",
+                intLimit=None,
+                seleniumDriver=Mock()  # Mock driver
+            )
+
+            # Should track statistics
+            assert "total" in dctStats
+            assert "success" in dctStats
+            assert "failed" in dctStats
+
+        # RED: This test should fail
+        pytest.fail("Function download_batch() not yet implemented")
+
+    def test_download_batch_with_limit(self):
+        """Should respect limit parameter."""
+        import tempfile
+        import json
+
+        # Create index with 3 images
+        dctIndex = {
+            "MSG001": {
+                "metadata": {"message_id": "MSG001"},
+                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
+            },
+            "MSG002": {
+                "metadata": {"message_id": "MSG002"},
+                "images": [{"url": "http://test2.jpg", "local_filename": "test2.jpg"}]
+            },
+            "MSG003": {
+                "metadata": {"message_id": "MSG003"},
+                "images": [{"url": "http://test3.jpg", "local_filename": "test3.jpg"}]
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as strTempDir:
+            strIndexPath = f"{strTempDir}/index.json"
+            with open(strIndexPath, 'w') as f:
+                json.dump(dctIndex, f)
+
+            from download_images import download_batch
+
+            # Download only 2 images
+            dctStats = download_batch(
+                strIndexPath,
+                f"{strTempDir}/images",
+                intLimit=2,
+                seleniumDriver=Mock()
+            )
+
+            # Should only attempt 2 downloads
+            assert dctStats["total"] == 2
+
+        # RED: This test should fail
+        pytest.fail("Function download_batch() not yet implemented")
+
+    def test_download_batch_continue_on_failure(self):
+        """Should continue downloading even if some images fail."""
+        import tempfile
+        import json
+
+        dctIndex = {
+            "MSG001": {
+                "metadata": {"message_id": "MSG001"},
+                "images": [{"url": "http://test1.jpg", "local_filename": "test1.jpg"}]
+            },
+            "MSG002": {
+                "metadata": {"message_id": "MSG002"},
+                "images": [{"url": "http://test2.jpg", "local_filename": "test2.jpg"}]
+            }
+        }
+
+        with tempfile.TemporaryDirectory() as strTempDir:
+            strIndexPath = f"{strTempDir}/index.json"
+            with open(strIndexPath, 'w') as f:
+                json.dump(dctIndex, f)
+
+            # Create mock driver that fails on first image, succeeds on second
+            mockDriver = Mock()
+            # We'll need to mock download_image to control success/failure
+
+            from download_images import download_batch
+
+            dctStats = download_batch(
+                strIndexPath,
+                f"{strTempDir}/images",
+                intLimit=None,
+                seleniumDriver=mockDriver
+            )
+
+            # Should attempt both even if one fails
+            assert dctStats["total"] == 2
+
+        # RED: This test should fail
+        pytest.fail("Function download_batch() not yet implemented")
