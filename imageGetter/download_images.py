@@ -2,12 +2,14 @@
 # ABOUTME: Handles retry logic, validation, and progress tracking for batch downloads
 
 import time
+import json
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict
 from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from tqdm import tqdm
 
 
 def create_selenium_driver():
@@ -132,3 +134,81 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
             pass
 
     return False
+
+
+def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int] = None, seleniumDriver=None) -> Dict[str, int]:
+    """
+    Download all images from image index with progress tracking.
+
+    Args:
+        strIndexPath: Path to image_index.json file
+        strOutputDir: Directory to save downloaded images
+        intLimit: Optional limit on number of images to download
+        seleniumDriver: Optional Selenium driver (for testing). If None, creates new one.
+
+    Returns:
+        Dict with statistics: {"total": int, "success": int, "failed": int}
+    """
+    # Load image index
+    with open(strIndexPath, 'r', encoding='utf-8') as f:
+        dctIndex = json.load(f)
+
+    # Collect all images from all messages
+    lstAllImages = []
+    for strMessageId, dctEntry in dctIndex.items():
+        for dctImage in dctEntry["images"]:
+            lstAllImages.append({
+                "message_id": strMessageId,
+                "url": dctImage["url"],
+                "local_filename": dctImage["local_filename"]
+            })
+
+    # Apply limit if specified
+    if intLimit is not None:
+        lstAllImages = lstAllImages[:intLimit]
+
+    # Initialize statistics
+    dctStats = {
+        "total": len(lstAllImages),
+        "success": 0,
+        "failed": 0
+    }
+
+    # Create output directory
+    pathOutputDir = Path(strOutputDir)
+    pathOutputDir.mkdir(parents=True, exist_ok=True)
+
+    # Create driver if not provided
+    boolCloseDriver = False
+    if seleniumDriver is None:
+        try:
+            seleniumDriver = create_selenium_driver()
+            boolCloseDriver = True
+        except Exception as e:
+            print(f"Failed to create Selenium driver: {e}")
+            # Mark all as failed
+            dctStats["failed"] = dctStats["total"]
+            return dctStats
+
+    # Download each image with progress bar
+    for dctImageInfo in tqdm(lstAllImages, desc="Downloading images", unit="image"):
+        strUrl = dctImageInfo["url"]
+        strLocalFilename = dctImageInfo["local_filename"]
+        strOutputPath = str(pathOutputDir / strLocalFilename)
+
+        # Download image
+        boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3)
+
+        if boolSuccess:
+            dctStats["success"] += 1
+        else:
+            dctStats["failed"] += 1
+
+    # Close driver if we created it
+    if boolCloseDriver:
+        try:
+            seleniumDriver.quit()
+        except:
+            pass
+
+    return dctStats

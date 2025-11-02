@@ -184,10 +184,14 @@ class TestSeleniumDriver:
 class TestBatchDownload:
     """Tests for batch downloading multiple images."""
 
-    def test_download_batch_basic(self):
+    @patch('download_images.download_image')
+    def test_download_batch_basic(self, mock_download_image):
         """Should download multiple images and track progress."""
         import tempfile
         import json
+
+        # Mock download_image to always succeed
+        mock_download_image.return_value = True
 
         # Create minimal image index
         dctIndex = {
@@ -232,17 +236,21 @@ class TestBatchDownload:
             )
 
             # Should track statistics
-            assert "total" in dctStats
-            assert "success" in dctStats
-            assert "failed" in dctStats
+            assert dctStats["total"] == 2
+            assert dctStats["success"] == 2
+            assert dctStats["failed"] == 0
 
-        # RED: This test should fail
-        pytest.fail("Function download_batch() not yet implemented")
+            # Should have called download_image twice
+            assert mock_download_image.call_count == 2
 
-    def test_download_batch_with_limit(self):
+    @patch('download_images.download_image')
+    def test_download_batch_with_limit(self, mock_download_image):
         """Should respect limit parameter."""
         import tempfile
         import json
+
+        # Mock download_image to always succeed
+        mock_download_image.return_value = True
 
         # Create index with 3 images
         dctIndex = {
@@ -277,14 +285,17 @@ class TestBatchDownload:
 
             # Should only attempt 2 downloads
             assert dctStats["total"] == 2
+            assert dctStats["success"] == 2
+            assert mock_download_image.call_count == 2
 
-        # RED: This test should fail
-        pytest.fail("Function download_batch() not yet implemented")
-
-    def test_download_batch_continue_on_failure(self):
+    @patch('download_images.download_image')
+    def test_download_batch_continue_on_failure(self, mock_download_image):
         """Should continue downloading even if some images fail."""
         import tempfile
         import json
+
+        # Mock download_image to fail first, succeed second
+        mock_download_image.side_effect = [False, True]
 
         dctIndex = {
             "MSG001": {
@@ -302,21 +313,19 @@ class TestBatchDownload:
             with open(strIndexPath, 'w') as f:
                 json.dump(dctIndex, f)
 
-            # Create mock driver that fails on first image, succeeds on second
-            mockDriver = Mock()
-            # We'll need to mock download_image to control success/failure
-
             from download_images import download_batch
 
             dctStats = download_batch(
                 strIndexPath,
                 f"{strTempDir}/images",
                 intLimit=None,
-                seleniumDriver=mockDriver
+                seleniumDriver=Mock()
             )
 
             # Should attempt both even if one fails
             assert dctStats["total"] == 2
+            assert dctStats["success"] == 1
+            assert dctStats["failed"] == 1
 
-        # RED: This test should fail
-        pytest.fail("Function download_batch() not yet implemented")
+            # Should have called download_image twice
+            assert mock_download_image.call_count == 2
