@@ -190,18 +190,29 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
             return dctStats
 
     # Extract cookies once at the beginning (for direct binary downloads)
-    # Navigate to Google Groups first to establish valid context
+    # Try to get cookies from current page first (Chrome is already logged in)
     print("Extracting authentication cookies from Chrome session...")
+    dctCookies = {}
     try:
-        seleniumDriver.get("https://groups.google.com")
-        time.sleep(1)  # Brief wait for page to load
-        dctCookies = {}
-        for cookie in seleniumDriver.get_cookies():
+        # Try getting cookies from current page first
+        lstCookies = seleniumDriver.get_cookies()
+        for cookie in lstCookies:
             dctCookies[cookie['name']] = cookie['value']
-        print(f"Extracted {len(dctCookies)} cookies")
+        print(f"Extracted {len(dctCookies)} cookies from current page")
+
+        # If no cookies found, navigate to Google Groups to get them
+        if len(dctCookies) == 0:
+            print("No cookies found, navigating to groups.google.com...")
+            seleniumDriver.get("https://groups.google.com")
+            time.sleep(2)  # Wait for page to load
+            lstCookies = seleniumDriver.get_cookies()
+            for cookie in lstCookies:
+                dctCookies[cookie['name']] = cookie['value']
+            print(f"Extracted {len(dctCookies)} cookies after navigation")
     except Exception as e:
         print(f"Warning: Failed to extract cookies: {e}")
-        dctCookies = {}
+        print("Will attempt to download without pre-extracted cookies (slower)")
+        dctCookies = None  # Signal to extract cookies per-image
 
     # Download each image with progress bar
     for dctImageInfo in tqdm(lstAllImages, desc="Downloading images", unit="image"):
