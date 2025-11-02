@@ -354,7 +354,36 @@ Implement image database system following the incremental plan in `image_databas
 - Keyword frequency stats show most common aircraft terms
 - Index format: {"url": "...", "filename": "...", "local_filename": "...", "keywords": ["landing", "light"]}
 
-### Phase 2.8: Download Full A/ Directory Images
+### Phase 2.8: Download Image Enhancements
+**Goal:** Handle Google Groups HTML wrappers and detect duplicate downloads
+
+**Enhancements Applied:**
+- [x] Handle HTML wrapper responses for URLs with &view=1 parameter (Lines 72-83)
+  - Google Groups returns two response types:
+    - Direct image (56.2% - 3,654 images)
+    - HTML wrapper with &view=1 (43.8% - 2,846 images)
+  - Detect &view=1 or ?view=1 in URL
+  - Parse HTML response to extract real image URL from <img src> attribute
+  - Download from extracted URL instead of HTML wrapper
+  - Fixes 2,846 images that would have downloaded HTML instead of images
+- [x] Track file sizes and detect duplicate downloads (Lines 205-308)
+  - Record actual downloaded file size to index (size_bytes field)
+  - Track consecutive download file sizes
+  - Warn in console and debug log when same size with different filenames
+  - Helps identify potential download issues (same image downloaded twice)
+- [x] Commit: "Handle HTML wrapper for view=1 URLs and detect duplicate file sizes"
+- [x] Update download_images_cli.py to SOURCE DEST positional args format
+  - Matches extract_image_urls.py CLI style
+  - Changed from --index/--output to source/dest positional arguments
+- [x] Commit: "Change download CLI to SOURCE DEST positional args"
+
+**Results:**
+- HTML wrapper handling fixes 2,846 images (43.8% of A/ directory)
+- File size tracking enables duplicate detection and quality monitoring
+- Consistent CLI interface across all imageGetter tools
+- Debug logging captures all details for analysis
+
+### Phase 2.9: Download Full A/ Directory Images
 - [ ] Start Chrome with debug mode: `chrome.exe --remote-debugging-port=9222`
 - [ ] Log into Google Groups in Chrome
 - [ ] Run download with --limit 5 first for testing
@@ -377,7 +406,8 @@ Implement image database system following the incremental plan in `image_databas
 - [x] **PHASE 2 IMPLEMENTATION COMPLETE** - All code written and tested with mocks
 - [x] **PHASE 2 DEBUGGING FIXES** - Debug logging and recursive directory search fixes applied
 - [x] **PHASE 2 EXTRACTION ENHANCEMENTS** - Blacklist filtering, keyword extraction, improved CLI
-- [ ] **PHASE 2 VALIDATION COMPLETE** - Waiting for actual download with Chrome debug mode (Phase 2.8)
+- [x] **PHASE 2 DOWNLOAD ENHANCEMENTS** - HTML wrapper handling, file size tracking, CLI consistency
+- [ ] **PHASE 2 VALIDATION COMPLETE** - Waiting for actual download with Chrome debug mode (Phase 2.9)
 
 ---
 
@@ -612,9 +642,10 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 - [x] Phase 2.1 through 2.5 - COMPLETE (implementation and unit tests)
 - [x] Phase 2.6 - Debugging and Fixes - COMPLETE
 - [x] Phase 2.7 - Extract Image URLs Enhancements - COMPLETE
-- [ ] Phase 2.8 - Download Full A/ Directory Images (waiting for Chrome debug mode testing)
+- [x] Phase 2.8 - Download Image Enhancements - COMPLETE
+- [ ] Phase 2.9 - Download Full A/ Directory Images (waiting for Chrome debug mode testing)
 
-**Next Task:** Phase 2.8 - Tom to test download with Chrome debug mode and analyze debug log
+**Next Task:** Phase 2.9 - Tom to test download with Chrome debug mode and analyze debug log
 
 **Recent Enhancements (2025-11-02):**
 1. Added debug logging for Content-Length header diagnostics (download_debug.log)
@@ -626,6 +657,9 @@ Use "Strange things are afoot at the Circle K" if urgent architectural attention
 7. Improved keyword filtering to remove noise terms
 8. Added subject line keywords to each image for better searchability
 9. Verified download_images.py compatibility with new index format
+10. Changed download_images_cli.py to SOURCE DEST positional args format (consistent with extract_image_urls.py)
+11. Handle HTML wrapper responses for URLs with &view=1 (fixes 2,846 images = 43.8%)
+12. Track actual file sizes and detect duplicate downloads by comparing consecutive file sizes
 
 **Test Results:** 41 passed, 7 skipped
 - All batch download tests passing with mocked Selenium
