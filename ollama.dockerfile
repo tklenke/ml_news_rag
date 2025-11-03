@@ -5,7 +5,7 @@ RUN echo "getting embed models"
 # Install embed models (note will install in a new image basically)
 RUN nohup bash -c "ollama serve &" \
    && sleep 2 \
-   #&& ollama run gemma2:2b \
+   && ollama run gemma3:1b \
    && ollama pull nomic-embed-text 
 
 
