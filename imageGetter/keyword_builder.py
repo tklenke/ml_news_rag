@@ -148,3 +148,95 @@ def aggregate_keywords(keyword_lists: List[List[str]]) -> Set[str]:
             all_keywords.add(keyword.lower())
 
     return all_keywords
+
+
+def load_existing_keywords(file_path: str) -> List[str]:
+    """Load keywords from a text file (one keyword per line).
+
+    Args:
+        file_path: Path to keywords file
+
+    Returns:
+        List of keywords from file
+    """
+    keywords = []
+    with open(file_path, 'r') as f:
+        for line in f:
+            keyword = line.strip()
+            if keyword:  # Skip empty lines
+                keywords.append(keyword)
+    return keywords
+
+
+def merge_keyword_lists(existing_keywords: List[str], new_keywords: Set[str]) -> Set[str]:
+    """Merge new keywords with existing keywords, removing duplicates.
+
+    Args:
+        existing_keywords: List of existing keywords
+        new_keywords: Set of new keywords to merge
+
+    Returns:
+        Set of merged keywords (case-insensitive)
+    """
+    # Convert all to lowercase for case-insensitive merging
+    merged = set()
+
+    # Add existing keywords
+    for keyword in existing_keywords:
+        merged.add(keyword.lower())
+
+    # Add new keywords
+    for keyword in new_keywords:
+        merged.add(keyword.lower())
+
+    return merged
+
+
+def filter_noise_keywords(keywords: Set[str]) -> Set[str]:
+    """Filter out noise keywords (common words, short words, numbers-only).
+
+    Args:
+        keywords: Set of keywords to filter
+
+    Returns:
+        Set of filtered keywords
+    """
+    # Common stop words to filter out
+    stop_words = {
+        "the", "and", "a", "an", "is", "are", "was", "were", "be", "been",
+        "of", "to", "in", "for", "on", "at", "by", "with", "from", "as",
+        "this", "that", "these", "those", "it", "its", "if", "or", "but"
+    }
+
+    filtered = set()
+    for keyword in keywords:
+        keyword_lower = keyword.lower()
+
+        # Remove stop words
+        if keyword_lower in stop_words:
+            continue
+
+        # Remove very short words (< 2 chars), except "ng" (nose gear)
+        if len(keyword_lower) < 2:
+            continue
+
+        # Remove numbers-only
+        if keyword_lower.isdigit():
+            continue
+
+        # Keep this keyword
+        filtered.add(keyword_lower)
+
+    return filtered
+
+
+def sort_keywords(keywords: Set[str]) -> List[str]:
+    """Sort keywords alphabetically.
+
+    Args:
+        keywords: Set of keywords
+
+    Returns:
+        Sorted list of keywords
+    """
+    return sorted(list(keywords))

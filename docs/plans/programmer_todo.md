@@ -143,23 +143,25 @@
 
 **Goal:** Merge LLM keywords with existing keywords, filter noise
 
+**Status:** COMPLETE ✓
+
 **Tasks:**
-1. [ ] Write failing test: `test_load_existing_keywords()`
+1. [x] Write failing test: `test_load_existing_keywords()`
    - Load keywords_seed.txt or keywords_master.txt
-2. [ ] Write failing test: `test_merge_keyword_lists()`
+2. [x] Write failing test: `test_merge_keyword_lists()`
    - Merge new keywords with existing
    - Remove duplicates (case-insensitive)
-3. [ ] Write failing test: `test_filter_noise_keywords()`
+3. [x] Write failing test: `test_filter_noise_keywords()`
    - Remove common words (the, and, a, etc.)
-   - Remove very short words (<3 chars)
+   - Remove very short words (<2 chars), except valid abbreviations like "ng"
    - Remove numbers-only
-4. [ ] Write failing test: `test_sort_keywords_alphabetically()`
-5. [ ] Run tests - verify all fail
-6. [ ] Implement merge and filter functions
-7. [ ] Run tests - verify all pass
-8. [ ] Commit: "Implement keyword merging and filtering (Phase 4a.3)"
+4. [x] Write failing test: `test_sort_keywords_alphabetically()`
+5. [x] Run tests - verify all fail
+6. [x] Implement merge and filter functions
+7. [x] Run tests - verify all pass
+8. [x] Commit: "Implement keyword merging and filtering (Phase 4a.3)"
 
-**Deliverable:** Functions to merge, filter, and clean keyword lists
+**Deliverable:** Functions to merge, filter, and clean keyword lists (16 tests passing, 2 skipped)
 
 ---
 

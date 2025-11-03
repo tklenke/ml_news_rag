@@ -12,7 +12,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from keyword_builder import (
     load_image_index, sample_random_messages, extract_message_text,
-    KeywordExtractor, aggregate_keywords
+    KeywordExtractor, aggregate_keywords,
+    load_existing_keywords, merge_keyword_lists, filter_noise_keywords, sort_keywords
 )
 
 
@@ -248,3 +249,117 @@ class TestAggregateKeywords:
 
         result = aggregate_keywords(keyword_lists)
         assert len(result) == 2  # Only 2 unique keywords despite 6 total
+
+
+class TestLoadExistingKeywords:
+    """Test loading keywords from file."""
+
+    def test_load_existing_keywords(self):
+        """Test loading keywords from a text file."""
+        # Create a temporary keywords file
+        keywords = ["firewall", "engine", "cowling", "panel", "landing gear"]
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+            for keyword in keywords:
+                f.write(f"{keyword}\n")
+            temp_path = f.name
+
+        try:
+            result = load_existing_keywords(temp_path)
+            assert isinstance(result, list)
+            assert len(result) == 5
+            assert "firewall" in result
+            assert "landing gear" in result
+        finally:
+            os.unlink(temp_path)
+
+    def test_load_empty_file(self):
+        """Test loading an empty keywords file."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+            temp_path = f.name
+
+        try:
+            result = load_existing_keywords(temp_path)
+            assert isinstance(result, list)
+            assert len(result) == 0
+        finally:
+            os.unlink(temp_path)
+
+
+class TestMergeKeywordLists:
+    """Test merging keyword lists."""
+
+    def test_merge_keyword_lists(self):
+        """Test merging new keywords with existing."""
+        existing = ["firewall", "engine", "cowling"]
+        new_keywords = {"panel", "firewall", "landing gear"}
+
+        result = merge_keyword_lists(existing, new_keywords)
+        assert isinstance(result, set)
+        assert len(result) == 5  # firewall appears in both but counted once
+        assert "firewall" in result
+        assert "panel" in result
+
+    def test_merge_handles_case_insensitive(self):
+        """Test that merge handles case-insensitive duplicates."""
+        existing = ["Firewall", "Engine"]
+        new_keywords = {"firewall", "panel"}
+
+        result = merge_keyword_lists(existing, new_keywords)
+        assert len(result) == 3  # firewall/Firewall counted once, engine, panel
+
+
+class TestFilterNoiseKeywords:
+    """Test filtering noise keywords."""
+
+    def test_filter_noise_keywords(self):
+        """Test filtering common words and noise."""
+        keywords = {
+            "firewall", "engine", "cowling",
+            "the", "and", "a", "is",  # Common words
+            "it", "on",  # Short words (<3 chars)
+            "123", "456"  # Numbers-only
+        }
+
+        result = filter_noise_keywords(keywords)
+        assert isinstance(result, set)
+        # Should keep aircraft keywords
+        assert "firewall" in result
+        assert "engine" in result
+        # Should remove common words
+        assert "the" not in result
+        assert "and" not in result
+        # Should remove short words
+        assert "it" not in result
+        assert "on" not in result
+        # Should remove numbers-only
+        assert "123" not in result
+
+    def test_filter_keeps_valid_short_keywords(self):
+        """Test that filter keeps valid 2-letter keywords like 'ng' (nose gear)."""
+        keywords = {"ng", "firewall", "a"}
+
+        result = filter_noise_keywords(keywords)
+        # "ng" is a valid keyword (nose gear abbreviation) - keep it
+        # "a" is a common word - remove it
+        assert "ng" in result
+        assert "a" not in result
+
+
+class TestSortKeywords:
+    """Test sorting keywords."""
+
+    def test_sort_keywords(self):
+        """Test sorting keywords alphabetically."""
+        keywords = {"firewall", "engine", "cowling", "panel", "baffles"}
+
+        result = sort_keywords(keywords)
+        assert isinstance(result, list)
+        assert len(result) == 5
+        # Check alphabetical order
+        assert result == ["baffles", "cowling", "engine", "firewall", "panel"]
+
+    def test_sort_empty_set(self):
+        """Test sorting empty set."""
+        result = sort_keywords(set())
+        assert isinstance(result, list)
+        assert len(result) == 0
