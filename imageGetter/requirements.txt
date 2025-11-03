@@ -14,3 +14,6 @@ selenium>=4.0.0
 
 # Progress bars
 tqdm>=4.65.0
+
+# LLM integration
+ollama>=0.1.0

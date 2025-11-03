@@ -10,7 +10,10 @@ from pathlib import Path
 # Import from parent directory
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from keyword_builder import load_image_index, sample_random_messages, extract_message_text
+from keyword_builder import (
+    load_image_index, sample_random_messages, extract_message_text,
+    KeywordExtractor, aggregate_keywords
+)
 
 
 class TestLoadImageIndex:
@@ -174,3 +177,74 @@ class TestExtractMessageText:
         assert len(result) > 0
         # Should contain the subject text
         assert "baffles" in result.lower()
+
+
+class TestKeywordExtractor:
+    """Test LLM-based keyword extraction."""
+
+    @pytest.mark.skip(reason="Requires Ollama running - manual test only")
+    def test_extract_keywords_from_message(self):
+        """Test extracting keywords from a single message using LLM."""
+        extractor = KeywordExtractor()
+        message_text = "Firewall installation complete with new engine baffles"
+
+        result = extractor.extract_keywords_from_message(message_text)
+        assert isinstance(result, list)
+        # Should extract aircraft-related keywords
+        result_lower = [k.lower() for k in result]
+        assert any("firewall" in k or "baffle" in k or "engine" in k for k in result_lower)
+
+    @pytest.mark.skip(reason="Requires Ollama running - manual test only")
+    def test_extract_keywords_from_multiple_messages(self):
+        """Test extracting keywords from multiple messages."""
+        extractor = KeywordExtractor()
+        messages = [
+            "Firewall installation complete",
+            "Cowling work in progress",
+            "Landing gear installed"
+        ]
+
+        result = extractor.extract_keywords_from_messages(messages)
+        assert isinstance(result, list)
+        assert len(result) > 0
+        # Should have keywords from multiple messages
+        result_lower = [k.lower() for k in result]
+        # Check for keywords from different messages
+        keyword_count = sum(1 for k in result_lower
+                           if any(term in k for term in ["firewall", "cowling", "landing", "gear"]))
+        assert keyword_count > 0
+
+
+class TestAggregateKeywords:
+    """Test keyword aggregation and deduplication."""
+
+    def test_aggregate_keywords(self):
+        """Test aggregating keywords from multiple lists."""
+        keyword_lists = [
+            ["firewall", "engine", "baffles"],
+            ["cowling", "firewall", "panel"],
+            ["landing gear", "nose gear", "FIREWALL"]
+        ]
+
+        result = aggregate_keywords(keyword_lists)
+        assert isinstance(result, set)
+        # Should have unique keywords (case-insensitive)
+        assert "firewall" in result or "FIREWALL" in result
+        assert len(result) == 7  # firewall, engine, baffles, cowling, panel, landing gear, nose gear
+
+    def test_aggregate_empty_lists(self):
+        """Test aggregating empty keyword lists."""
+        result = aggregate_keywords([])
+        assert isinstance(result, set)
+        assert len(result) == 0
+
+    def test_aggregate_handles_duplicates_case_insensitive(self):
+        """Test that aggregation removes case-insensitive duplicates."""
+        keyword_lists = [
+            ["Firewall", "Engine"],
+            ["firewall", "engine"],
+            ["FIREWALL", "ENGINE"]
+        ]
+
+        result = aggregate_keywords(keyword_lists)
+        assert len(result) == 2  # Only 2 unique keywords despite 6 total

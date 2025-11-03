@@ -119,34 +119,23 @@
 
 **Goal:** Use LLM to extract keywords from message text
 
+**Status:** COMPLETE ✓
+
 **Tasks:**
-1. [ ] Create `imageGetter/llm_config.py` with ABOUTME comments (if not exists from 4b)
-2. [ ] Add keyword extraction prompt to llm_config.py:
-   ```python
-   KEYWORD_EXTRACTION_PROMPT = """You are analyzing aircraft builder messages to build a keyword vocabulary. Extract all aircraft-building related keywords from this message.
-
-Message: {message}
-
-Return keywords as a comma-separated list. Focus on:
-- Aircraft parts (firewall, cowling, canard, etc.)
-- Tools and materials (epoxy, aluminum, fiberglass, etc.)
-- Processes (layup, installation, painting, etc.)
-- Systems (engine, fuel, electrical, etc.)
-
-Return only the keywords, no explanations."""
-   ```
-3. [ ] Write failing test: `test_extract_keywords_from_message()`
-4. [ ] Write failing test: `test_handle_multiple_messages()`
-5. [ ] Write failing test: `test_aggregate_keywords()`
+1. [x] Create `imageGetter/llm_config.py` with ABOUTME comments (if not exists from 4b)
+2. [x] Add keyword extraction prompt to llm_config.py
+3. [x] Write failing test: `test_extract_keywords_from_message()`
+4. [x] Write failing test: `test_handle_multiple_messages()`
+5. [x] Write failing test: `test_aggregate_keywords()`
    - Collect all keywords from multiple messages
    - Remove duplicates
    - Expected: returns set of unique keywords
-6. [ ] Run tests - verify all fail
-7. [ ] Implement keyword extraction using KeywordTagger (reuse from 4b or create simpler version)
-8. [ ] Run tests - verify all pass
-9. [ ] Commit: "Implement LLM keyword extraction (Phase 4a.2)"
+6. [x] Run tests - verify all fail
+7. [x] Implement keyword extraction using KeywordExtractor class (following embedder/f_llm.py pattern)
+8. [x] Run tests - verify all pass
+9. [x] Commit: "Implement LLM keyword extraction (Phase 4a.2)"
 
-**Deliverable:** Function to extract and aggregate keywords from messages
+**Deliverable:** KeywordExtractor class and aggregate_keywords function (8 tests passing, 2 skipped for LLM tests)
 
 ---
 
