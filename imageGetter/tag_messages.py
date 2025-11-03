@@ -63,18 +63,82 @@ def load_keywords(keywords_file: str) -> List[str]:
     return keywords
 
 
-def extract_message_text(message: Dict) -> str:
-    """Extract text from message for LLM processing.
+def extract_message_text(message: Dict, msgs_md_dir: str = "../data/msgs_md") -> str:
+    """Extract full message text from markdown file for LLM processing.
+
+    Reads the full message body from the corresponding markdown file
+    in data/msgs_md/{first_letter}/{message_id}.md
 
     Args:
         message: Message dictionary with metadata
+        msgs_md_dir: Path to msgs_md directory (default: ../data/msgs_md)
 
     Returns:
-        Clean text string for LLM input
+        Clean text string for LLM input (subject + body)
     """
     metadata = message.get("metadata", {})
     subject = metadata.get("subject", "")
-    return subject
+    message_id = metadata.get("message_id", "")
+
+    # If no message_id, return just subject
+    if not message_id:
+        return subject
+
+    # Construct path to markdown file: msgs_md/{first_letter}/{message_id}.md
+    first_letter = message_id[0].upper()
+    md_file = Path(msgs_md_dir) / first_letter / f"{message_id}.md"
+
+    # If file doesn't exist, return just subject
+    if not md_file.exists():
+        # Try lowercase directory (some messages might be stored there)
+        first_letter_lower = message_id[0].lower()
+        md_file = Path(msgs_md_dir) / first_letter_lower / f"{message_id}.md"
+        if not md_file.exists():
+            # Also try aDigits directory for messages starting with lowercase 'a' followed by digit
+            if message_id[0].lower() == 'a' and len(message_id) > 1 and message_id[1].isdigit():
+                md_file = Path(msgs_md_dir) / "aDigits" / f"{message_id}.md"
+                if not md_file.exists():
+                    return subject
+            else:
+                return subject
+
+    # Read markdown file and extract body text
+    try:
+        with open(md_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Skip the first few lines (metadata header) and extract body
+        # The body starts after the subject line (marked with "# ")
+        lines = content.split('\n')
+        body_lines = []
+        found_subject = False
+
+        for line in lines:
+            # Once we find the subject line, start collecting body text
+            if line.strip().startswith('# '):
+                found_subject = True
+                continue
+
+            # After finding subject, collect all text
+            if found_subject:
+                # Skip image markers and profile photos
+                if not line.strip().startswith('![') and not line.strip().startswith('https://'):
+                    body_lines.append(line)
+
+        body_text = '\n'.join(body_lines).strip()
+
+        # Return subject + body (limited to reasonable length for LLM)
+        # Limit to ~2000 characters to avoid timeout
+        full_text = f"{subject}\n\n{body_text}"
+        if len(full_text) > 2000:
+            full_text = full_text[:2000] + "..."
+
+        return full_text
+
+    except Exception as e:
+        # On any error, fall back to just subject
+        print(f"Warning: Could not read message body for {message_id}: {e}")
+        return subject
 
 
 def tag_messages(

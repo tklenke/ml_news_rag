@@ -89,13 +89,15 @@ class TestExtractMessageText:
     """Test extracting text from messages."""
 
     def test_extract_subject_only(self):
-        """Test extracting subject from message."""
+        """Test extracting subject from message (when markdown file not found)."""
         message = {
             "metadata": {
-                "subject": "Installing firewall today"
+                "subject": "Installing firewall today",
+                "message_id": "nonexistent123"
             }
         }
 
+        # Should fall back to subject if markdown file not found
         result = extract_message_text(message)
 
         assert "Installing firewall today" in result
@@ -110,6 +112,37 @@ class TestExtractMessageText:
 
         assert isinstance(result, str)
         assert len(result) == 0
+
+    def test_extract_full_message_from_markdown(self, tmp_path):
+        """Test extracting full message body from markdown file."""
+        # Create temporary markdown file
+        md_dir = tmp_path / "A"
+        md_dir.mkdir()
+        md_file = md_dir / "A-TestMsg.md"
+        md_content = """[Original Message ID:A-TestMsg](...)
+ # Installing firewall today
+
+ ### author
+
+ This is the message body.
+ I'm installing the firewall.
+ It's going well.
+"""
+        md_file.write_text(md_content)
+
+        message = {
+            "metadata": {
+                "subject": "Installing firewall today",
+                "message_id": "A-TestMsg"
+            }
+        }
+
+        result = extract_message_text(message, msgs_md_dir=str(tmp_path))
+
+        # Should contain both subject and body
+        assert "Installing firewall today" in result
+        assert "message body" in result
+        assert "installing the firewall" in result
 
 
 class TestTagMessages:
