@@ -1,7 +1,7 @@
 # Programmer Todo - Image Database Project
 
 **Project:** Image Database for Cozy Builders Newsgroup
-**Last Updated:** 2025-11-02
+**Last Updated:** 2025-11-03
 
 ## Current Status
 
@@ -24,10 +24,14 @@
 - 188 thumbnails generated (200x200, 2.2MB, 100% success)
 
 **Phase 4a: COMPLETE** ✓ (awaiting Tom's manual execution)
-- All 5 sub-phases implemented and tested
-- CLI tool ready: build_keywords_cli.py
-- Output: keywords_master.txt (Tom will create by running CLI)
-- Next: Tom runs CLI, then Phase 4b (message tagging)
+- Phase 4a.1: Message sampling functions (5 tests passing)
+- Phase 4a.2: LLM keyword extraction with KeywordExtractor class (8 tests, 2 skipped)
+- Phase 4a.3: Keyword merging, filtering, sorting (16 tests passing)
+- Phase 4a.4: CLI tool build_keywords_cli.py with progress bars and statistics
+- Phase 4a.5: Awaiting Tom to run CLI and create keywords_master.txt
+- Test coverage: 53 tests passing, 9 skipped
+- Dependencies: ollama>=0.1.0 added to requirements.txt
+- Next: Tom runs CLI with Ollama, then Phase 4b implementation begins
 
 **Phase 4b: PENDING** - Tag Messages with Keywords
 - 5 sub-phases: 4b.1 (config file), 4b.2 (LLM tagger core), 4b.3 (batch processor), 4b.4 (CLI), 4b.5 (validation)
@@ -35,7 +39,7 @@
 - Uses keywords_master.txt from Phase 4a as input
 - Next: Starts after Phase 4a complete
 
-**Next Task:** Phase 4a.1 - Message Sampling
+**Next Task:** Tom runs build_keywords_cli.py to create keywords_master.txt (Phase 4a.5), then Programmer implements Phase 4b
 
 ---
 
