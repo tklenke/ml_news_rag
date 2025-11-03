@@ -54,14 +54,16 @@ data/
         "local_filename": "A1NtxlDfY4c_part0_1_image.jpg",
         "keywords": ["landing", "light", "van", "baffles"]
       }
-    ]
+    ],
+    "llm_keywords": ["firewall", "baffles", "cowling"]
   }
 }
 ```
 
 **Notes:**
 - Top-level keys are message IDs
-- Keywords extracted from both filename and message subject
+- `keywords` extracted from filename and message subject (Phase 1)
+- `llm_keywords` added by LLM tagger from master keyword list (Phase 4)
 - `local_filename` uses normalized format: `{messageID}_part{X}_{Y}_{filename}`
 
 ### 3. Module Structure
@@ -329,6 +331,61 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 
 ## Phase Revisions
 
+### Phase 4 Implementation Details **[REVISED - 2025-11-03]**
+
+**Scope Clarification:**
+- Tagging only messages with images (~7k messages in image_index.json)
+- NOT tagging full corpus (separate tool handles text-only search)
+- Keywords stored IN image_index.json as new `llm_keywords` field
+
+**Data Structure:**
+```json
+{
+  "A1NtxlDfY4c": {
+    "metadata": {...},
+    "images": [...],
+    "llm_keywords": ["firewall", "baffles", "cowling"]  // NEW FIELD
+  }
+}
+```
+
+**llm_keywords Field States:**
+- `["firewall", "cowling"]` = tagged with matches
+- `[]` = tagged but no keywords matched (valid state)
+- Field missing = not yet tagged
+
+**Command Line Interface:**
+```bash
+# Tag messages, limit to first 50 processed
+python tag_messages.py data/image_index.json --limit 50
+
+# Skip already-tagged (default behavior)
+python tag_messages.py data/image_index.json
+
+# Overwrite existing llm_keywords
+python tag_messages.py data/image_index.json --overwrite
+
+# Use custom keyword file
+python tag_messages.py data/image_index.json --keywords custom_keywords.txt
+```
+
+**Processing Behavior:**
+- Skip messages where `llm_keywords` exists and not empty (unless `--overwrite`)
+- `--limit` counts processed messages (not skipped messages)
+- Recursive directory processing (walks full corpus)
+
+**Keyword Discovery Process:**
+- Sample small batches (5 messages) for review
+- `python build_keyword_list.py --sample 5 --output candidates.txt`
+- Tom reviews and adds to keywords_seed.txt
+- Iterate until keyword list stable
+
+**Why This Design:**
+- One source of truth (image_index.json contains all image metadata)
+- Scope matches use case (image search tool, not text search)
+- Simple query: load one file, filter by keyword
+- Incremental processing with resume capability
+
 ### Phase 4-5 Revision (2025-11-02)
 
 **Original Plan:** ChromaDB semantic search with metadata filtering
@@ -340,7 +397,7 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 - Simpler, more interpretable, faster queries
 - Debuggable - can review keyword assignments
 
-**New Phase 4:** Build keyword list (LLM-assisted), tag messages, create message_keywords.json
+**New Phase 4:** Build keyword list (LLM-assisted), tag messages with keywords in image_index.json
 **New Phase 5:** Keyword-based query interface with HTML viewer
 
 **Old Phase 5 (Scale to Full Corpus) removed** - already scaling organically

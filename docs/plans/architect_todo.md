@@ -31,14 +31,21 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 - [x] Prune programmer_todo.md (740 lines → 150 lines)
 - [x] Update architecture document with actual implementation
 
+### Completed Architectural Tasks (2025-11-03)
+- [x] Finalize Phase 4 implementation design with Tom
+- [x] Decide keywords storage location (image_index.json, not separate file)
+- [x] Clarify scope (7k messages with images, not full corpus)
+- [x] Design CLI interface (--limit, --overwrite, --keywords flags)
+- [x] Break down Phase 4 into TDD increments (4.1-4.5)
+- [x] Update architecture document with Phase 4 details
+- [x] Update programmer_todo.md with detailed Phase 4 tasks
+
 ### Pending Architectural Tasks
-- [ ] Review Phase 2.9 production download results when available
-- [ ] Assess download success rate and error patterns from production run
-- [ ] Review Phase 3 results (thumbnail quality, sizing)
-- [ ] Review Phase 4 LLM keyword tagging approach
+- [ ] Review Phase 4 LLM keyword tagging approach (after implementation)
   - [ ] Assess keyword list quality (coverage, precision)
   - [ ] Evaluate tagging accuracy
   - [ ] Decide if LLM prompts need refinement
+  - [ ] Decide which Ollama model to use (gemma2:2b? llama?)
 - [ ] Review Phase 5 keyword-based query results
   - [ ] Assess query precision/recall
   - [ ] Evaluate if keyword approach sufficient or need ChromaDB fallback
@@ -53,6 +60,39 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 ---
 
 ## Decision Log
+
+### 2025-11-03: Phase 4 Implementation Details - Keywords in Index
+
+**Decision:** Store `llm_keywords` field inside image_index.json (not separate file)
+
+**Rationale:**
+- Scope is image search tool, not full corpus search (Tom has separate tool for that)
+- Only tagging 7k messages with images (exact set in image_index.json)
+- One source of truth - all image metadata in one file
+- Simpler query logic - load one file, filter by keyword
+- Natural structure - keywords are message metadata like subject/author
+
+**CLI Interface Decisions:**
+- `--limit N` processes first N messages (not counting skipped messages)
+- `--overwrite` flag to retag existing llm_keywords (default: skip if present)
+- `--keywords FILE` to use custom keyword list (default: keywords_seed.txt)
+- Default behavior: skip messages where llm_keywords exists and not empty
+
+**llm_keywords Field States:**
+- `["firewall", "cowling"]` = tagged with keyword matches
+- `[]` = tagged but no keywords matched (valid state, don't retag)
+- Field missing = not yet tagged (needs processing)
+
+**Keyword Discovery Process:**
+- Small batch size: 5 messages (not 100) for faster review cycles
+- Optional tool: `build_keyword_list.py --sample 5` to help expand keyword list
+- Tom may use keywords_seed.txt (110 terms) as-is or expand iteratively
+
+**Architecture Impact:**
+- No separate message_keywords.json file needed
+- Simpler query interface (Phase 5)
+- Resume capability built-in (skip existing llm_keywords)
+- Incremental processing with --limit flag
 
 ### 2025-11-02: Phase 4-5 Architecture Revision - LLM Keyword Tagging
 
@@ -225,4 +265,4 @@ Use "Strange things are afoot at the Circle K" if you need immediate architectur
 
 ---
 
-**Last Updated:** 2025-11-01 by Claude (Architect)
+**Last Updated:** 2025-11-03 by Claude (Architect)
