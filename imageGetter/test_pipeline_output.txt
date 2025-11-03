@@ -1,0 +1,8 @@
+aluminum
+canard
+cowling
+engine
+epoxy
+firewall
+fuel
+wing
