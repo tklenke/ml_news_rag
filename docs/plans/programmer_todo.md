@@ -23,14 +23,18 @@
 - CLI tool created with progress bar and options
 - 188 thumbnails generated (200x200, 2.2MB, 100% success)
 
-**Phase 4a: PENDING**
-- Details TBD (Tom to specify)
+**Phase 4a: PENDING** - Build Improved Keywords File
+- 5 sub-phases: 4a.1 (message sampling), 4a.2 (keyword extraction), 4a.3 (merge/filter), 4a.4 (CLI tool), 4a.5 (run and document)
+- Output: keywords_master.txt (200-300 keywords)
+- Next: Start with Phase 4a.1 (message sampling)
 
-**Phase 4b: PENDING**
-- 6 sub-phases: 4b.1 (optional keyword discovery), 4b.2 (config file), 4b.3 (LLM tagger core), 4b.4 (batch processor), 4b.5 (CLI), 4b.6 (validation)
-- Next: Start with Phase 4b.2 (create llm_config.py)
+**Phase 4b: PENDING** - Tag Messages with Keywords
+- 5 sub-phases: 4b.1 (config file), 4b.2 (LLM tagger core), 4b.3 (batch processor), 4b.4 (CLI), 4b.5 (validation)
+- Prerequisites: Phase 4a must be complete (keywords_master.txt exists)
+- Uses keywords_master.txt from Phase 4a as input
+- Next: Starts after Phase 4a complete
 
-**Next Task:** Phase 4a - TBD
+**Next Task:** Phase 4a.1 - Message Sampling
 
 ---
 
@@ -64,45 +68,212 @@
 
 ---
 
-## Phase 4a: TBD
+## Phase 4a: Build Improved Keywords File
 
-**Goal:** TBD (Tom to specify)
+**Goal:** Analyze messages with photos using LLM to create comprehensive keyword list
+
+**Purpose:** Phase 4a builds the vocabulary that Phase 4b will use for tagging.
+
+**Input:**
+- `docs/input/keywords_seed.txt` (110 starting keywords)
+- `data/image_index.json` (messages with photos - ~7k messages)
+
+**Output:**
+- `docs/input/keywords_master.txt` (improved keyword list, 200-300 keywords)
+
+**Process Overview:**
+1. Sample N messages from image_index.json
+2. Ask LLM: "What aircraft-building keywords appear in this message?"
+3. Aggregate all keywords suggested by LLM
+4. Merge with existing keywords (seed or previous iteration)
+5. Remove duplicates, filter noise
+6. Tom reviews and prunes candidates
+7. Iterate until keyword list is stable
+8. Save final keywords_master.txt
+
+### Phase 4a.1: Message Sampling (TDD)
+
+**Goal:** Sample random messages from image_index.json
+
+**Tasks:**
+1. [ ] Create `imageGetter/keyword_builder.py` with ABOUTME comments
+2. [ ] Write failing test: `test_load_image_index()`
+3. [ ] Write failing test: `test_sample_random_messages()`
+   - Sample N random messages from index
+   - Expected: returns list of N message objects
+4. [ ] Write failing test: `test_extract_message_text()`
+   - Extract subject and relevant text fields
+   - Expected: returns clean text for LLM
+5. [ ] Run tests - verify all fail
+6. [ ] Implement sampling functions
+7. [ ] Run tests - verify all pass
+8. [ ] Commit: "Implement message sampling (Phase 4a.1)"
+
+**Deliverable:** Functions to sample messages and extract text
+
+---
+
+### Phase 4a.2: LLM Keyword Extraction (TDD)
+
+**Goal:** Use LLM to extract keywords from message text
+
+**Tasks:**
+1. [ ] Create `imageGetter/llm_config.py` with ABOUTME comments (if not exists from 4b)
+2. [ ] Add keyword extraction prompt to llm_config.py:
+   ```python
+   KEYWORD_EXTRACTION_PROMPT = """You are analyzing aircraft builder messages to build a keyword vocabulary. Extract all aircraft-building related keywords from this message.
+
+Message: {message}
+
+Return keywords as a comma-separated list. Focus on:
+- Aircraft parts (firewall, cowling, canard, etc.)
+- Tools and materials (epoxy, aluminum, fiberglass, etc.)
+- Processes (layup, installation, painting, etc.)
+- Systems (engine, fuel, electrical, etc.)
+
+Return only the keywords, no explanations."""
+   ```
+3. [ ] Write failing test: `test_extract_keywords_from_message()`
+4. [ ] Write failing test: `test_handle_multiple_messages()`
+5. [ ] Write failing test: `test_aggregate_keywords()`
+   - Collect all keywords from multiple messages
+   - Remove duplicates
+   - Expected: returns set of unique keywords
+6. [ ] Run tests - verify all fail
+7. [ ] Implement keyword extraction using KeywordTagger (reuse from 4b or create simpler version)
+8. [ ] Run tests - verify all pass
+9. [ ] Commit: "Implement LLM keyword extraction (Phase 4a.2)"
+
+**Deliverable:** Function to extract and aggregate keywords from messages
+
+---
+
+### Phase 4a.3: Keyword Merging and Filtering (TDD)
+
+**Goal:** Merge LLM keywords with existing keywords, filter noise
+
+**Tasks:**
+1. [ ] Write failing test: `test_load_existing_keywords()`
+   - Load keywords_seed.txt or keywords_master.txt
+2. [ ] Write failing test: `test_merge_keyword_lists()`
+   - Merge new keywords with existing
+   - Remove duplicates (case-insensitive)
+3. [ ] Write failing test: `test_filter_noise_keywords()`
+   - Remove common words (the, and, a, etc.)
+   - Remove very short words (<3 chars)
+   - Remove numbers-only
+4. [ ] Write failing test: `test_sort_keywords_alphabetically()`
+5. [ ] Run tests - verify all fail
+6. [ ] Implement merge and filter functions
+7. [ ] Run tests - verify all pass
+8. [ ] Commit: "Implement keyword merging and filtering (Phase 4a.3)"
+
+**Deliverable:** Functions to merge, filter, and clean keyword lists
+
+---
+
+### Phase 4a.4: CLI Tool
+
+**Goal:** Command line tool for iterative keyword building
+
+**Tasks:**
+1. [ ] Create `imageGetter/build_keywords_cli.py` with ABOUTME comments
+2. [ ] Add argument parsing:
+   - Positional: `INDEX_FILE` (path to image_index.json)
+   - `--sample N` - number of messages to sample (default: 100)
+   - `--existing FILE` - existing keywords to merge with (default: keywords_seed.txt)
+   - `--output FILE` - output file for candidates (default: keywords_candidates.txt)
+   - `--model MODEL` - override LLM model from config
+3. [ ] Add progress bar (tqdm)
+4. [ ] Add statistics:
+   - Messages sampled
+   - Keywords extracted
+   - New keywords (not in existing list)
+   - Duplicate keywords removed
+5. [ ] Test with --sample 10
+6. [ ] Document usage in imageGetter/README.md
+7. [ ] Commit: "Add CLI for keyword building (Phase 4a.4)"
+
+**Command Line Examples:**
+```bash
+# First iteration: sample 100 messages, use seed file
+python build_keywords_cli.py ../data/image_index.json --sample 100 --output keywords_candidates.txt
+
+# Tom reviews keywords_candidates.txt, adds good ones to keywords_master.txt
+
+# Second iteration: sample 100 more, merge with master
+python build_keywords_cli.py ../data/image_index.json --sample 100 --existing ../docs/input/keywords_master.txt --output keywords_candidates2.txt
+
+# Large sample for final pass
+python build_keywords_cli.py ../data/image_index.json --sample 500 --existing ../docs/input/keywords_master.txt --output keywords_candidates_final.txt
+```
+
+**Deliverable:** Working CLI tool for iterative keyword building
+
+---
+
+### Phase 4a.5: Run and Document
+
+**Goal:** Build initial keywords_master.txt
+
+**Tasks:**
+1. [ ] Run with --sample 100 on image_index.json
+2. [ ] Review candidate keywords
+3. [ ] Create `docs/input/keywords_master.txt` with curated keywords
+4. [ ] Document process in `docs/notes/phase4a_results.md`:
+   - Number of messages sampled
+   - Keywords extracted
+   - Keywords after filtering
+   - Final count in keywords_master.txt
+   - Examples of good keywords found
+5. [ ] Commit keywords_master.txt and results
+6. [ ] Mark Phase 4a complete in this file
+
+**Deliverable:** keywords_master.txt ready for Phase 4b
+
+---
+
+### Important Notes for Phase 4a
+
+**LLM Setup:**
+- Use same Ollama setup as Phase 4b (llm_config.py)
+- Model: gemma3:1b (configurable)
+- Different prompt: KEYWORD_EXTRACTION_PROMPT (not KEYWORD_TAGGING_PROMPT)
+
+**Sampling Strategy:**
+- Random sampling (not sequential) for diversity
+- Tom can run multiple times with different samples
+- Incremental: each iteration adds to previous keywords
+
+**Output Files:**
+- `keywords_candidates.txt` - Raw output from LLM (Tom reviews)
+- `keywords_master.txt` - Curated final list (Tom maintains)
+- Phase 4b will use keywords_master.txt
+
+**Workflow:**
+1. Programmer implements Phase 4a.1-4a.4
+2. Programmer runs with small sample (--sample 10) to verify
+3. Tom runs multiple iterations to build keywords_master.txt
+4. Phase 4a complete when Tom is satisfied with keyword list
+5. Phase 4b uses keywords_master.txt as input
 
 ---
 
 ## Phase 4b: LLM Keyword Tagging
 
-**Goal:** Use local LLM to tag messages with curated keywords
+**Goal:** Tag all messages with keywords from Phase 4a's keywords_master.txt
 
 **REVISED 2025-11-03:** Store keywords IN image_index.json as `llm_keywords` field
 
 **Scope:**
 - Tag only messages with images (~7k messages in image_index.json)
-- Use keywords_seed.txt (110 keywords) as starting point
+- Use keywords_master.txt from Phase 4a (200-300 keywords)
 - Store results in image_index.json (not separate file)
 
-### Phase 4b.1: Keyword Discovery Tool (Optional - Tom may skip)
+**Prerequisites:**
+- Phase 4a must be complete (keywords_master.txt exists)
 
-**Goal:** CLI tool to sample messages and extract candidate keywords
-
-**Tasks:**
-1. [ ] Write failing test: `test_sample_random_messages_from_index()`
-2. [ ] Write failing test: `test_extract_message_text_for_llm()`
-3. [ ] Implement `build_keyword_list.py` module (TDD)
-   - Read image_index.json
-   - Sample N random messages (--sample flag)
-   - Format message text for LLM
-   - Query LLM: "Extract aircraft-building keywords from these messages"
-   - Output candidate keywords to file
-4. [ ] Create CLI: `python build_keyword_list.py --sample 5 --output candidates.txt`
-5. [ ] Test with 5 messages from A/ directory
-6. [ ] Document usage in imageGetter/README.md
-
-**Deliverable:** Tool to help Tom expand keyword list (may not be used if seed list sufficient)
-
----
-
-### Phase 4b.2: LLM Configuration File
+### Phase 4b.1: LLM Configuration File
 
 **Goal:** Create config file for LLM parameters and prompt
 
@@ -124,13 +295,13 @@ Message: {message}
 Return the matching keywords as a comma-separated list. If no keywords match, return "NONE". Do not include explanations or extra text."""
    ```
 3. [ ] Document that Tom can edit model and prompt in this file
-4. [ ] Commit: "Add LLM configuration file (Phase 4b.2)"
+4. [ ] Commit: "Add LLM configuration file (Phase 4b.1)"
 
 **Deliverable:** llm_config.py with editable prompt and model
 
 ---
 
-### Phase 4b.3: LLM Keyword Tagger Core (TDD)
+### Phase 4b.2: LLM Keyword Tagger Core (TDD)
 
 **Goal:** Class-based tagger using Ollama (following embedder/f_llm.py pattern)
 
@@ -176,7 +347,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
     ```
 11. [ ] Run tests - verify all pass
 12. [ ] Refactor if needed
-13. [ ] Commit: "Implement LLM keyword tagger core (Phase 4b.3)"
+13. [ ] Commit: "Implement LLM keyword tagger core (Phase 4b.2)"
 
 **Implementation Notes:**
 - Follow pattern from `embedder/f_llm.py` (class-based, ollama.Client)
@@ -189,7 +360,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
 
 ---
 
-### Phase 4b.4: Batch Message Tagger (TDD)
+### Phase 4b.3: Batch Message Tagger (TDD)
 
 **Goal:** Process image_index.json and add llm_keywords to each message
 
@@ -208,7 +379,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
 7. [ ] Run tests - verify all fail
 8. [ ] Implement `tag_messages.py` module:
    - Load image_index.json
-   - Load keywords from keywords_seed.txt (or custom file)
+   - Load keywords from keywords_master.txt (from Phase 4a, or custom file)
    - Create KeywordTagger instance
    - For each message in image_index.json:
      - Skip if llm_keywords exists and not empty (unless --overwrite)
@@ -219,13 +390,13 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
    - Write back to image_index.json
    - Auto-save every 50 messages (crash recovery)
 9. [ ] Run tests - verify all pass
-10. [ ] Commit: "Implement batch message tagger (Phase 4b.4)"
+10. [ ] Commit: "Implement batch message tagger (Phase 4b.3)"
 
 **Deliverable:** Core processing logic with tests
 
 ---
 
-### Phase 4b.5: CLI Interface
+### Phase 4b.4: CLI Interface
 
 **Goal:** Command line tool for tagging messages
 
@@ -235,7 +406,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
    - Positional: `INDEX_FILE` (path to image_index.json)
    - `--limit N` - process first N messages
    - `--overwrite` - retag existing llm_keywords
-   - `--keywords FILE` - use custom keyword file (default: ../docs/input/keywords_seed.txt)
+   - `--keywords FILE` - use custom keyword file (default: ../docs/input/keywords_master.txt from Phase 4a)
    - `--model MODEL` - override LLM model from llm_config.py
 3. [ ] Add progress bar (tqdm)
 4. [ ] Add statistics:
@@ -247,7 +418,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
 5. [ ] Test with --limit 5 on image_index.json
 6. [ ] Test with --overwrite flag
 7. [ ] Document usage in imageGetter/README.md
-8. [ ] Commit: "Add CLI for message tagging (Phase 4b.5)"
+8. [ ] Commit: "Add CLI for message tagging (Phase 4b.4)"
 
 **Command Line Examples:**
 ```bash
@@ -271,7 +442,7 @@ python tag_messages_cli.py ../data/image_index.json --model gemma2:2b
 
 ---
 
-### Phase 4b.6: Validate and Document
+### Phase 4b.5: Validate and Document
 
 **Goal:** Run on real data and validate quality
 
@@ -304,9 +475,9 @@ python tag_messages_cli.py ../data/image_index.json --model gemma2:2b
 - Follow pattern from `embedder/f_llm.py` (class-based KeywordTagger)
 
 **Keywords File:**
-- Located: `docs/input/keywords_seed.txt`
-- 110 keywords currently
-- Tom may expand during Phase 4.1 or use as-is
+- Located: `docs/input/keywords_master.txt` (created in Phase 4a)
+- Approximately 200-300 keywords after Phase 4a complete
+- Default CLI parameter points to keywords_master.txt
 
 **Error Handling:**
 - If Ollama not running → clear error message

@@ -44,8 +44,18 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 - [x] Update programmer_todo.md with detailed Phase 4b tasks and LLM guidance
 - [x] Reorganize phases: Phase 4 → Phase 4b, create placeholder for Phase 4a
 
+### Completed Architectural Tasks (2025-11-03 - Phase 4a/4b clarification)
+- [x] Clarify Phase 4a and 4b purposes with Tom
+- [x] Design Phase 4a: Build improved keywords file using LLM
+- [x] Redesign Phase 4b: Use keywords_master.txt from Phase 4a
+- [x] Break down Phase 4a into TDD increments (4a.1-4a.5)
+- [x] Update Phase 4b to use keywords_master.txt, remove old keyword discovery (4b.1)
+- [x] Update all documentation with corrected two-phase approach
+
 ### Pending Architectural Tasks
-- [ ] Design Phase 4a (Tom to specify requirements)
+- [ ] Review Phase 4a implementation (after Programmer completes)
+  - [ ] Assess keywords_master.txt quality
+  - [ ] Determine if sample size adequate
 - [ ] Review Phase 4b LLM keyword tagging approach (after implementation)
   - [ ] Assess keyword list quality (coverage, precision)
   - [ ] Evaluate tagging accuracy
@@ -65,6 +75,40 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 ---
 
 ## Decision Log
+
+### 2025-11-03: Phase 4a/4b Clarification - Two-Phase Keyword Approach
+
+**Decision:** Phase 4a builds vocabulary (keywords_master.txt), Phase 4b applies it (tagging)
+
+**Tom's Clarification:**
+- "Phase 4a - Develop a better keywords file using LLM, the seed file and the messages with photos"
+- "Phase 4b - use the better keywords file, and the LLM to update the index file with the LLM keywords field"
+
+**Architecture:**
+- **Phase 4a (Build Vocabulary):**
+  - Input: keywords_seed.txt (110 keywords) + image_index.json (~7k messages)
+  - Process: Sample messages → LLM extracts keywords → merge with seed → filter → Tom reviews
+  - Output: keywords_master.txt (200-300 keywords)
+  - Tools: keyword_builder.py, build_keywords_cli.py
+  - Iterative: Tom can run multiple times to refine keyword list
+
+- **Phase 4b (Apply Vocabulary):**
+  - Input: keywords_master.txt (from 4a) + image_index.json
+  - Process: For each message, LLM matches relevant keywords from master list
+  - Output: image_index.json with llm_keywords field populated
+  - Tools: llm_tagger.py, tag_messages.py, tag_messages_cli.py
+
+**Rationale:**
+- Separates vocabulary building from vocabulary application
+- Tom can iterate on keyword list without retagging all messages
+- Better control over keyword quality before tagging 7k messages
+- LLM extracts keywords (Phase 4a) vs LLM matches keywords (Phase 4b)
+
+**Changes:**
+- Phase 4a: 5 sub-phases (message sampling, extraction, merge/filter, CLI, run/document)
+- Phase 4b: 5 sub-phases (removed old 4b.1 keyword discovery, renumbered rest)
+- Phase 4b now uses keywords_master.txt instead of keywords_seed.txt
+- Two prompts in llm_config.py: KEYWORD_EXTRACTION_PROMPT and KEYWORD_TAGGING_PROMPT
 
 ### 2025-11-03: Phase Renumbering - Create Phase 4a Slot
 

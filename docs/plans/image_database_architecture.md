@@ -75,10 +75,12 @@ Extracts image URLs from markdown files and downloads images.
 - `extract_image_urls.py` - Parse msgs_md files, identify attachment URLs
 - `download_images.py` - Download images with retry logic, rename to standardized format
 - `generate_thumbnails.py` - Create 200x200px center-cropped thumbnails
-- `llm_config.py` - LLM configuration (model, Ollama host, prompt template) - **Tom edits this**
-- `llm_tagger.py` - KeywordTagger class using Ollama to tag messages
-- `tag_messages.py` - Batch processor to add llm_keywords to image_index.json
-- `tag_messages_cli.py` - CLI interface for keyword tagging
+- `keyword_builder.py` - Sample messages and extract keywords (Phase 4a)
+- `build_keywords_cli.py` - CLI for iterative keyword building (Phase 4a)
+- `llm_config.py` - LLM configuration (model, Ollama host, prompts) - **Tom edits this**
+- `llm_tagger.py` - KeywordTagger class using Ollama to tag messages (Phase 4b)
+- `tag_messages.py` - Batch processor to add llm_keywords to image_index.json (Phase 4b)
+- `tag_messages_cli.py` - CLI interface for keyword tagging (Phase 4b)
 - `image_index.json` - Maintained index of all images
 
 **Filtering Rules (as implemented):**
@@ -175,12 +177,17 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 - Update image_index.json with thumbnail status
 - **Deliverable:** images/thumbs/ populated with thumbnails
 
-### Phase 4a: TBD
-- **Deliverable:** TBD
+### Phase 4a: Build Improved Keywords File
+- Sample messages with photos from image_index.json
+- Use LLM to extract aircraft-building keywords
+- Merge with keywords_seed.txt, filter noise
+- Tom reviews and curates final list
+- **Deliverable:** keywords_master.txt (200-300 keywords)
 
-### Phase 4b: LLM Keyword Tagging
-- Tag messages with keywords using local LLM
+### Phase 4b: Tag Messages with Keywords
+- Tag all messages with keywords from keywords_master.txt
 - Create llm_config.py for Tom to edit model and prompt
+- Use KeywordTagger class (follows embedder/f_llm.py pattern)
 - Store llm_keywords in image_index.json
 - **Deliverable:** image_index.json with llm_keywords populated
 
@@ -337,10 +344,19 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 
 ## Phase Revisions
 
-### Phase 4b Implementation Details **[REVISED - 2025-11-03]**
+### Phase 4a-4b Two-Phase Approach **[REVISED - 2025-11-03]**
 
-**Scope Clarification:**
-- Tagging only messages with images (~7k messages in image_index.json)
+**Phase 4a: Build Vocabulary**
+- Sample messages with images from image_index.json
+- Use LLM to extract aircraft-building keywords
+- Merge with keywords_seed.txt (110 starting keywords)
+- Filter noise, remove duplicates
+- Tom reviews and curates candidates iteratively
+- Output: keywords_master.txt (200-300 keywords)
+
+**Phase 4b: Apply Vocabulary**
+- Tag all messages with images (~7k messages in image_index.json)
+- Use keywords_master.txt from Phase 4a as input
 - NOT tagging full corpus (separate tool handles text-only search)
 - Keywords stored IN image_index.json as new `llm_keywords` field
 
@@ -391,10 +407,25 @@ python tag_messages.py data/image_index.json --keywords custom_keywords.txt
 - Scope matches use case (image search tool, not text search)
 - Simple query: load one file, filter by keyword
 - Incremental processing with resume capability
+- Two-phase approach: build vocabulary first, then apply it
 
-**LLM Tagging Architecture:**
-- **Configuration:** llm_config.py contains model name, Ollama host, and prompt template
-  - Tom can edit model (default: gemma3:1b) and prompt without touching code
+**Phase 4a: Keyword Building Architecture:**
+- **keyword_builder.py:** Sample messages, extract keywords via LLM
+  - Random sampling for diversity
+  - Aggregate keywords from multiple messages
+  - Merge with existing keywords (incremental)
+  - Filter noise (stopwords, short words, numbers)
+- **build_keywords_cli.py:** Iterative keyword building tool
+  - `--sample N` - control sample size
+  - `--existing FILE` - merge with previous iteration
+  - `--output FILE` - candidate keywords for Tom to review
+- **Workflow:** Run multiple times, Tom reviews each iteration, builds keywords_master.txt
+
+**Phase 4b: LLM Tagging Architecture:**
+- **Configuration:** llm_config.py contains model name, Ollama host, and prompts (TWO prompts)
+  - KEYWORD_EXTRACTION_PROMPT for Phase 4a (extract keywords from message)
+  - KEYWORD_TAGGING_PROMPT for Phase 4b (match message to keyword list)
+  - Tom can edit model (default: gemma3:1b) and prompts without touching code
   - Follows existing pattern from embedder/f_llm.py
 - **KeywordTagger Class:** Encapsulates Ollama interaction
   - `__init__(ollamahost)` - Creates ollama.Client
@@ -402,7 +433,7 @@ python tag_messages.py data/image_index.json --keywords custom_keywords.txt
   - Graceful error handling: returns [] on error, logs issue, doesn't crash
   - Response validation: ensures LLM only returns keywords from master list
 - **Batch Processing:** tag_messages.py
-  - Loads image_index.json and keywords_seed.txt
+  - Loads image_index.json and keywords_master.txt (from Phase 4a)
   - Skips messages with existing llm_keywords (unless --overwrite)
   - Auto-saves every 50 messages (crash recovery)
   - Handles LLM errors per-message (log and continue)
