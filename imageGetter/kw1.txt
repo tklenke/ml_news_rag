@@ -1,0 +1,222 @@
+3m cleaner recommended
+aileron
+airfoil
+airframe
+alignment
+alternator
+aluminum
+antenna
+antenna switch box
+axle
+baffle
+baffles
+baffling
+baffling strips
+balance
+bearing
+bellhorn
+blank line
+bolt
+bore
+bracket
+brake
+break-in
+build
+building
+bulkhead
+c-a
+cable
+camlocks
+canard
+canards
+canning
+canopy
+chapter
+cht
+component
+cooler
+cooling
+cowl
+cowling
+crack
+crankcase vent routing
+cut
+cutout
+cutting
+cylinder cooling
+damage
+door
+down
+efis auto trim
+electric
+electrical
+elevator
+engine
+engine issue
+epoxy
+equipment
+exhaust
+exhaust pipes
+ez lift switch position
+failure
+fairings
+fender
+fiberglass
+filling
+firewall
+firewalls
+fitting
+fixture
+flight
+float
+fly
+flying
+foam
+frame
+fuel
+fuel selector valve selection
+fuselage
+gear
+hatch
+hinge
+hull
+impeller
+install
+installation
+instrument
+intake
+issue
+jig
+landing
+landing brake actuator loads
+layout
+layup
+leak
+lid
+light
+line
+lining
+longeron
+lubrication
+main gear
+manifold pressure sensor mount
+material
+mknc-12a
+mod
+model
+modification
+mount
+mounting
+naca stuff
+ng
+nose
+nose bob
+nose door
+nose gear
+nozzle
+observation
+offset
+oil
+oil cooler
+packing
+pad
+paint
+painting
+panel
+part
+patching
+pedal
+pipe
+pitot
+plans
+plating
+plug
+plywood
+problem
+process
+prop
+propeller
+pump
+putty
+quadrant knobs
+raptor
+repair
+repairs
+restract
+retract
+reverse scoop
+rudder
+s tracte flox
+sanding
+scratch
+seal
+sealing
+sealing
+seam
+seat
+seatback
+seating
+section
+selector
+setup
+shaft
+shifter
+spar
+spartape
+spinner
+spool
+spreader
+spring
+stand
+static
+station
+steering
+stick
+sticker
+stitching
+strakes
+strip
+strut
+stub
+substitution
+sump
+switch
+system
+tail
+tailering
+tank
+tape
+template
+test
+testing
+thread
+throttle cable
+tire
+tires
+tool
+tooling
+track
+transponder
+trim
+trimming
+trunk
+tube
+tubing
+turbine
+turtleback
+valve
+vehicle
+vent
+vents
+viewport
+weld
+welding
+wheel
+wheel pants
+window
+wing
+winglet
+wire
+wire covering under the cowl
+wire sleeving
+wiring
