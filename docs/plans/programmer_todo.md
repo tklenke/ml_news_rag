@@ -95,21 +95,23 @@
 
 **Goal:** Sample random messages from image_index.json
 
+**Status:** COMPLETE ✓
+
 **Tasks:**
-1. [ ] Create `imageGetter/keyword_builder.py` with ABOUTME comments
-2. [ ] Write failing test: `test_load_image_index()`
-3. [ ] Write failing test: `test_sample_random_messages()`
+1. [x] Create `imageGetter/keyword_builder.py` with ABOUTME comments
+2. [x] Write failing test: `test_load_image_index()`
+3. [x] Write failing test: `test_sample_random_messages()`
    - Sample N random messages from index
    - Expected: returns list of N message objects
-4. [ ] Write failing test: `test_extract_message_text()`
+4. [x] Write failing test: `test_extract_message_text()`
    - Extract subject and relevant text fields
    - Expected: returns clean text for LLM
-5. [ ] Run tests - verify all fail
-6. [ ] Implement sampling functions
-7. [ ] Run tests - verify all pass
-8. [ ] Commit: "Implement message sampling (Phase 4a.1)"
+5. [x] Run tests - verify all fail
+6. [x] Implement sampling functions
+7. [x] Run tests - verify all pass
+8. [x] Commit: "Implement message sampling (Phase 4a.1)"
 
-**Deliverable:** Functions to sample messages and extract text
+**Deliverable:** Functions to sample messages and extract text (5 tests passing)
 
 ---
 
