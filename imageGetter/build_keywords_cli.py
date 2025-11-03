@@ -60,7 +60,18 @@ def main():
     print(f"Loaded {total_messages} messages with images")
     print()
 
-    # Step 2: Sample random messages (or use all if no sample specified)
+    # Step 2: Load existing keywords FIRST (if file exists) - to provide context to LLM
+    existing_keywords = []
+    if Path(args.existing).exists():
+        print("Loading existing keywords to provide context to LLM...")
+        existing_keywords = load_existing_keywords(args.existing)
+        print(f"Loaded {len(existing_keywords)} existing keywords")
+    else:
+        print(f"Existing keywords file not found: {args.existing}")
+        print("Starting with empty keyword list (LLM will have no context)")
+    print()
+
+    # Step 3: Sample random messages (or use all if no sample specified)
     if args.sample:
         print(f"Sampling {args.sample} random messages...")
         sampled_messages = sample_random_messages(image_index, args.sample)
@@ -73,33 +84,25 @@ def main():
         print(f"Processing {actual_sample_size} messages")
     print()
 
-    # Step 3: Extract keywords from messages using LLM
+    # Step 4: Extract keywords from messages using LLM (with existing keywords as context)
     print("Extracting keywords using LLM...")
     print("(This may take a few minutes depending on sample size and model)")
+    if existing_keywords:
+        print(f"Providing {len(existing_keywords)} existing keywords to LLM for context")
     extractor = KeywordExtractor(model=args.model)
 
     all_keywords = []
     for message in tqdm(sampled_messages, desc="Processing messages"):
         message_text = extract_message_text(message)
-        keywords = extractor.extract_keywords_from_message(message_text)
+        keywords = extractor.extract_keywords_from_message(message_text, existing_keywords)
         all_keywords.append(keywords)
 
     print(f"\nExtracted keywords from {len(all_keywords)} messages")
 
-    # Step 4: Aggregate keywords
+    # Step 5: Aggregate keywords
     print("Aggregating keywords...")
     unique_keywords = aggregate_keywords(all_keywords)
     print(f"Found {len(unique_keywords)} unique keywords from LLM")
-
-    # Step 5: Load existing keywords (if file exists)
-    existing_keywords = []
-    if Path(args.existing).exists():
-        print(f"\nLoading existing keywords from {args.existing}...")
-        existing_keywords = load_existing_keywords(args.existing)
-        print(f"Loaded {len(existing_keywords)} existing keywords")
-    else:
-        print(f"\nExisting keywords file not found: {args.existing}")
-        print("Starting with empty keyword list")
 
     # Step 6: Merge with existing keywords and identify new ones
     print("\nMerging with existing keywords...")

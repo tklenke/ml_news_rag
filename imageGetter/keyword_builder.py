@@ -75,11 +75,12 @@ class KeywordExtractor:
         self.ollama_client = ollama.Client(ollama_host or OLLAMA_HOST)
         self.model = model or LLM_MODEL
 
-    def extract_keywords_from_message(self, message_text: str) -> List[str]:
+    def extract_keywords_from_message(self, message_text: str, existing_keywords: List[str] = None) -> List[str]:
         """Extract keywords from a single message using LLM.
 
         Args:
             message_text: Message text to extract keywords from
+            existing_keywords: Optional list of existing keywords to provide as context
 
         Returns:
             List of extracted keywords
@@ -91,8 +92,17 @@ class KeywordExtractor:
             return []
 
         try:
-            # Format the prompt
-            prompt = KEYWORD_EXTRACTION_PROMPT.format(message=message_text)
+            # Format existing keywords for prompt (comma-separated)
+            if existing_keywords:
+                keywords_str = ", ".join(existing_keywords)
+            else:
+                keywords_str = "(none yet - this is the first extraction)"
+
+            # Format the prompt with both message and existing keywords
+            prompt = KEYWORD_EXTRACTION_PROMPT.format(
+                keywords=keywords_str,
+                message=message_text
+            )
 
             # Call LLM
             response = self.ollama_client.generate(
@@ -131,18 +141,19 @@ class KeywordExtractor:
                 # Re-raise unexpected errors
                 raise RuntimeError(f"Error extracting keywords: {e}") from e
 
-    def extract_keywords_from_messages(self, messages: List[str]) -> List[str]:
+    def extract_keywords_from_messages(self, messages: List[str], existing_keywords: List[str] = None) -> List[str]:
         """Extract keywords from multiple messages.
 
         Args:
             messages: List of message texts
+            existing_keywords: Optional list of existing keywords to provide as context
 
         Returns:
             List of all keywords from all messages (may contain duplicates)
         """
         all_keywords = []
         for message_text in messages:
-            keywords = self.extract_keywords_from_message(message_text)
+            keywords = self.extract_keywords_from_message(message_text, existing_keywords)
             all_keywords.extend(keywords)
 
         return all_keywords
