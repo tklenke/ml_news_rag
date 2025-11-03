@@ -83,6 +83,9 @@ class KeywordExtractor:
 
         Returns:
             List of extracted keywords
+
+        Raises:
+            RuntimeError: If Ollama is not running or model not found
         """
         if not message_text or not message_text.strip():
             return []
@@ -111,9 +114,22 @@ class KeywordExtractor:
             return keywords
 
         except Exception as e:
-            # Log error and return empty list (graceful degradation)
-            print(f"Error extracting keywords: {e}")
-            return []
+            # Provide clear error message and halt
+            error_msg = str(e).lower()
+            if 'not found' in error_msg or '404' in error_msg:
+                raise RuntimeError(
+                    f"LLM model '{self.model}' not found. "
+                    f"Please ensure Ollama is running and the model is installed. "
+                    f"Try: ollama pull {self.model}"
+                ) from e
+            elif 'connection' in error_msg or 'refused' in error_msg:
+                raise RuntimeError(
+                    f"Cannot connect to Ollama at {OLLAMA_HOST}. "
+                    f"Please ensure Ollama is running."
+                ) from e
+            else:
+                # Re-raise unexpected errors
+                raise RuntimeError(f"Error extracting keywords: {e}") from e
 
     def extract_keywords_from_messages(self, messages: List[str]) -> List[str]:
         """Extract keywords from multiple messages.

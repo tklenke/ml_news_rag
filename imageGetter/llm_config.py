@@ -3,7 +3,7 @@
 
 # LLM Configuration
 OLLAMA_HOST = "http://localhost:11434"
-LLM_MODEL = "gemma2:2b"  # Tom can edit this as needed
+LLM_MODEL = "gemma3:1b"  # Tom can edit this as needed
 
 # Prompt template for keyword extraction (Phase 4a)
 KEYWORD_EXTRACTION_PROMPT = """You are analyzing aircraft builder messages to build a keyword vocabulary. Extract all aircraft-building related keywords from this message.
