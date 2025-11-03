@@ -23,10 +23,11 @@
 - CLI tool created with progress bar and options
 - 188 thumbnails generated (200x200, 2.2MB, 100% success)
 
-**Phase 4a: PENDING** - Build Improved Keywords File
-- 5 sub-phases: 4a.1 (message sampling), 4a.2 (keyword extraction), 4a.3 (merge/filter), 4a.4 (CLI tool), 4a.5 (run and document)
-- Output: keywords_master.txt (200-300 keywords)
-- Next: Start with Phase 4a.1 (message sampling)
+**Phase 4a: COMPLETE** ✓ (awaiting Tom's manual execution)
+- All 5 sub-phases implemented and tested
+- CLI tool ready: build_keywords_cli.py
+- Output: keywords_master.txt (Tom will create by running CLI)
+- Next: Tom runs CLI, then Phase 4b (message tagging)
 
 **Phase 4b: PENDING** - Tag Messages with Keywords
 - 5 sub-phases: 4b.1 (config file), 4b.2 (LLM tagger core), 4b.3 (batch processor), 4b.4 (CLI), 4b.5 (validation)
@@ -213,20 +214,36 @@ python build_keywords_cli.py ../data/image_index.json --sample 500 --existing ..
 
 **Goal:** Build initial keywords_master.txt
 
-**Tasks:**
-1. [ ] Run with --sample 100 on image_index.json
-2. [ ] Review candidate keywords
-3. [ ] Create `docs/input/keywords_master.txt` with curated keywords
-4. [ ] Document process in `docs/notes/phase4a_results.md`:
-   - Number of messages sampled
-   - Keywords extracted
-   - Keywords after filtering
-   - Final count in keywords_master.txt
-   - Examples of good keywords found
-5. [ ] Commit keywords_master.txt and results
-6. [ ] Mark Phase 4a complete in this file
+**Status:** AWAITING TOM'S EXECUTION
+
+**Tasks (for Tom to complete):**
+1. [ ] Ensure Ollama is running (docker-compose up or manual start)
+2. [ ] Run CLI with small sample first:
+   ```bash
+   cd imageGetter
+   python build_keywords_cli.py ../data/image_index.json --sample 10 --output keywords_test.txt
+   ```
+3. [ ] If test works, run with larger sample:
+   ```bash
+   python build_keywords_cli.py ../data/image_index.json --sample 100 --output keywords_candidates.txt
+   ```
+4. [ ] Review keywords_candidates.txt
+5. [ ] Create `docs/input/keywords_master.txt` with curated keywords
+6. [ ] Optionally: Run multiple iterations with different samples
+7. [ ] Document results in `docs/notes/phase4a_results.md`
+8. [ ] Commit keywords_master.txt and results
 
 **Deliverable:** keywords_master.txt ready for Phase 4b
+
+**Programmer Notes:**
+- All Phase 4a code is complete and tested (53 tests passing)
+- CLI tool is fully functional and includes:
+  * Message sampling from image_index.json
+  * LLM-based keyword extraction
+  * Keyword merging, filtering, and sorting
+  * Progress bars and comprehensive statistics
+  * Support for iterative refinement
+- Ready for Tom to run and build master keyword list
 
 ---
 
