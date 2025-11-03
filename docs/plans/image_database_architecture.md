@@ -63,7 +63,7 @@ data/
 **Notes:**
 - Top-level keys are message IDs
 - `keywords` extracted from filename and message subject (Phase 1)
-- `llm_keywords` added by LLM tagger from master keyword list (Phase 4)
+- `llm_keywords` added by LLM tagger from master keyword list (Phase 4b)
 - `local_filename` uses normalized format: `{messageID}_part{X}_{Y}_{filename}`
 
 ### 3. Module Structure
@@ -175,17 +175,19 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 - Update image_index.json with thumbnail status
 - **Deliverable:** images/thumbs/ populated with thumbnails
 
-### Phase 4: Query Interface (Test on A/ directory)
-- CLI tool to query and display image results
-- Integrate with existing asker/ RAG query
-- Display thumbnails with message context
-- **Deliverable:** Working CLI query tool
+### Phase 4a: TBD
+- **Deliverable:** TBD
 
-### Phase 5: Scale to Full Corpus
-- Process all directories (B/, C/, ... Z/, etc.)
-- Monitor disk space and download progress
-- Handle edge cases discovered during testing
-- **Deliverable:** Complete image database
+### Phase 4b: LLM Keyword Tagging
+- Tag messages with keywords using local LLM
+- Create llm_config.py for Tom to edit model and prompt
+- Store llm_keywords in image_index.json
+- **Deliverable:** image_index.json with llm_keywords populated
+
+### Phase 5: Keyword-Based Query Interface
+- CLI tool to query images by keywords
+- Display thumbnails with message context
+- **Deliverable:** Working keyword-based image search
 
 ### Phase 6: Web Interface (Future Enhancement)
 - Simple web UI for thumbnail grid
@@ -335,7 +337,7 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 
 ## Phase Revisions
 
-### Phase 4 Implementation Details **[REVISED - 2025-11-03]**
+### Phase 4b Implementation Details **[REVISED - 2025-11-03]**
 
 **Scope Clarification:**
 - Tagging only messages with images (~7k messages in image_index.json)
@@ -417,16 +419,18 @@ python tag_messages.py data/image_index.json --keywords custom_keywords.txt
 - Simpler, more interpretable, faster queries
 - Debuggable - can review keyword assignments
 
-**New Phase 4:** Build keyword list (LLM-assisted), tag messages with keywords in image_index.json
+**New Phase 4a:** TBD (Tom to specify)
+**New Phase 4b:** Build keyword list (LLM-assisted), tag messages with keywords in image_index.json
 **New Phase 5:** Keyword-based query interface with HTML viewer
 
+**Old Phase 4 (Query Interface) merged with Phase 5**
 **Old Phase 5 (Scale to Full Corpus) removed** - already scaling organically
 
 ---
 
 ## Open Questions
 
-1. Keyword list size: 50-200 terms optimal? (Phase 4 will determine)
+1. Keyword list size: 50-200 terms optimal? (Phase 4b will determine)
 2. Should we store original message markdown path in image_index.json for reference?
 3. Do we need image versioning if re-downloading improves quality?
 4. Web interface framework preference (Flask, FastAPI, static HTML)?

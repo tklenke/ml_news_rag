@@ -32,19 +32,21 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 - [x] Update architecture document with actual implementation
 
 ### Completed Architectural Tasks (2025-11-03)
-- [x] Finalize Phase 4 implementation design with Tom
+- [x] Finalize Phase 4b implementation design with Tom
 - [x] Decide keywords storage location (image_index.json, not separate file)
 - [x] Clarify scope (7k messages with images, not full corpus)
 - [x] Design CLI interface (--limit, --overwrite, --keywords, --model flags)
 - [x] Review existing LLM patterns (embedder/f_llm.py, asker/ask_models.py)
 - [x] Design LLM tagging architecture (class-based KeywordTagger following f_llm.py pattern)
 - [x] Design llm_config.py for Tom to edit model and prompt
-- [x] Break down Phase 4 into TDD increments (4.1-4.6)
-- [x] Update architecture document with Phase 4 details and LLM architecture
-- [x] Update programmer_todo.md with detailed Phase 4 tasks and LLM guidance
+- [x] Break down Phase 4b into TDD increments (4b.1-4b.6)
+- [x] Update architecture document with Phase 4b details and LLM architecture
+- [x] Update programmer_todo.md with detailed Phase 4b tasks and LLM guidance
+- [x] Reorganize phases: Phase 4 → Phase 4b, create placeholder for Phase 4a
 
 ### Pending Architectural Tasks
-- [ ] Review Phase 4 LLM keyword tagging approach (after implementation)
+- [ ] Design Phase 4a (Tom to specify requirements)
+- [ ] Review Phase 4b LLM keyword tagging approach (after implementation)
   - [ ] Assess keyword list quality (coverage, precision)
   - [ ] Evaluate tagging accuracy
   - [ ] Decide if LLM prompts need refinement
@@ -64,7 +66,21 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 
 ## Decision Log
 
-### 2025-11-03: Phase 4 Implementation Details - Keywords in Index
+### 2025-11-03: Phase Renumbering - Create Phase 4a Slot
+
+**Decision:** Rename existing Phase 4 (LLM tagging) to Phase 4b, create Phase 4a for new program
+
+**Rationale:**
+- Tom has a new program to add before LLM tagging
+- Renumber to preserve logical sequence
+- Phase 4b design remains unchanged
+
+**Changes:**
+- Phase 4 → Phase 4b (all sub-phases: 4.1→4b.1, 4.2→4b.2, etc.)
+- Phase 4a placeholder created (Tom to specify)
+- All documentation updated (programmer_todo, architecture, architect_todo)
+
+### 2025-11-03: Phase 4b Implementation Details - Keywords in Index
 
 **Decision:** Store `llm_keywords` field inside image_index.json (not separate file)
 
@@ -107,9 +123,9 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
   - KEYWORD_TAGGING_PROMPT = "..." (Tom can experiment with prompt)
 - Rationale: Separates configuration from code, enables rapid iteration on prompt engineering
 
-### 2025-11-02: Phase 4-5 Architecture Revision - LLM Keyword Tagging
+### 2025-11-02: Phase 4b-5 Architecture Revision - LLM Keyword Tagging
 
-**Decision:** Replace ChromaDB semantic search (old Phase 4) with LLM keyword tagging approach
+**Decision:** Replace ChromaDB semantic search (original plan) with LLM keyword tagging approach
 
 **Rationale:**
 - **Simpler architecture** - No ChromaDB integration needed for image search
@@ -120,9 +136,10 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 - **Debuggable** - Can review and refine keyword assignments
 
 **New Phase Structure:**
-- **Phase 4: LLM Keyword Tagging** - Build keyword list, tag messages, create message_keywords.json
+- **Phase 4a:** TBD (Tom to specify)
+- **Phase 4b: LLM Keyword Tagging** - Build keyword list, tag messages, store in image_index.json
 - **Phase 5: Keyword-Based Query** - Simple lookup and HTML viewer
-- **Old Phase 5 removed** - "Scale to full corpus" already happening organically
+- **Old "Scale to full corpus" removed** - already happening organically
 
 **Architecture Impact:**
 - No ChromaDB metadata updates needed
@@ -208,7 +225,7 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 
 3. **Text-based retrieval may have poor precision**
    - Mitigation: Can add multimodal embeddings in Phase 6+
-   - Status: Will assess during Phase 4
+   - Status: Will assess during Phase 4b
 
 4. **Disk space may be insufficient**
    - Mitigation: Estimate after Phase 3, can use external drive
@@ -273,7 +290,8 @@ Use "Strange things are afoot at the Circle K" if you need immediate architectur
 | Phase 1 Review | Pending | After Programmer completes Phase 1 |
 | Phase 2 Review | Pending | After Programmer completes Phase 2 |
 | Phase 3 Review | Pending | After Programmer completes Phase 3 |
-| Phase 4 Review | Pending | After Programmer completes Phase 4 |
+| Phase 4a Review | Pending | After Programmer completes Phase 4a |
+| Phase 4b Review | Pending | After Programmer completes Phase 4b |
 | Phase 5 Review | Pending | After Programmer completes Phase 5 |
 
 ---

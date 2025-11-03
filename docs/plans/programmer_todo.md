@@ -23,11 +23,14 @@
 - CLI tool created with progress bar and options
 - 188 thumbnails generated (200x200, 2.2MB, 100% success)
 
-**Phase 4: IN PROGRESS**
-- 6 sub-phases: 4.1 (optional keyword discovery), 4.2 (config file), 4.3 (LLM tagger core), 4.4 (batch processor), 4.5 (CLI), 4.6 (validation)
-- Next: Start with Phase 4.2 (create llm_config.py)
+**Phase 4a: PENDING**
+- Details TBD (Tom to specify)
 
-**Next Task:** Phase 4.2 - Create LLM configuration file
+**Phase 4b: PENDING**
+- 6 sub-phases: 4b.1 (optional keyword discovery), 4b.2 (config file), 4b.3 (LLM tagger core), 4b.4 (batch processor), 4b.5 (CLI), 4b.6 (validation)
+- Next: Start with Phase 4b.2 (create llm_config.py)
+
+**Next Task:** Phase 4a - TBD
 
 ---
 
@@ -61,7 +64,13 @@
 
 ---
 
-## Phase 4: LLM Keyword Tagging
+## Phase 4a: TBD
+
+**Goal:** TBD (Tom to specify)
+
+---
+
+## Phase 4b: LLM Keyword Tagging
 
 **Goal:** Use local LLM to tag messages with curated keywords
 
@@ -72,7 +81,7 @@
 - Use keywords_seed.txt (110 keywords) as starting point
 - Store results in image_index.json (not separate file)
 
-### Phase 4.1: Keyword Discovery Tool (Optional - Tom may skip)
+### Phase 4b.1: Keyword Discovery Tool (Optional - Tom may skip)
 
 **Goal:** CLI tool to sample messages and extract candidate keywords
 
@@ -93,7 +102,7 @@
 
 ---
 
-### Phase 4.2: LLM Configuration File
+### Phase 4b.2: LLM Configuration File
 
 **Goal:** Create config file for LLM parameters and prompt
 
@@ -115,13 +124,13 @@ Message: {message}
 Return the matching keywords as a comma-separated list. If no keywords match, return "NONE". Do not include explanations or extra text."""
    ```
 3. [ ] Document that Tom can edit model and prompt in this file
-4. [ ] Commit: "Add LLM configuration file (Phase 4.2)"
+4. [ ] Commit: "Add LLM configuration file (Phase 4b.2)"
 
 **Deliverable:** llm_config.py with editable prompt and model
 
 ---
 
-### Phase 4.3: LLM Keyword Tagger Core (TDD)
+### Phase 4b.3: LLM Keyword Tagger Core (TDD)
 
 **Goal:** Class-based tagger using Ollama (following embedder/f_llm.py pattern)
 
@@ -167,7 +176,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
     ```
 11. [ ] Run tests - verify all pass
 12. [ ] Refactor if needed
-13. [ ] Commit: "Implement LLM keyword tagger core (Phase 4.3)"
+13. [ ] Commit: "Implement LLM keyword tagger core (Phase 4b.3)"
 
 **Implementation Notes:**
 - Follow pattern from `embedder/f_llm.py` (class-based, ollama.Client)
@@ -180,7 +189,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
 
 ---
 
-### Phase 4.4: Batch Message Tagger (TDD)
+### Phase 4b.4: Batch Message Tagger (TDD)
 
 **Goal:** Process image_index.json and add llm_keywords to each message
 
@@ -210,13 +219,13 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
    - Write back to image_index.json
    - Auto-save every 50 messages (crash recovery)
 9. [ ] Run tests - verify all pass
-10. [ ] Commit: "Implement batch message tagger (Phase 4.4)"
+10. [ ] Commit: "Implement batch message tagger (Phase 4b.4)"
 
 **Deliverable:** Core processing logic with tests
 
 ---
 
-### Phase 4.5: CLI Interface
+### Phase 4b.5: CLI Interface
 
 **Goal:** Command line tool for tagging messages
 
@@ -238,7 +247,7 @@ Return the matching keywords as a comma-separated list. If no keywords match, re
 5. [ ] Test with --limit 5 on image_index.json
 6. [ ] Test with --overwrite flag
 7. [ ] Document usage in imageGetter/README.md
-8. [ ] Commit: "Add CLI for message tagging (Phase 4.5)"
+8. [ ] Commit: "Add CLI for message tagging (Phase 4b.5)"
 
 **Command Line Examples:**
 ```bash
@@ -262,7 +271,7 @@ python tag_messages_cli.py ../data/image_index.json --model gemma2:2b
 
 ---
 
-### Phase 4.6: Validate and Document
+### Phase 4b.6: Validate and Document
 
 **Goal:** Run on real data and validate quality
 
@@ -272,20 +281,20 @@ python tag_messages_cli.py ../data/image_index.json --model gemma2:2b
 3. [ ] If quality poor, iterate on LLM prompt
 4. [ ] Run on all A/ directory messages (~92 messages with images)
 5. [ ] Review statistics and sample results
-6. [ ] Create `docs/notes/phase4_results.md`:
+6. [ ] Create `docs/notes/phase4b_results.md`:
    - Messages processed
    - Keywords per message (distribution)
    - Sample results (show 5-10 messages with keywords)
    - Accuracy assessment
    - Any issues found
 7. [ ] Commit results documentation
-8. [ ] Mark Phase 4 complete in this file
+8. [ ] Mark Phase 4b complete in this file
 
 **Deliverable:** image_index.json with llm_keywords populated, results documented
 
 ---
 
-### Important Notes for Phase 4
+### Important Notes for Phase 4b
 
 **LLM Setup:**
 - Use Ollama with local model (already installed via docker-compose)
