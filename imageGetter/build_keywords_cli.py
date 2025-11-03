@@ -92,47 +92,66 @@ def main():
         print(f"\nExisting keywords file not found: {args.existing}")
         print("Starting with empty keyword list")
 
-    # Step 6: Merge with existing keywords
+    # Step 6: Merge with existing keywords and identify new ones
     print("\nMerging with existing keywords...")
     merged_keywords = merge_keyword_lists(existing_keywords, unique_keywords)
-    new_keywords_count = len(merged_keywords) - len(existing_keywords)
-    print(f"Total keywords after merge: {len(merged_keywords)}")
-    print(f"New keywords: {new_keywords_count}")
 
-    # Step 7: Filter noise
+    # Identify which keywords are new (not in existing)
+    existing_keywords_lower = set(k.lower() for k in existing_keywords)
+    new_keywords_only = set(k for k in merged_keywords if k not in existing_keywords_lower)
+
+    print(f"Total keywords after merge: {len(merged_keywords)}")
+    print(f"New keywords: {len(new_keywords_only)}")
+
+    # Step 7: Filter noise from both merged and new-only keywords
     print("\nFiltering noise keywords...")
     filtered_keywords = filter_noise_keywords(merged_keywords)
+    filtered_new_only = filter_noise_keywords(new_keywords_only)
     removed_count = len(merged_keywords) - len(filtered_keywords)
-    print(f"Removed {removed_count} noise keywords")
-    print(f"Filtered keywords: {len(filtered_keywords)}")
+    print(f"Removed {removed_count} noise keywords from merged list")
+    print(f"Filtered keywords (all): {len(filtered_keywords)}")
+    print(f"Filtered keywords (new only): {len(filtered_new_only)}")
 
     # Step 8: Sort alphabetically
     sorted_keywords = sort_keywords(filtered_keywords)
+    sorted_new_only = sort_keywords(filtered_new_only)
 
-    # Step 9: Write output
+    # Step 9: Write output files
     print(f"\nWriting candidate keywords to {args.output}...")
     with open(args.output, 'w') as f:
         for keyword in sorted_keywords:
             f.write(f"{keyword}\n")
-
     print(f"Successfully wrote {len(sorted_keywords)} keywords to {args.output}")
+
+    # Write new keywords to separate file
+    new_output = args.output.replace('.txt', '_new.txt')
+    print(f"\nWriting NEW keywords only to {new_output}...")
+    with open(new_output, 'w') as f:
+        for keyword in sorted_new_only:
+            f.write(f"{keyword}\n")
+    print(f"Successfully wrote {len(sorted_new_only)} NEW keywords to {new_output}")
 
     # Step 10: Statistics summary
     print("\n" + "="*60)
     print("SUMMARY STATISTICS")
     print("="*60)
-    print(f"Messages sampled:           {actual_sample_size}")
-    print(f"Keywords extracted (LLM):   {len(unique_keywords)}")
-    print(f"Existing keywords:          {len(existing_keywords)}")
-    print(f"Total after merge:          {len(merged_keywords)}")
-    print(f"New keywords found:         {new_keywords_count}")
-    print(f"Noise keywords removed:     {removed_count}")
-    print(f"Final candidate keywords:   {len(sorted_keywords)}")
+    print(f"Messages sampled:               {actual_sample_size}")
+    print(f"Keywords extracted (LLM):       {len(unique_keywords)}")
+    print(f"Existing keywords:              {len(existing_keywords)}")
+    print(f"Total after merge:              {len(merged_keywords)}")
+    print(f"New keywords found:             {len(new_keywords_only)}")
+    print(f"Noise keywords removed:         {removed_count}")
+    print(f"Final candidate keywords (all): {len(sorted_keywords)}")
+    print(f"Final new keywords only:        {len(sorted_new_only)}")
     print("="*60)
     print()
+    print("Output files created:")
+    print(f"  {args.output} - All keywords (existing + new, filtered)")
+    print(f"  {new_output} - NEW keywords only (for easy review)")
+    print()
     print("Next steps:")
-    print(f"1. Review {args.output}")
-    print(f"2. Add good keywords to keywords_master.txt")
+    print(f"1. Review {new_output} to see what's new")
+    print(f"2. Add good keywords from {new_output} to keywords_master.txt")
     print(f"3. Run again with different sample to find more keywords")
 
     return 0
