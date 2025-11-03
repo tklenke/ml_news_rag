@@ -4,6 +4,7 @@
 # LLM Configuration
 OLLAMA_HOST = "http://localhost:11434"
 LLM_MODEL = "gemma3:1b"  # Tom can edit this as needed
+LLM_TIMEOUT = 30.0  # Timeout in seconds for LLM requests (default: 30s)
 
 # Prompt template for keyword extraction (Phase 4a)
 KEYWORD_EXTRACTION_PROMPT = """You are a very exact librarian tasked with analyzing aircraft builder messages to build a keyword vocabulary.
@@ -20,7 +21,7 @@ Return keywords as a comma-separated list. Focus on:
 - Processes (layup, installation, painting, etc.)
 - Systems (engine, fuel, electrical, etc.)
 
-Return only the keywords, no explanations. If there is an error, return a blank line."""
+Return only the keywords, no explanations, No puntuation. If there is an error, return a blank line."""
 
 # Prompt template for keyword tagging (Phase 4b)
 KEYWORD_TAGGING_PROMPT = """You are analyzing aircraft builder messages. Given this list of keywords, return ONLY the keywords that are relevant to the message below.

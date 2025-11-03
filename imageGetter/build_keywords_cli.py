@@ -16,6 +16,7 @@ from keyword_builder import (
     filter_noise_keywords,
     sort_keywords
 )
+from llm_config import LLM_TIMEOUT
 
 
 def main():
@@ -36,6 +37,8 @@ def main():
                         help='Output file for candidate keywords (default: keywords_candidates.txt)')
     parser.add_argument('--model', type=str, default=None,
                         help='Override LLM model from config')
+    parser.add_argument('--verbose', action='store_true',
+                        help='Show detailed progress including message subjects')
 
     args = parser.parse_args()
 
@@ -86,18 +89,52 @@ def main():
 
     # Step 4: Extract keywords from messages using LLM (with existing keywords as context)
     print("Extracting keywords using LLM...")
+    print(f"Timeout per message: {LLM_TIMEOUT}s (configurable in llm_config.py)")
     print("(This may take a few minutes depending on sample size and model)")
     if existing_keywords:
         print(f"Providing {len(existing_keywords)} existing keywords to LLM for context")
+    if args.verbose:
+        print("Verbose mode enabled - showing message subjects and errors")
     extractor = KeywordExtractor(model=args.model)
 
     all_keywords = []
-    for message in tqdm(sampled_messages, desc="Processing messages"):
+    failed_messages = []
+
+    for i, message in enumerate(tqdm(sampled_messages, desc="Processing messages"), 1):
         message_text = extract_message_text(message)
-        keywords = extractor.extract_keywords_from_message(message_text, existing_keywords)
-        all_keywords.append(keywords)
+        message_id = message.get('metadata', {}).get('message_id', 'unknown')
+        subject = message.get('metadata', {}).get('subject', 'unknown')
+
+        try:
+            if args.verbose:
+                tqdm.write(f"[{i}/{len(sampled_messages)}] Processing: {subject[:50]}...")
+
+            keywords = extractor.extract_keywords_from_message(message_text, existing_keywords)
+            all_keywords.append(keywords)
+
+        except RuntimeError as e:
+            error_msg = str(e)
+            if args.verbose:
+                tqdm.write(f"ERROR on message {message_id}: {error_msg}")
+            else:
+                tqdm.write(f"WARNING: Skipping message {message_id} due to error")
+
+            failed_messages.append({
+                'message_id': message_id,
+                'subject': subject,
+                'error': error_msg
+            })
+            # Continue processing other messages
+            continue
 
     print(f"\nExtracted keywords from {len(all_keywords)} messages")
+    if failed_messages:
+        print(f"WARNING: {len(failed_messages)} messages failed (skipped)")
+        if args.verbose:
+            print("\nFailed messages:")
+            for fm in failed_messages:
+                print(f"  - {fm['message_id']}: {fm['subject'][:50]}")
+                print(f"    Error: {fm['error'][:80]}")
 
     # Step 5: Aggregate keywords
     print("Aggregating keywords...")
@@ -137,6 +174,8 @@ def main():
     print("SUMMARY STATISTICS")
     print("="*60)
     print(f"Messages processed:          {actual_sample_size}")
+    print(f"Messages failed:             {len(failed_messages)}")
+    print(f"Messages succeeded:          {len(all_keywords)}")
     print(f"Keywords extracted (LLM):    {len(unique_keywords)}")
     print(f"Existing keywords:           {len(existing_keywords)}")
     print(f"Total after merge:           {len(merged_keywords)}")

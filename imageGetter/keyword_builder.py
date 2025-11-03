@@ -5,7 +5,7 @@ import json
 import random
 from typing import List, Dict, Set
 import ollama
-from llm_config import OLLAMA_HOST, LLM_MODEL, KEYWORD_EXTRACTION_PROMPT
+from llm_config import OLLAMA_HOST, LLM_MODEL, KEYWORD_EXTRACTION_PROMPT, LLM_TIMEOUT
 
 
 def load_image_index(file_path: str) -> Dict:
@@ -104,12 +104,21 @@ class KeywordExtractor:
                 message=message_text
             )
 
-            # Call LLM
-            response = self.ollama_client.generate(
-                model=self.model,
-                prompt=prompt,
-                stream=False
-            )
+            # Call LLM with timeout
+            try:
+                response = self.ollama_client.generate(
+                    model=self.model,
+                    prompt=prompt,
+                    stream=False,
+                    options={
+                        'timeout': LLM_TIMEOUT
+                    }
+                )
+            except TimeoutError:
+                raise RuntimeError(
+                    f"LLM request timed out after {LLM_TIMEOUT} seconds. "
+                    f"Consider increasing LLM_TIMEOUT in llm_config.py or using a faster model."
+                ) from None
 
             # Parse response - expecting comma-separated keywords
             response_text = response.get('response', '').strip()
