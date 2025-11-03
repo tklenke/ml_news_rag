@@ -204,8 +204,8 @@ python build_keywords_cli.py ../data/image_index.json --sample 100 --output keyw
 # Second iteration: sample 100 more, merge with master
 python build_keywords_cli.py ../data/image_index.json --sample 100 --existing ../docs/input/keywords_master.txt --output keywords_candidates2.txt
 
-# Large sample for final pass
-python build_keywords_cli.py ../data/image_index.json --sample 500 --existing ../docs/input/keywords_master.txt --output keywords_candidates_final.txt
+# Process ALL messages for comprehensive keyword extraction (no --sample = all messages)
+python build_keywords_cli.py ../data/image_index.json --existing ../docs/input/keywords_master.txt --output keywords_candidates_all.txt
 ```
 
 **Deliverable:** Working CLI tool for iterative keyword building
@@ -227,9 +227,13 @@ python build_keywords_cli.py ../data/image_index.json --sample 500 --existing ..
    cd imageGetter
    python build_keywords_cli.py ../data/image_index.json --sample 10 --output keywords_test.txt
    ```
-3. [ ] If test works, run with larger sample:
+3. [ ] If test works, run with larger sample (or omit --sample to process ALL messages):
    ```bash
+   # Sample 100 messages
    python build_keywords_cli.py ../data/image_index.json --sample 100 --output keywords_candidates.txt
+
+   # Or process ALL messages (no --sample argument)
+   python build_keywords_cli.py ../data/image_index.json --output keywords_candidates_all.txt
    ```
 4. [ ] Review keywords_candidates.txt
 5. [ ] Create `docs/input/keywords_master.txt` with curated keywords

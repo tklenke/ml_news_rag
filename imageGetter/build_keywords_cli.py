@@ -28,8 +28,8 @@ def main():
                         help='Path to image_index.json')
 
     # Optional arguments
-    parser.add_argument('--sample', type=int, default=100,
-                        help='Number of messages to sample (default: 100)')
+    parser.add_argument('--sample', type=int, default=None,
+                        help='Number of messages to sample (default: all messages)')
     parser.add_argument('--existing', type=str, default='../docs/input/keywords_seed.txt',
                         help='Existing keywords file to merge with (default: keywords_seed.txt)')
     parser.add_argument('--output', type=str, default='keywords_candidates.txt',
@@ -45,7 +45,10 @@ def main():
         return 1
 
     print(f"Building keyword list from {args.index_file}")
-    print(f"Sample size: {args.sample} messages")
+    if args.sample:
+        print(f"Sample size: {args.sample} messages")
+    else:
+        print(f"Sample size: ALL messages (no limit)")
     print(f"Existing keywords: {args.existing}")
     print(f"Output: {args.output}")
     print()
@@ -57,11 +60,17 @@ def main():
     print(f"Loaded {total_messages} messages with images")
     print()
 
-    # Step 2: Sample random messages
-    print(f"Sampling {args.sample} random messages...")
-    sampled_messages = sample_random_messages(image_index, args.sample)
-    actual_sample_size = len(sampled_messages)
-    print(f"Sampled {actual_sample_size} messages")
+    # Step 2: Sample random messages (or use all if no sample specified)
+    if args.sample:
+        print(f"Sampling {args.sample} random messages...")
+        sampled_messages = sample_random_messages(image_index, args.sample)
+        actual_sample_size = len(sampled_messages)
+        print(f"Sampled {actual_sample_size} messages")
+    else:
+        print(f"Processing ALL {total_messages} messages (no sampling)...")
+        sampled_messages = list(image_index.values())
+        actual_sample_size = len(sampled_messages)
+        print(f"Processing {actual_sample_size} messages")
     print()
 
     # Step 3: Extract keywords from messages using LLM
