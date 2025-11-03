@@ -115,15 +115,20 @@ class KeywordExtractor:
                 stream=False
             )
 
-            # Parse response - expecting comma-separated keywords
+            # Parse response - expecting comma-separated keywords (but LLM sometimes uses newlines)
             response_text = response.get('response', '').strip()
             if not response_text:
                 return []
 
-            # Split by comma and clean up
-            keywords = [k.strip() for k in response_text.split(',')]
-            # Remove empty strings
-            keywords = [k for k in keywords if k]
+            # Split by comma first, then split each result by newline
+            # This handles both "keyword1, keyword2" and "keyword1\nkeyword2" formats
+            keywords = []
+            for part in response_text.split(','):
+                # Further split by newlines in case LLM used mixed format
+                for keyword in part.split('\n'):
+                    keyword = keyword.strip()
+                    if keyword:
+                        keywords.append(keyword)
 
             return keywords
 

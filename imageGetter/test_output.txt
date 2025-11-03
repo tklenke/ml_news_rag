@@ -1,7 +1,0 @@
-aluminum
-cowling
-engine
-epoxy
-firewall
-wing
-winglet
