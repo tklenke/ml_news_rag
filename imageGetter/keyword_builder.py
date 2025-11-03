@@ -72,7 +72,11 @@ class KeywordExtractor:
             ollama_host: Ollama server URL (defaults to OLLAMA_HOST from config)
             model: LLM model name (defaults to LLM_MODEL from config)
         """
-        self.ollama_client = ollama.Client(ollama_host or OLLAMA_HOST)
+        # Create client with timeout at the HTTP request level
+        self.ollama_client = ollama.Client(
+            host=ollama_host or OLLAMA_HOST,
+            timeout=LLM_TIMEOUT
+        )
         self.model = model or LLM_MODEL
 
     def extract_keywords_from_message(self, message_text: str, existing_keywords: List[str] = None) -> List[str]:
@@ -104,21 +108,12 @@ class KeywordExtractor:
                 message=message_text
             )
 
-            # Call LLM with timeout
-            try:
-                response = self.ollama_client.generate(
-                    model=self.model,
-                    prompt=prompt,
-                    stream=False,
-                    options={
-                        'timeout': LLM_TIMEOUT
-                    }
-                )
-            except TimeoutError:
-                raise RuntimeError(
-                    f"LLM request timed out after {LLM_TIMEOUT} seconds. "
-                    f"Consider increasing LLM_TIMEOUT in llm_config.py or using a faster model."
-                ) from None
+            # Call LLM (timeout is set at Client level)
+            response = self.ollama_client.generate(
+                model=self.model,
+                prompt=prompt,
+                stream=False
+            )
 
             # Parse response - expecting comma-separated keywords
             response_text = response.get('response', '').strip()
@@ -135,20 +130,31 @@ class KeywordExtractor:
         except Exception as e:
             # Provide clear error message and halt
             error_msg = str(e).lower()
-            if 'not found' in error_msg or '404' in error_msg:
+            error_type = type(e).__name__
+
+            # Check for timeout
+            if 'timeout' in error_msg or 'timed out' in error_msg or 'TimeoutError' in error_type:
+                raise RuntimeError(
+                    f"LLM request timed out after {LLM_TIMEOUT} seconds. "
+                    f"Message was too long or LLM is overloaded. "
+                    f"Consider increasing LLM_TIMEOUT in llm_config.py (current: {LLM_TIMEOUT}s)"
+                ) from e
+            # Check for model not found
+            elif 'not found' in error_msg or '404' in error_msg:
                 raise RuntimeError(
                     f"LLM model '{self.model}' not found. "
                     f"Please ensure Ollama is running and the model is installed. "
                     f"Try: ollama pull {self.model}"
                 ) from e
+            # Check for connection errors
             elif 'connection' in error_msg or 'refused' in error_msg:
                 raise RuntimeError(
                     f"Cannot connect to Ollama at {OLLAMA_HOST}. "
                     f"Please ensure Ollama is running."
                 ) from e
             else:
-                # Re-raise unexpected errors
-                raise RuntimeError(f"Error extracting keywords: {e}") from e
+                # Re-raise unexpected errors with context
+                raise RuntimeError(f"Error extracting keywords ({error_type}): {e}") from e
 
     def extract_keywords_from_messages(self, messages: List[str], existing_keywords: List[str] = None) -> List[str]:
         """Extract keywords from multiple messages.
