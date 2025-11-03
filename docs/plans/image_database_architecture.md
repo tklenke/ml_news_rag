@@ -75,6 +75,10 @@ Extracts image URLs from markdown files and downloads images.
 - `extract_image_urls.py` - Parse msgs_md files, identify attachment URLs
 - `download_images.py` - Download images with retry logic, rename to standardized format
 - `generate_thumbnails.py` - Create 200x200px center-cropped thumbnails
+- `llm_config.py` - LLM configuration (model, Ollama host, prompt template) - **Tom edits this**
+- `llm_tagger.py` - KeywordTagger class using Ollama to tag messages
+- `tag_messages.py` - Batch processor to add llm_keywords to image_index.json
+- `tag_messages_cli.py` - CLI interface for keyword tagging
 - `image_index.json` - Maintained index of all images
 
 **Filtering Rules (as implemented):**
@@ -385,6 +389,22 @@ python tag_messages.py data/image_index.json --keywords custom_keywords.txt
 - Scope matches use case (image search tool, not text search)
 - Simple query: load one file, filter by keyword
 - Incremental processing with resume capability
+
+**LLM Tagging Architecture:**
+- **Configuration:** llm_config.py contains model name, Ollama host, and prompt template
+  - Tom can edit model (default: gemma3:1b) and prompt without touching code
+  - Follows existing pattern from embedder/f_llm.py
+- **KeywordTagger Class:** Encapsulates Ollama interaction
+  - `__init__(ollamahost)` - Creates ollama.Client
+  - `tag_message(message_text, keywords, model)` - Tags single message
+  - Graceful error handling: returns [] on error, logs issue, doesn't crash
+  - Response validation: ensures LLM only returns keywords from master list
+- **Batch Processing:** tag_messages.py
+  - Loads image_index.json and keywords_seed.txt
+  - Skips messages with existing llm_keywords (unless --overwrite)
+  - Auto-saves every 50 messages (crash recovery)
+  - Handles LLM errors per-message (log and continue)
+- **CLI Interface:** tag_messages_cli.py with --limit, --overwrite, --keywords, --model flags
 
 ### Phase 4-5 Revision (2025-11-02)
 

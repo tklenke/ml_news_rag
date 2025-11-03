@@ -35,10 +35,13 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 - [x] Finalize Phase 4 implementation design with Tom
 - [x] Decide keywords storage location (image_index.json, not separate file)
 - [x] Clarify scope (7k messages with images, not full corpus)
-- [x] Design CLI interface (--limit, --overwrite, --keywords flags)
-- [x] Break down Phase 4 into TDD increments (4.1-4.5)
-- [x] Update architecture document with Phase 4 details
-- [x] Update programmer_todo.md with detailed Phase 4 tasks
+- [x] Design CLI interface (--limit, --overwrite, --keywords, --model flags)
+- [x] Review existing LLM patterns (embedder/f_llm.py, asker/ask_models.py)
+- [x] Design LLM tagging architecture (class-based KeywordTagger following f_llm.py pattern)
+- [x] Design llm_config.py for Tom to edit model and prompt
+- [x] Break down Phase 4 into TDD increments (4.1-4.6)
+- [x] Update architecture document with Phase 4 details and LLM architecture
+- [x] Update programmer_todo.md with detailed Phase 4 tasks and LLM guidance
 
 ### Pending Architectural Tasks
 - [ ] Review Phase 4 LLM keyword tagging approach (after implementation)
@@ -93,6 +96,16 @@ Next: Production download testing (Phase 2.9), then Programmer implements Phase 
 - Simpler query interface (Phase 5)
 - Resume capability built-in (skip existing llm_keywords)
 - Incremental processing with --limit flag
+
+**LLM Configuration Design (llm_config.py):**
+- Tom requested separate config file for model and prompt (not hardcoded)
+- Pattern: Follow embedder/f_llm.py (class-based KeywordTagger)
+- Error handling: Log and continue (don't crash on LLM errors)
+- File contents:
+  - OLLAMA_HOST = "http://localhost:11434"
+  - LLM_MODEL = "gemma3:1b" (Tom can edit)
+  - KEYWORD_TAGGING_PROMPT = "..." (Tom can experiment with prompt)
+- Rationale: Separates configuration from code, enables rapid iteration on prompt engineering
 
 ### 2025-11-02: Phase 4-5 Architecture Revision - LLM Keyword Tagging
 
