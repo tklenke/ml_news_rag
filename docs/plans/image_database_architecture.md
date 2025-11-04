@@ -464,71 +464,61 @@ python tag_messages.py data/image_index.json --keywords custom_keywords.txt
 **Old Phase 4 (Query Interface) merged with Phase 5**
 **Old Phase 5 (Scale to Full Corpus) removed** - already scaling organically
 
-### Phase 4b Enhancement: Chapter Categorization **[DESIGNED - 2025-11-04]**
+### Phase 4b Enhancement: Chapter Categorization **[COMPLETE - 2025-11-04]**
 
 **Enhancement:** Add Cozy IV build chapter categorization alongside keyword tagging
 
-**Rationale:**
-- Tom requested ability to categorize messages by Cozy IV build chapters (1-25)
-- CHAPTER_CATEGORIZATION_PROMPT already exists in llm_config.py
-- Chapter categorization provides another dimension for querying/organizing content
-- Uses same LLM infrastructure as keyword tagging (Ollama)
+**Status:** ✅ Implementation complete, 95 tests passing
 
-**Architecture:**
-- New `chapters` field in index: List of integers (1-25), sorted ascending
-- `KeywordTagger.categorize_message()` - New method to categorize into chapters
-- `KeywordTagger.tag_message()` - Modified to return tuple: (keywords, raw_response)
-- Enhanced verbose mode shows full LLM responses for both keyword and chapter
-- Default keywords file changed to `aircraft_keywords.txt` (562 keywords)
+**Implementation Details:**
 
-**Processing Flow:**
-1. Extract message text (subject + body from markdown)
-2. Call LLM for keyword tagging (using aircraft_keywords.txt)
-3. Call LLM for chapter categorization (using CHAPTER_CATEGORIZATION_PROMPT)
-4. Store both results in index
-5. In verbose mode, display both LLM responses and parsed results
+**Message Text Extraction:**
+- Extracts full message body from markdown files (not just subject)
+- Handles multiple directory structures (uppercase, lowercase, aDigits)
+- Limits to 2000 characters for LLM performance
+- Falls back to subject-only if markdown file not found
+
+**Error Handling:**
+- Model not found errors → RuntimeError (terminates immediately with clear message)
+- Other LLM errors → Log and return empty list (graceful degradation)
+- Validates chapter numbers in range 1-25
+- Validates keywords against master list (prevents hallucination)
+
+**Progress Tracking:**
+- Non-verbose mode: `[X/Y] Subject` for each message
+- Auto-save every 50 messages with notification
+- Verbose mode: Full LLM responses for both keyword and chapter categorization
+
+**Data Structure:**
+```json
+{
+  "A1NtxlDfY4c": {
+    "metadata": {...},
+    "images": [...],
+    "llm_keywords": ["firewall", "baffles", "cowling"],
+    "chapters": [4, 15, 23]
+  }
+}
+```
 
 **Chapter Parsing:**
-- Extract all integers from LLM response using regex
-- Filter to valid range (1-25)
-- Remove duplicates
-- Sort ascending
-- Handle formats: "4, 15, 23" or "Chapter 4, Chapter 15" or "4\n15\n23"
+- Regex extraction: `\d+` matches all integers in response
+- Filters to valid range (1-25)
+- Removes duplicates
+- Sorts ascending
+- Handles formats: "4, 15, 23" or "Chapter 4, Chapter 15" or "4\n15\n23"
 
-**Verbose Output Example:**
-```
-Message A1NtxlDfY4c: "Re: [c-a] Van's baffles for Long-ez"
-========================================
+**CLI Features:**
+- Default keywords file: `aircraft_keywords.txt` (562 keywords)
+- `--verbose` flag for detailed LLM responses
+- Statistics include chapter distribution (0, 1, 2+ chapters)
+- Resume capability: skip messages with both llm_keywords and chapters
 
---- KEYWORD TAGGING ---
-LLM Response:
-firewall, baffles, cowling
-
-Parsed Keywords:
-["firewall", "baffles", "cowling"]
-
-Stored in llm_keywords: ["firewall", "baffles", "cowling"]
-
---- CHAPTER CATEGORIZATION ---
-LLM Response:
-4, 15, 23
-
-Parsed Chapters:
-[4, 15, 23]
-
-Stored in chapters: [4, 15, 23]
-
-========================================
-```
-
-**Implementation Tasks:**
-- See `docs/plans/phase4b_enhancement_tasks.md` for detailed implementation plan
-- Estimated effort: 4-6 hours (5 tasks with TDD approach)
-
-**Backward Compatibility:**
-- Old indexes without `chapters` field work fine
-- Field added on first processing run
-- Resume capability: skip messages with existing chapters (unless --overwrite)
+**Key Files:**
+- `imageGetter/llm_tagger.py` - KeywordTagger class with both methods
+- `imageGetter/tag_messages.py` - Batch processor with verbose mode
+- `imageGetter/tag_messages_cli.py` - CLI with chapter statistics
+- `imageGetter/llm_config.py` - CHAPTER_CATEGORIZATION_PROMPT with full 25-chapter reference
 
 ---
 
