@@ -1,8 +1,8 @@
 # Image Database Architecture
 
 **Created:** 2025-11-01
-**Last Updated:** 2025-11-02
-**Status:** Phase 2 Implementation Complete
+**Last Updated:** 2025-11-04
+**Status:** Phase 4b Enhancement - Chapter Categorization Design
 
 ## Overview
 
@@ -55,7 +55,8 @@ data/
         "keywords": ["landing", "light", "van", "baffles"]
       }
     ],
-    "llm_keywords": ["firewall", "baffles", "cowling"]
+    "llm_keywords": ["firewall", "baffles", "cowling"],
+    "chapters": [4, 15, 23]
   }
 }
 ```
@@ -64,7 +65,12 @@ data/
 - Top-level keys are message IDs
 - `keywords` extracted from filename and message subject (Phase 1)
 - `llm_keywords` added by LLM tagger from master keyword list (Phase 4b)
+- `chapters` added by LLM categorizer into Cozy IV build chapters 1-25 (Phase 4b Enhancement, 2025-11-04)
 - `local_filename` uses normalized format: `{messageID}_part{X}_{Y}_{filename}`
+
+**Field States:**
+- `llm_keywords`: List of strings, empty list `[]` valid, missing = not yet tagged
+- `chapters`: List of integers (1-25), sorted ascending, empty list `[]` valid, missing = not yet categorized
 
 ### 3. Module Structure
 
@@ -78,9 +84,10 @@ Extracts image URLs from markdown files and downloads images.
 - `keyword_builder.py` - Sample messages and extract keywords (Phase 4a)
 - `build_keywords_cli.py` - CLI for iterative keyword building (Phase 4a)
 - `llm_config.py` - LLM configuration (model, Ollama host, prompts) - **Tom edits this**
-- `llm_tagger.py` - KeywordTagger class using Ollama to tag messages (Phase 4b)
-- `tag_messages.py` - Batch processor to add llm_keywords to image_index.json (Phase 4b)
-- `tag_messages_cli.py` - CLI interface for keyword tagging (Phase 4b)
+- `llm_tagger.py` - KeywordTagger class using Ollama to tag messages and categorize chapters (Phase 4b + Enhancement)
+- `tag_messages.py` - Batch processor to add llm_keywords and chapters to image_index.json (Phase 4b + Enhancement)
+- `tag_messages_cli.py` - CLI interface for keyword tagging and chapter categorization (Phase 4b + Enhancement)
+- `aircraft_keywords.txt` - Master keyword list (562 keywords, created with Claude Opus)
 - `image_index.json` - Maintained index of all images
 
 **Filtering Rules (as implemented):**
@@ -456,6 +463,72 @@ python tag_messages.py data/image_index.json --keywords custom_keywords.txt
 
 **Old Phase 4 (Query Interface) merged with Phase 5**
 **Old Phase 5 (Scale to Full Corpus) removed** - already scaling organically
+
+### Phase 4b Enhancement: Chapter Categorization **[DESIGNED - 2025-11-04]**
+
+**Enhancement:** Add Cozy IV build chapter categorization alongside keyword tagging
+
+**Rationale:**
+- Tom requested ability to categorize messages by Cozy IV build chapters (1-25)
+- CHAPTER_CATEGORIZATION_PROMPT already exists in llm_config.py
+- Chapter categorization provides another dimension for querying/organizing content
+- Uses same LLM infrastructure as keyword tagging (Ollama)
+
+**Architecture:**
+- New `chapters` field in index: List of integers (1-25), sorted ascending
+- `KeywordTagger.categorize_message()` - New method to categorize into chapters
+- `KeywordTagger.tag_message()` - Modified to return tuple: (keywords, raw_response)
+- Enhanced verbose mode shows full LLM responses for both keyword and chapter
+- Default keywords file changed to `aircraft_keywords.txt` (562 keywords)
+
+**Processing Flow:**
+1. Extract message text (subject + body from markdown)
+2. Call LLM for keyword tagging (using aircraft_keywords.txt)
+3. Call LLM for chapter categorization (using CHAPTER_CATEGORIZATION_PROMPT)
+4. Store both results in index
+5. In verbose mode, display both LLM responses and parsed results
+
+**Chapter Parsing:**
+- Extract all integers from LLM response using regex
+- Filter to valid range (1-25)
+- Remove duplicates
+- Sort ascending
+- Handle formats: "4, 15, 23" or "Chapter 4, Chapter 15" or "4\n15\n23"
+
+**Verbose Output Example:**
+```
+Message A1NtxlDfY4c: "Re: [c-a] Van's baffles for Long-ez"
+========================================
+
+--- KEYWORD TAGGING ---
+LLM Response:
+firewall, baffles, cowling
+
+Parsed Keywords:
+["firewall", "baffles", "cowling"]
+
+Stored in llm_keywords: ["firewall", "baffles", "cowling"]
+
+--- CHAPTER CATEGORIZATION ---
+LLM Response:
+4, 15, 23
+
+Parsed Chapters:
+[4, 15, 23]
+
+Stored in chapters: [4, 15, 23]
+
+========================================
+```
+
+**Implementation Tasks:**
+- See `docs/plans/phase4b_enhancement_tasks.md` for detailed implementation plan
+- Estimated effort: 4-6 hours (5 tasks with TDD approach)
+
+**Backward Compatibility:**
+- Old indexes without `chapters` field work fine
+- Field added on first processing run
+- Resume capability: skip messages with existing chapters (unless --overwrite)
 
 ---
 
