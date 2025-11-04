@@ -220,6 +220,20 @@ def tag_messages(
         "errors": 0
     }
 
+    # Count total messages to process for progress tracking
+    total_to_process = 0
+    for message in index_data.values():
+        if overwrite:
+            total_to_process += 1
+        else:
+            has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+            has_chapters = "chapters" in message and message.get("chapters") is not None
+            if not (has_keywords and has_chapters):
+                total_to_process += 1
+
+    if limit and limit < total_to_process:
+        total_to_process = limit
+
     # Process messages
     messages_processed = 0
     for msg_id, message in index_data.items():
@@ -255,6 +269,10 @@ def tag_messages(
                     keyword_response, matched_keywords,
                     chapter_response, chapters
                 )
+            # PROGRESS OUTPUT (non-verbose)
+            else:
+                subject = message.get("metadata", {}).get("subject", "")
+                print(f"[{stats['processed']+1}/{total_to_process}] {subject[:60]}")
 
             stats["processed"] += 1
             messages_processed += 1
@@ -269,6 +287,8 @@ def tag_messages(
 
         # Auto-save every 50 messages
         if stats["processed"] % 50 == 0:
+            if not verbose:
+                print(f"  → Auto-saved after {stats['processed']} messages")
             save_image_index(index_data, index_file)
 
     # Final save
