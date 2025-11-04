@@ -110,6 +110,134 @@ python generate_thumbnails_cli.py \
   --index ../data/image_index.json
 ```
 
+## Image Curation Workflow
+
+After downloading and processing images, use this workflow to dedupe, review, and curate your image collection:
+
+### Phase 4: Deduplicate Images
+
+Remove duplicate images (based on file size) and missing files from the index:
+
+```bash
+python dedupe_images_cli.py \
+  --index ../data/image_index.json \
+  --output ../data/image_index_deduped.json \
+  --images-dir ../data/images/full
+```
+
+**Example output:**
+```
+Loading index from ../data/image_index.json...
+Loaded 1234 messages with 6789 images
+
+Processing messages...
+100%|████████████████████| 1234/1234 [00:15<00:00, 82.27 messages/s]
+
+============================================================
+DEDUPLICATION SUMMARY
+============================================================
+Total messages:          1234
+Messages processed:      1234
+
+Images before:           6789
+Duplicates removed:      691
+Missing files removed:   23
+Images after:            6075
+============================================================
+
+Saving deduped index to ../data/image_index_deduped.json...
+```
+
+### Phase 5: Generate Paginated HTML Review
+
+Create an interactive HTML view to review images by keyword (210 images per page):
+
+```bash
+python analyze_tag_statistics.py \
+  --index ../data/image_index_deduped.json \
+  --thumb-dir ../data/images/thumbs \
+  --html \
+  --page-size 210 \
+  --output tag_review
+```
+
+**Example output:**
+```
+Loaded 1234 messages
+Extracted 45 unique keywords
+
+Tag Statistics:
+  aircraft: 1245 images
+  helicopters: 856 images
+  experimental: 634 images
+  ...
+
+HTML pages generated:
+  tag_review_page1.html (210 images)
+  tag_review_page2.html (210 images)
+  ...
+  tag_review_page29.html (75 images)
+```
+
+### Phase 6: Review and Select Images
+
+1. Open the HTML files in your browser (e.g., `tag_review_page1.html`)
+2. Review images and check boxes for images you want to remove
+3. Click "Export Selected to File" button on each page
+4. This creates `images_to_remove_pageN.txt` files for each page
+
+**Navigation:**
+- Each page includes << First | < Previous | Page N of M | Next > | Last >> links
+- "Select All" and "Clear All" buttons for bulk operations
+- Selected images highlighted in red
+
+### Phase 7: Remove Selected Images
+
+Process the removal list files to create a cleaned index:
+
+```bash
+python remove_images_cli.py \
+  ../data/image_index_deduped.json \
+  ../data/image_index_cleaned.json \
+  --remove-list images_to_remove_page*.txt
+```
+
+**Example output:**
+```
+Loading index from ../data/image_index_deduped.json...
+Loaded 1234 messages with 6075 images
+
+Loading removal lists...
+  - images_to_remove_page1.txt
+  - images_to_remove_page2.txt
+  - images_to_remove_page8.txt
+  - images_to_remove_page9.txt
+Loaded 356 unique filenames to remove
+
+Removing images from index...
+
+============================================================
+REMOVAL SUMMARY
+============================================================
+Total messages:              1234
+Messages affected:           198
+Messages removed:            157
+
+Images before:               6075
+Images removed:              356
+Images after:                5719
+============================================================
+
+Saving cleaned index to ../data/image_index_cleaned.json...
+Cleaned index saved to: ../data/image_index_cleaned.json
+```
+
+**Notes:**
+- Messages with all images removed are deleted entirely from the index
+- Original index files are never modified (read-only)
+- Multiple removal list files are automatically deduplicated
+- The cleaned index is ready for further processing or analysis
+
 ## Testing
 
 ```bash
