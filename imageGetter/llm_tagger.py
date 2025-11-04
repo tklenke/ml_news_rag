@@ -21,7 +21,7 @@ class KeywordTagger:
             timeout=LLM_TIMEOUT
         )
 
-    def tag_message(self, message_text: str, keywords: List[str], model: str = None) -> List[str]:
+    def tag_message(self, message_text: str, keywords: List[str], model: str = None) -> tuple[List[str], str]:
         """Tag message with relevant keywords using LLM.
 
         Args:
@@ -30,13 +30,15 @@ class KeywordTagger:
             model: Optional model override (defaults to LLM_MODEL from config)
 
         Returns:
-            List of matching keywords from master list
+            Tuple of (matched_keywords, raw_response):
+            - matched_keywords: List of matching keywords from master list
+            - raw_response: Full LLM response text
         """
         # Handle empty inputs
         if not message_text or not message_text.strip():
-            return []
+            return ([], "")
         if not keywords:
-            return []
+            return ([], "")
 
         try:
             # Format keyword list for prompt
@@ -55,10 +57,11 @@ class KeywordTagger:
                 stream=False
             )
 
-            # Parse response
-            response_text = response.get('response', '').strip()
+            # Parse response (keep raw for return, strip for parsing)
+            raw_response = response.get('response', '')
+            response_text = raw_response.strip()
             if not response_text or response_text.upper() == 'NONE':
-                return []
+                return ([], raw_response)
 
             # Split by comma and/or newline (handle both formats)
             matched_keywords = []
@@ -74,10 +77,10 @@ class KeywordTagger:
                                     matched_keywords.append(master_kw)
                                 break
 
-            return matched_keywords
+            return (matched_keywords, raw_response)
 
         except Exception as e:
             # Log error and return empty list (graceful degradation)
             # Don't crash the batch processing
             print(f"ERROR tagging message: {e}")
-            return []
+            return ([], f"ERROR: {e}")

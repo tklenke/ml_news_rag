@@ -194,7 +194,7 @@ def tag_messages(
 
         # Tag message
         try:
-            matched_keywords = tagger.tag_message(message_text, keywords, model=model)
+            matched_keywords, raw_response = tagger.tag_message(message_text, keywords, model=model)
             message["llm_keywords"] = matched_keywords
             stats["processed"] += 1
             messages_processed += 1

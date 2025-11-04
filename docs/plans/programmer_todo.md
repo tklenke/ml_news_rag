@@ -552,36 +552,43 @@ Enhance Phase 4b to categorize messages into Cozy IV build chapters. For each me
 
 **File:** `imageGetter/llm_tagger.py`
 
-**Status:** PENDING
+**Status:** COMPLETE ✓
 
 **Changes:**
-1. [ ] Modify `tag_message()` signature:
+1. [x] Modify `tag_message()` signature:
    ```python
    def tag_message(self, message_text: str, keywords: List[str], model: str = None) -> tuple[List[str], str]:
    ```
 
-2. [ ] Change return statement to return tuple:
+2. [x] Change return statement to return tuple:
    ```python
-   return (matched_keywords, response_text)
+   return (matched_keywords, raw_response)
    ```
 
-3. [ ] On error, return:
+3. [x] On error, return:
    ```python
    return ([], f"ERROR: {e}")
    ```
 
 **Tests to Update:**
-- [ ] Update all existing tests in `test_llm_tagger.py` that call `tag_message()`
-- [ ] Update to unpack tuple: `keywords, raw_response = tagger.tag_message(...)`
+- [x] Update all existing tests in `test_llm_tagger.py` that call `tag_message()`
+- [x] Update to unpack tuple: `keywords, raw_response = tagger.tag_message(...)`
 
 **TDD Steps:**
-1. [ ] Update test expectations to unpack tuples
-2. [ ] Run tests - verify they fail
-3. [ ] Update `tag_message()` implementation
-4. [ ] Run tests - verify they pass
-5. [ ] Commit: "Update tag_message to return raw LLM response"
+1. [x] Update test expectations to unpack tuples
+2. [x] Run tests - verify they fail
+3. [x] Update `tag_message()` implementation
+4. [x] Run tests - verify they pass
+5. [x] Commit: "Update tag_message to return raw LLM response"
 
-**Deliverable:** tag_message() returns tuple (keywords, raw_response)
+**Deliverable:** tag_message() returns tuple (keywords, raw_response) ✓
+
+**Files Modified:**
+- imageGetter/llm_tagger.py - Updated return type and all return statements
+- imageGetter/tests/test_llm_tagger.py - Updated all 15 tests to unpack tuples
+- imageGetter/tag_messages.py - Updated line 197 to unpack tuple
+- imageGetter/tag_messages_cli.py - Updated line 125 to unpack tuple
+- All 79 tests passing
 
 ---
 

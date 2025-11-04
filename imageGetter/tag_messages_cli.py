@@ -122,7 +122,7 @@ def main():
             if args.verbose:
                 tqdm.write(f"[{processed_count+1}/{messages_to_process}] Processing: {subject[:60]}...")
 
-            matched_keywords = tagger.tag_message(message_text, keywords, model=args.model)
+            matched_keywords, raw_response = tagger.tag_message(message_text, keywords, model=args.model)
             message["llm_keywords"] = matched_keywords
             processed_count += 1
             keywords_found.append(len(matched_keywords))
