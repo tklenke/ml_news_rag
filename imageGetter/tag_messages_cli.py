@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
-# ABOUTME: CLI tool for tagging messages with LLM keywords
-# ABOUTME: Provides progress tracking, statistics, and resume capability
+# ABOUTME: CLI tool for tagging messages with LLM keywords and chapter categorization
+# ABOUTME: Provides statistics for keywords and chapters, with verbose mode support
 
 import argparse
 from pathlib import Path
-from tqdm import tqdm
 from tag_messages import (
     load_image_index,
     load_keywords,
-    tag_messages,
-    extract_message_text,
-    save_image_index
+    tag_messages
 )
-from llm_tagger import KeywordTagger
 from llm_config import LLM_TIMEOUT
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Tag messages with LLM keywords from master keyword list'
+        description='Tag messages with LLM keywords and categorize into Cozy IV build chapters'
     )
 
     # Positional argument
@@ -26,16 +22,16 @@ def main():
                         help='Path to image index JSON file')
 
     # Optional arguments
-    parser.add_argument('--keywords', type=str, default='kw2.txt',
-                        help='Keywords file to use (default: kw2.txt)')
+    parser.add_argument('--keywords', type=str, default='aircraft_keywords.txt',
+                        help='Keywords file to use (default: aircraft_keywords.txt)')
     parser.add_argument('--limit', type=int, default=None,
                         help='Process only first N messages (default: all)')
     parser.add_argument('--overwrite', action='store_true',
-                        help='Retag messages that already have llm_keywords')
+                        help='Retag messages that already have llm_keywords and chapters')
     parser.add_argument('--model', type=str, default=None,
                         help='Override LLM model from llm_config.py')
     parser.add_argument('--verbose', action='store_true',
-                        help='Show detailed progress including message subjects')
+                        help='Show detailed LLM responses for keyword tagging and chapter categorization')
 
     args = parser.parse_args()
 
@@ -71,17 +67,13 @@ def main():
     print(f"Loaded {len(keywords)} keywords")
     print()
 
-    # Initialize tagger
-    print("Initializing LLM keyword tagger...")
-    print(f"Timeout per message: {LLM_TIMEOUT}s (configurable in llm_config.py)")
-    tagger = KeywordTagger()
-    print()
-
     # Count messages to process
     messages_to_process = 0
     already_tagged = 0
     for message in index_data.values():
-        if args.overwrite or "llm_keywords" not in message or not message["llm_keywords"]:
+        has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+        has_chapters = "chapters" in message and message.get("chapters") is not None
+        if args.overwrite or not (has_keywords and has_chapters):
             messages_to_process += 1
         else:
             already_tagged += 1
@@ -94,62 +86,29 @@ def main():
         print(f"Already tagged (will skip): {already_tagged}")
     print()
 
-    # Process messages with progress bar
-    print("Tagging messages...")
+    # Process messages
+    print("Tagging messages with keywords and categorizing into chapters...")
+    print(f"LLM timeout per message: {LLM_TIMEOUT}s (configurable in llm_config.py)")
     if args.verbose:
-        print("Verbose mode enabled - showing message subjects")
+        print("Verbose mode enabled - showing detailed LLM responses")
+    print()
 
-    processed_count = 0
-    skipped_count = 0
-    error_count = 0
-    keywords_found = []
+    # Call tag_messages() to process batch
+    stats = tag_messages(
+        index_file=args.index_file,
+        keywords_file=args.keywords,
+        overwrite=args.overwrite,
+        limit=args.limit,
+        model=args.model,
+        verbose=args.verbose
+    )
 
-    for msg_id, message in tqdm(index_data.items(), desc="Processing messages", total=total_messages):
-        # Check limit
-        if args.limit and processed_count >= args.limit:
-            break
+    processed_count = stats["processed"]
+    skipped_count = stats["skipped"]
+    error_count = stats["errors"]
 
-        # Skip if already tagged (unless overwrite)
-        if not args.overwrite and "llm_keywords" in message and message["llm_keywords"]:
-            skipped_count += 1
-            continue
-
-        # Extract and tag
-        message_text = extract_message_text(message)
-        subject = message.get("metadata", {}).get("subject", "unknown")
-
-        try:
-            if args.verbose:
-                tqdm.write(f"[{processed_count+1}/{messages_to_process}] Processing: {subject[:60]}...")
-
-            matched_keywords, raw_response = tagger.tag_message(message_text, keywords, model=args.model)
-            message["llm_keywords"] = matched_keywords
-            processed_count += 1
-            keywords_found.append(len(matched_keywords))
-
-            if args.verbose and matched_keywords:
-                tqdm.write(f"  Found keywords: {', '.join(matched_keywords)}")
-
-        except Exception as e:
-            if args.verbose:
-                tqdm.write(f"ERROR on message {msg_id}: {e}")
-            else:
-                tqdm.write(f"WARNING: Error tagging message {msg_id}, setting empty list")
-
-            message["llm_keywords"] = []
-            error_count += 1
-            processed_count += 1
-            keywords_found.append(0)
-
-        # Auto-save every 50 messages
-        if processed_count % 50 == 0:
-            if args.verbose:
-                tqdm.write(f"Auto-saving after {processed_count} messages...")
-            save_image_index(index_data, args.index_file)
-
-    # Final save
-    print("\nSaving results...")
-    save_image_index(index_data, args.index_file)
+    # Reload index to get updated data for statistics
+    index_data = load_image_index(args.index_file)
 
     # Statistics
     print("\n" + "="*60)
@@ -160,14 +119,39 @@ def main():
     print(f"Messages skipped:            {skipped_count}")
     print(f"Messages with errors:        {error_count}")
 
-    if keywords_found:
-        avg_keywords = sum(keywords_found) / len(keywords_found)
-        min_keywords = min(keywords_found)
-        max_keywords = max(keywords_found)
+    # Keyword statistics
+    keyword_counts = []
+    for message in index_data.values():
+        if "llm_keywords" in message:
+            keyword_counts.append(len(message["llm_keywords"]))
+
+    if keyword_counts:
         print(f"\nKeywords per message:")
-        print(f"  Average:                   {avg_keywords:.1f}")
-        print(f"  Min:                       {min_keywords}")
-        print(f"  Max:                       {max_keywords}")
+        print(f"  Average:                   {sum(keyword_counts)/len(keyword_counts):.1f}")
+        print(f"  Min:                       {min(keyword_counts)}")
+        print(f"  Max:                       {max(keyword_counts)}")
+
+    # Chapter statistics
+    chapter_counts = []
+    for message in index_data.values():
+        if "chapters" in message:
+            chapter_counts.append(len(message["chapters"]))
+
+    if chapter_counts:
+        print(f"\nChapters per message:")
+        print(f"  Average:                   {sum(chapter_counts)/len(chapter_counts):.1f}")
+        print(f"  Min:                       {min(chapter_counts)}")
+        print(f"  Max:                       {max(chapter_counts)}")
+
+        # Count distribution
+        zero_chapters = chapter_counts.count(0)
+        one_chapter = chapter_counts.count(1)
+        multi_chapters = len([c for c in chapter_counts if c > 1])
+
+        print(f"\nMessages by chapter count:")
+        print(f"  0 chapters:                {zero_chapters}")
+        print(f"  1 chapter:                 {one_chapter}")
+        print(f"  2+ chapters:               {multi_chapters}")
 
     print("="*60)
     print()

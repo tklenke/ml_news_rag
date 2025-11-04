@@ -852,7 +852,7 @@ def categorize_message(self, message_text: str, model: str = None) -> tuple[List
 
 **File:** `imageGetter/tag_messages_cli.py`
 
-**Status:** PENDING
+**Status:** COMPLETE ✓
 
 **Changes:**
 
@@ -901,14 +901,23 @@ def categorize_message(self, message_text: str, model: str = None) -> tuple[List
    ```
 
 **Testing:**
-1. [ ] Test manually with:
+1. [x] Test manually with:
    - `python tag_messages_cli.py test.idx --limit 5`
    - `python tag_messages_cli.py test.idx --limit 5 --verbose`
-2. [ ] Verify default keywords file is aircraft_keywords.txt
-3. [ ] Verify chapter statistics displayed
-4. [ ] Commit: "Update CLI with aircraft_keywords.txt and chapter statistics"
+2. [x] Verify default keywords file is aircraft_keywords.txt
+3. [x] Verify chapter statistics displayed
+4. [x] Commit: "Update CLI with aircraft_keywords.txt and chapter statistics"
 
-**Deliverable:** CLI with enhanced verbose mode and chapter statistics
+**Deliverable:** CLI with enhanced verbose mode and chapter statistics ✓
+
+**Changes Made:**
+- Updated default keywords file from 'kw2.txt' to 'aircraft_keywords.txt'
+- Simplified CLI to call tag_messages() instead of manual iteration
+- Passes verbose=args.verbose to tag_messages() for detailed LLM output
+- Added chapter statistics to output (avg, min, max, distribution)
+- Updated help text to reflect both keyword tagging and chapter categorization
+- Removed unused imports (tqdm, extract_message_text, save_image_index, KeywordTagger)
+- All 93 tests passing
 
 ---
 
