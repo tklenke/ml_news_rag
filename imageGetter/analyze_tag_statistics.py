@@ -203,8 +203,8 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
     html.append(f"  </div>")
     html.append("  <table>")
 
-    # Generate table rows (4 columns)
-    cols = 4
+    # Generate table rows (6 columns)
+    cols = 6
     for i in range(0, len(images), cols):
         html.append("    <tr>")
         for j in range(cols):
