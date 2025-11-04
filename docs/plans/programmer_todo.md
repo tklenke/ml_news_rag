@@ -1070,7 +1070,7 @@ RuntimeError immediately with a clear message.
 - ✅ Model not found errors now terminate immediately
 - ✅ Other errors still handled gracefully (return empty lists)
 
-**Commit:** `(pending)` - Fix model not found to be hard error that terminates
+**Commit:** `c1670a6` - Fix model not found to be hard error that terminates
 
 ---
 
