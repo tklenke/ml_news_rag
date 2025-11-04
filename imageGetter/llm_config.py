@@ -3,7 +3,8 @@
 
 # LLM Configuration
 OLLAMA_HOST = "http://localhost:11434"
-LLM_MODEL = "gemma3:1b"  # Tom can edit this as needed
+LLM_MODEL = "gemma3:4b"  # Tom can edit this as needed
+#LLM_MODEL = "gemma3:1b"  # Tom can edit this as needed
 #LLM_MODEL = "mistral-openorca:7b"  # Tom can edit this as needed
 LLM_TIMEOUT = 30.0  # Timeout in seconds for LLM requests (default: 30s)
 
