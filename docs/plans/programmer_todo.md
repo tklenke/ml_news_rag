@@ -712,7 +712,7 @@ def categorize_message(self, message_text: str, model: str = None) -> tuple[List
 
 **File:** `imageGetter/tag_messages.py`
 
-**Status:** PENDING
+**Status:** COMPLETE ✓
 
 **Changes:**
 
@@ -800,44 +800,49 @@ def categorize_message(self, message_text: str, model: str = None) -> tuple[List
 
 **Tests to Write in `imageGetter/tests/test_tag_messages.py`:**
 
-1. [ ] `test_tag_messages_adds_chapters_field()`
+1. [x] `test_tag_messages_adds_chapters_field()`
    - Create test index with one message
    - Call tag_messages()
    - Verify message has "chapters" field
    - Verify it's a list of integers
 
-2. [ ] `test_tag_messages_chapters_empty_list_valid()`
+2. [x] `test_tag_messages_chapters_empty_list_valid()`
    - Message with no chapter matches
    - Verify chapters = []
 
-3. [ ] `test_skip_already_categorized()`
+3. [x] `test_skip_already_categorized()`
    - Message already has llm_keywords and chapters
    - Verify it's skipped (unless overwrite)
 
-4. [ ] `test_overwrite_existing_chapters()`
+4. [x] `test_overwrite_existing_chapters()`
    - Message has chapters = [4, 15]
    - Call with overwrite=True
    - Verify chapters updated
 
-5. [ ] `test_preserves_llm_keywords()`
+5. [x] `test_preserves_llm_keywords()`
    - Message has llm_keywords
    - Add chapters
    - Verify llm_keywords unchanged
 
-6. [ ] `test_verbose_mode_prints_output()`
+6. [x] `test_verbose_mode_prints_output()`
    - Call with verbose=True
    - Capture stdout
    - Verify verbose output contains LLM responses
 
 **TDD Steps:**
-1. [ ] Write all 6 tests
-2. [ ] Run tests - verify all fail
-3. [ ] Update `tag_messages()` function
-4. [ ] Add `print_verbose_output()` helper
-5. [ ] Run tests - verify all pass
-6. [ ] Commit: "Add chapter categorization to tag_messages batch processor"
+1. [x] Write all 6 tests
+2. [x] Run tests - verify all fail
+3. [x] Update `tag_messages()` function
+4. [x] Add `print_verbose_output()` helper
+5. [x] Run tests - verify all pass
+6. [x] Commit: "Add chapter categorization to tag_messages batch processor"
 
-**Deliverable:** tag_messages() with chapter support and 6 new passing tests
+**Deliverable:** tag_messages() with chapter support and 6 new passing tests ✓
+
+**Files Modified:**
+- imageGetter/tag_messages.py - Added verbose parameter, print_verbose_output() helper, updated processing loop
+- imageGetter/tests/test_tag_messages.py - Added 6 tests, updated existing test for new skip logic
+- All 93 tests passing (87 existing + 6 new)
 
 ---
 

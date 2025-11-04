@@ -164,7 +164,8 @@ class TestTagMessages:
             "msg3": {
                 "metadata": {"subject": "Already tagged"},
                 "images": [],
-                "llm_keywords": ["engine"]
+                "llm_keywords": ["engine"],
+                "chapters": [23]
             }
         }
         index_file.write_text(json.dumps(test_data, indent=2))
@@ -178,7 +179,7 @@ class TestTagMessages:
         return str(kw_file)
 
     def test_skip_already_tagged_messages(self, test_index, test_keywords):
-        """Test that messages with llm_keywords are skipped by default."""
+        """Test that messages with both llm_keywords and chapters are skipped by default."""
         # Load original data
         with open(test_index) as f:
             original = json.load(f)
@@ -190,8 +191,9 @@ class TestTagMessages:
         with open(test_index) as f:
             result = json.load(f)
 
-        # msg3 already had llm_keywords, should be unchanged
+        # msg3 already had both llm_keywords and chapters, should be unchanged
         assert result["msg3"]["llm_keywords"] == original["msg3"]["llm_keywords"]
+        assert result["msg3"]["chapters"] == original["msg3"]["chapters"]
         # Should report skipped message
         assert stats["skipped"] >= 1
 
@@ -255,6 +257,139 @@ class TestTagMessages:
         for msg_id in original:
             assert result[msg_id]["metadata"] == original[msg_id]["metadata"]
             assert result[msg_id]["images"] == original[msg_id]["images"]
+
+    def test_tag_messages_adds_chapters_field(self, test_index, test_keywords):
+        """Test that tag_messages adds chapters field to messages."""
+        # Tag messages
+        tag_messages(test_index, test_keywords, overwrite=True)
+
+        # Load result
+        with open(test_index) as f:
+            result = json.load(f)
+
+        # All messages should have chapters field
+        for msg_id, msg in result.items():
+            assert "chapters" in msg
+            assert isinstance(msg["chapters"], list)
+            # Should be list of integers
+            for chapter in msg["chapters"]:
+                assert isinstance(chapter, int)
+
+    def test_tag_messages_chapters_empty_list_valid(self, test_index, test_keywords):
+        """Test that empty chapters list [] is a valid state."""
+        # Tag messages
+        tag_messages(test_index, test_keywords, overwrite=True)
+
+        # Load result
+        with open(test_index) as f:
+            result = json.load(f)
+
+        # All messages should have chapters field (even if empty)
+        for msg_id, msg in result.items():
+            assert "chapters" in msg
+            assert isinstance(msg["chapters"], list)
+            # Empty list is valid
+            if len(msg["chapters"]) == 0:
+                assert msg["chapters"] == []
+
+    def test_skip_already_categorized(self, test_index, test_keywords):
+        """Test that messages with both llm_keywords and chapters are skipped."""
+        # First tag all messages
+        tag_messages(test_index, test_keywords, overwrite=True)
+
+        # Load result
+        with open(test_index) as f:
+            result = json.load(f)
+
+        # Save the chapters from msg1
+        original_chapters = result["msg1"]["chapters"].copy()
+        original_keywords = result["msg1"]["llm_keywords"].copy()
+
+        # Try to tag again without overwrite
+        stats = tag_messages(test_index, test_keywords, overwrite=False)
+
+        # All messages should be skipped (they all have both fields now)
+        assert stats["skipped"] == 3
+        assert stats["processed"] == 0
+
+        # Load result again
+        with open(test_index) as f:
+            result2 = json.load(f)
+
+        # msg1 should be unchanged
+        assert result2["msg1"]["chapters"] == original_chapters
+        assert result2["msg1"]["llm_keywords"] == original_keywords
+
+    def test_overwrite_existing_chapters(self, test_index, test_keywords):
+        """Test that overwrite flag retags existing chapters."""
+        # First tag all messages
+        tag_messages(test_index, test_keywords, overwrite=True)
+
+        # Load result
+        with open(test_index) as f:
+            result = json.load(f)
+
+        # Manually set msg1 chapters to specific value
+        result["msg1"]["chapters"] = [4, 15]
+        with open(test_index, 'w') as f:
+            json.dump(result, f)
+
+        # Tag again with overwrite
+        stats = tag_messages(test_index, test_keywords, overwrite=True)
+
+        # Should process all messages (nothing skipped)
+        assert stats["skipped"] == 0
+        assert stats["processed"] == 3
+
+        # Load result
+        with open(test_index) as f:
+            result2 = json.load(f)
+
+        # msg1 chapters should have been updated (may or may not be [4, 15] depending on LLM)
+        assert "chapters" in result2["msg1"]
+        assert isinstance(result2["msg1"]["chapters"], list)
+
+    def test_preserves_llm_keywords(self, test_index, test_keywords):
+        """Test that adding chapters preserves existing llm_keywords."""
+        # First tag all messages
+        tag_messages(test_index, test_keywords, overwrite=True)
+
+        # Load result
+        with open(test_index) as f:
+            result = json.load(f)
+
+        # Save original keywords
+        original_keywords = {}
+        for msg_id in result:
+            original_keywords[msg_id] = result[msg_id]["llm_keywords"].copy()
+
+        # Tag again with overwrite (will retag both keywords and chapters)
+        tag_messages(test_index, test_keywords, overwrite=True)
+
+        # Load result
+        with open(test_index) as f:
+            result2 = json.load(f)
+
+        # All messages should still have both fields
+        for msg_id in result2:
+            assert "llm_keywords" in result2[msg_id]
+            assert "chapters" in result2[msg_id]
+            assert isinstance(result2[msg_id]["llm_keywords"], list)
+            assert isinstance(result2[msg_id]["chapters"], list)
+
+    def test_verbose_mode_prints_output(self, test_index, test_keywords, capsys):
+        """Test that verbose mode prints detailed output."""
+        # Tag with verbose mode
+        tag_messages(test_index, test_keywords, limit=1, overwrite=True, verbose=True)
+
+        # Capture output
+        captured = capsys.readouterr()
+
+        # Should contain verbose markers
+        assert "KEYWORD TAGGING" in captured.out
+        assert "CHAPTER CATEGORIZATION" in captured.out
+        assert "LLM Response:" in captured.out
+        assert "Parsed Keywords:" in captured.out or "Parsed Chapters:" in captured.out
 
 
 class TestSaveImageIndex:

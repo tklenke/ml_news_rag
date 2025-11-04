@@ -141,21 +141,64 @@ def extract_message_text(message: Dict, msgs_md_dir: str = "../data/msgs_md") ->
         return subject
 
 
+def print_verbose_output(
+    msg_id: str,
+    metadata: Dict,
+    keyword_response: str,
+    matched_keywords: List[str],
+    chapter_response: str,
+    chapters: List[int]
+):
+    """Print detailed verbose output for a tagged message.
+
+    Args:
+        msg_id: Message ID
+        metadata: Message metadata dictionary
+        keyword_response: Raw LLM response from keyword tagging
+        matched_keywords: Parsed keywords list
+        chapter_response: Raw LLM response from chapter categorization
+        chapters: Parsed chapter numbers list
+    """
+    subject = metadata.get("subject", "unknown")
+
+    print(f"\n{'='*70}")
+    print(f"Message {msg_id}: \"{subject[:60]}\"")
+    print('='*70)
+
+    print("\n--- KEYWORD TAGGING ---")
+    print("LLM Response:")
+    print(keyword_response or "(empty)")
+    print("\nParsed Keywords:")
+    print(matched_keywords)
+    print(f"\nStored in llm_keywords: {matched_keywords}")
+
+    print("\n--- CHAPTER CATEGORIZATION ---")
+    print("LLM Response:")
+    print(chapter_response or "(empty)")
+    print("\nParsed Chapters:")
+    print(chapters)
+    print(f"\nStored in chapters: {chapters}")
+
+    print('='*70)
+
+
 def tag_messages(
     index_file: str,
     keywords_file: str,
     overwrite: bool = False,
     limit: int = None,
-    model: str = None
+    model: str = None,
+    verbose: bool = False
 ) -> Dict:
-    """Tag messages in index with LLM keywords.
+    """Tag messages in index with LLM keywords and chapter categorization.
 
     Args:
         index_file: Path to image index JSON file
         keywords_file: Path to keywords file
-        overwrite: If True, retag messages that already have llm_keywords
+        overwrite: If True, retag messages that already have llm_keywords and chapters
         limit: If specified, process only first N messages
         model: Optional model override
+        verbose: If True, print detailed output for each message
 
     Returns:
         Dictionary with statistics:
@@ -184,24 +227,42 @@ def tag_messages(
         if limit is not None and messages_processed >= limit:
             break
 
-        # Skip if already tagged (unless overwrite)
-        if not overwrite and "llm_keywords" in message and message["llm_keywords"]:
-            stats["skipped"] += 1
-            continue
+        # Skip if already tagged AND categorized (unless overwrite)
+        if not overwrite:
+            has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+            has_chapters = "chapters" in message and message.get("chapters") is not None
+            if has_keywords and has_chapters:
+                stats["skipped"] += 1
+                continue
 
         # Extract message text
         message_text = extract_message_text(message)
 
-        # Tag message
+        # Tag message with keywords and categorize into chapters
         try:
-            matched_keywords, raw_response = tagger.tag_message(message_text, keywords, model=model)
+            # TAG WITH KEYWORDS
+            matched_keywords, keyword_response = tagger.tag_message(message_text, keywords, model=model)
             message["llm_keywords"] = matched_keywords
+
+            # CATEGORIZE INTO CHAPTERS
+            chapters, chapter_response = tagger.categorize_message(message_text, model=model)
+            message["chapters"] = chapters
+
+            # VERBOSE OUTPUT
+            if verbose:
+                print_verbose_output(
+                    msg_id, message.get("metadata", {}),
+                    keyword_response, matched_keywords,
+                    chapter_response, chapters
+                )
+
             stats["processed"] += 1
             messages_processed += 1
         except Exception as e:
             print(f"ERROR tagging message {msg_id}: {e}")
-            # Set empty list on error (valid state)
+            # Set empty lists on error (valid state)
             message["llm_keywords"] = []
+            message["chapters"] = []
             stats["errors"] += 1
             stats["processed"] += 1
             messages_processed += 1
