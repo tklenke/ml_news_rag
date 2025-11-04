@@ -106,12 +106,12 @@ class TestKeywordTagger:
         assert raw_response == ""
 
     def test_llm_error_handling(self, tagger, keywords):
-        """Test graceful error handling when LLM fails."""
+        """Test graceful error handling when LLM fails (non-model errors)."""
         message = "Installing firewall"
 
-        # Mock LLM to raise exception
+        # Mock LLM to raise non-model exception (e.g., connection error)
         with patch.object(tagger, 'ollamaclient') as mock_client:
-            mock_client.generate.side_effect = Exception("LLM connection error")
+            mock_client.generate.side_effect = Exception("Connection timeout")
 
             # Should not crash, should return empty list and error message
             result, raw_response = tagger.tag_message(message, keywords)
@@ -285,11 +285,11 @@ class TestKeywordTagger:
         assert raw_response == ""
 
     def test_categorize_message_error_handling(self, tagger):
-        """Test graceful error handling when LLM fails during categorization."""
+        """Test graceful error handling when LLM fails during categorization (non-model errors)."""
         message = "Working on firewall"
 
         with patch.object(tagger, 'ollamaclient') as mock_client:
-            mock_client.generate.side_effect = Exception("LLM connection error")
+            mock_client.generate.side_effect = Exception("Connection timeout")
 
             chapters, raw_response = tagger.categorize_message(message)
 
@@ -310,3 +310,25 @@ class TestKeywordTagger:
             assert isinstance(chapters, list)
             assert chapters == [4, 15, 23]  # No duplicates, sorted
             assert raw_response == '4, 4, 15, 15, 23'
+
+    def test_tag_message_model_not_found_raises_error(self, tagger, keywords):
+        """Test that model not found error terminates immediately."""
+        message = "Installing firewall"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_client.generate.side_effect = Exception("model 'gemma3:1b' not found (status code: 404)")
+
+            # Should raise RuntimeError, not return empty list
+            with pytest.raises(RuntimeError, match="LLM model not found"):
+                tagger.tag_message(message, keywords)
+
+    def test_categorize_message_model_not_found_raises_error(self, tagger):
+        """Test that model not found error terminates immediately during categorization."""
+        message = "Working on firewall"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_client.generate.side_effect = Exception("model 'llama3:8b' not found")
+
+            # Should raise RuntimeError, not return empty list
+            with pytest.raises(RuntimeError, match="LLM model not found"):
+                tagger.categorize_message(message)

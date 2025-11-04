@@ -379,17 +379,27 @@ class TestTagMessages:
 
     def test_verbose_mode_prints_output(self, test_index, test_keywords, capsys):
         """Test that verbose mode prints detailed output."""
-        # Tag with verbose mode
-        tag_messages(test_index, test_keywords, limit=1, overwrite=True, verbose=True)
+        # Import and mock at module level to avoid model not found errors
+        from unittest.mock import patch
+        from llm_tagger import KeywordTagger
 
-        # Capture output
-        captured = capsys.readouterr()
+        with patch.object(KeywordTagger, 'tag_message') as mock_tag, \
+             patch.object(KeywordTagger, 'categorize_message') as mock_cat:
+            # Mock successful responses
+            mock_tag.return_value = (['firewall'], 'firewall')
+            mock_cat.return_value = ([23], '23')
 
-        # Should contain verbose markers
-        assert "KEYWORD TAGGING" in captured.out
-        assert "CHAPTER CATEGORIZATION" in captured.out
-        assert "LLM Response:" in captured.out
-        assert "Parsed Keywords:" in captured.out or "Parsed Chapters:" in captured.out
+            # Tag with verbose mode
+            tag_messages(test_index, test_keywords, limit=1, overwrite=True, verbose=True)
+
+            # Capture output
+            captured = capsys.readouterr()
+
+            # Should contain verbose markers
+            assert "KEYWORD TAGGING" in captured.out
+            assert "CHAPTER CATEGORIZATION" in captured.out
+            assert "LLM Response:" in captured.out
+            assert "firewall" in captured.out or "23" in captured.out
 
 
 class TestSaveImageIndex:

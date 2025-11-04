@@ -1049,6 +1049,31 @@ build manual. Verbose mode enables debugging by displaying full LLM responses.
 
 ---
 
+## Post-Enhancement Fix: Model Not Found Error Handling
+
+**Date:** 2025-11-04
+
+**Issue:** Model not found errors were being silently caught and messages were being tagged
+with empty lists, rather than terminating immediately with a clear error.
+
+**Fix:** Updated error handling in both `tag_message()` and `categorize_message()` to detect
+model not found errors (404 status or "model...not found" in error message) and raise
+RuntimeError immediately with a clear message.
+
+**Changes:**
+- `llm_tagger.py`: Added model not found detection in exception handlers
+- `test_llm_tagger.py`: Added 2 new tests for model not found handling
+- `test_tag_messages.py`: Updated verbose test to mock successfully
+
+**Test Results:**
+- ✅ 95 tests passing (93 + 2 new)
+- ✅ Model not found errors now terminate immediately
+- ✅ Other errors still handled gracefully (return empty lists)
+
+**Commit:** `(pending)` - Fix model not found to be hard error that terminates
+
+---
+
 ## Important Implementation Notes
 
 ### Dual-Path Download Strategy

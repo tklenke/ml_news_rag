@@ -80,8 +80,14 @@ class KeywordTagger:
             return (matched_keywords, raw_response)
 
         except Exception as e:
-            # Log error and return empty list (graceful degradation)
-            # Don't crash the batch processing
+            error_msg = str(e)
+            # Model not found is a configuration error - terminate immediately
+            if "not found" in error_msg.lower() and ("model" in error_msg.lower() or "404" in error_msg):
+                print(f"FATAL ERROR: Model not found. Check LLM_MODEL in llm_config.py")
+                print(f"Error details: {e}")
+                raise RuntimeError(f"LLM model not found: {e}") from e
+
+            # Other errors: log and return empty list (graceful degradation)
             print(f"ERROR tagging message: {e}")
             return ([], f"ERROR: {e}")
 
@@ -135,5 +141,13 @@ class KeywordTagger:
             return (chapters, raw_response)
 
         except Exception as e:
+            error_msg = str(e)
+            # Model not found is a configuration error - terminate immediately
+            if "not found" in error_msg.lower() and ("model" in error_msg.lower() or "404" in error_msg):
+                print(f"FATAL ERROR: Model not found. Check LLM_MODEL in llm_config.py")
+                print(f"Error details: {e}")
+                raise RuntimeError(f"LLM model not found: {e}") from e
+
+            # Other errors: log and return empty list (graceful degradation)
             print(f"ERROR categorizing message: {e}")
             return ([], f"ERROR: {e}")
