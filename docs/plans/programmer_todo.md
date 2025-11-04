@@ -1074,6 +1074,43 @@ RuntimeError immediately with a clear message.
 
 ---
 
+## Post-Enhancement: Progress Tracking in Non-Verbose Mode
+
+**Date:** 2025-11-04
+
+**Issue:** Non-verbose mode had no progress indication during batch processing, making it
+difficult to track progress during long-running operations.
+
+**Fix:** Added progress counter `[X/Y]` with message subjects, plus auto-save notifications
+every 50 messages.
+
+**Changes:**
+- `tag_messages.py`:
+  - Count total_to_process before main loop
+  - Print `[X/Y] Subject` for each message in non-verbose mode
+  - Print auto-save notification every 50 messages
+  - Verbose mode unchanged (still shows full LLM responses)
+
+**Example Output (non-verbose):**
+```
+[1/250] Installing firewall today
+[2/250] Cowling attachment work in progress
+[3/250] Engine mount fabrication and fitting
+...
+[50/250] Wing assembly progress update
+  → Auto-saved after 50 messages
+...
+```
+
+**Test Results:**
+- ✅ 95 tests passing
+- ✅ Progress tracking works in non-verbose mode
+- ✅ Verbose mode unchanged
+
+**Commit:** `bbbc32c` - Add progress tracking to non-verbose mode
+
+---
+
 ## Important Implementation Notes
 
 ### Dual-Path Download Strategy
