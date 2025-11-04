@@ -43,26 +43,26 @@ def load_removal_lists(removal_files: List[str]) -> Set[str]:
 def remove_images_from_index(index_data: Dict, removal_set: Set[str]) -> Tuple[Dict, Dict]:
     """Remove images from index based on removal set.
 
+    Messages with no remaining images are removed entirely from the index.
+
     Args:
         index_data: Dictionary of messages with images
         removal_set: Set of image filenames to remove
 
     Returns:
         Tuple of (modified_index, stats_dict)
-        stats_dict contains: images_removed, messages_affected
+        stats_dict contains: images_removed, messages_affected, messages_removed
     """
     stats = {
         "images_removed": 0,
-        "messages_affected": 0
+        "messages_affected": 0,
+        "messages_removed": 0
     }
 
     # Deep copy the index to avoid modifying original
     result = {}
 
     for msg_id, message in index_data.items():
-        # Copy the message
-        result[msg_id] = message.copy()
-
         # Filter images
         original_images = message.get("images", [])
         kept_images = []
@@ -76,11 +76,19 @@ def remove_images_from_index(index_data: Dict, removal_set: Set[str]) -> Tuple[D
             else:
                 kept_images.append(image)
 
-        # Update images list
-        result[msg_id]["images"] = kept_images
+        # Only keep messages that have at least one image remaining
+        if len(kept_images) > 0:
+            # Copy the message
+            result[msg_id] = message.copy()
+            result[msg_id]["images"] = kept_images
 
-        if message_affected:
-            stats["messages_affected"] += 1
+            if message_affected:
+                stats["messages_affected"] += 1
+        else:
+            # Message has no images left, remove it entirely
+            stats["messages_removed"] += 1
+            if message_affected:
+                stats["messages_affected"] += 1
 
     return result, stats
 

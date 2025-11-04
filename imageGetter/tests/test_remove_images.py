@@ -157,7 +157,7 @@ class TestRemoveImagesFromIndex:
         assert stats["messages_affected"] == 0
 
     def test_remove_all_images_from_message(self, tmp_path):
-        """Test removing all images from a message."""
+        """Test removing all images from a message removes the message."""
         index_data = {
             "msg1": {
                 "metadata": {"subject": "Test"},
@@ -171,10 +171,10 @@ class TestRemoveImagesFromIndex:
 
         result, stats = remove_images_from_index(index_data, removal_set)
 
-        # All images removed, but message still exists with empty list
-        assert "msg1" in result
-        assert len(result["msg1"]["images"]) == 0
+        # All images removed, so message should be removed entirely
+        assert "msg1" not in result
         assert stats["images_removed"] == 2
+        assert stats["messages_removed"] == 1
         assert stats["messages_affected"] == 1
 
     def test_preserve_other_image_fields(self, tmp_path):
@@ -218,6 +218,47 @@ class TestRemoveImagesFromIndex:
         assert result["msg1"]["metadata"]["subject"] == "Test"
         assert result["msg1"]["metadata"]["author"] == "John"
         assert result["msg1"]["llm_keywords"] == ["aircraft"]
+
+    def test_remove_messages_with_no_images(self, tmp_path):
+        """Test that messages with all images removed are deleted from index."""
+        index_data = {
+            "msg1": {
+                "metadata": {"subject": "Test 1"},
+                "images": [
+                    {"local_filename": "img1.jpg"},
+                    {"local_filename": "img2.jpg"}
+                ]
+            },
+            "msg2": {
+                "metadata": {"subject": "Test 2"},
+                "images": [
+                    {"local_filename": "img3.jpg"}
+                ]
+            },
+            "msg3": {
+                "metadata": {"subject": "Test 3"},
+                "images": [
+                    {"local_filename": "img4.jpg"},
+                    {"local_filename": "img5.jpg"}
+                ]
+            }
+        }
+        # Remove all images from msg1 and msg2
+        removal_set = {"img1.jpg", "img2.jpg", "img3.jpg"}
+
+        result, stats = remove_images_from_index(index_data, removal_set)
+
+        # msg1 and msg2 should be removed entirely
+        assert "msg1" not in result
+        assert "msg2" not in result
+        # msg3 should still exist with remaining images
+        assert "msg3" in result
+        assert len(result["msg3"]["images"]) == 2
+
+        # Check stats
+        assert stats["images_removed"] == 3
+        assert stats["messages_removed"] == 2
+        assert stats["messages_affected"] == 2
 
 
 class TestSaveIndex:

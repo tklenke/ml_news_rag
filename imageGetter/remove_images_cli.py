@@ -57,15 +57,11 @@ def main():
     print("="*60)
     print(f"Total messages:              {total_messages}")
     print(f"Messages affected:           {stats['messages_affected']}")
+    print(f"Messages removed:            {stats['messages_removed']}")
     print()
     print(f"Images before:               {total_images_before}")
     print(f"Images removed:              {stats['images_removed']}")
     print(f"Images after:                {total_images_after}")
-    print()
-
-    # Messages with no images left
-    empty_messages = sum(1 for m in cleaned_index.values() if len(m.get("images", [])) == 0)
-    print(f"Messages with no images:     {empty_messages}")
     print("="*60)
     print()
 
