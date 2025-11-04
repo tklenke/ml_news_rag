@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# ABOUTME: Analyze keyword and chapter statistics from tagged image index
+# ABOUTME: Analyze keyword statistics from tagged image index
 # ABOUTME: Combines LLM keywords and non-LLM keywords, generates text report and HTML view
 
 import json
@@ -57,16 +57,6 @@ def analyze_keywords(index_data: dict) -> Counter:
     return keyword_counter
 
 
-def analyze_chapters(index_data: dict) -> Counter:
-    """Analyze chapter frequencies across all messages."""
-    chapter_counter = Counter()
-
-    for message in index_data.values():
-        chapters = message.get("chapters", [])
-        for ch in chapters:
-            chapter_counter[ch] += 1
-
-    return chapter_counter
 
 
 def format_keyword_statistics(keyword_counter: Counter) -> str:
@@ -118,31 +108,9 @@ def format_keyword_statistics(keyword_counter: Counter) -> str:
     return "\n".join(output)
 
 
-def format_chapter_statistics(chapter_counter: Counter) -> str:
-    """Format chapter statistics."""
-    output = []
-    output.append("=" * 70)
-    output.append("CHAPTER STATISTICS")
-    output.append("=" * 70)
-    output.append(f"Total unique chapters: {len(chapter_counter)}")
-    output.append(f"Total chapter assignments: {sum(chapter_counter.values())}")
-    output.append("")
-
-    if chapter_counter:
-        output.append("Chapters by occurrence (sorted by chapter number):")
-        output.append("-" * 70)
-
-        # Sort by chapter number
-        sorted_chapters = sorted(chapter_counter.items(), key=lambda x: x[0])
-
-        for chapter, count in sorted_chapters:
-            output.append(f"  Chapter {chapter:2d}:  {count:4d} occurrences")
-        output.append("")
-
-    return "\n".join(output)
 
 
-def format_summary(index_data: dict, keyword_counter: Counter, chapter_counter: Counter) -> str:
+def format_summary(index_data: dict, keyword_counter: Counter) -> str:
     """Format summary statistics."""
     output = []
     output.append("=" * 70)
@@ -151,16 +119,13 @@ def format_summary(index_data: dict, keyword_counter: Counter, chapter_counter: 
 
     total_messages = len(index_data)
     messages_with_llm_keywords = sum(1 for m in index_data.values() if m.get("llm_keywords"))
-    messages_with_chapters = sum(1 for m in index_data.values() if m.get("chapters"))
     messages_with_image_keywords = sum(1 for m in index_data.values() if any(img.get("keywords") for img in m.get("images", [])))
 
     output.append(f"Total messages: {total_messages}")
     output.append(f"Messages with LLM keywords: {messages_with_llm_keywords}")
     output.append(f"Messages with image keywords: {messages_with_image_keywords}")
-    output.append(f"Messages with chapters: {messages_with_chapters}")
     output.append("")
     output.append(f"Total unique keywords: {len(keyword_counter)}")
-    output.append(f"Total unique chapters: {len(chapter_counter)}")
     output.append("")
 
     # Averages
@@ -168,11 +133,6 @@ def format_summary(index_data: dict, keyword_counter: Counter, chapter_counter: 
         total_kw_count = sum(keyword_counter.values())
         avg_keywords = total_kw_count / total_messages
         output.append(f"Average keywords per message: {avg_keywords:.2f}")
-
-    if messages_with_chapters > 0:
-        total_ch_count = sum(chapter_counter.values())
-        avg_chapters = total_ch_count / total_messages
-        output.append(f"Average chapters per message: {avg_chapters:.2f}")
 
     output.append("")
 
@@ -193,7 +153,6 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
         metadata = message.get("metadata", {})
         subject = metadata.get("subject", "Unknown")
         llm_keywords = message.get("llm_keywords", [])
-        chapters = message.get("chapters", [])
 
         for image in message.get("images", []):
             local_filename = image.get("local_filename", "")
@@ -210,7 +169,6 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
                 "msg_id": msg_id,
                 "subject": subject,
                 "local_filename": local_filename,
-                "chapters": chapters,
                 "keywords": all_keywords
             })
 
@@ -225,13 +183,15 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
     html.append("    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }")
     html.append("    h1 { color: #333; }")
     html.append("    .info { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }")
-    html.append("    table { border-collapse: collapse; width: 100%; background: #fff; }")
-    html.append("    td { padding: 15px; vertical-align: top; border: 1px solid #ddd; width: 25%; }")
-    html.append("    img { max-width: 100%; height: auto; display: block; margin-bottom: 10px; }")
-    html.append("    pre { background: #f8f8f8; padding: 10px; font-size: 11px; ")
-    html.append("          border: 1px solid #ddd; border-radius: 3px; overflow-x: auto; margin: 0; }")
-    html.append("    .subject { font-size: 12px; color: #666; margin-bottom: 5px; font-style: italic; }")
-    html.append("    .msg-id { font-size: 10px; color: #999; margin-bottom: 10px; }")
+    html.append("    table { border-collapse: collapse; background: #fff; }")
+    html.append("    td { padding: 10px; vertical-align: top; border: 1px solid #ddd; width: 210px; }")
+    html.append("    img { width: 200px; height: auto; display: block; margin-bottom: 10px; }")
+    html.append("    pre { background: #f8f8f8; padding: 8px; font-size: 10px; ")
+    html.append("          border: 1px solid #ddd; border-radius: 3px; overflow-x: auto; margin: 0; ")
+    html.append("          word-wrap: break-word; white-space: pre-wrap; }")
+    html.append("    .subject { font-size: 11px; color: #666; margin-bottom: 5px; font-style: italic; ")
+    html.append("               word-wrap: break-word; }")
+    html.append("    .msg-id { font-size: 9px; color: #999; margin-bottom: 10px; }")
     html.append("  </style>")
     html.append("</head>")
     html.append("<body>")
@@ -256,16 +216,15 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
                 thumb_path = thumb_path.rsplit('.', 1)[0] + '_thumb.jpg'
 
                 # Format metadata
-                chapters_str = ", ".join(str(ch) for ch in img_data['chapters']) if img_data['chapters'] else "none"
                 keywords_str = ", ".join(img_data['keywords'][:10]) if img_data['keywords'] else "none"
                 if len(img_data['keywords']) > 10:
                     keywords_str += f" ... ({len(img_data['keywords'])} total)"
 
                 html.append("      <td>")
-                html.append(f"        <div class='subject'>{img_data['subject'][:60]}</div>")
+                html.append(f"        <div class='subject'>{img_data['subject'][:50]}</div>")
                 html.append(f"        <div class='msg-id'>{img_data['msg_id']}</div>")
                 html.append(f"        <img src='{thumb_path}' alt='Image'>")
-                html.append(f"        <pre>chapters: {chapters_str}\nkeywords: {keywords_str}</pre>")
+                html.append(f"        <pre>keywords: {keywords_str}</pre>")
                 html.append("      </td>")
             else:
                 html.append("      <td></td>")
@@ -282,7 +241,7 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Analyze keyword and chapter statistics from tagged image index'
+        description='Analyze keyword statistics from tagged image index'
     )
 
     parser.add_argument('index_file',
@@ -315,9 +274,6 @@ def main():
     print("Analyzing keywords...")
     keyword_counter = analyze_keywords(index_data)
 
-    print("Analyzing chapters...")
-    chapter_counter = analyze_chapters(index_data)
-
     # Write text statistics
     print(f"Writing statistics to {output_file}...")
     with open(output_file, 'w') as f:
@@ -330,11 +286,7 @@ def main():
         f.write("\n\n")
 
         # Summary
-        f.write(format_summary(index_data, keyword_counter, chapter_counter))
-        f.write("\n\n")
-
-        # Chapter statistics
-        f.write(format_chapter_statistics(chapter_counter))
+        f.write(format_summary(index_data, keyword_counter))
         f.write("\n\n")
 
         # Keyword statistics
@@ -342,7 +294,6 @@ def main():
 
     print(f"Statistics written to: {output_file}")
     print(f"Total unique keywords: {len(keyword_counter)}")
-    print(f"Total unique chapters: {len(chapter_counter)}")
 
     # Generate HTML view
     print(f"Generating HTML view to {html_file}...")
