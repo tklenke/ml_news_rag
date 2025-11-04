@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# ABOUTME: CLI tool for tagging messages with LLM keywords and chapter categorization
-# ABOUTME: Provides statistics for keywords and chapters, with verbose mode support
+# ABOUTME: CLI tool for tagging messages with LLM keywords
+# ABOUTME: Provides statistics for keywords with verbose mode support
 
 import argparse
 from pathlib import Path
@@ -14,7 +14,7 @@ from llm_config import LLM_TIMEOUT
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Tag messages with LLM keywords and categorize into Cozy IV build chapters'
+        description='Tag messages with LLM keywords'
     )
 
     # Positional argument
@@ -27,11 +27,11 @@ def main():
     parser.add_argument('--limit', type=int, default=None,
                         help='Process only first N messages (default: all)')
     parser.add_argument('--overwrite', action='store_true',
-                        help='Retag messages that already have llm_keywords and chapters')
+                        help='Retag messages that already have llm_keywords')
     parser.add_argument('--model', type=str, default=None,
                         help='Override LLM model from llm_config.py')
     parser.add_argument('--verbose', action='store_true',
-                        help='Show detailed LLM responses for keyword tagging and chapter categorization')
+                        help='Show detailed LLM responses for keyword tagging')
 
     args = parser.parse_args()
 
@@ -72,8 +72,7 @@ def main():
     already_tagged = 0
     for message in index_data.values():
         has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
-        has_chapters = "chapters" in message and message.get("chapters") is not None
-        if args.overwrite or not (has_keywords and has_chapters):
+        if args.overwrite or not has_keywords:
             messages_to_process += 1
         else:
             already_tagged += 1
@@ -87,7 +86,7 @@ def main():
     print()
 
     # Process messages
-    print("Tagging messages with keywords and categorizing into chapters...")
+    print("Tagging messages with keywords...")
     print(f"LLM timeout per message: {LLM_TIMEOUT}s (configurable in llm_config.py)")
     if args.verbose:
         print("Verbose mode enabled - showing detailed LLM responses")
@@ -130,28 +129,6 @@ def main():
         print(f"  Average:                   {sum(keyword_counts)/len(keyword_counts):.1f}")
         print(f"  Min:                       {min(keyword_counts)}")
         print(f"  Max:                       {max(keyword_counts)}")
-
-    # Chapter statistics
-    chapter_counts = []
-    for message in index_data.values():
-        if "chapters" in message:
-            chapter_counts.append(len(message["chapters"]))
-
-    if chapter_counts:
-        print(f"\nChapters per message:")
-        print(f"  Average:                   {sum(chapter_counts)/len(chapter_counts):.1f}")
-        print(f"  Min:                       {min(chapter_counts)}")
-        print(f"  Max:                       {max(chapter_counts)}")
-
-        # Count distribution
-        zero_chapters = chapter_counts.count(0)
-        one_chapter = chapter_counts.count(1)
-        multi_chapters = len([c for c in chapter_counts if c > 1])
-
-        print(f"\nMessages by chapter count:")
-        print(f"  0 chapters:                {zero_chapters}")
-        print(f"  1 chapter:                 {one_chapter}")
-        print(f"  2+ chapters:               {multi_chapters}")
 
     print("="*60)
     print()
