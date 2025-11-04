@@ -1,18 +1,37 @@
 #!/usr/bin/env python3
 # ABOUTME: Analyze keyword and chapter statistics from tagged image index
-# ABOUTME: Combines LLM keywords and non-LLM keywords, groups by frequency
+# ABOUTME: Combines LLM keywords and non-LLM keywords, generates text report and HTML view
 
 import json
-import sys
+import argparse
 from pathlib import Path
 from collections import Counter
 from datetime import datetime
 
 
-def load_index(index_file: str) -> dict:
-    """Load image index from JSON file."""
+def load_index(index_file: str, limit: int = None) -> dict:
+    """Load image index from JSON file.
+
+    Args:
+        index_file: Path to image index JSON file
+        limit: Optional limit on number of messages to load
+
+    Returns:
+        Dictionary of messages (limited if specified)
+    """
     with open(index_file, 'r') as f:
-        return json.load(f)
+        data = json.load(f)
+
+    if limit:
+        # Limit to first N messages
+        limited_data = {}
+        for i, (key, value) in enumerate(data.items()):
+            if i >= limit:
+                break
+            limited_data[key] = value
+        return limited_data
+
+    return data
 
 
 def analyze_keywords(index_data: dict) -> Counter:
@@ -160,24 +179,138 @@ def format_summary(index_data: dict, keyword_counter: Counter, chapter_counter: 
     return "\n".join(output)
 
 
-def main():
-    if len(sys.argv) < 2:
-        print("Usage: python analyze_tag_statistics.py <index_file> [output_file]")
-        print("Example: python analyze_tag_statistics.py tests/test.idx tag_statistics.txt")
-        sys.exit(1)
+def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
+    """Generate HTML view of tagged images.
 
-    index_file = sys.argv[1]
+    Args:
+        index_data: Dictionary of messages with images
+        thumb_dir: Relative path to thumbnail directory
+        output_file: Path to output HTML file
+    """
+    # Collect all images with their metadata
+    images = []
+    for msg_id, message in index_data.items():
+        metadata = message.get("metadata", {})
+        subject = metadata.get("subject", "Unknown")
+        llm_keywords = message.get("llm_keywords", [])
+        chapters = message.get("chapters", [])
+
+        for image in message.get("images", []):
+            local_filename = image.get("local_filename", "")
+            if not local_filename:
+                continue
+
+            # Get image keywords (non-LLM)
+            img_keywords = image.get("keywords", [])
+
+            # Combine all keywords (LLM + image)
+            all_keywords = list(llm_keywords) + list(img_keywords)
+
+            images.append({
+                "msg_id": msg_id,
+                "subject": subject,
+                "local_filename": local_filename,
+                "chapters": chapters,
+                "keywords": all_keywords
+            })
+
+    # Generate HTML
+    html = []
+    html.append("<!DOCTYPE html>")
+    html.append("<html>")
+    html.append("<head>")
+    html.append("  <meta charset='UTF-8'>")
+    html.append("  <title>Tag View - Image Statistics</title>")
+    html.append("  <style>")
+    html.append("    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }")
+    html.append("    h1 { color: #333; }")
+    html.append("    .info { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }")
+    html.append("    table { border-collapse: collapse; width: 100%; background: #fff; }")
+    html.append("    td { padding: 15px; vertical-align: top; border: 1px solid #ddd; width: 25%; }")
+    html.append("    img { max-width: 100%; height: auto; display: block; margin-bottom: 10px; }")
+    html.append("    pre { background: #f8f8f8; padding: 10px; font-size: 11px; ")
+    html.append("          border: 1px solid #ddd; border-radius: 3px; overflow-x: auto; margin: 0; }")
+    html.append("    .subject { font-size: 12px; color: #666; margin-bottom: 5px; font-style: italic; }")
+    html.append("    .msg-id { font-size: 10px; color: #999; margin-bottom: 10px; }")
+    html.append("  </style>")
+    html.append("</head>")
+    html.append("<body>")
+    html.append("  <h1>Tag View - Image Statistics</h1>")
+    html.append(f"  <div class='info'>")
+    html.append(f"    <strong>Generated:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}<br>")
+    html.append(f"    <strong>Total images:</strong> {len(images)}<br>")
+    html.append(f"    <strong>Total messages:</strong> {len(index_data)}")
+    html.append(f"  </div>")
+    html.append("  <table>")
+
+    # Generate table rows (4 columns)
+    cols = 4
+    for i in range(0, len(images), cols):
+        html.append("    <tr>")
+        for j in range(cols):
+            idx = i + j
+            if idx < len(images):
+                img_data = images[idx]
+                thumb_path = f"{thumb_dir}/{img_data['local_filename']}"
+                # Replace file extension with _thumb.jpg
+                thumb_path = thumb_path.rsplit('.', 1)[0] + '_thumb.jpg'
+
+                # Format metadata
+                chapters_str = ", ".join(str(ch) for ch in img_data['chapters']) if img_data['chapters'] else "none"
+                keywords_str = ", ".join(img_data['keywords'][:10]) if img_data['keywords'] else "none"
+                if len(img_data['keywords']) > 10:
+                    keywords_str += f" ... ({len(img_data['keywords'])} total)"
+
+                html.append("      <td>")
+                html.append(f"        <div class='subject'>{img_data['subject'][:60]}</div>")
+                html.append(f"        <div class='msg-id'>{img_data['msg_id']}</div>")
+                html.append(f"        <img src='{thumb_path}' alt='Image'>")
+                html.append(f"        <pre>chapters: {chapters_str}\nkeywords: {keywords_str}</pre>")
+                html.append("      </td>")
+            else:
+                html.append("      <td></td>")
+        html.append("    </tr>")
+
+    html.append("  </table>")
+    html.append("</body>")
+    html.append("</html>")
+
+    # Write HTML file
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write("\n".join(html))
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Analyze keyword and chapter statistics from tagged image index'
+    )
+
+    parser.add_argument('index_file',
+                        help='Path to image index JSON file')
+    parser.add_argument('--output', '-o',
+                        help='Output text file (default: tag_statistics_TIMESTAMP.txt)')
+    parser.add_argument('--limit', type=int, default=None,
+                        help='Limit number of messages to process')
+    parser.add_argument('--thumb_dir', default='../data/images/thumbs',
+                        help='Relative path to thumbnail directory (default: ../data/images/thumbs)')
+
+    args = parser.parse_args()
 
     # Generate default output filename if not provided
-    if len(sys.argv) >= 3:
-        output_file = sys.argv[2]
+    if args.output:
+        output_file = args.output
     else:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_file = f"tag_statistics_{timestamp}.txt"
 
-    print(f"Loading index from {index_file}...")
-    index_data = load_index(index_file)
+    # HTML output file
+    html_file = output_file.rsplit('.', 1)[0] + '_view.html'
+
+    print(f"Loading index from {args.index_file}...")
+    index_data = load_index(args.index_file, limit=args.limit)
     print(f"Loaded {len(index_data)} messages")
+    if args.limit:
+        print(f"(limited to first {args.limit} messages)")
 
     print("Analyzing keywords...")
     keyword_counter = analyze_keywords(index_data)
@@ -185,13 +318,15 @@ def main():
     print("Analyzing chapters...")
     chapter_counter = analyze_chapters(index_data)
 
+    # Write text statistics
     print(f"Writing statistics to {output_file}...")
-
     with open(output_file, 'w') as f:
         # Header
         f.write("TAG STATISTICS REPORT\n")
         f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write(f"Index file: {index_file}\n")
+        f.write(f"Index file: {args.index_file}\n")
+        if args.limit:
+            f.write(f"Limit: {args.limit} messages\n")
         f.write("\n\n")
 
         # Summary
@@ -205,9 +340,14 @@ def main():
         # Keyword statistics
         f.write(format_keyword_statistics(keyword_counter))
 
-    print(f"\nStatistics written to: {output_file}")
+    print(f"Statistics written to: {output_file}")
     print(f"Total unique keywords: {len(keyword_counter)}")
     print(f"Total unique chapters: {len(chapter_counter)}")
+
+    # Generate HTML view
+    print(f"Generating HTML view to {html_file}...")
+    generate_html_view(index_data, args.thumb_dir, html_file)
+    print(f"HTML view written to: {html_file}")
 
 
 if __name__ == "__main__":
