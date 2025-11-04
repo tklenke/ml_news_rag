@@ -205,3 +205,108 @@ class TestKeywordTagger:
             # No whitespace-padded entries
             assert "  firewall  " not in result
             assert raw_response == '  firewall  ,  cowling  '
+
+    def test_categorize_message_single_chapter(self, tagger):
+        """Test categorizing message with single chapter match."""
+        message = "Working on firewall installation"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_response = {'response': '23'}
+            mock_client.generate.return_value = mock_response
+
+            chapters, raw_response = tagger.categorize_message(message)
+
+            assert isinstance(chapters, list)
+            assert chapters == [23]
+            assert raw_response == '23'
+
+    def test_categorize_message_multiple_chapters(self, tagger):
+        """Test categorizing message with multiple chapter matches."""
+        message = "Installing fuselage bulkheads, firewall, and engine mount"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_response = {'response': '4, 15, 23'}
+            mock_client.generate.return_value = mock_response
+
+            chapters, raw_response = tagger.categorize_message(message)
+
+            assert isinstance(chapters, list)
+            assert chapters == [4, 15, 23]  # Should be sorted
+            assert raw_response == '4, 15, 23'
+
+    def test_categorize_message_verbose_format(self, tagger):
+        """Test parsing verbose chapter format."""
+        message = "Working on fuselage and firewall"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_response = {'response': 'Chapter 4, Chapter 15'}
+            mock_client.generate.return_value = mock_response
+
+            chapters, raw_response = tagger.categorize_message(message)
+
+            assert isinstance(chapters, list)
+            assert chapters == [4, 15]
+            assert raw_response == 'Chapter 4, Chapter 15'
+
+    def test_categorize_message_none_response(self, tagger):
+        """Test parsing 'NONE' response for categorization."""
+        message = "Weather delays this week"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_response = {'response': 'NONE'}
+            mock_client.generate.return_value = mock_response
+
+            chapters, raw_response = tagger.categorize_message(message)
+
+            assert isinstance(chapters, list)
+            assert len(chapters) == 0
+            assert raw_response == 'NONE'
+
+    def test_categorize_message_invalid_chapters(self, tagger):
+        """Test filtering out invalid chapter numbers."""
+        message = "Various work"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_response = {'response': '0, 4, 26, 100'}
+            mock_client.generate.return_value = mock_response
+
+            chapters, raw_response = tagger.categorize_message(message)
+
+            assert isinstance(chapters, list)
+            assert chapters == [4]  # Only valid chapter (1-25)
+            assert raw_response == '0, 4, 26, 100'
+
+    def test_categorize_message_empty_message(self, tagger):
+        """Test categorizing empty message."""
+        chapters, raw_response = tagger.categorize_message("")
+
+        assert isinstance(chapters, list)
+        assert len(chapters) == 0
+        assert raw_response == ""
+
+    def test_categorize_message_error_handling(self, tagger):
+        """Test graceful error handling when LLM fails during categorization."""
+        message = "Working on firewall"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_client.generate.side_effect = Exception("LLM connection error")
+
+            chapters, raw_response = tagger.categorize_message(message)
+
+            assert isinstance(chapters, list)
+            assert len(chapters) == 0
+            assert "ERROR" in raw_response
+
+    def test_categorize_message_removes_duplicates(self, tagger):
+        """Test removing duplicate chapter numbers."""
+        message = "Multiple references to same chapters"
+
+        with patch.object(tagger, 'ollamaclient') as mock_client:
+            mock_response = {'response': '4, 4, 15, 15, 23'}
+            mock_client.generate.return_value = mock_response
+
+            chapters, raw_response = tagger.categorize_message(message)
+
+            assert isinstance(chapters, list)
+            assert chapters == [4, 15, 23]  # No duplicates, sorted
+            assert raw_response == '4, 4, 15, 15, 23'

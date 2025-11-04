@@ -598,7 +598,7 @@ Enhance Phase 4b to categorize messages into Cozy IV build chapters. For each me
 
 **File:** `imageGetter/llm_tagger.py`
 
-**Status:** PENDING
+**Status:** COMPLETE ✓
 
 **Implementation:**
 ```python
@@ -657,47 +657,52 @@ def categorize_message(self, message_text: str, model: str = None) -> tuple[List
 
 **Tests to Write in `imageGetter/tests/test_llm_tagger.py`:**
 
-1. [ ] `test_categorize_message_single_chapter()`
+1. [x] `test_categorize_message_single_chapter()`
    - Mock response: "23"
    - Expected: chapters = [23]
 
-2. [ ] `test_categorize_message_multiple_chapters()`
+2. [x] `test_categorize_message_multiple_chapters()`
    - Mock response: "4, 15, 23"
    - Expected: chapters = [4, 15, 23] (sorted)
 
-3. [ ] `test_categorize_message_verbose_format()`
+3. [x] `test_categorize_message_verbose_format()`
    - Mock response: "Chapter 4, Chapter 15"
    - Expected: chapters = [4, 15]
 
-4. [ ] `test_categorize_message_none_response()`
+4. [x] `test_categorize_message_none_response()`
    - Mock response: "NONE"
    - Expected: chapters = []
 
-5. [ ] `test_categorize_message_invalid_chapters()`
+5. [x] `test_categorize_message_invalid_chapters()`
    - Mock response: "0, 4, 26, 100"
    - Expected: chapters = [4] (only valid chapter)
 
-6. [ ] `test_categorize_message_empty_message()`
+6. [x] `test_categorize_message_empty_message()`
    - Input: ""
    - Expected: chapters = [], raw_response = ""
 
-7. [ ] `test_categorize_message_error_handling()`
+7. [x] `test_categorize_message_error_handling()`
    - Mock LLM failure
    - Expected: chapters = [], raw_response contains "ERROR"
 
-8. [ ] `test_categorize_message_removes_duplicates()`
+8. [x] `test_categorize_message_removes_duplicates()`
    - Mock response: "4, 4, 15, 15, 23"
    - Expected: chapters = [4, 15, 23] (no duplicates)
 
 **TDD Steps:**
-1. [ ] Write all 8 tests (use mocking for LLM calls)
-2. [ ] Run tests - verify all fail
-3. [ ] Implement `categorize_message()` method
-4. [ ] Run tests - verify all pass
-5. [ ] Refactor if needed
-6. [ ] Commit: "Add categorize_message method for chapter categorization"
+1. [x] Write all 8 tests (use mocking for LLM calls)
+2. [x] Run tests - verify all fail
+3. [x] Implement `categorize_message()` method
+4. [x] Run tests - verify all pass
+5. [x] Refactor if needed
+6. [x] Commit: "Add categorize_message method for chapter categorization"
 
-**Deliverable:** categorize_message() method with 8 passing tests
+**Deliverable:** categorize_message() method with 8 passing tests ✓
+
+**Files Modified:**
+- imageGetter/llm_tagger.py - Added categorize_message() method (lines 88-139)
+- imageGetter/tests/test_llm_tagger.py - Added 8 tests for categorize_message()
+- All 87 tests passing (79 existing + 8 new)
 
 ---
 

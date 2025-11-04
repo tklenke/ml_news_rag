@@ -84,3 +84,56 @@ class KeywordTagger:
             # Don't crash the batch processing
             print(f"ERROR tagging message: {e}")
             return ([], f"ERROR: {e}")
+
+    def categorize_message(self, message_text: str, model: str = None) -> tuple[List[int], str]:
+        """Categorize message into Cozy IV build chapters.
+
+        Args:
+            message_text: Message text to analyze
+            model: Optional model override
+
+        Returns:
+            Tuple of (chapter_list, raw_response):
+            - chapter_list: List of chapter numbers (1-25), sorted
+            - raw_response: Full LLM response text
+        """
+        # Handle empty input
+        if not message_text or not message_text.strip():
+            return ([], "")
+
+        try:
+            # Import prompt
+            from llm_config import CHAPTER_CATEGORIZATION_PROMPT
+
+            # Format prompt
+            prompt = CHAPTER_CATEGORIZATION_PROMPT.format(message=message_text)
+
+            # Call LLM
+            response = self.ollamaclient.generate(
+                model=model or LLM_MODEL,
+                prompt=prompt,
+                stream=False
+            )
+
+            # Get raw response (keep original for return)
+            raw_response = response.get('response', '')
+            response_text = raw_response.strip()
+
+            # Parse chapter numbers using regex
+            import re
+            numbers = re.findall(r'\d+', response_text)
+            chapters = []
+            for num_str in numbers:
+                num = int(num_str)
+                # Filter to valid chapter range (1-25)
+                if 1 <= num <= 25:
+                    chapters.append(num)
+
+            # Remove duplicates and sort
+            chapters = sorted(list(set(chapters)))
+
+            return (chapters, raw_response)
+
+        except Exception as e:
+            print(f"ERROR categorizing message: {e}")
+            return ([], f"ERROR: {e}")
