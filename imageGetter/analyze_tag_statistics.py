@@ -139,50 +139,35 @@ def format_summary(index_data: dict, keyword_counter: Counter) -> str:
     return "\n".join(output)
 
 
-def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
-    """Generate HTML view of tagged images.
+def generate_html_page(images: list, thumb_dir: str, output_file: str,
+                       page_num: int, total_pages: int, base_filename: str):
+    """Generate a single HTML page with pagination.
 
     Args:
-        index_data: Dictionary of messages with images
+        images: List of image dictionaries for this page
         thumb_dir: Relative path to thumbnail directory
         output_file: Path to output HTML file
+        page_num: Current page number (1-indexed)
+        total_pages: Total number of pages
+        base_filename: Base filename for generating page links
     """
-    # Collect all images with their metadata
-    images = []
-    for msg_id, message in index_data.items():
-        metadata = message.get("metadata", {})
-        subject = metadata.get("subject", "Unknown")
-        llm_keywords = message.get("llm_keywords", [])
-
-        for image in message.get("images", []):
-            local_filename = image.get("local_filename", "")
-            if not local_filename:
-                continue
-
-            # Get image keywords (non-LLM)
-            img_keywords = image.get("keywords", [])
-
-            # Combine all keywords (LLM + image)
-            all_keywords = list(llm_keywords) + list(img_keywords)
-
-            images.append({
-                "msg_id": msg_id,
-                "subject": subject,
-                "local_filename": local_filename,
-                "keywords": all_keywords
-            })
-
-    # Generate HTML
     html = []
     html.append("<!DOCTYPE html>")
     html.append("<html>")
     html.append("<head>")
     html.append("  <meta charset='UTF-8'>")
-    html.append("  <title>Tag View - Image Statistics</title>")
+    html.append(f"  <title>Tag View - Page {page_num} of {total_pages}</title>")
     html.append("  <style>")
     html.append("    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }")
     html.append("    h1 { color: #333; }")
     html.append("    .info { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }")
+    html.append("    .pagination { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; ")
+    html.append("                  text-align: center; font-size: 16px; }")
+    html.append("    .pagination a { margin: 0 5px; padding: 8px 12px; background: #007bff; color: white; ")
+    html.append("                    text-decoration: none; border-radius: 4px; }")
+    html.append("    .pagination a:hover { background: #0056b3; }")
+    html.append("    .pagination a.disabled { background: #ccc; cursor: not-allowed; pointer-events: none; }")
+    html.append("    .pagination .current { margin: 0 10px; font-weight: bold; }")
     html.append("    .toolbar { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; ")
     html.append("               display: flex; gap: 10px; align-items: center; }")
     html.append("    .toolbar button { padding: 8px 16px; background: #007bff; color: white; border: none; ")
@@ -209,18 +194,42 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
     html.append("  </style>")
     html.append("</head>")
     html.append("<body>")
-    html.append("  <h1>Tag View - Image Statistics</h1>")
+    html.append(f"  <h1>Tag View - Page {page_num} of {total_pages}</h1>")
+
+    # Info section
     html.append(f"  <div class='info'>")
-    html.append(f"    <strong>Generated:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}<br>")
-    html.append(f"    <strong>Total images:</strong> {len(images)}<br>")
-    html.append(f"    <strong>Total messages:</strong> {len(index_data)}")
+    html.append(f"    <strong>Images on this page:</strong> {len(images)}<br>")
+    html.append(f"    <strong>Page:</strong> {page_num} of {total_pages}")
     html.append(f"  </div>")
+
+    # Pagination nav
+    html.append(f"  <div class='pagination'>")
+    if page_num > 1:
+        html.append(f"    <a href='{base_filename}_page1.html'>&lt;&lt; First</a>")
+        html.append(f"    <a href='{base_filename}_page{page_num-1}.html'>&lt; Previous</a>")
+    else:
+        html.append(f"    <a class='disabled'>&lt;&lt; First</a>")
+        html.append(f"    <a class='disabled'>&lt; Previous</a>")
+
+    html.append(f"    <span class='current'>Page {page_num} of {total_pages}</span>")
+
+    if page_num < total_pages:
+        html.append(f"    <a href='{base_filename}_page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"    <a href='{base_filename}_page{total_pages}.html'>Last &gt;&gt;</a>")
+    else:
+        html.append(f"    <a class='disabled'>Next &gt;</a>")
+        html.append(f"    <a class='disabled'>Last &gt;&gt;</a>")
+    html.append(f"  </div>")
+
+    # Toolbar
     html.append(f"  <div class='toolbar'>")
     html.append(f"    <button onclick='selectAll()'>Select All</button>")
     html.append(f"    <button onclick='clearAll()' class='secondary'>Clear All</button>")
     html.append(f"    <button onclick='exportList()' class='export'>Export Removal List</button>")
     html.append(f"    <div class='counter'>Selected: <span id='count'>0</span></div>")
     html.append(f"  </div>")
+
+    # Table
     html.append("  <table>")
 
     # Generate table rows (6 columns)
@@ -256,6 +265,27 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
         html.append("    </tr>")
 
     html.append("  </table>")
+
+    # Bottom pagination
+    html.append(f"  <div class='pagination' style='margin-top: 20px;'>")
+    if page_num > 1:
+        html.append(f"    <a href='{base_filename}_page1.html'>&lt;&lt; First</a>")
+        html.append(f"    <a href='{base_filename}_page{page_num-1}.html'>&lt; Previous</a>")
+    else:
+        html.append(f"    <a class='disabled'>&lt;&lt; First</a>")
+        html.append(f"    <a class='disabled'>&lt; Previous</a>")
+
+    html.append(f"    <span class='current'>Page {page_num} of {total_pages}</span>")
+
+    if page_num < total_pages:
+        html.append(f"    <a href='{base_filename}_page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"    <a href='{base_filename}_page{total_pages}.html'>Last &gt;&gt;</a>")
+    else:
+        html.append(f"    <a class='disabled'>Next &gt;</a>")
+        html.append(f"    <a class='disabled'>Last &gt;&gt;</a>")
+    html.append(f"  </div>")
+
+    # JavaScript
     html.append("  <script>")
     html.append("    function updateSelection() {")
     html.append("      // Update count")
@@ -286,6 +316,7 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
     html.append("      updateSelection();")
     html.append("    }")
     html.append("    ")
+    html.append(f"    const pageNum = {page_num};")
     html.append("    function exportList() {")
     html.append("      const checkboxes = document.querySelectorAll('.remove-checkbox:checked');")
     html.append("      if (checkboxes.length === 0) {")
@@ -304,13 +335,13 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
     html.append("      const url = URL.createObjectURL(blob);")
     html.append("      const a = document.createElement('a');")
     html.append("      a.href = url;")
-    html.append("      a.download = 'images_to_remove.txt';")
+    html.append("      a.download = `images_to_remove_page${pageNum}.txt`;")
     html.append("      document.body.appendChild(a);")
     html.append("      a.click();")
     html.append("      document.body.removeChild(a);")
     html.append("      URL.revokeObjectURL(url);")
     html.append("      ")
-    html.append("      alert(`Exported ${filenames.length} images to images_to_remove.txt`);")
+    html.append("      alert(`Exported ${filenames.length} images to images_to_remove_page${pageNum}.txt`);")
     html.append("    }")
     html.append("  </script>")
     html.append("</body>")
@@ -319,6 +350,67 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_file: str):
     # Write HTML file
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write("\n".join(html))
+
+
+def generate_html_view(index_data: dict, thumb_dir: str, output_base: str, page_size: int = 210):
+    """Generate paginated HTML views of tagged images.
+
+    Args:
+        index_data: Dictionary of messages with images
+        thumb_dir: Relative path to thumbnail directory
+        output_base: Base path for output HTML files (without extension)
+        page_size: Number of images per page (default: 210)
+    """
+    # Collect all images with their metadata
+    images = []
+    for msg_id, message in index_data.items():
+        metadata = message.get("metadata", {})
+        subject = metadata.get("subject", "Unknown")
+        llm_keywords = message.get("llm_keywords", [])
+
+        for image in message.get("images", []):
+            local_filename = image.get("local_filename", "")
+            if not local_filename:
+                continue
+
+            # Get image keywords (non-LLM)
+            img_keywords = image.get("keywords", [])
+
+            # Combine all keywords (LLM + image)
+            all_keywords = list(llm_keywords) + list(img_keywords)
+
+            images.append({
+                "msg_id": msg_id,
+                "subject": subject,
+                "local_filename": local_filename,
+                "keywords": all_keywords
+            })
+
+    # Calculate number of pages
+    total_images = len(images)
+    total_pages = (total_images + page_size - 1) // page_size  # Ceiling division
+
+    if total_pages == 0:
+        print("No images to display")
+        return
+
+    # Extract base filename from output_base
+    from pathlib import Path
+    base_path = Path(output_base)
+    base_filename = base_path.stem
+
+    # Generate each page
+    for page_num in range(1, total_pages + 1):
+        start_idx = (page_num - 1) * page_size
+        end_idx = min(start_idx + page_size, total_images)
+        page_images = images[start_idx:end_idx]
+
+        output_file = f"{output_base}_page{page_num}.html"
+        generate_html_page(page_images, thumb_dir, output_file,
+                          page_num, total_pages, base_filename)
+
+    print(f"Generated {total_pages} HTML pages ({total_images} images, {page_size} per page)")
+    print(f"Start at: {output_base}_page1.html")
 
 
 def main():
@@ -334,6 +426,8 @@ def main():
                         help='Limit number of messages to process')
     parser.add_argument('--thumb_dir', default='../data/images/thumbs',
                         help='Relative path to thumbnail directory (default: ../data/images/thumbs)')
+    parser.add_argument('--page-size', type=int, default=210,
+                        help='Number of images per HTML page (default: 210)')
 
     args = parser.parse_args()
 
@@ -344,8 +438,8 @@ def main():
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_file = f"tag_statistics_{timestamp}.txt"
 
-    # HTML output file
-    html_file = output_file.rsplit('.', 1)[0] + '_view.html'
+    # HTML output base (without .html extension)
+    html_base = output_file.rsplit('.', 1)[0] + '_view'
 
     print(f"Loading index from {args.index_file}...")
     index_data = load_index(args.index_file, limit=args.limit)
@@ -378,9 +472,8 @@ def main():
     print(f"Total unique keywords: {len(keyword_counter)}")
 
     # Generate HTML view
-    print(f"Generating HTML view to {html_file}...")
-    generate_html_view(index_data, args.thumb_dir, html_file)
-    print(f"HTML view written to: {html_file}")
+    print(f"Generating HTML view...")
+    generate_html_view(index_data, args.thumb_dir, html_base, args.page_size)
 
 
 if __name__ == "__main__":
