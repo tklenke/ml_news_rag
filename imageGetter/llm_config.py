@@ -1,5 +1,5 @@
-# ABOUTME: LLM configuration for keyword extraction and tagging
-# ABOUTME: Defines Ollama host, model settings, and prompt templates
+# ABOUTME: LLM configuration and reference data for keyword extraction and tagging
+# ABOUTME: Defines Ollama host, model settings, prompt templates, and invalid keywords
 
 # LLM Configuration
 OLLAMA_HOST = "http://localhost:11434"
@@ -7,6 +7,12 @@ LLM_MODEL = "gemma3:4b"  # Tom can edit this as needed
 #LLM_MODEL = "gemma3:1b"  # Tom can edit this as needed
 #LLM_MODEL = "mistral-openorca:7b"  # Tom can edit this as needed
 LLM_TIMEOUT = 30.0  # Timeout in seconds for LLM requests (default: 30s)
+
+# Keywords that should be filtered out from tagging results
+# These are common words that appear frequently but aren't useful for categorization
+INVALID_KEYWORDS = [
+    "cozy",
+]
 
 # Prompt template for keyword extraction (Phase 4a)
 KEYWORD_EXTRACTION_PROMPT = """You are a very exact librarian tasked with analyzing aircraft 
