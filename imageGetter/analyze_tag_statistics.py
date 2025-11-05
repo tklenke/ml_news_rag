@@ -7,6 +7,7 @@ import argparse
 from pathlib import Path
 from collections import Counter
 from datetime import datetime
+from llm_config import INVALID_KEYWORDS
 
 
 def load_index(index_file: str, limit: int = None) -> dict:
@@ -38,21 +39,29 @@ def analyze_keywords(index_data: dict) -> Counter:
     """Analyze keyword frequencies across all messages.
 
     Combines both message keywords and image keywords.
+    Filters out invalid keywords from the count.
     """
     keyword_counter = Counter()
+
+    # Build set of invalid keywords (case-insensitive)
+    invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
 
     for message in index_data.values():
         # Collect message keywords
         msg_keywords = message.get("keywords", [])
         for kw in msg_keywords:
-            keyword_counter[kw.lower()] += 1
+            # Skip invalid keywords
+            if kw.lower() not in invalid_lower:
+                keyword_counter[kw.lower()] += 1
 
         # Collect image keywords
         images = message.get("images", [])
         for image in images:
             keywords = image.get("keywords", [])
             for kw in keywords:
-                keyword_counter[kw.lower()] += 1
+                # Skip invalid keywords
+                if kw.lower() not in invalid_lower:
+                    keyword_counter[kw.lower()] += 1
 
     return keyword_counter
 

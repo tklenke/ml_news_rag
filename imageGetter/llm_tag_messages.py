@@ -279,22 +279,12 @@ def tag_messages(
 
 
 def save_image_index(index_data: Dict, index_file: str):
-    """Save image index to JSON file with backup.
-
-    Creates backup of existing file before overwriting.
+    """Save image index to JSON file.
 
     Args:
         index_data: Dictionary to save
         index_file: Path to save to
     """
-    index_path = Path(index_file)
-
-    # Create backup if file exists
-    if index_path.exists():
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_path = index_path.parent / f"{index_path.name}.backup.{timestamp}"
-        shutil.copy2(index_path, backup_path)
-
-    # Write new data
+    # Write data directly (no backup needed since we write to new files)
     with open(index_file, 'w') as f:
         json.dump(index_data, f, indent=2)

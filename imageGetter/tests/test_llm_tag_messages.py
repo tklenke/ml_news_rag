@@ -318,8 +318,8 @@ class TestSaveImageIndex:
             result = json.load(f)
         assert result == test_data
 
-    def test_save_creates_backup(self, tmp_path):
-        """Test that saving creates backup of existing file."""
+    def test_save_overwrites_existing_file(self, tmp_path):
+        """Test that saving overwrites existing file without backup."""
         index_file = tmp_path / "test_index.json"
         original_data = {"msg1": {"metadata": {"subject": "Original"}}}
         new_data = {"msg1": {"metadata": {"subject": "New"}}}
@@ -327,9 +327,13 @@ class TestSaveImageIndex:
         # Create original file
         index_file.write_text(json.dumps(original_data))
 
-        # Save new data (should create backup)
+        # Save new data (no backup created since we write to new files in practice)
         save_image_index(new_data, str(index_file))
 
-        # Check backup exists
+        # Check no backup exists
         backup_files = list(tmp_path.glob("test_index.json.backup.*"))
-        assert len(backup_files) >= 1
+        assert len(backup_files) == 0
+
+        # Check new data was written
+        result = json.loads(index_file.read_text())
+        assert result["msg1"]["metadata"]["subject"] == "New"
