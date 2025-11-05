@@ -58,6 +58,43 @@ def sort_keywords_alphabetically(keyword_counts: Dict[str, int]) -> List[Tuple[s
     return sorted(keyword_counts.items(), key=lambda x: x[0])
 
 
+def generate_html_head(title: str) -> List[str]:
+    """Generate HTML head section with Skeleton CSS.
+
+    Args:
+        title: Page title
+
+    Returns:
+        List of HTML lines for head section
+    """
+    head = []
+    head.append("<!DOCTYPE html>")
+    head.append("<html lang='en'>")
+    head.append("<head>")
+    head.append("  <meta charset='utf-8'>")
+    head.append("  <meta name='viewport' content='width=device-width, initial-scale=1'>")
+    head.append(f"  <title>{title}</title>")
+    # Using CDN for testing - can be changed to site-relative paths for production
+    head.append("  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css'>")
+    head.append("  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css'>")
+    # Custom CSS for thumbnails and layout
+    head.append("  <style>")
+    head.append("    .thumbnail { width: 100%; height: auto; margin-bottom: 5px; }")
+    head.append("    .img-cell { text-align: center; margin-bottom: 20px; }")
+    head.append("    .subject { font-size: 12px; margin: 5px 0; }")
+    head.append("    .msg-id { font-size: 10px; color: #999; margin: 3px 0; }")
+    head.append("    .keywords { font-size: 10px; color: #666; margin: 3px 0; }")
+    head.append("    .year-header { font-size: 18px; font-weight: bold; margin: 20px 0 10px 0; }")
+    head.append("    .pagination { margin: 20px 0; text-align: center; }")
+    head.append("    .pagination a, .pagination span { margin: 0 5px; }")
+    head.append("    .pagination .disabled { color: #ccc; }")
+    head.append("  </style>")
+    head.append("</head>")
+    head.append("<body>")
+    head.append("  <div class='container'>")
+    return head
+
+
 def generate_index_html(keyword_counts: List[Tuple[str, int]], output_file: str) -> None:
     """Generate index.html with links to all images and keyword pages.
 
@@ -65,32 +102,26 @@ def generate_index_html(keyword_counts: List[Tuple[str, int]], output_file: str)
         keyword_counts: List of (keyword, count) tuples sorted alphabetically
         output_file: Path to write index.html
     """
-    html = []
-    html.append("<!DOCTYPE html>")
-    html.append("<html>")
-    html.append("<head>")
-    html.append("<meta charset='utf-8'>")
-    html.append("<title>Cozy Builders Image Database</title>")
-    html.append("</head>")
-    html.append("<body>")
-    html.append("<h1>Cozy Builders Image Database</h1>")
+    html = generate_html_head("Cozy Builders Image Database")
+    html.append("    <h1>Cozy Builders Image Database</h1>")
 
     # Link to all images
-    html.append("<p><a href='all/page1.html'>All Images (chronological)</a></p>")
+    html.append("    <p><a href='all/page1.html' class='button button-primary'>All Images (chronological)</a></p>")
 
     # Browse by keyword section
-    html.append("<h2>Browse by Keyword</h2>")
+    html.append("    <h2>Browse by Keyword</h2>")
 
     if keyword_counts:
-        html.append("<ul>")
+        html.append("    <ul>")
         for keyword, count in keyword_counts:
             # Sanitize keyword for filename
             safe_keyword = keyword.replace(" ", "_").lower()
-            html.append(f"<li><a href='keywords/{safe_keyword}_page1.html'>{keyword} ({count} images)</a></li>")
-        html.append("</ul>")
+            html.append(f"      <li><a href='keywords/{safe_keyword}_page1.html'>{keyword} ({count} images)</a></li>")
+        html.append("    </ul>")
     else:
-        html.append("<p>No keywords found.</p>")
+        html.append("    <p>No keywords found.</p>")
 
+    html.append("  </div>") # Close container
     html.append("</body>")
     html.append("</html>")
 
@@ -189,86 +220,78 @@ def generate_all_images_page(
         output_file: Path to write HTML file
         year_groups: List of (year, image_count) tuples for year headers
     """
-    html = []
-    html.append("<!DOCTYPE html>")
-    html.append("<html>")
-    html.append("<head>")
-    html.append("<meta charset='utf-8'>")
-    html.append("<title>All Images - Page {}</title>".format(page_num))
-    html.append("</head>")
-    html.append("<body>")
+    html = generate_html_head(f"All Images - Page {page_num}")
 
     # Breadcrumb
-    html.append("<p><a href='../index.html'>&larr; Back to Index</a></p>")
-    html.append("<h1>All Images (Chronological)</h1>")
+    html.append("    <p><a href='../index.html'>&larr; Back to Index</a></p>")
+    html.append("    <h1>All Images (Chronological)</h1>")
 
     # Year headers (only show on first page for now)
     if page_num == 1 and year_groups:
-        html.append("<div class='year-summary'>")
+        html.append("    <div class='year-summary'>")
         for year, count in year_groups:
-            html.append(f"<div>{year} ({count} images)</div>")
-        html.append("</div>")
+            html.append(f"      <div class='year-header'>{year} ({count} images)</div>")
+        html.append("    </div>")
 
     # Top pagination
-    html.append("<div class='pagination'>")
+    html.append("    <div class='pagination'>")
     if page_num > 1:
-        html.append(f"<a href='page1.html'>&lt;&lt; First</a>")
-        html.append(f"<a href='page{page_num-1}.html'>&lt; Previous</a>")
+        html.append(f"      <a href='page1.html'>&lt;&lt; First</a>")
+        html.append(f"      <a href='page{page_num-1}.html'>&lt; Previous</a>")
     else:
-        html.append("<span class='disabled'>&lt;&lt; First</span>")
-        html.append("<span class='disabled'>&lt; Previous</span>")
+        html.append("      <span class='disabled'>&lt;&lt; First</span>")
+        html.append("      <span class='disabled'>&lt; Previous</span>")
 
-    html.append(f"<span>Page {page_num} of {total_pages}</span>")
+    html.append(f"      <span><strong>Page {page_num} of {total_pages}</strong></span>")
 
     if page_num < total_pages:
-        html.append(f"<a href='page{page_num+1}.html'>Next &gt;</a>")
-        html.append(f"<a href='page{total_pages}.html'>Last &gt;&gt;</a>")
+        html.append(f"      <a href='page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"      <a href='page{total_pages}.html'>Last &gt;&gt;</a>")
     else:
-        html.append("<span class='disabled'>Next &gt;</span>")
-        html.append("<span class='disabled'>Last &gt;&gt;</span>")
-    html.append("</div>")
+        html.append("      <span class='disabled'>Next &gt;</span>")
+        html.append("      <span class='disabled'>Last &gt;&gt;</span>")
+    html.append("    </div>")
 
-    # Image grid (6 columns)
-    html.append("<table>")
+    # Image grid using Skeleton CSS (6 columns = 2 Skeleton columns each)
     for i in range(0, len(images), 6):
-        html.append("<tr>")
+        html.append("    <div class='row'>")
         for j in range(6):
             idx = i + j
             if idx < len(images):
                 img = images[idx]
-                html.append("<td>")
-                html.append(f"<div class='subject'>{img.get('subject', 'No subject')}</div>")
-                html.append(f"<div class='msg-id'>{img.get('message_id', '')}</div>")
-                html.append(f"<a href='{img.get('full_path', '')}'>")
-                html.append(f"<img src='{img.get('thumbnail_path', '')}' />")
-                html.append("</a>")
-                keywords_str = ", ".join(img.get('keywords', []))
-                html.append(f"<div class='keywords'>keywords: {keywords_str}</div>")
-                html.append("</td>")
-            else:
-                html.append("<td></td>")
-        html.append("</tr>")
-    html.append("</table>")
+                html.append("      <div class='two columns img-cell'>")
+                html.append(f"        <div class='subject'>{img.get('subject', 'No subject')[:30]}</div>")
+                html.append(f"        <div class='msg-id'>{img.get('message_id', '')}</div>")
+                html.append(f"        <a href='{img.get('full_path', '')}'>")
+                html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
+                html.append("        </a>")
+                keywords_str = ", ".join(img.get('keywords', [])[:5])
+                if len(img.get('keywords', [])) > 5:
+                    keywords_str += "..."
+                html.append(f"        <div class='keywords'>{keywords_str}</div>")
+                html.append("      </div>")
+        html.append("    </div>")
 
     # Bottom pagination (same as top)
-    html.append("<div class='pagination'>")
+    html.append("    <div class='pagination'>")
     if page_num > 1:
-        html.append(f"<a href='page1.html'>&lt;&lt; First</a>")
-        html.append(f"<a href='page{page_num-1}.html'>&lt; Previous</a>")
+        html.append(f"      <a href='page1.html'>&lt;&lt; First</a>")
+        html.append(f"      <a href='page{page_num-1}.html'>&lt; Previous</a>")
     else:
-        html.append("<span class='disabled'>&lt;&lt; First</span>")
-        html.append("<span class='disabled'>&lt; Previous</span>")
+        html.append("      <span class='disabled'>&lt;&lt; First</span>")
+        html.append("      <span class='disabled'>&lt; Previous</span>")
 
-    html.append(f"<span>Page {page_num} of {total_pages}</span>")
+    html.append(f"      <span><strong>Page {page_num} of {total_pages}</strong></span>")
 
     if page_num < total_pages:
-        html.append(f"<a href='page{page_num+1}.html'>Next &gt;</a>")
-        html.append(f"<a href='page{total_pages}.html'>Last &gt;&gt;</a>")
+        html.append(f"      <a href='page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"      <a href='page{total_pages}.html'>Last &gt;&gt;</a>")
     else:
-        html.append("<span class='disabled'>Next &gt;</span>")
-        html.append("<span class='disabled'>Last &gt;&gt;</span>")
-    html.append("</div>")
+        html.append("      <span class='disabled'>Next &gt;</span>")
+        html.append("      <span class='disabled'>Last &gt;&gt;</span>")
+    html.append("    </div>")
 
+    html.append("  </div>") # Close container
     html.append("</body>")
     html.append("</html>")
 
@@ -336,79 +359,71 @@ def generate_keyword_page(
     """
     safe_keyword = sanitize_keyword_for_filename(keyword)
 
-    html = []
-    html.append("<!DOCTYPE html>")
-    html.append("<html>")
-    html.append("<head>")
-    html.append("<meta charset='utf-8'>")
-    html.append(f"<title>{keyword} - Page {page_num}</title>")
-    html.append("</head>")
-    html.append("<body>")
+    html = generate_html_head(f"{keyword} - Page {page_num}")
 
     # Breadcrumb
-    html.append("<p><a href='../index.html'>&larr; Back to Index</a></p>")
-    html.append(f"<h1>Keyword: {keyword}</h1>")
+    html.append("    <p><a href='../index.html'>&larr; Back to Index</a></p>")
+    html.append(f"    <h1>Keyword: {keyword}</h1>")
 
     # Top pagination
-    html.append("<div class='pagination'>")
+    html.append("    <div class='pagination'>")
     if page_num > 1:
-        html.append(f"<a href='{safe_keyword}_page1.html'>&lt;&lt; First</a>")
-        html.append(f"<a href='{safe_keyword}_page{page_num-1}.html'>&lt; Previous</a>")
+        html.append(f"      <a href='{safe_keyword}_page1.html'>&lt;&lt; First</a>")
+        html.append(f"      <a href='{safe_keyword}_page{page_num-1}.html'>&lt; Previous</a>")
     else:
-        html.append("<span class='disabled'>&lt;&lt; First</span>")
-        html.append("<span class='disabled'>&lt; Previous</span>")
+        html.append("      <span class='disabled'>&lt;&lt; First</span>")
+        html.append("      <span class='disabled'>&lt; Previous</span>")
 
-    html.append(f"<span>Page {page_num} of {total_pages}</span>")
+    html.append(f"      <span><strong>Page {page_num} of {total_pages}</strong></span>")
 
     if page_num < total_pages:
-        html.append(f"<a href='{safe_keyword}_page{page_num+1}.html'>Next &gt;</a>")
-        html.append(f"<a href='{safe_keyword}_page{total_pages}.html'>Last &gt;&gt;</a>")
+        html.append(f"      <a href='{safe_keyword}_page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"      <a href='{safe_keyword}_page{total_pages}.html'>Last &gt;&gt;</a>")
     else:
-        html.append("<span class='disabled'>Next &gt;</span>")
-        html.append("<span class='disabled'>Last &gt;&gt;</span>")
-    html.append("</div>")
+        html.append("      <span class='disabled'>Next &gt;</span>")
+        html.append("      <span class='disabled'>Last &gt;&gt;</span>")
+    html.append("    </div>")
 
-    # Image grid (6 columns)
-    html.append("<table>")
+    # Image grid using Skeleton CSS (6 columns = 2 Skeleton columns each)
     for i in range(0, len(images), 6):
-        html.append("<tr>")
+        html.append("    <div class='row'>")
         for j in range(6):
             idx = i + j
             if idx < len(images):
                 img = images[idx]
-                html.append("<td>")
-                html.append(f"<div class='subject'>{img.get('subject', 'No subject')}</div>")
-                html.append(f"<div class='msg-id'>{img.get('message_id', '')}</div>")
-                html.append(f"<a href='{img.get('full_path', '')}'>")
-                html.append(f"<img src='{img.get('thumbnail_path', '')}' />")
-                html.append("</a>")
-                keywords_str = ", ".join(img.get('keywords', []))
-                html.append(f"<div class='keywords'>keywords: {keywords_str}</div>")
-                html.append("</td>")
-            else:
-                html.append("<td></td>")
-        html.append("</tr>")
-    html.append("</table>")
+                html.append("      <div class='two columns img-cell'>")
+                html.append(f"        <div class='subject'>{img.get('subject', 'No subject')[:30]}</div>")
+                html.append(f"        <div class='msg-id'>{img.get('message_id', '')}</div>")
+                html.append(f"        <a href='{img.get('full_path', '')}'>")
+                html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
+                html.append("        </a>")
+                keywords_str = ", ".join(img.get('keywords', [])[:5])
+                if len(img.get('keywords', [])) > 5:
+                    keywords_str += "..."
+                html.append(f"        <div class='keywords'>{keywords_str}</div>")
+                html.append("      </div>")
+        html.append("    </div>")
 
     # Bottom pagination (same as top)
-    html.append("<div class='pagination'>")
+    html.append("    <div class='pagination'>")
     if page_num > 1:
-        html.append(f"<a href='{safe_keyword}_page1.html'>&lt;&lt; First</a>")
-        html.append(f"<a href='{safe_keyword}_page{page_num-1}.html'>&lt; Previous</a>")
+        html.append(f"      <a href='{safe_keyword}_page1.html'>&lt;&lt; First</a>")
+        html.append(f"      <a href='{safe_keyword}_page{page_num-1}.html'>&lt; Previous</a>")
     else:
-        html.append("<span class='disabled'>&lt;&lt; First</span>")
-        html.append("<span class='disabled'>&lt; Previous</span>")
+        html.append("      <span class='disabled'>&lt;&lt; First</span>")
+        html.append("      <span class='disabled'>&lt; Previous</span>")
 
-    html.append(f"<span>Page {page_num} of {total_pages}</span>")
+    html.append(f"      <span><strong>Page {page_num} of {total_pages}</strong></span>")
 
     if page_num < total_pages:
-        html.append(f"<a href='{safe_keyword}_page{page_num+1}.html'>Next &gt;</a>")
-        html.append(f"<a href='{safe_keyword}_page{total_pages}.html'>Last &gt;&gt;</a>")
+        html.append(f"      <a href='{safe_keyword}_page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"      <a href='{safe_keyword}_page{total_pages}.html'>Last &gt;&gt;</a>")
     else:
-        html.append("<span class='disabled'>Next &gt;</span>")
-        html.append("<span class='disabled'>Last &gt;&gt;</span>")
-    html.append("</div>")
+        html.append("      <span class='disabled'>Next &gt;</span>")
+        html.append("      <span class='disabled'>Last &gt;&gt;</span>")
+    html.append("    </div>")
 
+    html.append("  </div>") # Close container
     html.append("</body>")
     html.append("</html>")
 

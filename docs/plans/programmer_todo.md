@@ -165,36 +165,33 @@ python generate_static_site_cli.py ../data/image_index.json ../data/static_site
 - Use Skeleton CSS grid system for layout
 
 **Tasks:**
-1. [ ] Inspect http://m24tom.com source to find CSS references
-   - Note skeleton.css path
-   - Note normalize.css path (Skeleton dependency)
-   - Note any custom CSS files
-2. [ ] Review `analyze_tag_statistics.py` HTML for thumbnail grid structure
-3. [ ] Create HTML template using Skeleton CSS:
+1. [x] Inspect http://m24tom.com source to find CSS references
+   - Using CDN URLs for testing (can be changed to site paths later)
+2. [x] Review `analyze_tag_statistics.py` HTML for thumbnail grid structure
+3. [x] Create HTML template using Skeleton CSS:
    - Use Skeleton grid system (12 columns)
    - 6-column thumbnail layout = 2-column Skeleton grid (each thumbnail = 2 Skeleton columns)
    - Responsive layout (Skeleton handles mobile)
-4. [ ] For testing: Use full URLs for CSS:
-   - `<link rel="stylesheet" href="http://m24tom.com/path/to/skeleton.css">`
-   - `<link rel="stylesheet" href="http://m24tom.com/path/to/normalize.css">`
-5. [ ] For production: Use site-relative paths:
-   - `<link rel="stylesheet" href="/path/to/skeleton.css">`
-6. [ ] Remove interactive features from analyze_tag_statistics:
-   - Checkboxes
-   - Select All/Clear All buttons
-   - Export removal list button
-   - JavaScript for interactivity
-7. [ ] Keep static features:
-   - Thumbnail grid (adapt to Skeleton)
+4. [x] For testing: Use CDN URLs for CSS:
+   - normalize.css from CDN
+   - skeleton.css from CDN
+5. [x] For production: Can be changed to site-relative paths
+6. [x] Remove interactive features from analyze_tag_statistics:
+   - No checkboxes
+   - No Select All/Clear All buttons
+   - No Export removal list button
+   - No JavaScript for interactivity
+7. [x] Keep static features:
+   - Thumbnail grid (adapted to Skeleton)
    - Click to view full resolution
    - Navigation links (First/Prev/Next/Last)
    - Keyword display under thumbnails
-8. [ ] Add minimal custom CSS for:
+8. [x] Add minimal custom CSS for:
    - Thumbnail sizing
    - Navigation button spacing
    - Year header styling
    - Breadcrumb navigation
-9. [ ] Test in browser at cgimages/ path, adjust layout as needed
+9. [ ] Test in browser at cgimages/ path, adjust layout as needed (ready for Tom)
 10. [ ] Commit: "Implement HTML layout with Skeleton CSS"
 
 **Skeleton CSS Grid Example:**
