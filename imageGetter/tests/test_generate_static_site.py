@@ -174,3 +174,177 @@ class TestGenerateIndexHTML:
         # Should still have link to all images
         assert "All Images" in content
         assert "all/page1.html" in content
+
+
+class TestSortMessagesByDate:
+    """Tests for sorting messages chronologically."""
+
+    def test_sort_messages_by_date_descending(self):
+        """Test sorting messages by date, newest first."""
+        from generate_static_site import sort_messages_by_date
+
+        index_data = {
+            "MSG001": {
+                "metadata": {"date": "Jan 15, 2023"},
+                "images": [{"filename": "img1.jpg"}]
+            },
+            "MSG002": {
+                "metadata": {"date": "Dec 20, 2024"},
+                "images": [{"filename": "img2.jpg"}]
+            },
+            "MSG003": {
+                "metadata": {"date": "Mar 5, 2024"},
+                "images": [{"filename": "img3.jpg"}]
+            }
+        }
+
+        result = sort_messages_by_date(index_data)
+
+        # Should be list of (message_id, message_data) tuples
+        assert isinstance(result, list)
+        assert len(result) == 3
+
+        # Should be sorted newest first: 2024-12, 2024-03, 2023-01
+        assert result[0][0] == "MSG002"  # Dec 2024
+        assert result[1][0] == "MSG003"  # Mar 2024
+        assert result[2][0] == "MSG001"  # Jan 2023
+
+
+class TestGroupByYear:
+    """Tests for grouping messages by year."""
+
+    def test_group_by_year(self):
+        """Test grouping messages into years with counts."""
+        from generate_static_site import group_messages_by_year
+
+        sorted_messages = [
+            ("MSG002", {"metadata": {"date": "Dec 20, 2024"}, "images": [{"f": "i1"}, {"f": "i2"}]}),
+            ("MSG003", {"metadata": {"date": "Mar 5, 2024"}, "images": [{"f": "i3"}]}),
+            ("MSG001", {"metadata": {"date": "Jan 15, 2023"}, "images": [{"f": "i4"}, {"f": "i5"}, {"f": "i6"}]}),
+        ]
+
+        result = group_messages_by_year(sorted_messages)
+
+        # Should be list of (year, image_count) tuples
+        assert isinstance(result, list)
+        assert len(result) == 2
+
+        # Should be ordered newest first
+        assert result[0] == (2024, 3)  # 2 images + 1 image = 3 total
+        assert result[1] == (2023, 3)  # 3 images
+
+
+class TestPaginateImages:
+    """Tests for pagination."""
+
+    def test_paginate_images(self):
+        """Test paginating list of images."""
+        from generate_static_site import paginate_images
+
+        # Create 500 test images
+        images = [{"filename": f"img{i}.jpg"} for i in range(500)]
+
+        result = paginate_images(images, images_per_page=210)
+
+        # Should return list of pages
+        assert isinstance(result, list)
+        # 500 images / 210 per page = 3 pages (210 + 210 + 80)
+        assert len(result) == 3
+        assert len(result[0]) == 210
+        assert len(result[1]) == 210
+        assert len(result[2]) == 80
+
+    def test_paginate_images_single_page(self):
+        """Test pagination with less than one page of images."""
+        from generate_static_site import paginate_images
+
+        images = [{"filename": f"img{i}.jpg"} for i in range(50)]
+
+        result = paginate_images(images, images_per_page=210)
+
+        assert len(result) == 1
+        assert len(result[0]) == 50
+
+
+class TestGenerateAllImagesPage:
+    """Tests for generating all images pages."""
+
+    def test_generate_all_images_page(self, tmp_path):
+        """Test generating a single all images page."""
+        from generate_static_site import generate_all_images_page
+
+        images = [
+            {
+                "message_id": "MSG001",
+                "subject": "Test Subject 1",
+                "keywords": ["firewall", "engine"],
+                "thumbnail_path": "thumbs/img1_thumb.jpg",
+                "full_path": "full/img1.jpg",
+                "year": 2024
+            },
+            {
+                "message_id": "MSG002",
+                "subject": "Test Subject 2",
+                "keywords": ["cowling"],
+                "thumbnail_path": "thumbs/img2_thumb.jpg",
+                "full_path": "full/img2.jpg",
+                "year": 2024
+            }
+        ]
+
+        output_file = tmp_path / "page1.html"
+        generate_all_images_page(
+            images=images,
+            page_num=1,
+            total_pages=1,
+            output_file=str(output_file),
+            year_groups=[(2024, 2)]
+        )
+
+        assert output_file.exists()
+        content = output_file.read_text()
+
+        # Should have year header
+        assert "2024" in content
+        assert "2 images" in content or "(2)" in content
+
+        # Should have image info
+        assert "Test Subject 1" in content
+        assert "MSG001" in content
+        assert "firewall" in content
+
+        # Should have pagination structure
+        assert "First" in content
+        assert "Previous" in content
+        assert "Next" in content
+        assert "Last" in content
+
+
+class TestNavigationLinks:
+    """Tests for first/prev/next/last navigation."""
+
+    def test_first_prev_next_last_navigation(self, tmp_path):
+        """Test that navigation links are correct for different pages."""
+        from generate_static_site import generate_all_images_page
+
+        images = [{"message_id": f"MSG{i}", "subject": f"Test {i}",
+                   "keywords": [], "thumbnail_path": "", "full_path": "", "year": 2024}
+                  for i in range(10)]
+
+        # Test page 1 of 3 - Previous/First should be disabled
+        output_file = tmp_path / "page1.html"
+        generate_all_images_page(images, 1, 3, str(output_file), [(2024, 10)])
+        content = output_file.read_text()
+
+        # On page 1, links to next/last should be enabled
+        assert "page2.html" in content  # Next
+        assert "page3.html" in content  # Last
+
+        # Test page 3 of 3 - Next/Last should be disabled
+        output_file = tmp_path / "page3.html"
+        generate_all_images_page(images, 3, 3, str(output_file), [(2024, 10)])
+        content = output_file.read_text()
+
+        # On page 3, links to first/prev should be enabled
+        assert "page1.html" in content  # First
+        assert "page2.html" in content  # Previous

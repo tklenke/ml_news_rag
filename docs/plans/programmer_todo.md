@@ -67,13 +67,13 @@
 **Deliverable:** `all/page1.html`, `all/page2.html`, etc. with chronological images
 
 **Tasks:**
-1. [ ] Write failing test: `test_sort_messages_by_date_descending()`
-2. [ ] Write failing test: `test_group_by_year()`
-3. [ ] Write failing test: `test_paginate_images()`
-4. [ ] Write failing test: `test_generate_all_images_page()`
-5. [ ] Write failing test: `test_first_prev_next_last_navigation()`
-6. [ ] Run tests - verify all fail
-7. [ ] Implement functions to:
+1. [x] Write failing test: `test_sort_messages_by_date_descending()`
+2. [x] Write failing test: `test_group_by_year()`
+3. [x] Write failing test: `test_paginate_images()`
+4. [x] Write failing test: `test_generate_all_images_page()`
+5. [x] Write failing test: `test_first_prev_next_last_navigation()`
+6. [x] Run tests - verify all fail
+7. [x] Implement functions to:
    - Sort messages by date (descending, newest first)
    - Group by year (for year headers)
    - Paginate (210 images per page, 6 columns × 35 rows)
@@ -83,8 +83,8 @@
      - 6-column thumbnail grid
      - First/Previous/Next/Last navigation (top and bottom)
      - Each thumbnail shows: image, subject, message ID, keywords
-8. [ ] Run tests - verify all pass
-9. [ ] Manual test: Generate pages, verify navigation works
+8. [x] Run tests - verify all pass
+9. [ ] Manual test: Generate pages, verify navigation works (deferred)
 10. [ ] Commit: "Implement all images chronological pages"
 
 **Pagination Logic:**
