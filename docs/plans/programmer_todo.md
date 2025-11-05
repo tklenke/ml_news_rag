@@ -192,7 +192,7 @@ python generate_static_site_cli.py ../data/image_index.json ../data/static_site
    - Year header styling
    - Breadcrumb navigation
 9. [ ] Test in browser at cgimages/ path, adjust layout as needed (ready for Tom)
-10. [ ] Commit: "Implement HTML layout with Skeleton CSS"
+10. [x] Commit: "Implement HTML layout with Skeleton CSS"
 
 **Skeleton CSS Grid Example:**
 ```html
