@@ -29,14 +29,14 @@
 **Deliverable:** `index.html` with links to "All Images" and alphabetical keyword list
 
 **Tasks:**
-1. [ ] Create `imageGetter/generate_static_site.py` with ABOUTME comments
-2. [ ] Create `imageGetter/tests/test_generate_static_site.py`
-3. [ ] Write failing test: `test_load_index_data()`
-4. [ ] Write failing test: `test_count_images_per_keyword()`
-5. [ ] Write failing test: `test_generate_index_html()`
-6. [ ] Write failing test: `test_alphabetical_keyword_sort()`
-7. [ ] Run tests - verify all fail
-8. [ ] Implement functions to:
+1. [x] Create `imageGetter/generate_static_site.py` with ABOUTME comments
+2. [x] Create `imageGetter/tests/test_generate_static_site.py`
+3. [x] Write failing test: `test_load_index_data()`
+4. [x] Write failing test: `test_count_images_per_keyword()`
+5. [x] Write failing test: `test_generate_index_html()`
+6. [x] Write failing test: `test_alphabetical_keyword_sort()`
+7. [x] Run tests - verify all fail
+8. [x] Implement functions to:
    - Load image_index.json
    - Count images per keyword
    - Sort keywords alphabetically
@@ -44,7 +44,7 @@
      - Link to "All Images" (→ all/page1.html)
      - Alphabetical keyword list with counts: `firewall (127 images)`
      - Breadcrumb navigation at top
-9. [ ] Run tests - verify all pass
+9. [x] Run tests - verify all pass
 10. [ ] Manual test: Open index.html in browser, verify layout
 11. [ ] Commit: "Implement index page generation"
 
