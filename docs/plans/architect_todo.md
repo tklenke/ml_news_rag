@@ -6,7 +6,9 @@
 
 **Phase:** Phases 1-4b complete, Phase 5 ready for implementation
 
-**Documentation:** See `image_database_design.md` for complete design and implementation history
+**Documentation:**
+- Design and history: `image_database_design.md`
+- Todo files pruned (703 lines removed), history in git
 
 ---
 
