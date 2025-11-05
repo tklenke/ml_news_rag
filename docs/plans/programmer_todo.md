@@ -129,18 +129,18 @@
 **Deliverable:** CLI tool to generate complete static site
 
 **Tasks:**
-1. [ ] Create `imageGetter/generate_static_site_cli.py` with ABOUTME comments
-2. [ ] Add command-line arguments:
+1. [x] Create `imageGetter/generate_static_site_cli.py` with ABOUTME comments
+2. [x] Add command-line arguments:
    - `SOURCE` (path to image_index.json)
    - `DEST` (output directory for static site)
    - `--images-per-page` (default 210)
-3. [ ] Implement:
+3. [x] Implement:
    - Create output directory structure (all/, keywords/)
    - Generate index.html
    - Generate all/pageN.html files
    - Generate keywords/KEYWORD_pageN.html files for each keyword
    - Progress reporting
-4. [ ] Test on actual image_index.json
+4. [ ] Test on actual image_index.json (ready for Tom to test)
 5. [ ] Commit: "Add CLI tool for static site generation"
 
 **Usage:**
