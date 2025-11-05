@@ -10,13 +10,81 @@
 - Phase 4b: LLM keyword tagging ✓
 - Image Curation Tools: dedupe, HTML review, batch removal ✓
 
-**Next:** Phase 5 - Keyword-Based Query Interface
+**Next:** Search-based keyword tagger (simpler alternative to LLM tagger)
 
 **Test Status:** 110 tests passing, 14 skipped
 
 ---
 
 ## Recent Changes Summary (2025-11-04 to 2025-11-05)
+
+### File Cleanup and Keyword Finalization (2025-11-05)
+**Commits:** 13779b7
+
+**Moved test files to input/ directory:**
+- czindex.idx, backupcz.idx
+- 28 images_to_remove_page*.txt files
+- Various test index files (cleaned.idx, test_cleaned*.idx, etc.)
+- tests/test.idx
+
+**Deleted obsolete files:**
+- index251102143704.idx (old timestamped index - 216KB)
+- tag_statistics.txt
+- test_10_thumbnails.py
+
+**Finalized aircraft_keywords.txt:**
+- Simplified vendor/manufacturer names
+- Removed redundant words ("Aircraft Spruce" → "Spruce", "Ken Brock Manufacturing" → "Brock", etc.)
+- Now contains 557 curated keywords ready for tagging
+
+**Added to .gitignore:**
+- imageGetter/input/ (test data and work-in-progress files)
+
+### Tagger Rename and Search Tagger Preparation (2025-11-05)
+**Commits:** 0064389
+
+**Objective:** Prepare for two parallel tagging approaches - LLM-based (semantic) and search-based (fast/simple).
+
+**Rationale:**
+LLM tagging is slow (30s per message × 1234 messages ≈ 10 hours) and can have errors/timeouts. Search-based tagging will be:
+- **Fast:** Process entire dataset in seconds
+- **Reliable:** No LLM timeouts or errors
+- **Deterministic:** Same input always gives same output
+- **Good enough:** 557 curated keywords + stemming should catch 80-90% of relevant terms
+
+**Files Renamed:**
+- `tag_messages.py` → `llm_tag_messages.py`
+- `tag_messages_cli.py` → `llm_tag_messages_cli.py`
+- `tests/test_tag_messages.py` → `tests/test_llm_tag_messages.py`
+
+**Parallel Structure:**
+
+LLM-based tagging (semantic matching):
+- `llm_tagger.py` - Core LLM KeywordTagger class
+- `llm_tag_messages.py` - Batch processor using LLM
+- `llm_tag_messages_cli.py` - CLI: `python llm_tag_messages_cli.py SOURCE [DEST]`
+- `tests/test_llm_tag_messages.py` - 17 tests passing
+
+Search-based tagging (keyword matching with stemming) - TO BE BUILT:
+- `search_tagger.py` - Core SearchTagger class with stemming
+- `search_tag_messages.py` - Batch processor using search
+- `search_tag_messages_cli.py` - CLI: `python search_tag_messages_cli.py SOURCE [DEST]`
+- `tests/test_search_tag_messages.py` - Tests (TDD)
+
+**Search Tagger Design:**
+1. Case-insensitive search with word boundaries
+2. Stemming (e.g., "cowl" matches "cowling", "cowls", "cowled")
+3. Search both subject + body of message
+4. Dedupe keywords (no duplicates in output)
+5. Store results in same `llm_keywords` field (compatible with existing tools)
+
+**Tradeoffs:**
+- **Lose:** Synonym matching, context understanding, related terms
+- **Gain:** Speed (seconds vs hours), reliability, simplicity, maintainability
+- **Mitigation:** Can always add synonyms to aircraft_keywords.txt, or use LLM for subset
+
+**All tests passing** after rename (110 passing, 14 skipped).
+**README.md updated** to reference llm_tag_messages_cli.py.
 
 ### CLI Standardization (2025-11-05)
 **Commits:** bd5e142 (CLI changes), f20f9dc (README update)

@@ -154,7 +154,7 @@ Saving deduped index to ../data/image_index_deduped.json...
 Tag messages with semantic keywords using LLM (automatically skips already-tagged messages):
 
 ```bash
-python tag_messages_cli.py \
+python llm_tag_messages_cli.py \
   ../data/image_index_deduped.json \
   ../data/image_index_tagged.json \
   --keywords aircraft_keywords.txt
