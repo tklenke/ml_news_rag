@@ -4,6 +4,7 @@
 import re
 from typing import List, Dict
 from urllib.parse import urlparse, parse_qs, unquote
+from llm_config import INVALID_KEYWORDS
 
 # Blacklist: Filenames to exclude (UI elements, emoticons, signatures, temp files)
 # These are non-content images that appear in email threads but aren't aircraft photos
@@ -163,6 +164,10 @@ def extract_keywords_from_filename(strFilename: str) -> List[str]:
             continue
 
         lstKeywords.append(strWordLower)
+
+    # Filter out invalid keywords (case-insensitive)
+    invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
+    lstKeywords = [kw for kw in lstKeywords if kw.lower() not in invalid_lower]
 
     return lstKeywords
 

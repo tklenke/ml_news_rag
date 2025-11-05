@@ -11,7 +11,7 @@ def main():
     """CLI entry point for batch image downloads."""
     parser = argparse.ArgumentParser(
         description="Download images from Google Groups using image index",
-        usage="%(prog)s [options] SOURCE DEST"
+        usage="%(prog)s [-h] [--limit N] SOURCE DEST"
     )
     parser.add_argument(
         "source",

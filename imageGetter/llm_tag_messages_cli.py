@@ -15,7 +15,7 @@ from llm_config import LLM_TIMEOUT
 def main():
     parser = argparse.ArgumentParser(
         description='Tag messages with LLM keywords',
-        usage='%(prog)s [options] SOURCE [DEST]'
+        usage='%(prog)s [-h] [--keywords KEYWORDS] [--limit N] [--model MODEL] [--verbose] SOURCE [DEST]'
     )
 
     # Positional arguments

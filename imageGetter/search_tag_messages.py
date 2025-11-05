@@ -7,6 +7,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List
 from search_tagger import SearchTagger
+from llm_config import INVALID_KEYWORDS
 
 
 def load_image_index(index_file: str) -> Dict:
@@ -76,7 +77,8 @@ def tag_messages(
     keywords_file: str,
     output_file: str = None,
     limit: int = None,
-    verbose: bool = False
+    verbose: bool = False,
+    keep_existing: bool = False
 ) -> Dict:
     """Tag messages in index with keywords using search and stemming.
 
@@ -86,6 +88,7 @@ def tag_messages(
         output_file: Path to output file (default: overwrite input file with backup)
         limit: If specified, process only first N messages
         verbose: If True, print detailed output for each message
+        keep_existing: If True, merge with existing keywords; if False, replace (default: False)
 
     Returns:
         Dictionary with statistics:
@@ -134,25 +137,42 @@ def tag_messages(
             # Get existing keywords (if any)
             existing_keywords = message.get("keywords", [])
 
-            # Search for keywords
+            # Create allowed vocabulary (case-insensitive) from aircraft_keywords.txt
+            allowed_keywords_lower = {kw.lower() for kw in keywords}
+
+            # Filter existing keywords: keep only those in allowed vocabulary
+            valid_existing = [kw for kw in existing_keywords if kw.lower() in allowed_keywords_lower]
+
+            # Search for keywords in message text
             matched_keywords = tagger.find_keywords(message_text, keywords)
 
-            # Merge existing and new keywords, deduplicate (case-insensitive)
-            combined = list(existing_keywords) + matched_keywords
-            seen = set()
-            deduplicated = []
-            for kw in combined:
-                if kw.lower() not in seen:
-                    seen.add(kw.lower())
-                    deduplicated.append(kw)
+            # Decide whether to merge or replace
+            if keep_existing:
+                # Merge valid existing and newly matched keywords, deduplicate (case-insensitive)
+                combined = list(valid_existing) + matched_keywords
+                seen = set()
+                deduplicated = []
+                for kw in combined:
+                    if kw.lower() not in seen:
+                        seen.add(kw.lower())
+                        deduplicated.append(kw)
+            else:
+                # Replace: use only newly matched keywords (discard existing)
+                deduplicated = matched_keywords
 
-            # Store merged keywords
-            message["keywords"] = deduplicated
+            # Filter out invalid keywords (should already be filtered, but belt-and-suspenders)
+            invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
+            final_keywords = [kw for kw in deduplicated if kw.lower() not in invalid_lower]
+
+            # Store keywords
+            message["keywords"] = final_keywords
 
             if verbose:
                 print(f"  Existing: {existing_keywords}")
+                print(f"  Valid existing (in vocabulary): {valid_existing}")
                 print(f"  Matched: {matched_keywords}")
-                print(f"  Final: {deduplicated}")
+                print(f"  Final: {final_keywords}")
+                print(f"  Mode: {'merge' if keep_existing else 'replace'}")
 
             stats["processed"] += 1
             messages_processed += 1

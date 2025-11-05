@@ -22,7 +22,7 @@ from llm_config import LLM_TIMEOUT
 def main():
     parser = argparse.ArgumentParser(
         description='Build keyword list by sampling messages and extracting keywords with LLM',
-        usage='%(prog)s [options] SOURCE [DEST]'
+        usage='%(prog)s [-h] [--sample N] [--existing FILE] [--model MODEL] [--verbose] SOURCE [DEST]'
     )
 
     # Positional arguments

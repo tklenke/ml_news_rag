@@ -113,22 +113,49 @@ class TestTagMessages:
         assert stats["skipped"] == 0
 
     def test_merge_existing_keywords(self, test_index, test_keywords):
-        """Test that existing keywords are merged with newly matched keywords."""
+        """Test that existing keywords are merged when keep_existing=True."""
+        # Modify test data to have a valid keyword in existing
+        with open(test_index) as f:
+            data = json.load(f)
+        # Add "fuel" to existing keywords (fuel is in keywords.txt)
+        data["msg3"]["keywords"] = ["fuel", "existing"]
+        with open(test_index, 'w') as f:
+            json.dump(data, f)
+
+        # Tag messages with keep_existing=True
+        stats = tag_messages(test_index, test_keywords, keep_existing=True)
+
+        # Load result
+        with open(test_index) as f:
+            result = json.load(f)
+
+        # msg3 had ["fuel", "existing"], should now have ["fuel", "engine"]
+        # - "fuel" is in vocabulary, preserved
+        # - "existing" NOT in vocabulary, filtered out
+        # - "engine" found in "Engine mount" subject, added
+        assert "fuel" in result["msg3"]["keywords"]  # Valid existing preserved
+        assert "existing" not in result["msg3"]["keywords"]  # Invalid filtered out
+        assert "engine" in result["msg3"]["keywords"]  # New match added
+        # No messages skipped
+        assert stats["skipped"] == 0
+
+    def test_replace_existing_keywords_default(self, test_index, test_keywords):
+        """Test that existing keywords are replaced by default (keep_existing=False)."""
         # Load original data
         with open(test_index) as f:
             original = json.load(f)
 
-        # Tag messages
+        # Tag messages with default behavior (keep_existing=False)
         stats = tag_messages(test_index, test_keywords)
 
         # Load result
         with open(test_index) as f:
             result = json.load(f)
 
-        # msg3 had ["existing"], should now have ["existing", "engine"]
-        # (engine is found in "Engine mount" subject)
-        assert "existing" in result["msg3"]["keywords"]  # Original preserved
-        assert "engine" in result["msg3"]["keywords"]  # New match added
+        # msg3 had ["existing"], should now have ONLY ["engine"]
+        # (engine is found in "Engine mount" subject, "existing" discarded)
+        assert "existing" not in result["msg3"]["keywords"]  # Original discarded
+        assert "engine" in result["msg3"]["keywords"]  # New match only
         # No messages skipped
         assert stats["skipped"] == 0
 
@@ -147,14 +174,14 @@ class TestTagMessages:
             assert isinstance(msg["keywords"], list)
 
     def test_invalid_keywords_filtered_in_batch(self, tmp_path):
-        """Test that invalid keywords are filtered during batch tagging."""
+        """Test that invalid keywords are filtered during batch tagging (default replace mode)."""
         # Create index with message containing "cozy"
         index_file = tmp_path / "test_index.json"
         test_data = {
             "msg1": {
                 "metadata": {"subject": "This cozy firewall installation"},
                 "images": [],
-                "keywords" : ["stevenlevy"]
+                "keywords" : ["stevenlevy","COZY","cozy"]
             }
         }
         index_file.write_text(json.dumps(test_data))
@@ -163,15 +190,113 @@ class TestTagMessages:
         kw_file = tmp_path / "keywords.txt"
         kw_file.write_text("cozy\nfirewall\nengine")
 
-        # Tag messages
+        # Tag messages (default: replace existing keywords)
         tag_messages(str(index_file), str(kw_file))
 
         # Load result
         with open(index_file) as f:
             result = json.load(f)
 
-        # "cozy" should be filtered out, firewall should be present
+        # Default mode: existing keywords discarded, only newly matched kept
         assert "keywords" in result["msg1"]
-        assert "cozy" not in result["msg1"]["keywords"]
+        # Verify no case variant of 'cozy' exists (filtered as invalid)
+        assert not any(kw.lower() == 'cozy' for kw in result["msg1"]["keywords"])
+        # stevenlevy was in existing keywords but discarded (replace mode)
+        assert "stevenlevy" not in result["msg1"]["keywords"]
+        # firewall matched from message text and kept
         assert "firewall" in result["msg1"]["keywords"]
-        assert "stevenlevy" in result["msg1"]["keywords"]
+
+    def test_vocabulary_restriction(self, tmp_path):
+        """Test that only keywords from aircraft_keywords.txt are allowed."""
+        # Create index with keywords NOT in vocabulary
+        index_file = tmp_path / "test_index.json"
+        test_data = {
+            "msg1": {
+                "metadata": {"subject": "Firewall installation"},
+                "keywords": ["firewall", "random_keyword_not_in_vocab", "another_invalid"],
+                "images": []
+            }
+        }
+        index_file.write_text(json.dumps(test_data))
+
+        # Create keywords file with limited vocabulary
+        kw_file = tmp_path / "keywords.txt"
+        kw_file.write_text("firewall\nengine\nfuel")
+
+        # Tag messages (default: replace mode)
+        tag_messages(str(index_file), str(kw_file))
+
+        # Load result
+        with open(index_file) as f:
+            result = json.load(f)
+
+        # Only firewall should remain (in vocabulary and matched in subject)
+        assert "keywords" in result["msg1"]
+        assert "firewall" in result["msg1"]["keywords"]
+        # Invalid keywords should be filtered out
+        assert "random_keyword_not_in_vocab" not in result["msg1"]["keywords"]
+        assert "another_invalid" not in result["msg1"]["keywords"]
+
+    def test_vocabulary_restriction_with_merge(self, tmp_path):
+        """Test that vocabulary restriction works in merge mode too."""
+        # Create index with keywords NOT in vocabulary
+        index_file = tmp_path / "test_index.json"
+        test_data = {
+            "msg1": {
+                "metadata": {"subject": "Firewall and engine work"},
+                "keywords": ["firewall", "random_keyword_not_in_vocab", "engine"],
+                "images": []
+            }
+        }
+        index_file.write_text(json.dumps(test_data))
+
+        # Create keywords file with limited vocabulary
+        kw_file = tmp_path / "keywords.txt"
+        kw_file.write_text("firewall\nengine\nfuel")
+
+        # Tag messages with keep_existing=True
+        tag_messages(str(index_file), str(kw_file), keep_existing=True)
+
+        # Load result
+        with open(index_file) as f:
+            result = json.load(f)
+
+        # firewall and engine should remain (both in vocabulary)
+        assert "keywords" in result["msg1"]
+        assert "firewall" in result["msg1"]["keywords"]
+        assert "engine" in result["msg1"]["keywords"]
+        # Invalid keyword should be filtered out even in merge mode
+        assert "random_keyword_not_in_vocab" not in result["msg1"]["keywords"]
+
+    def test_invalid_keywords_filtered_with_merge(self, tmp_path):
+        """Test that invalid keywords are filtered when merging (keep_existing=True)."""
+        # Create index with message containing "cozy"
+        index_file = tmp_path / "test_index.json"
+        test_data = {
+            "msg1": {
+                "metadata": {"subject": "This cozy firewall installation"},
+                "images": [],
+                "keywords" : ["stevenlevy","COZY","cozy","firewall"]
+            }
+        }
+        index_file.write_text(json.dumps(test_data))
+
+        # Create keywords file - include firewall but not stevenlevy or cozy
+        kw_file = tmp_path / "keywords.txt"
+        kw_file.write_text("firewall\nengine\nfuel")
+
+        # Tag messages with keep_existing=True
+        tag_messages(str(index_file), str(kw_file), keep_existing=True)
+
+        # Load result
+        with open(index_file) as f:
+            result = json.load(f)
+
+        # Merge mode: only valid vocabulary keywords kept
+        assert "keywords" in result["msg1"]
+        # Verify "cozy" filtered out (in INVALID_KEYWORDS)
+        assert not any(kw.lower() == 'cozy' for kw in result["msg1"]["keywords"])
+        # stevenlevy filtered out (not in vocabulary)
+        assert "stevenlevy" not in result["msg1"]["keywords"]
+        # firewall preserved (in vocabulary and in existing keywords)
+        assert "firewall" in result["msg1"]["keywords"]

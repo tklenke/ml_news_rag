@@ -10,7 +10,7 @@ from remove_images import load_index, load_removal_lists, remove_images_from_ind
 def main():
     parser = argparse.ArgumentParser(
         description='Remove images from index based on removal list files',
-        usage='%(prog)s INPUT_INDEX OUTPUT_INDEX --remove-list FILE [FILE ...]',
+        usage='%(prog)s [-h] INPUT_INDEX OUTPUT_INDEX --remove-list FILE [FILE ...]',
         epilog='''
 Examples:
   %(prog)s index.json cleaned.json --remove-list images_to_remove.txt

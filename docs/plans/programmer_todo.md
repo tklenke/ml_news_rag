@@ -98,6 +98,105 @@ python search_tag_messages_cli.py data/index.idx data/index_tagged.idx
 **Key Learning:**
 Different workflow stages create keywords from different sources. Tools must **merge, not overwrite** to prevent data loss. The "skip already tagged" pattern only makes sense for slow, resumable operations (like LLM tagging), not fast deterministic operations (like search tagging).
 
+### Invalid Keyword Filtering Fix (2025-11-05)
+**Problem Identified:**
+Despite INVALID_KEYWORDS filtering in search_tag_messages.py, "cozy" still appeared as #1 keyword (856 occurrences) in statistics. Investigation revealed TWO sources of keywords:
+1. **Message-level keywords** - created by search_tag_messages.py (properly filtered)
+2. **Image-level keywords** - created by extract_image_urls.py (NOT filtered)
+
+`analyze_tag_statistics.py` counts BOTH sources, so unfiltered image keywords appeared in statistics.
+
+**Root Cause:**
+`extract_image_urls.py` creates keywords from image filenames but didn't filter against INVALID_KEYWORDS list. The "cozy" keyword came from image filenames like "Cozy_Builder_Firewall.jpg" → ["cozy", "builder", "firewall"].
+
+**Solution Implemented (TDD):**
+
+1. **Created tests first** (`tests/test_extract_keywords.py`):
+   - `test_filter_invalid_keywords` - verify "cozy" filtered from "Cozy_Builder_Firewall.jpg"
+   - `test_filter_invalid_keywords_case_insensitive` - verify all case variants filtered
+   - Tests FAILED initially ✓
+
+2. **Fixed implementation** (`extract_image_urls.py`):
+   ```python
+   # Import INVALID_KEYWORDS
+   from llm_config import INVALID_KEYWORDS
+
+   # Filter before returning keywords
+   invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
+   lstKeywords = [kw for kw in lstKeywords if kw.lower() not in invalid_lower]
+   ```
+   - Tests PASSED ✓
+
+3. **Created cleanup script** (`clean_invalid_keywords.py`):
+   - Removes invalid keywords from BOTH message-level AND image-level keywords
+   - Handles existing indexes that already have invalid keywords
+   - Usage: `python clean_invalid_keywords.py input.idx output.idx`
+
+**Test Results:**
+- All 12 tests passing (7 search_tag + 5 extract_keywords) ✓
+- Cleanup removed 856 image keywords from czindex_removed.idx
+- Final statistics: "fuel" is now top keyword (549), "cozy" completely removed
+- Compound words preserved: "cozy75cz", "cozy3", "cozy4" (aircraft model numbers)
+
+**Files Modified:**
+- `extract_image_urls.py` - Added INVALID_KEYWORDS filtering at source
+- `tests/test_extract_keywords.py` - New test file (5 tests)
+- `clean_invalid_keywords.py` - New cleanup script for existing indexes
+- `search_tag_messages.py` - Already had filtering (previous fix)
+
+**Workflow Updated:**
+```bash
+# 1. Extract images (now filters invalid keywords at creation)
+python extract_image_urls.py msgs_md/ data/
+
+# 2. Tag messages (cleans + tags in one step)
+python search_tag_messages_cli.py data/index.idx data/index_tagged.idx
+# Default: cleans invalid keywords from BOTH sources, then tags
+# Use --no-clean to skip cleaning step
+
+# 3. For standalone cleaning (if needed):
+python clean_invalid_keywords.py old_index.idx cleaned_index.idx
+```
+
+**Integrated Cleaning (2025-11-05):**
+Tom requested integrating `clean_invalid_keywords` into `search_tag_messages_cli.py`:
+- Made cleaning the DEFAULT behavior (runs before tagging)
+- Added `--no-clean` flag to skip cleaning if needed
+- Workflow now: Load → Clean → Save → Tag (all in one command)
+- Removes 856 invalid "cozy" keywords automatically from existing indexes
+
+**Replace vs Merge Mode (2025-11-05):**
+Changed default behavior from merge to replace for message-level keywords:
+
+**NEW DEFAULT (replace mode):**
+- Discards all pre-existing message-level keywords
+- Searches message text (subject + message_md) for keywords
+- Stores ONLY newly matched keywords from message text
+- Rationale: Image keywords come from filenames, message keywords should come from message content
+
+**With `--keep-existing-keywords` flag (merge mode):**
+- Keeps pre-existing message-level keywords
+- Searches message text for new keywords
+- Merges both (old behavior)
+
+**Changes:**
+- `search_tag_messages.py`: Added `keep_existing` parameter (default: False)
+- `search_tag_messages_cli.py`: Added `--keep-existing-keywords` flag
+- Tests updated: 9 tests now cover both replace and merge modes
+- New tests: `test_replace_existing_keywords_default`, `test_invalid_keywords_filtered_with_merge`
+
+**Example:**
+```bash
+# Default: replace existing message keywords with newly matched
+python search_tag_messages_cli.py data/index.idx data/tagged.idx
+
+# Merge: keep existing + add newly matched
+python search_tag_messages_cli.py data/index.idx data/tagged.idx --keep-existing-keywords
+```
+
+**Key Learning:**
+Filter invalid data **at the source** where it's created, not just where it's consumed. Both `extract_image_urls.py` (image keywords) and `search_tag_messages.py` (message keywords) must filter independently since they create keywords from different sources. For convenience, `search_tag_messages_cli.py` also cleans existing indexes before tagging.
+
 **Field Name Standardization (2025-11-05):**
 - Renamed `llm_keywords` → `keywords` across codebase (commit 84cd645)
 - Both LLM and search taggers now use same `keywords` field
