@@ -45,8 +45,8 @@
      - Alphabetical keyword list with counts: `firewall (127 images)`
      - Breadcrumb navigation at top
 9. [x] Run tests - verify all pass
-10. [ ] Manual test: Open index.html in browser, verify layout
-11. [ ] Commit: "Implement index page generation"
+10. [ ] Manual test: Open index.html in browser, verify layout (deferred for now)
+11. [x] Commit: "Implement index page generation"
 
 **HTML Structure (index.html):**
 ```html
