@@ -12,11 +12,96 @@
 
 **Next:** Phase 5 - Keyword-Based Query Interface
 
-**Test Status:** 128 tests passing, 14 skipped (+18 new tests for search tagger)
+**Test Status:** 130 tests passing, 14 skipped (+20 new tests for search tagger)
 
 ---
 
 ## Recent Changes Summary (2025-11-04 to 2025-11-05)
+
+### Search Tagger Keyword Merging Fix (2025-11-05)
+**Commits:** bf2da16, c1abd50, f2dee1b, cc9afd9, 84cd645
+
+**Problem Identified:**
+Search tagger was **skipping messages that already had keywords** instead of merging new matches with existing keywords. This prevented proper integration with `extract_image_urls.py` which creates image-level keywords.
+
+**Root Cause:**
+Skip logic was leftover from LLM tagging where:
+- Processing was slow (30s per message)
+- You might need to restart and resume
+- Skipping already-tagged messages made sense
+
+But with fast search tagging:
+- Processing is instant
+- Workflow involves TWO keyword sources:
+  1. `extract_image_urls.py` → creates image-level keywords
+  2. `search_tag_messages.py` → creates message-level keywords
+- Both sources needed to coexist (no data loss)
+
+**Solution Implemented:**
+Changed search_tag_messages.py to **merge keywords** instead of skip:
+
+```python
+# Get existing keywords (if any)
+existing_keywords = message.get("keywords", [])
+
+# Search for new keywords
+matched_keywords = tagger.find_keywords(message_text, keywords)
+
+# Merge and deduplicate (case-insensitive)
+combined = existing_keywords + matched_keywords
+# ... dedupe ...
+message["keywords"] = deduplicated
+```
+
+**Changes:**
+1. **search_tag_messages.py:**
+   - Removed skip logic for already-tagged messages
+   - Added merge + deduplicate logic
+   - Process ALL messages (stats["skipped"] always 0)
+   - Preserve existing keywords on error
+
+2. **search_tag_messages_cli.py:**
+   - Updated messaging: "will be merged" instead of "will skip"
+   - Removed "Note: X messages skipped" output
+   - Show count of messages with existing keywords
+
+3. **tests/test_search_tag_messages.py:**
+   - Updated `test_tag_messages_basic`: expect 3 processed, 0 skipped
+   - Renamed `test_skip_already_tagged` → `test_merge_existing_keywords`
+   - Added `test_invalid_keywords_filtered_in_batch` (integration test)
+   - Verify merge behavior: existing + new keywords combined
+
+4. **Invalid Keyword Filtering:**
+   - Added INVALID_KEYWORDS list to llm_config.py (starts with "cozy")
+   - SearchTagger filters invalid keywords BEFORE storing in index
+   - analyze_tag_statistics shows true data (no filtering)
+   - If "cozy" appears in stats → index needs re-tagging
+
+5. **Removed Backup Files:**
+   - Eliminated `.backup.*` files during auto-saves
+   - Not needed since we write to new files (non-destructive)
+
+**Test Results:**
+All 7 search_tag_messages tests passing ✓
+
+**Example Workflow:**
+```bash
+# 1. Extract images (creates image-level keywords)
+python extract_image_urls.py msgs_md/ data/
+
+# 2. Tag messages (merges with existing, adds message-level keywords)
+python search_tag_messages_cli.py data/index.idx data/index_tagged.idx
+
+# Result: Both image keywords AND message keywords preserved
+```
+
+**Key Learning:**
+Different workflow stages create keywords from different sources. Tools must **merge, not overwrite** to prevent data loss. The "skip already tagged" pattern only makes sense for slow, resumable operations (like LLM tagging), not fast deterministic operations (like search tagging).
+
+**Field Name Standardization (2025-11-05):**
+- Renamed `llm_keywords` → `keywords` across codebase (commit 84cd645)
+- Both LLM and search taggers now use same `keywords` field
+- Simpler and more accurate (not LLM-specific anymore)
 
 ### Search-Based Keyword Tagger Implementation (2025-11-05)
 **Commits:** 3db2bb1
