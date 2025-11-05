@@ -253,7 +253,7 @@ def generate_all_images_page(
             if idx < len(images):
                 img = images[idx]
                 html.append("      <div class='two columns img-cell'>")
-                html.append(f"        <div class='subject'>{img.get('subject', 'No subject')[:30]}</div>")
+                html.append(f"        <div class='subject'><a href='https://groups.google.com/g/cozy_builders/c/{img.get('message_id', '')}'>{img.get('subject', 'No subject')[:30]}</a></div>")
                 html.append(f"        <div class='msg-id'>{img.get('message_id', '')}</div>")
                 html.append(f"        <a href='{img.get('original_url', '')}'>")
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
@@ -385,7 +385,7 @@ def generate_keyword_page(
             if idx < len(images):
                 img = images[idx]
                 html.append("      <div class='two columns img-cell'>")
-                html.append(f"        <div class='subject'>{img.get('subject', 'No subject')[:30]}</div>")
+                html.append(f"        <div class='subject'><a href='https://groups.google.com/g/cozy_builders/c/{img.get('message_id', '')}'>{img.get('subject', 'No subject')[:30]}</a></div>")
                 html.append(f"        <div class='msg-id'>{img.get('message_id', '')}</div>")
                 html.append(f"        <a href='{img.get('original_url', '')}'>")
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
