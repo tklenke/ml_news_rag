@@ -166,7 +166,7 @@ def print_verbose_output(
     print(keyword_response or "(empty)")
     print("\nParsed Keywords:")
     print(matched_keywords)
-    print(f"\nStored in llm_keywords: {matched_keywords}")
+    print(f"\nStored in keywords: {matched_keywords}")
 
     print('='*70)
 
@@ -216,7 +216,7 @@ def tag_messages(
     # Count total messages to process for progress tracking
     total_to_process = 0
     for message in index_data.values():
-        has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+        has_keywords = "keywords" in message and message.get("keywords") is not None
         if not has_keywords:
             total_to_process += 1
 
@@ -231,7 +231,7 @@ def tag_messages(
             break
 
         # Skip if already tagged
-        has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+        has_keywords = "keywords" in message and message.get("keywords") is not None
         if has_keywords:
             stats["skipped"] += 1
             continue
@@ -243,7 +243,7 @@ def tag_messages(
         try:
             # TAG WITH KEYWORDS
             matched_keywords, keyword_response = tagger.tag_message(message_text, keywords, model=model)
-            message["llm_keywords"] = matched_keywords
+            message["keywords"] = matched_keywords
 
             # VERBOSE OUTPUT
             if verbose:
@@ -261,7 +261,7 @@ def tag_messages(
         except Exception as e:
             print(f"ERROR tagging message {msg_id}: {e}")
             # Set empty list on error (valid state)
-            message["llm_keywords"] = []
+            message["keywords"] = []
             stats["errors"] += 1
             stats["processed"] += 1
             messages_processed += 1

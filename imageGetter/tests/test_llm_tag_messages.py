@@ -164,7 +164,7 @@ class TestTagMessages:
             "msg3": {
                 "metadata": {"subject": "Already tagged"},
                 "images": [],
-                "llm_keywords": ["engine"]
+                "keywords": ["engine"]
             }
         }
         index_file.write_text(json.dumps(test_data, indent=2))
@@ -178,7 +178,7 @@ class TestTagMessages:
         return str(kw_file)
 
     def test_skip_already_tagged_messages(self, test_index, test_keywords):
-        """Test that messages with llm_keywords are skipped by default."""
+        """Test that messages with keywords are skipped by default."""
         # Load original data
         with open(test_index) as f:
             original = json.load(f)
@@ -190,8 +190,8 @@ class TestTagMessages:
         with open(test_index) as f:
             result = json.load(f)
 
-        # msg3 already had llm_keywords, should be unchanged
-        assert result["msg3"]["llm_keywords"] == original["msg3"]["llm_keywords"]
+        # msg3 already had keywords, should be unchanged
+        assert result["msg3"]["keywords"] == original["msg3"]["keywords"]
         # Should report skipped message
         assert stats["skipped"] >= 1
 
@@ -204,10 +204,10 @@ class TestTagMessages:
         with open(test_index) as f:
             result = json.load(f)
 
-        # All messages should have llm_keywords field (even if empty)
+        # All messages should have keywords field (even if empty)
         for msg_id, msg in result.items():
-            assert "llm_keywords" in msg
-            assert isinstance(msg["llm_keywords"], list)
+            assert "keywords" in msg
+            assert isinstance(msg["keywords"], list)
 
     def test_limit_processing(self, test_index, test_keywords):
         """Test --limit flag processes exactly N messages."""
@@ -221,8 +221,8 @@ class TestTagMessages:
         with open(test_index) as f:
             result = json.load(f)
 
-        # Count how many have llm_keywords
-        tagged_count = sum(1 for msg in result.values() if "llm_keywords" in msg)
+        # Count how many have keywords
+        tagged_count = sum(1 for msg in result.values() if "keywords" in msg)
         assert tagged_count >= 1
 
     def test_preserves_other_fields(self, test_index, test_keywords):
@@ -244,7 +244,7 @@ class TestTagMessages:
             assert result[msg_id]["images"] == original[msg_id]["images"]
 
     def test_skip_already_tagged_on_retag(self, test_index, test_keywords):
-        """Test that messages with llm_keywords are skipped on second run."""
+        """Test that messages with keywords are skipped on second run."""
         # First tag all messages
         tag_messages(test_index, test_keywords)
 
@@ -255,13 +255,13 @@ class TestTagMessages:
         # Save original keywords
         original_keywords = {}
         for msg_id in result:
-            if "llm_keywords" in result[msg_id]:
-                original_keywords[msg_id] = result[msg_id]["llm_keywords"].copy()
+            if "keywords" in result[msg_id]:
+                original_keywords[msg_id] = result[msg_id]["keywords"].copy()
 
         # Try to tag again
         stats = tag_messages(test_index, test_keywords)
 
-        # All messages should be skipped (they all have llm_keywords now)
+        # All messages should be skipped (they all have keywords now)
         assert stats["skipped"] == 3
         assert stats["processed"] == 0
 
@@ -271,7 +271,7 @@ class TestTagMessages:
 
         # Keywords should be unchanged
         for msg_id in result2:
-            assert result2[msg_id]["llm_keywords"] == original_keywords[msg_id]
+            assert result2[msg_id]["keywords"] == original_keywords[msg_id]
 
     def test_verbose_mode_prints_output(self, test_index, test_keywords, capsys):
         """Test that verbose mode prints detailed output."""
@@ -304,7 +304,7 @@ class TestSaveImageIndex:
         test_data = {
             "msg1": {
                 "metadata": {"subject": "Test"},
-                "llm_keywords": ["firewall"]
+                "keywords": ["firewall"]
             }
         }
 

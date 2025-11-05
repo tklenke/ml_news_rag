@@ -203,7 +203,7 @@ Results saved to: ../data/image_index_tagged.json
 ```
 
 **Notes:**
-- Messages with existing `llm_keywords` are skipped automatically (idempotent)
+- Messages with existing `keywords` are skipped automatically (idempotent)
 - Auto-saves every 50 messages for crash recovery
 - Use `--limit N` to tag only first N messages (for testing)
 - Use `--verbose` to see detailed LLM responses

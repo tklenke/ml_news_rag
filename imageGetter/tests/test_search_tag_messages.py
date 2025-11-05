@@ -78,7 +78,7 @@ class TestTagMessages:
             "msg3": {
                 "metadata": {"subject": "Engine mount"},
                 "images": [],
-                "llm_keywords": ["existing"]  # Already tagged
+                "keywords": ["existing"]  # Already tagged
             }
         }
         index_file.write_text(json.dumps(test_data))
@@ -100,13 +100,13 @@ class TestTagMessages:
             result = json.load(f)
 
         # msg1 should have firewall and install keywords
-        assert "llm_keywords" in result["msg1"]
-        assert "firewall" in result["msg1"]["llm_keywords"]
-        assert "install" in result["msg1"]["llm_keywords"]
+        assert "keywords" in result["msg1"]
+        assert "firewall" in result["msg1"]["keywords"]
+        assert "install" in result["msg1"]["keywords"]
 
         # msg2 should have cowling keyword
-        assert "llm_keywords" in result["msg2"]
-        assert "cowling" in result["msg2"]["llm_keywords"]
+        assert "keywords" in result["msg2"]
+        assert "cowling" in result["msg2"]["keywords"]
 
         # Stats should show 2 processed (msg3 already tagged)
         assert stats["processed"] == 2
@@ -125,8 +125,8 @@ class TestTagMessages:
         with open(test_index) as f:
             result = json.load(f)
 
-        # msg3 already had llm_keywords, should be unchanged
-        assert result["msg3"]["llm_keywords"] == original["msg3"]["llm_keywords"]
+        # msg3 already had keywords, should be unchanged
+        assert result["msg3"]["keywords"] == original["msg3"]["keywords"]
         # Should report skipped message
         assert stats["skipped"] >= 1
 
@@ -139,7 +139,7 @@ class TestTagMessages:
         with open(test_index) as f:
             result = json.load(f)
 
-        # All messages should have llm_keywords field (even if empty)
+        # All messages should have keywords field (even if empty)
         for msg_id, msg in result.items():
-            assert "llm_keywords" in msg
-            assert isinstance(msg["llm_keywords"], list)
+            assert "keywords" in msg
+            assert isinstance(msg["keywords"], list)

@@ -203,7 +203,7 @@ class TestRemoveImagesFromIndex:
         index_data = {
             "msg1": {
                 "metadata": {"subject": "Test", "author": "John"},
-                "llm_keywords": ["aircraft"],
+                "keywords": ["aircraft"],
                 "images": [
                     {"local_filename": "img1.jpg"},
                     {"local_filename": "img2.jpg"}
@@ -217,7 +217,7 @@ class TestRemoveImagesFromIndex:
         # Metadata should be unchanged
         assert result["msg1"]["metadata"]["subject"] == "Test"
         assert result["msg1"]["metadata"]["author"] == "John"
-        assert result["msg1"]["llm_keywords"] == ["aircraft"]
+        assert result["msg1"]["keywords"] == ["aircraft"]
 
     def test_remove_messages_with_no_images(self, tmp_path):
         """Test that messages with all images removed are deleted from index."""

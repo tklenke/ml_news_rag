@@ -74,7 +74,7 @@ def main():
     messages_to_process = 0
     already_tagged = 0
     for message in index_data.values():
-        has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+        has_keywords = "keywords" in message and message.get("keywords") is not None
         if not has_keywords:
             messages_to_process += 1
         else:
@@ -123,8 +123,8 @@ def main():
     # Keyword statistics
     keyword_counts = []
     for message in index_data.values():
-        if "llm_keywords" in message:
-            keyword_counts.append(len(message["llm_keywords"]))
+        if "keywords" in message:
+            keyword_counts.append(len(message["keywords"]))
 
     if keyword_counts:
         print(f"\nKeywords per message:")

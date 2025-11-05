@@ -37,17 +37,17 @@ def load_index(index_file: str, limit: int = None) -> dict:
 def analyze_keywords(index_data: dict) -> Counter:
     """Analyze keyword frequencies across all messages.
 
-    Combines both LLM keywords and non-LLM keywords from images.
+    Combines both message keywords and image keywords.
     """
     keyword_counter = Counter()
 
     for message in index_data.values():
-        # Collect LLM keywords
-        llm_keywords = message.get("llm_keywords", [])
-        for kw in llm_keywords:
+        # Collect message keywords
+        msg_keywords = message.get("keywords", [])
+        for kw in msg_keywords:
             keyword_counter[kw.lower()] += 1
 
-        # Collect non-LLM keywords from images
+        # Collect image keywords
         images = message.get("images", [])
         for image in images:
             keywords = image.get("keywords", [])
@@ -118,18 +118,18 @@ def format_summary(index_data: dict, keyword_counter: Counter) -> str:
     output.append("=" * 70)
 
     total_messages = len(index_data)
-    messages_with_llm_keywords = sum(1 for m in index_data.values() if m.get("llm_keywords"))
+    messages_with_keywords = sum(1 for m in index_data.values() if m.get("keywords"))
     messages_with_image_keywords = sum(1 for m in index_data.values() if any(img.get("keywords") for img in m.get("images", [])))
 
     output.append(f"Total messages: {total_messages}")
-    output.append(f"Messages with LLM keywords: {messages_with_llm_keywords}")
+    output.append(f"Messages with keywords: {messages_with_keywords}")
     output.append(f"Messages with image keywords: {messages_with_image_keywords}")
     output.append("")
     output.append(f"Total unique keywords: {len(keyword_counter)}")
     output.append("")
 
     # Averages
-    if messages_with_llm_keywords > 0 or messages_with_image_keywords > 0:
+    if messages_with_keywords > 0 or messages_with_image_keywords > 0:
         total_kw_count = sum(keyword_counter.values())
         avg_keywords = total_kw_count / total_messages
         output.append(f"Average keywords per message: {avg_keywords:.2f}")
@@ -366,18 +366,18 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_base: str, page_
     for msg_id, message in index_data.items():
         metadata = message.get("metadata", {})
         subject = metadata.get("subject", "Unknown")
-        llm_keywords = message.get("llm_keywords", [])
+        msg_keywords = message.get("keywords", [])
 
         for image in message.get("images", []):
             local_filename = image.get("local_filename", "")
             if not local_filename:
                 continue
 
-            # Get image keywords (non-LLM)
+            # Get image keywords
             img_keywords = image.get("keywords", [])
 
-            # Combine all keywords (LLM + image)
-            all_keywords = list(llm_keywords) + list(img_keywords)
+            # Combine all keywords (message + image)
+            all_keywords = list(msg_keywords) + list(img_keywords)
 
             images.append({
                 "msg_id": msg_id,
