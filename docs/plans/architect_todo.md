@@ -1,17 +1,18 @@
 # Architect Todo - Image Database Project
 
-**Last Updated:** 2025-11-04 (Architect review)
+**Last Updated:** 2025-11-05 (Architect documentation consolidation)
 
 ## Current Status
 
-**Phase:** Phase 4b Complete, Phase 5 Design Needed
+**Phase:** Phase 4b Complete, Phase 5 Ready for Implementation
 
 **Completed Phases:**
 - Phase 1-3: URL extraction, downloads, thumbnails ✓
-- Phase 4a: Keyword building (code complete, Tom bypassed execution) ✓
-- Phase 4b: LLM keyword tagging with chapter categorization ✓
+- Phase 4a: Keyword building (Tom curated 557 keywords) ✓
+- Phase 4b: Dual tagger implementation (LLM + search) ✓
+- Documentation consolidation ✓
 
-**Next:** Design Phase 5 query interface (if needed) or review Phase 5 after implementation
+**Next:** Programmer implements Phase 5 query interface
 
 ---
 
@@ -104,18 +105,38 @@ Use "Strange things are afoot at the Circle K" for immediate architectural atten
 
 ---
 
+## Recent Work (2025-11-05)
+
+[x] **Documentation Consolidation:**
+- Archived image_database_implementation_plan.md (now obsolete, original phase breakdown preserved)
+- Renamed image_database_architecture.md → image_database_design.md (shorter name)
+- Updated design doc to reflect completed work (Phases 1-4b)
+- Removed outdated revision sections and consolidated design decisions
+- Added comprehensive tagging approach documentation
+- Updated component list with all current tools
+
+**Changes to Design Doc:**
+- Schema updated: `keywords` field (not `llm_keywords`), removed `chapters`
+- Module structure updated with all implemented tools
+- Implementation Status section with completion checkmarks
+- Keyword tagging approach fully documented (LLM vs search)
+- Vocabulary restriction details added
+- CLI standardization documented
+- Chapter categorization noted as removed
+
+---
+
 ## Deliverables Status
 
 | Deliverable | Status |
 |------------|--------|
-| Architecture Document | Complete ✓ |
-| Implementation Plan | Complete ✓ |
-| Architect Todo | Complete ✓ (this file) |
-| Programmer Todo | Complete ✓ |
-| Phase 1-3 Review | Complete ✓ |
-| Phase 4b Review | Complete ✓ |
-| Phase 5 Review | Pending |
+| Design Document | ✓ Updated (image_database_design.md) |
+| Implementation Plan | ✓ Archived (reference only) |
+| Architect Todo | ✓ Current (this file) |
+| Programmer Todo | ✓ Updated by Programmer |
+| Phase 1-4 Review | ✓ Complete |
+| Phase 5 Review | Pending implementation |
 
 ---
 
-**Last Updated:** 2025-11-04 by Claude (Architect)
+**Last Updated:** 2025-11-05 by Claude (Architect)
