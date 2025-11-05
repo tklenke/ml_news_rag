@@ -432,6 +432,8 @@ def main():
                         help='Relative path to thumbnail directory (default: ../data/images/thumbs)')
     parser.add_argument('--page-size', type=int, default=210,
                         help='Number of images per HTML page (default: 210)')
+    parser.add_argument('--suppress-html', action='store_true',
+                        help='Skip HTML view generation (only create text statistics)')
 
     args = parser.parse_args()
 
@@ -474,9 +476,12 @@ def main():
     print(f"Statistics written to: {args.dest}")
     print(f"Total unique keywords: {len(keyword_counter)}")
 
-    # Generate HTML view
-    print(f"Generating HTML view...")
-    generate_html_view(index_data, args.thumb_dir, html_base, args.page_size)
+    # Generate HTML view (unless suppressed)
+    if not args.suppress_html:
+        print(f"Generating HTML view...")
+        generate_html_view(index_data, args.thumb_dir, html_base, args.page_size)
+    else:
+        print("HTML generation suppressed (--suppress-html)")
 
 
 if __name__ == "__main__":
