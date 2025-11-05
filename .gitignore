@@ -6,6 +6,7 @@ my_db/
 embedstatus*.txt
 href*.txt
 A*.txt
+imageGetter/input/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

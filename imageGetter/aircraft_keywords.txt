@@ -497,67 +497,56 @@ wires
 wiring
 yaw
 yoke
-Aircraft Spruce
-Wicks Aircraft Supply
-Brock Manufacturing
-Ken Brock Manufacturing
-Feather Lite
-B&C Specialty
-AeroComposites
+Spruce
+Wicks
+Brock
+Feather
+Lite
 Safe-T-Poxy
 EZ-Poxy
 West System
 System Three
 Jeffco
-MGS Epoxies
-Rutan Aircraft Factory
-Co-Z Development
-Cozy Girrrls
-Jack Wilhelmson 
-EZ Parts
-Gary Hertzler
-Cleveland Wheels & Brakes
-Matco Manufacturing
-Gerdes Products
-Grove Aircraft
+MGS
+Rutan
+Co-Z
+Cozy
+Girrrls
+Wilhelmson
+Hertzler
+Cleveland
+Matco
+Gerdes
+Grove
 Whelen
 AeroFlash
-Nav/Antenna Systems
-RST Engineering
-GRT Avionics
-Grand Rapids Technologies
-MGL Avionics
-Dynon Avionics
+RST
+GRT
+Grand Rapids
+Dynon
 Garmin
-King Radio
-Narco Avionics
+King
+Narco
 Terra
-Lightspeed Engineering
+Lightspeed
 David Clark
-Sensenich Propeller
-Performance Propellers
-Props Inc
-Catto Propellers
+Sensenich
+Catto
 MT-Propeller
-Prince Aircraft
+Prince
 Lycoming
-Continental Motors
-Superior Air Parts
+Continental
+Penn Yan
 Mattituck
-Penn Yan Aero
-Slick Magneto
-Champion Aerospace
-Tempest 
-Aeroparts
+Slick
+Champion
+Tempest
 Plane Power
-B&C Specialty Products
-Odyssey Battery
-Concorde Battery
+Odyssey
+Concorde
 EarthX
 Andair
 Facet
-Airflow Performance
-Ellison Throttle Body
+Ellison
 Bendix
-Precision 
 Marvel-Schebler
