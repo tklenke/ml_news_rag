@@ -233,19 +233,39 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 - Smart default output filenames
 - **Result:** Comprehensive tagging and curation workflow
 
-### Phase 5: Query Interface ⏳ PENDING
-**Planned:** Keyword-based image query and viewer
-- Query function to search by keywords
-- CLI tool for queries
-- HTML thumbnail viewer
-- Validate search quality
+### Phase 5: Static Site Generation ⏳ PENDING
+**Approach:** Generate static HTML site for browsing tagged images
 
-### Phase 6: Web Interface 📋 FUTURE
-**Future Enhancement:** Web-based query interface
-- Flask/FastAPI backend
-- Thumbnail grid display
-- Full-resolution viewer
-- Link to original messages
+**Site Structure:**
+- `index.html` - Main entry point
+  - Link to "All Images" (chronological, newest first)
+  - Alphabetical keyword list with image counts
+- `all/page1.html`, `all/page2.html`, ... - All images chronologically
+  - Sorted by date descending (newest first)
+  - Year headers (e.g., "2024 (345 images)", "2023 (512 images)")
+  - 6-column thumbnail grid
+  - First/Previous/Next/Last navigation (top and bottom)
+- `keywords/firewall_page1.html`, etc. - Keyword-specific pages
+  - Same format as "all images" pages
+  - Shows only images tagged with that keyword
+
+**Thumbnail Display:**
+Each thumbnail shows:
+- Image thumbnail (clickable to full resolution)
+- Message subject
+- Message ID
+- List of keywords for that message
+- Same format as `analyze_tag_statistics.py` output
+
+**Implementation Notes:**
+- Static files only (no backend, no JavaScript)
+- Read-only view (no interactive checkboxes/export features)
+- Code adapted from `analyze_tag_statistics.py` (not shared, copied as starting point)
+- Simple navigation: breadcrumbs and pagination links
+
+### Phase 6: Web Interface 📋 DEFERRED
+**Status:** Not needed - Phase 5 static site sufficient for initial use
+- Can revisit if static site limitations become problematic
 
 ## Technical Considerations
 
