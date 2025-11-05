@@ -154,35 +154,67 @@ python generate_static_site_cli.py ../data/image_index.json ../data/static_site
 
 ---
 
-### Phase 5.5: Copy HTML/CSS from analyze_tag_statistics
+### Phase 5.5: HTML Layout with Skeleton CSS
 
-**Deliverable:** Adapt existing HTML/CSS for static site
+**Deliverable:** HTML pages using Skeleton CSS framework to match existing site
+
+**Context:**
+- Main site: http://m24tom.com uses Skeleton CSS (http://getskeleton.com/)
+- Static site location: http://m24tom.com/cgimages/index.html
+- Match existing site's look and feel
+- Use Skeleton CSS grid system for layout
 
 **Tasks:**
-1. [ ] Review `analyze_tag_statistics.py` HTML generation code
-2. [ ] Copy relevant CSS styles:
-   - 6-column grid layout
-   - Thumbnail sizing
-   - Navigation button styles
-   - Page layout
-3. [ ] Remove interactive features:
+1. [ ] Inspect http://m24tom.com source to find CSS references
+   - Note skeleton.css path
+   - Note normalize.css path (Skeleton dependency)
+   - Note any custom CSS files
+2. [ ] Review `analyze_tag_statistics.py` HTML for thumbnail grid structure
+3. [ ] Create HTML template using Skeleton CSS:
+   - Use Skeleton grid system (12 columns)
+   - 6-column thumbnail layout = 2-column Skeleton grid (each thumbnail = 2 Skeleton columns)
+   - Responsive layout (Skeleton handles mobile)
+4. [ ] For testing: Use full URLs for CSS:
+   - `<link rel="stylesheet" href="http://m24tom.com/path/to/skeleton.css">`
+   - `<link rel="stylesheet" href="http://m24tom.com/path/to/normalize.css">`
+5. [ ] For production: Use site-relative paths:
+   - `<link rel="stylesheet" href="/path/to/skeleton.css">`
+6. [ ] Remove interactive features from analyze_tag_statistics:
    - Checkboxes
    - Select All/Clear All buttons
    - Export removal list button
    - JavaScript for interactivity
-4. [ ] Keep static features:
-   - Thumbnail grid
+7. [ ] Keep static features:
+   - Thumbnail grid (adapt to Skeleton)
    - Click to view full resolution
    - Navigation links (First/Prev/Next/Last)
    - Keyword display under thumbnails
-5. [ ] Add breadcrumb navigation styles
-6. [ ] Test in browser, adjust spacing/layout as needed
-7. [ ] Commit: "Adapt HTML/CSS from analyze_tag_statistics"
+8. [ ] Add minimal custom CSS for:
+   - Thumbnail sizing
+   - Navigation button spacing
+   - Year header styling
+   - Breadcrumb navigation
+9. [ ] Test in browser at cgimages/ path, adjust layout as needed
+10. [ ] Commit: "Implement HTML layout with Skeleton CSS"
 
-**CSS Notes:**
-- Thumbnails link to full resolution image (relative path)
-- Simple, clean layout
-- No JavaScript required
+**Skeleton CSS Grid Example:**
+```html
+<div class="container">
+  <div class="row">
+    <div class="two columns"><!-- thumbnail 1 --></div>
+    <div class="two columns"><!-- thumbnail 2 --></div>
+    <div class="two columns"><!-- thumbnail 3 --></div>
+    <div class="two columns"><!-- thumbnail 4 --></div>
+    <div class="two columns"><!-- thumbnail 5 --></div>
+    <div class="two columns"><!-- thumbnail 6 --></div>
+  </div>
+</div>
+```
+
+**CSS Reference Strategy:**
+- Testing: Full URLs `http://m24tom.com/css/...`
+- Production: Relative URLs `/css/...` or `../css/...`
+- Thumbnails: Relative paths from cgimages/ directory
 
 ---
 
