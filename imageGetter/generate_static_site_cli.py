@@ -42,9 +42,13 @@ def prepare_image_list(index_data: dict, base_path: str = "") -> List[dict]:
             local_filename = img.get("local_filename", "")
             original_url = img.get("url", "")
 
-            # Build thumbnail path - just "thumbs/filename_thumb.jpg"
+            # Build thumbnail path - "../thumbs/filename_thumb.jpg"
             thumb_filename = local_filename.rsplit('.', 1)[0] + '_thumb.jpg'
-            thumb_path = f"thumbs/{thumb_filename}"
+            thumb_path = f"../thumbs/{thumb_filename}"
+
+            # Ensure Google Groups URLs end with &view=1
+            if original_url and not original_url.endswith("&view=1"):
+                original_url = original_url + "&view=1"
 
             images.append({
                 "message_id": msg_id,
