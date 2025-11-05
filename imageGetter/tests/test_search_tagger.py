@@ -135,3 +135,30 @@ class TestSearchTagger:
         assert "pilot" in matched
         assert "fuel" in matched
         assert "system" in matched
+
+    def test_invalid_keywords_filtered(self):
+        """Test that invalid keywords are filtered out."""
+        tagger = SearchTagger()
+        message_text = "This cozy firewall and engine work was great."
+        keywords = ["cozy", "firewall", "engine"]
+
+        matched = tagger.find_keywords(message_text, keywords)
+
+        # 'cozy' should be filtered out as it's in INVALID_KEYWORDS
+        assert "cozy" not in matched
+        assert "firewall" in matched
+        assert "engine" in matched
+
+    def test_invalid_keywords_case_insensitive(self):
+        """Test that invalid keyword filtering is case-insensitive."""
+        tagger = SearchTagger()
+        message_text = "This COZY firewall installation."
+        keywords = ["Cozy", "COZY", "cozy", "firewall"]
+
+        matched = tagger.find_keywords(message_text, keywords)
+
+        # All variations of 'cozy' should be filtered out
+        assert "Cozy" not in matched
+        assert "COZY" not in matched
+        assert "cozy" not in matched
+        assert "firewall" in matched

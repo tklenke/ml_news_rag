@@ -3,6 +3,7 @@
 
 import re
 from typing import List
+from llm_reference import INVALID_KEYWORDS
 
 
 class SearchTagger:
@@ -110,5 +111,9 @@ class SearchTagger:
             if keyword_stem in message_stems:
                 if keyword not in matched:  # Dedupe
                     matched.append(keyword)
+
+        # Filter out invalid keywords
+        invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
+        matched = [kw for kw in matched if kw.lower() not in invalid_lower]
 
         return matched
