@@ -5,7 +5,7 @@ import json
 import tempfile
 import shutil
 from pathlib import Path
-from tag_messages import (
+from llm_tag_messages import (
     load_image_index,
     load_keywords,
     tag_messages,
