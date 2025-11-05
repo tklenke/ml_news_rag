@@ -19,34 +19,129 @@
 ## Recent Changes Summary (2025-11-04 to 2025-11-05)
 
 ### CLI Standardization (2025-11-05)
+**Commits:** bd5e142 (CLI changes), f20f9dc (README update)
 
-All CLI tools now follow consistent `python program SOURCE [DEST] [options]` pattern:
+**Objective:** Standardize all CLI tools to consistent interface pattern for better usability and predictability.
 
-**Changes made:**
-1. **tag_messages_cli.py**
-   - Changed from `INDEX_FILE --output` to `SOURCE [DEST]`
-   - Removed `--overwrite` flag (always skips already-tagged messages)
-   - Default DEST: `{source}_tagged.{ext}`
-   - Updated `tag_messages()` function to accept `output_file` parameter
+**Design Pattern Established:**
+```
+python program_name SOURCE [DEST] [options]
+```
 
-2. **build_keywords_cli.py**
-   - Changed from `INDEX_FILE --output FILE` to `SOURCE [DEST]`
-   - Moved `--output` to positional DEST argument
-   - Default DEST: `{source}_keywords.txt`
+**Design Principles:**
+1. **Non-destructive by default** - Never overwrite SOURCE, always write to new DEST file
+2. **Smart defaults** - If DEST omitted, generate from SOURCE with descriptive suffix
+3. **Consistent positional args** - SOURCE always first, DEST always second (optional)
+4. **Idempotent operations** - Tools can be run multiple times safely (skip already-processed items)
+5. **Preserved extensions** - DEST inherits SOURCE extension (.idx, .json, etc.)
 
-3. **analyze_tag_statistics.py**
-   - Changed from `index_file --output FILE` to `SOURCE [DEST]`
-   - Moved `--output` to positional DEST argument
-   - Default DEST: `{source}_statistics.txt`
+**Changes Made:**
 
-**Tools already following pattern:**
-- download_images_cli.py ✓
-- extract_image_urls.py ✓
-- dedupe_images_cli.py ✓
-- remove_images_cli.py ✓
-- generate_thumbnails_cli.py ✓ (kept --force flag as requested)
+1. **tag_messages_cli.py** - Tag messages with LLM keywords
+   - **Old:** `python tag_messages_cli.py INDEX_FILE --overwrite`
+   - **New:** `python tag_messages_cli.py SOURCE [DEST]`
+   - **Breaking:** Removed `--overwrite` flag
+   - **Behavior:** Always skips already-tagged messages (idempotent by default)
+   - **Default DEST:** `{source_stem}_tagged{source_ext}` (e.g., `test.idx` → `test_tagged.idx`)
+   - **Core change:** Updated `tag_messages()` to accept `output_file` parameter instead of in-place modification
+   - **Tests updated:** Removed `overwrite=True/False` from all test calls
 
-**Tests:** 110 passing, 14 skipped
+2. **build_keywords_cli.py** - Extract keywords from messages using LLM
+   - **Old:** `python build_keywords_cli.py INDEX_FILE --output keywords.txt`
+   - **New:** `python build_keywords_cli.py SOURCE [DEST]`
+   - **Breaking:** Moved `--output` to positional DEST
+   - **Default DEST:** `{source_stem}_keywords.txt` (e.g., `test.idx` → `test_keywords.txt`)
+   - **Suffix rationale:** Always `.txt` because output is plain text keyword list, not index format
+
+3. **analyze_tag_statistics.py** - Generate statistics and HTML views
+   - **Old:** `python analyze_tag_statistics.py index_file --output stats.txt`
+   - **New:** `python analyze_tag_statistics.py SOURCE [DEST]`
+   - **Breaking:** Moved `--output` to positional DEST
+   - **Default DEST:** `{source_stem}_statistics.txt`
+   - **HTML output:** Automatically generates `{dest_stem}_view_page*.html` files
+   - **Example:** `test.idx` → `test_statistics.txt` + `test_statistics_view_page1.html`
+
+**Tools Already Following Pattern:**
+- `download_images_cli.py` - SOURCE=index, DEST=image directory ✓
+- `extract_image_urls.py` - SOURCE=markdown dir, DEST=output dir ✓
+- `dedupe_images_cli.py` - SOURCE=index, DEST=deduped index ✓
+- `remove_images_cli.py` - SOURCE=index, DEST=cleaned index ✓
+- `generate_thumbnails_cli.py` - SOURCE=full images dir, DEST=thumbs dir ✓
+  - **Note:** Kept `--force` flag as requested (regenerate existing thumbnails)
+
+**Suffix Naming Convention:**
+- `_tagged` - After LLM keyword tagging
+- `_deduped` - After deduplication
+- `_cleaned` - After removal of unwanted images
+- `_keywords.txt` - Extracted keyword list
+- `_statistics.txt` - Statistics report
+- `_statistics_view` - HTML view base name
+
+**Migration Guide for Users:**
+
+Old workflow:
+```bash
+python tag_messages_cli.py test.idx --overwrite
+python build_keywords_cli.py test.idx --output keywords.txt
+python analyze_tag_statistics.py test.idx --output stats.txt
+```
+
+New workflow:
+```bash
+python tag_messages_cli.py test.idx test_tagged.idx
+python build_keywords_cli.py test.idx keywords.txt
+python analyze_tag_statistics.py test.idx stats.txt
+```
+
+Or with smart defaults (recommended):
+```bash
+python tag_messages_cli.py test.idx                    # → test_tagged.idx
+python build_keywords_cli.py test.idx                  # → test_keywords.txt
+python analyze_tag_statistics.py test.idx              # → test_statistics.txt
+```
+
+**Complete Updated Workflow:**
+```bash
+# Extract URLs
+python extract_image_urls.py ../data/msgs_md/A ../data
+
+# Download images
+python download_images_cli.py ../data/index*.idx ../data/images/full
+
+# Generate thumbnails
+python generate_thumbnails_cli.py ../data/images/full ../data/images/thumbs
+
+# Deduplicate
+python dedupe_images_cli.py data/index.idx data/index_deduped.idx
+
+# Tag with LLM keywords
+python tag_messages_cli.py data/index_deduped.idx data/index_tagged.idx
+
+# Generate HTML review
+python analyze_tag_statistics.py data/index_tagged.idx
+
+# (Manual review in browser, export removal lists)
+
+# Remove unwanted images
+python remove_images_cli.py data/index_tagged.idx data/index_cleaned.idx --remove-list *.txt
+```
+
+**Documentation Updated:**
+- `imageGetter/README.md` - Complete workflow with all phases
+- All CLI examples updated to new pattern
+- Added Phase 5 (LLM tagging) to workflow documentation
+
+**Testing:**
+- All 110 tests passing, 14 skipped
+- No regressions introduced
+- Test suite updated to match new API (removed `overwrite` parameter)
+
+**Benefits:**
+1. **Predictable** - All tools work the same way
+2. **Safe** - No accidental overwrites of source data
+3. **Chainable** - Easy to see data flow: `input.idx` → `_deduped` → `_tagged` → `_cleaned`
+4. **Discoverable** - `--help` shows consistent pattern
+5. **Scriptable** - Easier to write shell scripts with consistent interface
 
 ### Chapter Categorization Removed
 **Commits:** 48c2e91, 6450e90
