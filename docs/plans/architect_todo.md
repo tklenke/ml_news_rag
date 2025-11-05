@@ -4,22 +4,23 @@
 
 ## Current Status
 
-**Phase:** Phases 1-4b complete, Phase 5 ready for implementation
+**Phase:** Phases 1-5 complete, ready for deployment and user testing
 
 **Documentation:**
-- Design and history: `image_database_design.md`
-- Todo files pruned (703 lines removed), history in git
+- Design and history: `image_database_design.md` (updated with Phase 5 completion)
+- Todo files pruned: programmer_todo.md (84% reduction, 320→51 lines)
 
 ---
 
 ## Pending Tasks
 
-### Phase 5: Query Interface Review
-- [ ] Review Phase 5 implementation after Programmer completes
-  - [ ] Assess query interface usability
-  - [ ] Evaluate keyword search precision/recall
-  - [ ] Decide if HTML viewer approach is sufficient or needs web framework
-- [ ] If issues arise, revise query interface design
+### User Testing and Evaluation
+- [ ] Review Phase 5 after Tom deploys and tests static site
+  - [ ] Assess static site usability and navigation
+  - [ ] Evaluate keyword search effectiveness
+  - [ ] Decide if static HTML is sufficient or needs web framework
+  - [ ] Consider if 557 keywords provide adequate coverage
+- [ ] If issues arise, revise interface design or keyword strategy
 
 ### Future: Phase 6 - Web Interface (Optional)
 - [ ] Design web-based query interface (if Tom requests it)

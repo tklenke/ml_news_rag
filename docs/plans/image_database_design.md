@@ -2,7 +2,7 @@
 
 **Created:** 2025-11-01
 **Last Updated:** 2025-11-05
-**Status:** Phases 1-4b Complete, Phase 5 Pending
+**Status:** Phases 1-5 Complete, Ready for User Testing
 
 ## Overview
 
@@ -233,8 +233,8 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 - Smart default output filenames
 - **Result:** Comprehensive tagging and curation workflow
 
-### Phase 5: Static Site Generation ⏳ PENDING
-**Approach:** Generate static HTML site for browsing tagged images
+### Phase 5: Static Site Generation ✅ COMPLETE
+**Completed:** Generate static HTML site for browsing tagged images
 
 **Site Structure:**
 - `index.html` - Main entry point
@@ -242,8 +242,7 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
   - Alphabetical keyword list with image counts
 - `all/page1.html`, `all/page2.html`, ... - All images chronologically
   - Sorted by date descending (newest first)
-  - Year headers (e.g., "2024 (345 images)", "2023 (512 images)")
-  - 6-column thumbnail grid
+  - 6-column thumbnail grid (210 images per page)
   - First/Previous/Next/Last navigation (top and bottom)
 - `keywords/firewall_page1.html`, etc. - Keyword-specific pages
   - Same format as "all images" pages
@@ -251,17 +250,24 @@ msgs_md/ (MD) ----→   Extract Image URLs           ↓                 Query C
 
 **Thumbnail Display:**
 Each thumbnail shows:
-- Image thumbnail (clickable to full resolution)
-- Message subject
+- Image thumbnail (clickable to full resolution at Google Groups)
+- Clickable message subject (links to Google Groups thread)
 - Message ID
 - List of keywords for that message
-- Same format as `analyze_tag_statistics.py` output
 
-**Implementation Notes:**
+**Implementation Details:**
 - Static files only (no backend, no JavaScript)
-- Read-only view (no interactive checkboxes/export features)
-- Code adapted from `analyze_tag_statistics.py` (not shared, copied as starting point)
-- Simple navigation: breadcrumbs and pagination links
+- Skeleton CSS framework matching main site (http://m24tom.com)
+- Relative paths for deployment to `/cgimages/` directory
+- 18 comprehensive tests (all passing)
+- CLI tool: `generate_static_site_cli.py SOURCE DEST`
+
+**UI Refinements (based on user testing):**
+- Plain text "All Images" link (not button) on index page
+- Year headers removed from chronological pages
+- Subject lines clickable linking to Google Groups threads
+- Thumbnail paths use relative `../thumbs/` for proper navigation
+- Image links include `&view=1` parameter for direct viewing
 
 ### Phase 6: Web Interface 📋 DEFERRED
 **Status:** Not needed - Phase 5 static site sufficient for initial use
@@ -410,22 +416,26 @@ Each thumbnail shows:
 
 ## Success Criteria
 
-**Phases 1-4 Complete:** ✅
+**Phases 1-5 Complete:** ✅
 - ✓ URL extraction with keyword indexing working
 - ✓ Image download pipeline functional
 - ✓ Thumbnail generation complete
 - ✓ Master keyword list curated (557 keywords)
 - ✓ Two tagging approaches implemented (LLM and search)
 - ✓ Image curation tools complete (dedupe, analyze, remove)
-- ✓ CLI tools standardized and tested (110+ passing tests)
+- ✓ CLI tools standardized and tested (158 passing tests)
 - ✓ Full message body reading for accurate tagging
 - ✓ Vocabulary restriction preventing keyword sprawl
+- ✓ Static site generation with Skeleton CSS
+- ✓ Index page with alphabetical keyword list
+- ✓ Chronological "all images" pages
+- ✓ Keyword-specific filtered pages
+- ✓ UI refinements based on user testing
 
-**Phase 5 Pending:** ⏳
-- ☐ Keyword-based query function
-- ☐ CLI query tool
-- ☐ HTML thumbnail viewer
-- ☐ Query quality validation
+**Ready for Deployment:** 🚀
+- Generate production site with full image_index.json
+- Deploy to http://m24tom.com/cgimages/
+- User testing and quality validation
 
 ## Risks and Status
 
@@ -434,8 +444,8 @@ Each thumbnail shows:
 | Google Groups blocks scraping | ✅ Resolved | Rate limiting and Selenium authentication working |
 | Many broken image links | ✅ Acceptable | Resume capability handles failures gracefully |
 | Insufficient disk space | ✅ Managed | Monitoring disk usage, thumbnails reduce space needs |
-| Text retrieval poor quality | ⏳ TBD | Will validate in Phase 5, can add multimodal if needed |
 | Keyword sprawl (too many keywords) | ✅ Resolved | Vocabulary restriction limits to 557 allowed keywords |
+| Static site usability | 🚀 Pending | User testing will validate interface effectiveness |
 
 ## Key Design Revisions
 
@@ -467,6 +477,16 @@ Each thumbnail shows:
 **Enhancement:** Full message body reading from markdown files
 **Rationale:** Subject-only gave ~2 keywords/message, full body gives ~25 keywords/message
 **Implementation:** Reads from data/msgs_md/ with fallback for missing files
+
+### Phase 5: Static Site Completion (Nov 2025)
+**Delivered:** Complete static HTML site generator with Skeleton CSS
+**Features:**
+- Index page with alphabetical keyword navigation
+- Chronological "all images" view (210 images per page)
+- Keyword-specific filtered pages
+- Skeleton CSS framework matching main site
+- Google Groups integration (clickable subjects, direct image links)
+**Result:** 18 comprehensive tests, ready for deployment to `/cgimages/`
 
 ---
 
