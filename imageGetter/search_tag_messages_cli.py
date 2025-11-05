@@ -111,7 +111,7 @@ def clean_invalid_keywords_from_index(index_data: dict) -> dict:
 def main():
     parser = argparse.ArgumentParser(
         description='Tag messages with keywords using search and stemming (fast)',
-        usage='%(prog)s [-h] [--keywords KEYWORDS] [--limit N] [--verbose] [--no-clean] [--keep-existing-keywords] SOURCE [DEST]'
+        usage='%(prog)s [-h] [--keywords KEYWORDS] [--msgs-md-dir DIR] [--limit N] [--verbose] [--no-clean] [--keep-existing-keywords] SOURCE [DEST]'
     )
 
     # Positional arguments
@@ -123,6 +123,8 @@ def main():
     # Optional arguments
     parser.add_argument('--keywords', type=str, default='aircraft_keywords.txt',
                         help='Keywords file to use (default: aircraft_keywords.txt)')
+    parser.add_argument('--msgs-md-dir', type=str, default='../data/msgs_md',
+                        help='Path to msgs_md directory (default: ../data/msgs_md)')
     parser.add_argument('--limit', type=int, default=None,
                         help='Process only first N messages (default: all)')
     parser.add_argument('--verbose', action='store_true',
@@ -228,7 +230,8 @@ def main():
         output_file=args.dest,
         limit=args.limit,
         verbose=args.verbose,
-        keep_existing=args.keep_existing_keywords
+        keep_existing=args.keep_existing_keywords,
+        msgs_md_dir=args.msgs_md_dir
     )
 
     processed_count = stats["processed"]

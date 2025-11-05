@@ -45,31 +45,80 @@ def load_keywords(keywords_file: str) -> List[str]:
     return keywords
 
 
-def extract_message_text(message: Dict) -> str:
-    """Extract searchable text from message.
+def extract_message_text(message: Dict, msgs_md_dir: str = "../data/msgs_md") -> str:
+    """Extract full message text from markdown file for keyword searching.
 
-    Extracts subject and message body for keyword searching.
+    Reads the full message body from the corresponding markdown file
+    in data/msgs_md/{first_letter}/{message_id}.md
 
     Args:
-        message: Message dictionary
+        message: Message dictionary with metadata
+        msgs_md_dir: Path to msgs_md directory (default: ../data/msgs_md)
 
     Returns:
-        Combined text from subject and body
+        Clean text string for searching (subject + body)
     """
-    parts = []
+    from pathlib import Path
 
-    # Get subject
     metadata = message.get("metadata", {})
     subject = metadata.get("subject", "")
-    if subject:
-        parts.append(subject)
+    message_id = metadata.get("message_id", "")
 
-    # Get message body if available
-    message_md = metadata.get("message_md", "")
-    if message_md:
-        parts.append(message_md)
+    # If no message_id, return just subject
+    if not message_id:
+        return subject
 
-    return " ".join(parts)
+    # Construct path to markdown file: msgs_md/{first_letter}/{message_id}.md
+    first_letter = message_id[0].upper()
+    md_file = Path(msgs_md_dir) / first_letter / f"{message_id}.md"
+
+    # If file doesn't exist, return just subject
+    if not md_file.exists():
+        # Try lowercase directory (some messages might be stored there)
+        first_letter_lower = message_id[0].lower()
+        md_file = Path(msgs_md_dir) / first_letter_lower / f"{message_id}.md"
+        if not md_file.exists():
+            # Also try aDigits directory for messages starting with lowercase 'a' followed by digit
+            if message_id[0].lower() == 'a' and len(message_id) > 1 and message_id[1].isdigit():
+                md_file = Path(msgs_md_dir) / "aDigits" / f"{message_id}.md"
+                if not md_file.exists():
+                    return subject
+            else:
+                return subject
+
+    # Read markdown file and extract body text
+    try:
+        with open(md_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Skip the first few lines (metadata header) and extract body
+        # The body starts after the subject line (marked with "# ")
+        lines = content.split('\n')
+        body_lines = []
+        found_subject = False
+
+        for line in lines:
+            # Once we find the subject line, start collecting body text
+            if line.strip().startswith('# '):
+                found_subject = True
+                continue
+
+            # After finding subject, collect all text
+            if found_subject:
+                # Skip image markers and profile photos
+                if not line.strip().startswith('![') and not line.strip().startswith('https://'):
+                    body_lines.append(line)
+
+        body_text = '\n'.join(body_lines).strip()
+
+        # Return subject + body (full text for keyword searching)
+        full_text = f"{subject}\n\n{body_text}"
+        return full_text
+
+    except Exception as e:
+        # On any error, fall back to just subject
+        print(f"Warning: Could not read message body for {message_id}: {e}")
+        return subject
 
 
 def tag_messages(
@@ -78,7 +127,8 @@ def tag_messages(
     output_file: str = None,
     limit: int = None,
     verbose: bool = False,
-    keep_existing: bool = False
+    keep_existing: bool = False,
+    msgs_md_dir: str = "../data/msgs_md"
 ) -> Dict:
     """Tag messages in index with keywords using search and stemming.
 
@@ -89,6 +139,7 @@ def tag_messages(
         limit: If specified, process only first N messages
         verbose: If True, print detailed output for each message
         keep_existing: If True, merge with existing keywords; if False, replace (default: False)
+        msgs_md_dir: Path to msgs_md directory (default: ../data/msgs_md)
 
     Returns:
         Dictionary with statistics:
@@ -126,8 +177,8 @@ def tag_messages(
         if limit is not None and messages_processed >= limit:
             break
 
-        # Extract message text
-        message_text = extract_message_text(message)
+        # Extract message text from markdown file
+        message_text = extract_message_text(message, msgs_md_dir)
 
         try:
             if verbose:
