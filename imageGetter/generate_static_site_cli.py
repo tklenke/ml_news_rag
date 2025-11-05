@@ -40,17 +40,18 @@ def prepare_image_list(index_data: dict, base_path: str = "") -> List[dict]:
 
         for img in msg_images:
             local_filename = img.get("local_filename", "")
-            # Build paths
-            full_path = f"../../data/images/full/{local_filename}"
+            original_url = img.get("url", "")
+
+            # Build thumbnail path - just "thumbs/filename_thumb.jpg"
             thumb_filename = local_filename.rsplit('.', 1)[0] + '_thumb.jpg'
-            thumb_path = f"../../data/images/thumbs/{thumb_filename}"
+            thumb_path = f"thumbs/{thumb_filename}"
 
             images.append({
                 "message_id": msg_id,
                 "subject": metadata.get("subject", "No subject"),
                 "keywords": keywords,
                 "thumbnail_path": thumb_path,
-                "full_path": full_path,
+                "original_url": original_url,
                 "date": metadata.get("date", ""),
                 "year": extract_year_from_date(metadata.get("date", ""))
             })

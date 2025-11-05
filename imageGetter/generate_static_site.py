@@ -106,7 +106,7 @@ def generate_index_html(keyword_counts: List[Tuple[str, int]], output_file: str)
     html.append("    <h1>Cozy Builders Image Database</h1>")
 
     # Link to all images
-    html.append("    <p><a href='all/page1.html' class='button button-primary'>All Images (chronological)</a></p>")
+    html.append("    <p><a href='all/page1.html'>All Images (chronological)</a></p>")
 
     # Browse by keyword section
     html.append("    <h2>Browse by Keyword</h2>")
@@ -226,13 +226,6 @@ def generate_all_images_page(
     html.append("    <p><a href='../index.html'>&larr; Back to Index</a></p>")
     html.append("    <h1>All Images (Chronological)</h1>")
 
-    # Year headers (only show on first page for now)
-    if page_num == 1 and year_groups:
-        html.append("    <div class='year-summary'>")
-        for year, count in year_groups:
-            html.append(f"      <div class='year-header'>{year} ({count} images)</div>")
-        html.append("    </div>")
-
     # Top pagination
     html.append("    <div class='pagination'>")
     if page_num > 1:
@@ -262,7 +255,7 @@ def generate_all_images_page(
                 html.append("      <div class='two columns img-cell'>")
                 html.append(f"        <div class='subject'>{img.get('subject', 'No subject')[:30]}</div>")
                 html.append(f"        <div class='msg-id'>{img.get('message_id', '')}</div>")
-                html.append(f"        <a href='{img.get('full_path', '')}'>")
+                html.append(f"        <a href='{img.get('original_url', '')}'>")
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
                 html.append("        </a>")
                 keywords_str = ", ".join(img.get('keywords', [])[:5])
@@ -394,7 +387,7 @@ def generate_keyword_page(
                 html.append("      <div class='two columns img-cell'>")
                 html.append(f"        <div class='subject'>{img.get('subject', 'No subject')[:30]}</div>")
                 html.append(f"        <div class='msg-id'>{img.get('message_id', '')}</div>")
-                html.append(f"        <a href='{img.get('full_path', '')}'>")
+                html.append(f"        <a href='{img.get('original_url', '')}'>")
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
                 html.append("        </a>")
                 keywords_str = ", ".join(img.get('keywords', [])[:5])

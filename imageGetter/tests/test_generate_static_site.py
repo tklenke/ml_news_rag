@@ -304,10 +304,6 @@ class TestGenerateAllImagesPage:
         assert output_file.exists()
         content = output_file.read_text()
 
-        # Should have year header
-        assert "2024" in content
-        assert "2 images" in content or "(2)" in content
-
         # Should have image info
         assert "Test Subject 1" in content
         assert "MSG001" in content
