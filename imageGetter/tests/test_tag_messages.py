@@ -184,7 +184,7 @@ class TestTagMessages:
             original = json.load(f)
 
         # Tag messages
-        stats = tag_messages(test_index, test_keywords, overwrite=False)
+        stats = tag_messages(test_index, test_keywords)
 
         # Load result
         with open(test_index) as f:
@@ -195,23 +195,10 @@ class TestTagMessages:
         # Should report skipped message
         assert stats["skipped"] >= 1
 
-    def test_overwrite_existing_keywords(self, test_index, test_keywords):
-        """Test that --overwrite flag retags existing llm_keywords."""
-        # Load original data
-        with open(test_index) as f:
-            original = json.load(f)
-
-        # Tag messages with overwrite
-        stats = tag_messages(test_index, test_keywords, overwrite=True)
-
-        # Should process all messages (nothing skipped)
-        assert stats["skipped"] == 0
-        assert stats["processed"] == 3
-
     def test_tag_empty_list_valid_state(self, test_index, test_keywords):
         """Test that empty keyword list [] is a valid state."""
         # Tag messages
-        tag_messages(test_index, test_keywords, overwrite=True)
+        tag_messages(test_index, test_keywords)
 
         # Load result
         with open(test_index) as f:
@@ -225,7 +212,7 @@ class TestTagMessages:
     def test_limit_processing(self, test_index, test_keywords):
         """Test --limit flag processes exactly N messages."""
         # Tag with limit of 1
-        stats = tag_messages(test_index, test_keywords, limit=1, overwrite=True)
+        stats = tag_messages(test_index, test_keywords, limit=1)
 
         # Should process exactly 1 message
         assert stats["processed"] == 1
@@ -245,7 +232,7 @@ class TestTagMessages:
             original = json.load(f)
 
         # Tag messages
-        tag_messages(test_index, test_keywords, overwrite=True)
+        tag_messages(test_index, test_keywords)
 
         # Load result
         with open(test_index) as f:
@@ -259,7 +246,7 @@ class TestTagMessages:
     def test_skip_already_tagged_on_retag(self, test_index, test_keywords):
         """Test that messages with llm_keywords are skipped on second run."""
         # First tag all messages
-        tag_messages(test_index, test_keywords, overwrite=True)
+        tag_messages(test_index, test_keywords)
 
         # Load result
         with open(test_index) as f:
@@ -268,10 +255,11 @@ class TestTagMessages:
         # Save original keywords
         original_keywords = {}
         for msg_id in result:
-            original_keywords[msg_id] = result[msg_id]["llm_keywords"].copy()
+            if "llm_keywords" in result[msg_id]:
+                original_keywords[msg_id] = result[msg_id]["llm_keywords"].copy()
 
-        # Try to tag again without overwrite
-        stats = tag_messages(test_index, test_keywords, overwrite=False)
+        # Try to tag again
+        stats = tag_messages(test_index, test_keywords)
 
         # All messages should be skipped (they all have llm_keywords now)
         assert stats["skipped"] == 3
@@ -296,7 +284,7 @@ class TestTagMessages:
             mock_tag.return_value = (['firewall'], 'firewall')
 
             # Tag with verbose mode
-            tag_messages(test_index, test_keywords, limit=1, overwrite=True, verbose=True)
+            tag_messages(test_index, test_keywords, limit=1, verbose=True)
 
             # Capture output
             captured = capsys.readouterr()

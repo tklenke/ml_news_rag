@@ -14,20 +14,21 @@ from llm_config import LLM_TIMEOUT
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Tag messages with LLM keywords'
+        description='Tag messages with LLM keywords',
+        usage='%(prog)s [options] SOURCE [DEST]'
     )
 
-    # Positional argument
-    parser.add_argument('index_file', metavar='INDEX_FILE',
-                        help='Path to image index JSON file')
+    # Positional arguments
+    parser.add_argument('source', metavar='SOURCE',
+                        help='Path to input image index file')
+    parser.add_argument('dest', metavar='DEST', nargs='?',
+                        help='Path to output file (default: SOURCE with _tagged suffix)')
 
     # Optional arguments
     parser.add_argument('--keywords', type=str, default='aircraft_keywords.txt',
                         help='Keywords file to use (default: aircraft_keywords.txt)')
     parser.add_argument('--limit', type=int, default=None,
                         help='Process only first N messages (default: all)')
-    parser.add_argument('--overwrite', action='store_true',
-                        help='Retag messages that already have llm_keywords')
     parser.add_argument('--model', type=str, default=None,
                         help='Override LLM model from llm_config.py')
     parser.add_argument('--verbose', action='store_true',
@@ -35,30 +36,32 @@ def main():
 
     args = parser.parse_args()
 
+    # Generate default output filename if not provided
+    if args.dest is None:
+        source_path = Path(args.source)
+        args.dest = str(source_path.parent / f"{source_path.stem}_tagged{source_path.suffix}")
+
     # Validate files exist
-    if not Path(args.index_file).exists():
-        print(f"Error: Index file not found: {args.index_file}")
+    if not Path(args.source).exists():
+        print(f"Error: Input file not found: {args.source}")
         return 1
 
     if not Path(args.keywords).exists():
         print(f"Error: Keywords file not found: {args.keywords}")
         return 1
 
-    print(f"Tagging messages from {args.index_file}")
+    print(f"Tagging messages from {args.source}")
+    print(f"Output file: {args.dest}")
     print(f"Keywords: {args.keywords}")
     if args.limit:
         print(f"Limit: {args.limit} messages")
     else:
         print(f"Limit: ALL messages (no limit)")
-    if args.overwrite:
-        print(f"Overwrite: YES (retag existing)")
-    else:
-        print(f"Overwrite: NO (skip existing)")
     print()
 
     # Load data
     print("Loading image index...")
-    index_data = load_image_index(args.index_file)
+    index_data = load_image_index(args.source)
     total_messages = len(index_data)
     print(f"Loaded {total_messages} messages")
 
@@ -72,7 +75,7 @@ def main():
     already_tagged = 0
     for message in index_data.values():
         has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
-        if args.overwrite or not has_keywords:
+        if not has_keywords:
             messages_to_process += 1
         else:
             already_tagged += 1
@@ -81,8 +84,7 @@ def main():
         messages_to_process = args.limit
 
     print(f"Messages to process: {messages_to_process}")
-    if not args.overwrite:
-        print(f"Already tagged (will skip): {already_tagged}")
+    print(f"Already tagged (will skip): {already_tagged}")
     print()
 
     # Process messages
@@ -94,9 +96,9 @@ def main():
 
     # Call tag_messages() to process batch
     stats = tag_messages(
-        index_file=args.index_file,
+        index_file=args.source,
         keywords_file=args.keywords,
-        overwrite=args.overwrite,
+        output_file=args.dest,
         limit=args.limit,
         model=args.model,
         verbose=args.verbose
@@ -107,7 +109,7 @@ def main():
     error_count = stats["errors"]
 
     # Reload index to get updated data for statistics
-    index_data = load_image_index(args.index_file)
+    index_data = load_image_index(args.dest)
 
     # Statistics
     print("\n" + "="*60)
@@ -132,12 +134,11 @@ def main():
 
     print("="*60)
     print()
-    print(f"Results saved to: {args.index_file}")
+    print(f"Results saved to: {args.dest}")
     print()
 
-    if not args.overwrite and skipped_count > 0:
+    if skipped_count > 0:
         print(f"Note: {skipped_count} messages were skipped (already tagged).")
-        print("Use --overwrite to retag all messages.")
         print()
 
     return 0

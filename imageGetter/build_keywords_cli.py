@@ -21,20 +21,21 @@ from llm_config import LLM_TIMEOUT
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Build keyword list by sampling messages and extracting keywords with LLM'
+        description='Build keyword list by sampling messages and extracting keywords with LLM',
+        usage='%(prog)s [options] SOURCE [DEST]'
     )
 
-    # Positional argument
-    parser.add_argument('index_file', metavar='INDEX_FILE',
-                        help='Path to image_index.json')
+    # Positional arguments
+    parser.add_argument('source', metavar='SOURCE',
+                        help='Path to input image index file')
+    parser.add_argument('dest', metavar='DEST', nargs='?',
+                        help='Path to output keywords file (default: SOURCE with _keywords.txt suffix)')
 
     # Optional arguments
     parser.add_argument('--sample', type=int, default=None,
                         help='Number of messages to sample (default: all messages)')
     parser.add_argument('--existing', type=str, default='../docs/input/keywords_seed.txt',
                         help='Existing keywords file to merge with (default: keywords_seed.txt)')
-    parser.add_argument('--output', type=str, default='keywords_candidates.txt',
-                        help='Output file for candidate keywords (default: keywords_candidates.txt)')
     parser.add_argument('--model', type=str, default=None,
                         help='Override LLM model from config')
     parser.add_argument('--verbose', action='store_true',
@@ -42,23 +43,28 @@ def main():
 
     args = parser.parse_args()
 
+    # Generate default output filename if not provided
+    if args.dest is None:
+        source_path = Path(args.source)
+        args.dest = str(source_path.parent / f"{source_path.stem}_keywords.txt")
+
     # Validate index file exists
-    if not Path(args.index_file).exists():
-        print(f"Error: Index file not found: {args.index_file}")
+    if not Path(args.source).exists():
+        print(f"Error: Input file not found: {args.source}")
         return 1
 
-    print(f"Building keyword list from {args.index_file}")
+    print(f"Building keyword list from {args.source}")
+    print(f"Output file: {args.dest}")
     if args.sample:
         print(f"Sample size: {args.sample} messages")
     else:
         print(f"Sample size: ALL messages (no limit)")
     print(f"Existing keywords: {args.existing}")
-    print(f"Output: {args.output}")
     print()
 
     # Step 1: Load image index
     print("Loading image index...")
-    image_index = load_image_index(args.index_file)
+    image_index = load_image_index(args.source)
     total_messages = len(image_index)
     print(f"Loaded {total_messages} messages with images")
     print()
@@ -163,11 +169,11 @@ def main():
     sorted_keywords = sort_keywords(filtered_keywords)
 
     # Step 9: Write output file (alphabetically sorted)
-    print(f"\nWriting alphabetically sorted keywords to {args.output}...")
-    with open(args.output, 'w') as f:
+    print(f"\nWriting alphabetically sorted keywords to {args.dest}...")
+    with open(args.dest, 'w') as f:
         for keyword in sorted_keywords:
             f.write(f"{keyword}\n")
-    print(f"Successfully wrote {len(sorted_keywords)} keywords to {args.output}")
+    print(f"Successfully wrote {len(sorted_keywords)} keywords to {args.dest}")
 
     # Step 10: Statistics summary
     print("\n" + "="*60)
@@ -184,10 +190,10 @@ def main():
     print(f"Final candidate keywords:    {len(sorted_keywords)}")
     print("="*60)
     print()
-    print(f"Output written to: {args.output} (alphabetically sorted)")
+    print(f"Output written to: {args.dest} (alphabetically sorted)")
     print()
     print("Next steps:")
-    print(f"1. Review {args.output}")
+    print(f"1. Review {args.dest}")
     print(f"2. Add good keywords to keywords_master.txt")
     print(f"3. Run again with different sample to find more keywords")
 

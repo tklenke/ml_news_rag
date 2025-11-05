@@ -415,13 +415,17 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_base: str, page_
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Analyze keyword statistics from tagged image index'
+        description='Analyze keyword statistics from tagged image index',
+        usage='%(prog)s [options] SOURCE [DEST]'
     )
 
-    parser.add_argument('index_file',
-                        help='Path to image index JSON file')
-    parser.add_argument('--output', '-o',
-                        help='Output text file (default: tag_statistics_TIMESTAMP.txt)')
+    # Positional arguments
+    parser.add_argument('source', metavar='SOURCE',
+                        help='Path to input image index file')
+    parser.add_argument('dest', metavar='DEST', nargs='?',
+                        help='Path to output text file (default: SOURCE with _statistics.txt suffix)')
+
+    # Optional arguments
     parser.add_argument('--limit', type=int, default=None,
                         help='Limit number of messages to process')
     parser.add_argument('--thumb_dir', default='../data/images/thumbs',
@@ -432,17 +436,15 @@ def main():
     args = parser.parse_args()
 
     # Generate default output filename if not provided
-    if args.output:
-        output_file = args.output
-    else:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = f"tag_statistics_{timestamp}.txt"
+    if args.dest is None:
+        source_path = Path(args.source)
+        args.dest = str(source_path.parent / f"{source_path.stem}_statistics.txt")
 
     # HTML output base (without .html extension)
-    html_base = output_file.rsplit('.', 1)[0] + '_view'
+    html_base = Path(args.dest).stem + '_view'
 
-    print(f"Loading index from {args.index_file}...")
-    index_data = load_index(args.index_file, limit=args.limit)
+    print(f"Loading index from {args.source}...")
+    index_data = load_index(args.source, limit=args.limit)
     print(f"Loaded {len(index_data)} messages")
     if args.limit:
         print(f"(limited to first {args.limit} messages)")
@@ -451,12 +453,12 @@ def main():
     keyword_counter = analyze_keywords(index_data)
 
     # Write text statistics
-    print(f"Writing statistics to {output_file}...")
-    with open(output_file, 'w') as f:
+    print(f"Writing statistics to {args.dest}...")
+    with open(args.dest, 'w') as f:
         # Header
         f.write("TAG STATISTICS REPORT\n")
         f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        f.write(f"Index file: {args.index_file}\n")
+        f.write(f"Index file: {args.source}\n")
         if args.limit:
             f.write(f"Limit: {args.limit} messages\n")
         f.write("\n\n")
@@ -468,7 +470,7 @@ def main():
         # Keyword statistics
         f.write(format_keyword_statistics(keyword_counter))
 
-    print(f"Statistics written to: {output_file}")
+    print(f"Statistics written to: {args.dest}")
     print(f"Total unique keywords: {len(keyword_counter)}")
 
     # Generate HTML view

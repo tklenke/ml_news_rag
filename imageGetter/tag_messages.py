@@ -174,7 +174,7 @@ def print_verbose_output(
 def tag_messages(
     index_file: str,
     keywords_file: str,
-    overwrite: bool = False,
+    output_file: str = None,
     limit: int = None,
     model: str = None,
     verbose: bool = False
@@ -184,7 +184,7 @@ def tag_messages(
     Args:
         index_file: Path to image index JSON file
         keywords_file: Path to keywords file
-        overwrite: If True, retag messages that already have llm_keywords
+        output_file: Path to output file (default: overwrite input file with backup)
         limit: If specified, process only first N messages
         model: Optional model override
         verbose: If True, print detailed output for each message
@@ -195,6 +195,10 @@ def tag_messages(
         - skipped: Number of messages skipped (already tagged)
         - errors: Number of errors encountered
     """
+    # Default output to input file for backward compatibility
+    if output_file is None:
+        output_file = index_file
+
     # Load data
     index_data = load_image_index(index_file)
     keywords = load_keywords(keywords_file)
@@ -212,12 +216,9 @@ def tag_messages(
     # Count total messages to process for progress tracking
     total_to_process = 0
     for message in index_data.values():
-        if overwrite:
+        has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+        if not has_keywords:
             total_to_process += 1
-        else:
-            has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
-            if not has_keywords:
-                total_to_process += 1
 
     if limit and limit < total_to_process:
         total_to_process = limit
@@ -229,12 +230,11 @@ def tag_messages(
         if limit is not None and messages_processed >= limit:
             break
 
-        # Skip if already tagged (unless overwrite)
-        if not overwrite:
-            has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
-            if has_keywords:
-                stats["skipped"] += 1
-                continue
+        # Skip if already tagged
+        has_keywords = "llm_keywords" in message and message.get("llm_keywords") is not None
+        if has_keywords:
+            stats["skipped"] += 1
+            continue
 
         # Extract message text
         message_text = extract_message_text(message)
@@ -270,10 +270,10 @@ def tag_messages(
         if stats["processed"] % 50 == 0:
             if not verbose:
                 print(f"  → Auto-saved after {stats['processed']} messages")
-            save_image_index(index_data, index_file)
+            save_image_index(index_data, output_file)
 
     # Final save
-    save_image_index(index_data, index_file)
+    save_image_index(index_data, output_file)
 
     return stats
 
