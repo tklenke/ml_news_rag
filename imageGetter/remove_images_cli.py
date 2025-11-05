@@ -9,14 +9,22 @@ from remove_images import load_index, load_removal_lists, remove_images_from_ind
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Remove images from index based on removal list files'
+        description='Remove images from index based on removal list files',
+        usage='%(prog)s INPUT_INDEX OUTPUT_INDEX --remove-list FILE [FILE ...]',
+        epilog='''
+Examples:
+  %(prog)s index.json cleaned.json --remove-list images_to_remove.txt
+  %(prog)s index.json cleaned.json --remove-list page1.txt page2.txt page3.txt
+  %(prog)s index.json cleaned.json --remove-list images_to_remove_page*.txt
+        '''
     )
 
-    parser.add_argument('index_file',
+    parser.add_argument('index_file', metavar='INPUT_INDEX',
                         help='Path to input image index JSON file')
-    parser.add_argument('output_file',
+    parser.add_argument('output_file', metavar='OUTPUT_INDEX',
                         help='Path to output cleaned index JSON file')
     parser.add_argument('--remove-list', nargs='+', required=True,
+                        metavar='FILE',
                         help='One or more removal list files (images_to_remove*.txt)')
 
     args = parser.parse_args()
