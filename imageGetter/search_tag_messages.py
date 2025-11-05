@@ -112,12 +112,7 @@ def tag_messages(
     }
 
     # Count total messages to process for progress tracking
-    total_to_process = 0
-    for message in index_data.values():
-        has_keywords = "keywords" in message and message.get("keywords") is not None
-        if not has_keywords:
-            total_to_process += 1
-
+    total_to_process = len(index_data)
     if limit and limit < total_to_process:
         total_to_process = limit
 
@@ -128,12 +123,6 @@ def tag_messages(
         if limit is not None and messages_processed >= limit:
             break
 
-        # Skip if already tagged
-        has_keywords = "keywords" in message and message.get("keywords") is not None
-        if has_keywords:
-            stats["skipped"] += 1
-            continue
-
         # Extract message text
         message_text = extract_message_text(message)
 
@@ -142,21 +131,37 @@ def tag_messages(
                 subject = message.get("metadata", {}).get("subject", "Unknown")
                 print(f"[{messages_processed+1}/{total_to_process}] {subject[:60]}")
 
+            # Get existing keywords (if any)
+            existing_keywords = message.get("keywords", [])
+
             # Search for keywords
             matched_keywords = tagger.find_keywords(message_text, keywords)
 
-            # Store keywords (always a list, even if empty)
-            message["keywords"] = matched_keywords
+            # Merge existing and new keywords, deduplicate (case-insensitive)
+            combined = list(existing_keywords) + matched_keywords
+            seen = set()
+            deduplicated = []
+            for kw in combined:
+                if kw.lower() not in seen:
+                    seen.add(kw.lower())
+                    deduplicated.append(kw)
+
+            # Store merged keywords
+            message["keywords"] = deduplicated
 
             if verbose:
+                print(f"  Existing: {existing_keywords}")
                 print(f"  Matched: {matched_keywords}")
+                print(f"  Final: {deduplicated}")
 
             stats["processed"] += 1
             messages_processed += 1
 
         except Exception as e:
             print(f"ERROR processing message {msg_id}: {e}")
-            message["keywords"] = []
+            # Keep existing keywords on error
+            if "keywords" not in message:
+                message["keywords"] = []
             stats["errors"] += 1
             stats["processed"] += 1
             messages_processed += 1

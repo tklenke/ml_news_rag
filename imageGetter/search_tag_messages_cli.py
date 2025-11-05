@@ -67,21 +67,16 @@ def main():
     print(f"Loaded {len(keywords)} keywords")
     print()
 
-    # Count messages to process
-    messages_to_process = 0
-    already_tagged = 0
-    for message in index_data.values():
-        has_keywords = "keywords" in message and message.get("keywords") is not None
-        if not has_keywords:
-            messages_to_process += 1
-        else:
-            already_tagged += 1
+    # Count messages with existing keywords
+    messages_with_keywords = sum(1 for m in index_data.values() if m.get("keywords"))
+    messages_to_process = len(index_data)
 
     if args.limit and args.limit < messages_to_process:
         messages_to_process = args.limit
 
     print(f"Messages to process: {messages_to_process}")
-    print(f"Already tagged (will skip): {already_tagged}")
+    if messages_with_keywords > 0:
+        print(f"Messages with existing keywords: {messages_with_keywords} (will be merged)")
     print()
 
     # Process messages
@@ -131,10 +126,6 @@ def main():
     print()
     print(f"Results saved to: {args.dest}")
     print()
-
-    if skipped_count > 0:
-        print(f"Note: {skipped_count} messages were skipped (already tagged).")
-        print()
 
     return 0
 

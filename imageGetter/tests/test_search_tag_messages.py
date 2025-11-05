@@ -108,12 +108,12 @@ class TestTagMessages:
         assert "keywords" in result["msg2"]
         assert "cowling" in result["msg2"]["keywords"]
 
-        # Stats should show 2 processed (msg3 already tagged)
-        assert stats["processed"] == 2
-        assert stats["skipped"] == 1
+        # Stats should show 3 processed (all messages, no skipping)
+        assert stats["processed"] == 3
+        assert stats["skipped"] == 0
 
-    def test_skip_already_tagged(self, test_index, test_keywords):
-        """Test that already-tagged messages are skipped."""
+    def test_merge_existing_keywords(self, test_index, test_keywords):
+        """Test that existing keywords are merged with newly matched keywords."""
         # Load original data
         with open(test_index) as f:
             original = json.load(f)
@@ -125,10 +125,12 @@ class TestTagMessages:
         with open(test_index) as f:
             result = json.load(f)
 
-        # msg3 already had keywords, should be unchanged
-        assert result["msg3"]["keywords"] == original["msg3"]["keywords"]
-        # Should report skipped message
-        assert stats["skipped"] >= 1
+        # msg3 had ["existing"], should now have ["existing", "engine"]
+        # (engine is found in "Engine mount" subject)
+        assert "existing" in result["msg3"]["keywords"]  # Original preserved
+        assert "engine" in result["msg3"]["keywords"]  # New match added
+        # No messages skipped
+        assert stats["skipped"] == 0
 
     def test_empty_keywords_valid_state(self, test_index, test_keywords):
         """Test that empty keyword list [] is a valid state."""
@@ -151,14 +153,15 @@ class TestTagMessages:
         test_data = {
             "msg1": {
                 "metadata": {"subject": "This cozy firewall installation"},
-                "images": []
+                "images": [],
+                "keywords" : ["stevenlevy"]
             }
         }
         index_file.write_text(json.dumps(test_data))
 
         # Create keywords file including "cozy"
         kw_file = tmp_path / "keywords.txt"
-        kw_file.write_text("cozy\nfirewall\nengine\n")
+        kw_file.write_text("cozy\nfirewall\nengine")
 
         # Tag messages
         tag_messages(str(index_file), str(kw_file))
@@ -171,3 +174,4 @@ class TestTagMessages:
         assert "keywords" in result["msg1"]
         assert "cozy" not in result["msg1"]["keywords"]
         assert "firewall" in result["msg1"]["keywords"]
+        assert "stevenlevy" in result["msg1"]["keywords"]
