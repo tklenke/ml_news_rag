@@ -440,8 +440,9 @@ def main():
         source_path = Path(args.source)
         args.dest = str(source_path.parent / f"{source_path.stem}_statistics.txt")
 
-    # HTML output base (without .html extension)
-    html_base = Path(args.dest).stem + '_view'
+    # HTML output base (without .html extension) - include full path
+    dest_path = Path(args.dest)
+    html_base = str(dest_path.parent / (dest_path.stem + '_view'))
 
     print(f"Loading index from {args.source}...")
     index_data = load_index(args.source, limit=args.limit)
