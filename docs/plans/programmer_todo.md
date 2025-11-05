@@ -12,11 +12,69 @@
 
 **Next:** Phase 5 - Keyword-Based Query Interface
 
-**Test Status:** 130 tests passing, 14 skipped (+20 new tests for search tagger)
+**Test Status:** 16 tests for search tagger (all passing)
 
 ---
 
 ## Recent Changes Summary (2025-11-04 to 2025-11-05)
+
+### Full Message Body Reading + Vocabulary Enforcement (2025-11-05 Session 2)
+**Commits:** a29b077, 7b28357
+
+**Problem Identified:**
+Tom discovered two critical issues:
+1. Total unique keywords was 4920 instead of max 552 (from aircraft_keywords.txt)
+2. Search tagger was only reading subject lines, not full message bodies from data/msgs_md/
+
+**Root Causes:**
+1. Image-level keywords from filenames were unrestricted (any word from filename allowed)
+2. Message-level keywords were not validated against allowed vocabulary
+3. `extract_message_text()` was reading from `metadata.message_md` field instead of actual markdown files
+
+**Solutions Implemented:**
+
+**1. Vocabulary Restriction (Commit 7b28357):**
+- Added `filter_to_vocabulary()` function in search_tag_messages_cli.py
+- Filters BOTH message-level AND image-level keywords against aircraft_keywords.txt
+- Two-stage filtering: (1) INVALID_KEYWORDS, (2) Vocabulary restriction
+- Result: 472 unique keywords (down from 4920) - properly constrained to vocabulary
+
+**2. Full Message Body Reading (Commit a29b077):**
+- Updated `extract_message_text()` to read from markdown files in data/msgs_md/
+- Handles directory structure: `{first_letter}/{message_id}.md`
+- Falls back to lowercase directories and special `aDigits` directory
+- Added `--msgs-md-dir` CLI option (default: ../data/msgs_md)
+- Result: ~25 keywords/message average (up from ~2 with subject-only)
+
+**3. CLI Improvements:**
+- Updated ALL CLI scripts to show available options in usage message
+- Added `-h` to usage line for all scripts
+- Usage now shows: `[-h] [--option1] [--option2] ...` instead of just `[options]`
+
+**Files Modified:**
+- search_tag_messages.py - Full message body reading, vocabulary filtering
+- search_tag_messages_cli.py - Integrated vocabulary filtering, new CLI option
+- tests/test_search_tag_messages.py - Updated/added vocabulary restriction tests
+- All *_cli.py files - Updated usage messages
+
+**Test Coverage:**
+- 16 tests total (11 search_tag + 5 extract_keywords)
+- New tests: test_vocabulary_restriction, test_vocabulary_restriction_with_merge
+- All tests passing ✓
+
+**Performance Metrics:**
+- Keywords restricted: 4920 → 472 unique keywords
+- Keywords per message: ~2 → ~25 average (subject-only → full body)
+- Max keywords per message: 13 → 55
+- Image keywords removed: 17,162 (not in vocabulary)
+- Invalid keywords removed: 856 ("cozy" instances)
+
+**Key Learning:**
+Stemming is applied to ALL words in message body AND keywords, enabling fuzzy matching (e.g., "installing firewalls" matches "install" and "firewall" keywords).
+
+---
+
+## Previous Changes (2025-11-04 to 2025-11-05 Session 1)
 
 ### Search Tagger Keyword Merging Fix (2025-11-05)
 **Commits:** bf2da16, c1abd50, f2dee1b, cc9afd9, 84cd645
