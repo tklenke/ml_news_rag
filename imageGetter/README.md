@@ -86,18 +86,20 @@ ChromeDriver must be available at `../../chromedriver-win64/chromedriver.exe` (r
 
 ```bash
 python extract_image_urls.py \
-  --input ../data/msgs_md/A \
-  --output ../data/image_index.json \
+  ../data/msgs_md/A \
+  ../data \
   --dry-run
 ```
+
+**Note:** Creates `index{timestamp}.idx` in the output directory
 
 ### Phase 2: Download Images
 
 ```bash
 # Make sure Chrome is running with --remote-debugging-port=9222 first!
 python download_images_cli.py \
-  --index ../data/image_index.json \
-  --output ../data/images/full \
+  ../data/image_index.json \
+  ../data/images/full \
   --limit 5
 ```
 
@@ -105,14 +107,13 @@ python download_images_cli.py \
 
 ```bash
 python generate_thumbnails_cli.py \
-  --input ../data/images/full \
-  --output ../data/images/thumbs \
-  --index ../data/image_index.json
+  ../data/images/full \
+  ../data/images/thumbs
 ```
 
 ## Image Curation Workflow
 
-After downloading and processing images, use this workflow to dedupe, review, and curate your image collection:
+After downloading and processing images, use this workflow to dedupe, tag, review, and curate your image collection:
 
 ### Phase 4: Deduplicate Images
 
@@ -120,8 +121,8 @@ Remove duplicate images (based on file size) and missing files from the index:
 
 ```bash
 python dedupe_images_cli.py \
-  --index ../data/image_index.json \
-  --output ../data/image_index_deduped.json \
+  ../data/image_index.json \
+  ../data/image_index_deduped.json \
   --images-dir ../data/images/full
 ```
 
@@ -148,17 +149,75 @@ Images after:            6075
 Saving deduped index to ../data/image_index_deduped.json...
 ```
 
-### Phase 5: Generate Paginated HTML Review
+### Phase 5: Tag Messages with Keywords
+
+Tag messages with semantic keywords using LLM (automatically skips already-tagged messages):
+
+```bash
+python tag_messages_cli.py \
+  ../data/image_index_deduped.json \
+  ../data/image_index_tagged.json \
+  --keywords aircraft_keywords.txt
+```
+
+**Example output:**
+```
+Tagging messages from ../data/image_index_deduped.json
+Output file: ../data/image_index_tagged.json
+Keywords: aircraft_keywords.txt
+Limit: ALL messages (no limit)
+
+Loading image index...
+Loaded 1234 messages
+
+Loading keywords...
+Loaded 557 keywords
+
+Messages to process: 1234
+Already tagged (will skip): 0
+
+Tagging messages with keywords...
+LLM timeout per message: 30s (configurable in llm_config.py)
+
+[1/1234] Installing firewall today
+[2/1234] Re: Cowling attachment
+...
+  → Auto-saved after 50 messages
+...
+
+============================================================
+TAGGING STATISTICS
+============================================================
+Total messages in index:     1234
+Messages processed:          1234
+Messages skipped:            0
+Messages with errors:        0
+
+Keywords per message:
+  Average:                   2.3
+  Min:                       0
+  Max:                       8
+============================================================
+
+Results saved to: ../data/image_index_tagged.json
+```
+
+**Notes:**
+- Messages with existing `llm_keywords` are skipped automatically (idempotent)
+- Auto-saves every 50 messages for crash recovery
+- Use `--limit N` to tag only first N messages (for testing)
+- Use `--verbose` to see detailed LLM responses
+
+### Phase 6: Generate Paginated HTML Review
 
 Create an interactive HTML view to review images by keyword (210 images per page):
 
 ```bash
 python analyze_tag_statistics.py \
-  --index ../data/image_index_deduped.json \
+  ../data/image_index_tagged.json \
+  ../data/tag_review.txt \
   --thumb-dir ../data/images/thumbs \
-  --html \
-  --page-size 210 \
-  --output tag_review
+  --page-size 210
 ```
 
 **Example output:**
@@ -173,15 +232,15 @@ Tag Statistics:
   ...
 
 HTML pages generated:
-  tag_review_page1.html (210 images)
-  tag_review_page2.html (210 images)
+  tag_review_view_page1.html (210 images)
+  tag_review_view_page2.html (210 images)
   ...
-  tag_review_page29.html (75 images)
+  tag_review_view_page29.html (75 images)
 ```
 
-### Phase 6: Review and Select Images
+### Phase 7: Review and Select Images
 
-1. Open the HTML files in your browser (e.g., `tag_review_page1.html`)
+1. Open the HTML files in your browser (e.g., `tag_review_view_page1.html`)
 2. Review images and check boxes for images you want to remove
 3. Click "Export Selected to File" button on each page
 4. This creates `images_to_remove_pageN.txt` files for each page
@@ -191,20 +250,20 @@ HTML pages generated:
 - "Select All" and "Clear All" buttons for bulk operations
 - Selected images highlighted in red
 
-### Phase 7: Remove Selected Images
+### Phase 8: Remove Selected Images
 
 Process the removal list files to create a cleaned index:
 
 ```bash
 python remove_images_cli.py \
-  ../data/image_index_deduped.json \
+  ../data/image_index_tagged.json \
   ../data/image_index_cleaned.json \
   --remove-list images_to_remove_page*.txt
 ```
 
 **Example output:**
 ```
-Loading index from ../data/image_index_deduped.json...
+Loading index from ../data/image_index_tagged.json...
 Loaded 1234 messages with 6075 images
 
 Loading removal lists...
