@@ -274,3 +274,143 @@ def generate_all_images_page(
 
     # Write to file
     Path(output_file).write_text("\n".join(html))
+
+
+def filter_messages_by_keyword(index_data: dict, keyword: str) -> dict:
+    """Filter messages that have a specific keyword.
+
+    Args:
+        index_data: Dictionary of messages from image index
+        keyword: Keyword to filter by (case-insensitive)
+
+    Returns:
+        Dictionary of messages that have the keyword
+    """
+    filtered = {}
+    keyword_lower = keyword.lower()
+
+    for msg_id, msg_data in index_data.items():
+        keywords = msg_data.get("keywords", [])
+        # Case-insensitive comparison
+        keywords_lower = [k.lower() for k in keywords]
+        if keyword_lower in keywords_lower:
+            filtered[msg_id] = msg_data
+
+    return filtered
+
+
+def sanitize_keyword_for_filename(keyword: str) -> str:
+    """Convert keyword to safe filename.
+
+    Args:
+        keyword: Keyword string
+
+    Returns:
+        Safe filename string (lowercase, spaces/special chars replaced with underscores)
+    """
+    import re
+    # Convert to lowercase
+    safe = keyword.lower()
+    # Replace spaces and non-alphanumeric chars (except underscore) with underscore
+    safe = re.sub(r'[^a-z0-9_]+', '_', safe)
+    # Remove leading/trailing underscores
+    safe = safe.strip('_')
+    return safe
+
+
+def generate_keyword_page(
+    keyword: str,
+    images: List[dict],
+    page_num: int,
+    total_pages: int,
+    output_file: str
+) -> None:
+    """Generate a single keyword page.
+
+    Args:
+        keyword: The keyword for this page
+        images: List of image dictionaries for this page
+        page_num: Current page number (1-indexed)
+        total_pages: Total number of pages for this keyword
+        output_file: Path to write HTML file
+    """
+    safe_keyword = sanitize_keyword_for_filename(keyword)
+
+    html = []
+    html.append("<!DOCTYPE html>")
+    html.append("<html>")
+    html.append("<head>")
+    html.append("<meta charset='utf-8'>")
+    html.append(f"<title>{keyword} - Page {page_num}</title>")
+    html.append("</head>")
+    html.append("<body>")
+
+    # Breadcrumb
+    html.append("<p><a href='../index.html'>&larr; Back to Index</a></p>")
+    html.append(f"<h1>Keyword: {keyword}</h1>")
+
+    # Top pagination
+    html.append("<div class='pagination'>")
+    if page_num > 1:
+        html.append(f"<a href='{safe_keyword}_page1.html'>&lt;&lt; First</a>")
+        html.append(f"<a href='{safe_keyword}_page{page_num-1}.html'>&lt; Previous</a>")
+    else:
+        html.append("<span class='disabled'>&lt;&lt; First</span>")
+        html.append("<span class='disabled'>&lt; Previous</span>")
+
+    html.append(f"<span>Page {page_num} of {total_pages}</span>")
+
+    if page_num < total_pages:
+        html.append(f"<a href='{safe_keyword}_page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"<a href='{safe_keyword}_page{total_pages}.html'>Last &gt;&gt;</a>")
+    else:
+        html.append("<span class='disabled'>Next &gt;</span>")
+        html.append("<span class='disabled'>Last &gt;&gt;</span>")
+    html.append("</div>")
+
+    # Image grid (6 columns)
+    html.append("<table>")
+    for i in range(0, len(images), 6):
+        html.append("<tr>")
+        for j in range(6):
+            idx = i + j
+            if idx < len(images):
+                img = images[idx]
+                html.append("<td>")
+                html.append(f"<div class='subject'>{img.get('subject', 'No subject')}</div>")
+                html.append(f"<div class='msg-id'>{img.get('message_id', '')}</div>")
+                html.append(f"<a href='{img.get('full_path', '')}'>")
+                html.append(f"<img src='{img.get('thumbnail_path', '')}' />")
+                html.append("</a>")
+                keywords_str = ", ".join(img.get('keywords', []))
+                html.append(f"<div class='keywords'>keywords: {keywords_str}</div>")
+                html.append("</td>")
+            else:
+                html.append("<td></td>")
+        html.append("</tr>")
+    html.append("</table>")
+
+    # Bottom pagination (same as top)
+    html.append("<div class='pagination'>")
+    if page_num > 1:
+        html.append(f"<a href='{safe_keyword}_page1.html'>&lt;&lt; First</a>")
+        html.append(f"<a href='{safe_keyword}_page{page_num-1}.html'>&lt; Previous</a>")
+    else:
+        html.append("<span class='disabled'>&lt;&lt; First</span>")
+        html.append("<span class='disabled'>&lt; Previous</span>")
+
+    html.append(f"<span>Page {page_num} of {total_pages}</span>")
+
+    if page_num < total_pages:
+        html.append(f"<a href='{safe_keyword}_page{page_num+1}.html'>Next &gt;</a>")
+        html.append(f"<a href='{safe_keyword}_page{total_pages}.html'>Last &gt;&gt;</a>")
+    else:
+        html.append("<span class='disabled'>Next &gt;</span>")
+        html.append("<span class='disabled'>Last &gt;&gt;</span>")
+    html.append("</div>")
+
+    html.append("</body>")
+    html.append("</html>")
+
+    # Write to file
+    Path(output_file).write_text("\n".join(html))

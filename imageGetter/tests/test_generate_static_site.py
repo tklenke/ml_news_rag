@@ -348,3 +348,138 @@ class TestNavigationLinks:
         # On page 3, links to first/prev should be enabled
         assert "page1.html" in content  # First
         assert "page2.html" in content  # Previous
+
+
+class TestFilterMessagesByKeyword:
+    """Tests for filtering messages by keyword."""
+
+    def test_filter_messages_by_keyword(self):
+        """Test filtering messages that have a specific keyword."""
+        from generate_static_site import filter_messages_by_keyword
+
+        index_data = {
+            "MSG001": {
+                "keywords": ["firewall", "engine"],
+                "images": [{"f": "i1"}]
+            },
+            "MSG002": {
+                "keywords": ["cowling"],
+                "images": [{"f": "i2"}]
+            },
+            "MSG003": {
+                "keywords": ["firewall", "cowling"],
+                "images": [{"f": "i3"}, {"f": "i4"}]
+            },
+            "MSG004": {
+                "keywords": [],
+                "images": [{"f": "i5"}]
+            }
+        }
+
+        result = filter_messages_by_keyword(index_data, "firewall")
+
+        # Should return messages that have "firewall" keyword
+        assert len(result) == 2
+        assert "MSG001" in result
+        assert "MSG003" in result
+        assert "MSG002" not in result
+        assert "MSG004" not in result
+
+    def test_filter_case_insensitive(self):
+        """Test that keyword filtering is case-insensitive."""
+        from generate_static_site import filter_messages_by_keyword
+
+        index_data = {
+            "MSG001": {"keywords": ["Firewall", "Engine"], "images": [{"f": "i1"}]},
+            "MSG002": {"keywords": ["FIREWALL"], "images": [{"f": "i2"}]},
+        }
+
+        result = filter_messages_by_keyword(index_data, "firewall")
+        assert len(result) == 2
+
+
+class TestSafeKeywordFilenames:
+    """Tests for sanitizing keyword names for filenames."""
+
+    def test_safe_keyword_filenames(self):
+        """Test converting keywords to safe filenames."""
+        from generate_static_site import sanitize_keyword_for_filename
+
+        assert sanitize_keyword_for_filename("firewall") == "firewall"
+        assert sanitize_keyword_for_filename("landing gear") == "landing_gear"
+        assert sanitize_keyword_for_filename("Oil-Cooler") == "oil_cooler"
+        assert sanitize_keyword_for_filename("Co-Pilot") == "co_pilot"
+        assert sanitize_keyword_for_filename("3/4 inch") == "3_4_inch"
+
+
+class TestGenerateKeywordPage:
+    """Tests for generating keyword-specific pages."""
+
+    def test_generate_keyword_page(self, tmp_path):
+        """Test generating a keyword page."""
+        from generate_static_site import generate_keyword_page
+
+        images = [
+            {
+                "message_id": "MSG001",
+                "subject": "Firewall test",
+                "keywords": ["firewall", "engine"],
+                "thumbnail_path": "thumbs/img1_thumb.jpg",
+                "full_path": "full/img1.jpg",
+                "year": 2024
+            }
+        ]
+
+        output_file = tmp_path / "firewall_page1.html"
+        generate_keyword_page(
+            keyword="firewall",
+            images=images,
+            page_num=1,
+            total_pages=1,
+            output_file=str(output_file)
+        )
+
+        assert output_file.exists()
+        content = output_file.read_text()
+
+        # Should have breadcrumb back to index
+        assert "index.html" in content or "Back to Index" in content
+
+        # Should have keyword in title/heading
+        assert "firewall" in content.lower()
+
+        # Should have image info
+        assert "MSG001" in content
+        assert "Firewall test" in content
+
+        # Should have pagination
+        assert "First" in content
+        assert "Previous" in content
+
+
+class TestKeywordPageNavigation:
+    """Tests for keyword page navigation."""
+
+    def test_keyword_page_navigation(self, tmp_path):
+        """Test navigation links on keyword pages."""
+        from generate_static_site import generate_keyword_page
+
+        images = [{"message_id": f"MSG{i}", "subject": f"Test {i}",
+                   "keywords": ["test"], "thumbnail_path": "", "full_path": "", "year": 2024}
+                  for i in range(10)]
+
+        # Test page 1 of 2
+        output_file = tmp_path / "test_page1.html"
+        generate_keyword_page("test", images, 1, 2, str(output_file))
+        content = output_file.read_text()
+
+        # Should have link to page 2
+        assert "test_page2.html" in content
+
+        # Test page 2 of 2
+        output_file = tmp_path / "test_page2.html"
+        generate_keyword_page("test", images, 2, 2, str(output_file))
+        content = output_file.read_text()
+
+        # Should have link to page 1
+        assert "test_page1.html" in content

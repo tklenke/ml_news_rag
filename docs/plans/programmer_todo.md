@@ -100,12 +100,12 @@
 **Deliverable:** `keywords/firewall_page1.html`, etc. for each keyword
 
 **Tasks:**
-1. [ ] Write failing test: `test_filter_messages_by_keyword()`
-2. [ ] Write failing test: `test_generate_keyword_page()`
-3. [ ] Write failing test: `test_keyword_page_navigation()`
-4. [ ] Write failing test: `test_safe_keyword_filenames()`
-5. [ ] Run tests - verify all fail
-6. [ ] Implement functions to:
+1. [x] Write failing test: `test_filter_messages_by_keyword()`
+2. [x] Write failing test: `test_generate_keyword_page()`
+3. [x] Write failing test: `test_keyword_page_navigation()`
+4. [x] Write failing test: `test_safe_keyword_filenames()`
+5. [x] Run tests - verify all fail
+6. [x] Implement functions to:
    - Filter messages by keyword
    - Generate keywords/KEYWORD_pageN.html files with:
      - Breadcrumb: `← Back to Index | Keyword: firewall`
@@ -113,8 +113,8 @@
      - Same pagination (210 per page)
      - First/Previous/Next/Last navigation
    - Handle special characters in keyword filenames (sanitize)
-7. [ ] Run tests - verify all pass
-8. [ ] Manual test: Generate keyword pages, verify links work
+7. [x] Run tests - verify all pass
+8. [ ] Manual test: Generate keyword pages, verify links work (deferred)
 9. [ ] Commit: "Implement keyword-specific pages"
 
 **Filename Sanitization:**
