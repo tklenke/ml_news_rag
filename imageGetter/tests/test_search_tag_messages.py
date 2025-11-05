@@ -143,3 +143,31 @@ class TestTagMessages:
         for msg_id, msg in result.items():
             assert "keywords" in msg
             assert isinstance(msg["keywords"], list)
+
+    def test_invalid_keywords_filtered_in_batch(self, tmp_path):
+        """Test that invalid keywords are filtered during batch tagging."""
+        # Create index with message containing "cozy"
+        index_file = tmp_path / "test_index.json"
+        test_data = {
+            "msg1": {
+                "metadata": {"subject": "This cozy firewall installation"},
+                "images": []
+            }
+        }
+        index_file.write_text(json.dumps(test_data))
+
+        # Create keywords file including "cozy"
+        kw_file = tmp_path / "keywords.txt"
+        kw_file.write_text("cozy\nfirewall\nengine\n")
+
+        # Tag messages
+        tag_messages(str(index_file), str(kw_file))
+
+        # Load result
+        with open(index_file) as f:
+            result = json.load(f)
+
+        # "cozy" should be filtered out, firewall should be present
+        assert "keywords" in result["msg1"]
+        assert "cozy" not in result["msg1"]["keywords"]
+        assert "firewall" in result["msg1"]["keywords"]
