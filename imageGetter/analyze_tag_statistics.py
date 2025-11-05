@@ -416,7 +416,7 @@ def generate_html_view(index_data: dict, thumb_dir: str, output_base: str, page_
 def main():
     parser = argparse.ArgumentParser(
         description='Analyze keyword statistics from tagged image index',
-        usage='%(prog)s [options] SOURCE [DEST]'
+        usage='%(prog)s SOURCE [DEST] [--suppress-html] [--limit N] [--page-size N]'
     )
 
     # Positional arguments
