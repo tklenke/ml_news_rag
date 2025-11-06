@@ -15,7 +15,7 @@ from generate_static_site import (
     group_messages_by_year,
     paginate_images,
     generate_all_images_page,
-    filter_messages_by_keyword,
+    get_images_for_keyword,
     sanitize_keyword_for_filename,
     generate_keyword_page,
 )
@@ -73,13 +73,14 @@ def extract_year_from_date(date_str: str) -> int:
         return 1970
 
 
-def generate_site(source: str, dest: str, images_per_page: int = 210):
+def generate_site(source: str, dest: str, images_per_page: int = 210, min_score: int = 0):
     """Generate complete static site.
 
     Args:
         source: Path to image_index.json
         dest: Output directory for static site
         images_per_page: Number of images per page (default 210)
+        min_score: Minimum score threshold for displaying images (default 0)
     """
     print(f"Loading index from {source}...")
     index_data = load_index_data(source)
@@ -93,7 +94,7 @@ def generate_site(source: str, dest: str, images_per_page: int = 210):
 
     # Generate index page
     print("\nGenerating index page...")
-    keyword_counts = count_images_per_keyword(index_data)
+    keyword_counts = count_images_per_keyword(index_data, min_score=min_score)
     keyword_counts_sorted = sort_keywords_alphabetically(keyword_counts)
     generate_index_html(keyword_counts_sorted, str(dest_path / "index.html"))
     print(f"  Generated index.html with {len(keyword_counts_sorted)} keywords")
@@ -127,9 +128,8 @@ def generate_site(source: str, dest: str, images_per_page: int = 210):
     # Generate keyword pages
     print("\nGenerating keyword pages...")
     for keyword, count in keyword_counts_sorted:
-        # Filter messages and prepare images for this keyword
-        filtered_messages = filter_messages_by_keyword(index_data, keyword)
-        keyword_images = prepare_image_list(filtered_messages)
+        # Get images for this keyword (already sorted by score descending)
+        keyword_images = get_images_for_keyword(index_data, keyword, min_score=min_score)
 
         # Paginate keyword images
         keyword_pages = paginate_images(keyword_images, images_per_page)
@@ -174,6 +174,12 @@ def main():
         default=210,
         help="Number of images per page (default: 210)"
     )
+    parser.add_argument(
+        "--min-score",
+        type=int,
+        default=0,
+        help="Minimum score threshold for displaying images (default: 0)"
+    )
 
     args = parser.parse_args()
 
@@ -182,7 +188,7 @@ def main():
         print(f"Error: Source file not found: {args.source}", file=sys.stderr)
         sys.exit(1)
 
-    generate_site(args.source, args.dest, args.images_per_page)
+    generate_site(args.source, args.dest, args.images_per_page, args.min_score)
 
 
 if __name__ == "__main__":
