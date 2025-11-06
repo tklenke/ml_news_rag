@@ -10,7 +10,7 @@ from search_tag_messages import (
     load_keywords,
     tag_messages
 )
-from llm_config import INVALID_KEYWORDS
+from config import INVALID_KEYWORDS
 
 
 def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:

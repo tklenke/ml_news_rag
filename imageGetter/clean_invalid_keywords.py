@@ -5,7 +5,7 @@
 import json
 import argparse
 from pathlib import Path
-from llm_config import INVALID_KEYWORDS
+from config import INVALID_KEYWORDS
 
 
 def clean_invalid_keywords(index_file: str, output_file: str = None) -> dict:

@@ -3,7 +3,7 @@
 
 import re
 from typing import List
-from llm_config import INVALID_KEYWORDS
+from config import INVALID_KEYWORDS
 
 
 class SearchTagger:

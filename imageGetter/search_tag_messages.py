@@ -7,7 +7,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List
 from search_tagger import SearchTagger
-from llm_config import INVALID_KEYWORDS
+from config import INVALID_KEYWORDS
 
 
 def load_image_index(index_file: str) -> Dict:

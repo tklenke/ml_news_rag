@@ -4,7 +4,7 @@
 import re
 from typing import List, Dict
 from urllib.parse import urlparse, parse_qs, unquote
-from llm_config import INVALID_KEYWORDS
+from config import INVALID_KEYWORDS
 
 # Blacklist: Filenames to exclude (UI elements, emoticons, signatures, temp files)
 # These are non-content images that appear in email threads but aren't aircraft photos
