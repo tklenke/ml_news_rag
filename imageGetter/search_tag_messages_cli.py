@@ -261,16 +261,23 @@ def main():
     for message in index_data.values():
         for image in message.get("images", []):
             if "keywords" in image and len(image["keywords"]) > 0:
-                images_with_keywords += 1
-                keyword_counts.append(len(image["keywords"]))
-                # Extract scores from dict or tuples
                 keywords = image["keywords"]
+
+                # Check format and handle accordingly
                 if isinstance(keywords, dict):
+                    # New dict format: {"keyword": score, ...}
+                    images_with_keywords += 1
+                    keyword_counts.append(len(keywords))
                     all_scores.extend(keywords.values())
-                else:
-                    # Legacy format: [keyword, score] tuples
-                    for kw, score in keywords:
-                        all_scores.append(score)
+                elif isinstance(keywords, list) and len(keywords) > 0:
+                    first_item = keywords[0]
+                    if isinstance(first_item, (list, tuple)) and len(first_item) == 2:
+                        # Array-of-arrays format: [["keyword", score], ...]
+                        images_with_keywords += 1
+                        keyword_counts.append(len(keywords))
+                        for kw, score in keywords:
+                            all_scores.append(score)
+                    # else: plain strings format ["keyword", ...] - has no scores, skip
 
     if keyword_counts:
         print(f"\nKeywords per image:")
