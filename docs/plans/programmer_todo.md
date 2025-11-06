@@ -1,8 +1,8 @@
 # Programmer Todo - Image Database Project
 
 **Last Updated:** 2025-11-06
-**Status:** Phase 6 (Keyword Scoring) Ready for Implementation
-**Tests:** 158 passing, 14 skipped (Phase 5)
+**Status:** Phase 6 (Keyword Scoring) In Progress - Tasks 1-4 Complete
+**Tests:** 163 passing, 14 skipped (Phase 6 - updated)
 
 ---
 
@@ -17,7 +17,7 @@
 ## Tasks
 
 ### Task 1: Archive Unused LLM Tagger Code
-**Status:** [ ]
+**Status:** [✓] COMPLETE
 
 Archive the following files (not deleted, moved to docs/archive/imageGetter/):
 ```bash
@@ -43,7 +43,7 @@ mkdir -p docs/archive/imageGetter
 ---
 
 ### Task 2: Create keyword_scorer.py Module
-**Status:** [ ]
+**Status:** [✓] COMPLETE
 
 Create `imageGetter/keyword_scorer.py` based on `docs/input/score_method.txt`.
 
@@ -119,7 +119,7 @@ Implement KeywordScorer to make tests pass.
 ---
 
 ### Task 3: Update search_tag_messages.py for Image-Level Scoring
-**Status:** [ ]
+**Status:** [✓] COMPLETE
 
 Modify `imageGetter/search_tag_messages.py` to:
 1. Process each image independently
@@ -269,7 +269,7 @@ Implement changes to make tests pass.
 ---
 
 ### Task 4: Update search_tag_messages_cli.py
-**Status:** [ ]
+**Status:** [✓] COMPLETE
 
 Update CLI to match new search_tag_messages.py behavior.
 
@@ -314,7 +314,7 @@ Update CLI to make tests pass.
 ---
 
 ### Task 5: Update generate_static_site.py for Score-Based Sorting
-**Status:** [ ]
+**Status:** [IN PROGRESS]
 
 Modify `imageGetter/generate_static_site.py` to:
 1. Build keyword index with scores
