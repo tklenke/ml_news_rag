@@ -21,11 +21,14 @@ def load_index_data(index_file: str) -> dict:
         return json.load(f)
 
 
-def count_images_per_keyword(index_data: dict) -> Dict[str, int]:
+def count_images_per_keyword(index_data: dict, min_score: int = 0) -> Dict[str, int]:
     """Count how many images are tagged with each keyword.
+
+    Phase 6: Handles image-level scored keywords.
 
     Args:
         index_data: Dictionary of messages from image index
+        min_score: Minimum score threshold (default: 0, include all)
 
     Returns:
         Dictionary mapping keyword -> image count
@@ -33,15 +36,12 @@ def count_images_per_keyword(index_data: dict) -> Dict[str, int]:
     keyword_counts = Counter()
 
     for message in index_data.values():
-        # Get keywords for this message
-        keywords = message.get("keywords", [])
-
-        # Count images in this message
-        num_images = len(message.get("images", []))
-
-        # Add image count for each keyword
-        for keyword in keywords:
-            keyword_counts[keyword.lower()] += num_images
+        # Count images per keyword (Phase 6: image-level keywords)
+        for image in message.get("images", []):
+            # Get scored keywords for this image: [["keyword", score], ...]
+            for kw, score in image.get("keywords", []):
+                if score >= min_score:
+                    keyword_counts[kw.lower()] += 1
 
     return dict(keyword_counts)
 
@@ -258,9 +258,16 @@ def generate_all_images_page(
                 html.append(f"        <a href='{img.get('original_url', '')}'>")
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
                 html.append("        </a>")
-                keywords_str = ", ".join(img.get('keywords', [])[:5])
-                if len(img.get('keywords', [])) > 5:
-                    keywords_str += "..."
+                # Phase 6: Display keywords with scores
+                keywords_list = img.get('keywords', [])
+                if keywords_list:
+                    # Format as "keyword (score), keyword (score), ..."
+                    kw_strings = [f"{kw} ({score})" for kw, score in keywords_list[:5]]
+                    keywords_str = ", ".join(kw_strings)
+                    if len(keywords_list) > 5:
+                        keywords_str += "..."
+                else:
+                    keywords_str = ""
                 html.append(f"        <div class='keywords'>{keywords_str}</div>")
                 html.append("      </div>")
         html.append("    </div>")
@@ -292,8 +299,83 @@ def generate_all_images_page(
     Path(output_file).write_text("\n".join(html))
 
 
+def build_keyword_index_with_scores(index_data: dict, min_score: int = 0) -> Dict[str, List[Tuple[str, dict, int]]]:
+    """Build inverted index mapping keywords to (message_id, image, score) tuples.
+
+    Phase 6: Returns images sorted by score descending for each keyword.
+
+    Args:
+        index_data: Dictionary of messages from image index
+        min_score: Minimum score threshold (default: 0, include all)
+
+    Returns:
+        Dictionary mapping keyword -> [(msg_id, image_dict, score), ...] sorted by score desc
+    """
+    keyword_index = {}
+
+    for msg_id, msg_data in index_data.items():
+        for image in msg_data.get("images", []):
+            # Extract scored keywords: [["keyword", score], ...]
+            for kw, score in image.get("keywords", []):
+                if score >= min_score:
+                    kw_lower = kw.lower()
+                    if kw_lower not in keyword_index:
+                        keyword_index[kw_lower] = []
+
+                    # Store (msg_id, image, score) tuple
+                    keyword_index[kw_lower].append((msg_id, image, score))
+
+    # Sort each keyword's images by score descending (highest first)
+    for keyword in keyword_index:
+        keyword_index[keyword].sort(key=lambda x: x[2], reverse=True)
+
+    return keyword_index
+
+
+def get_images_for_keyword(index_data: dict, keyword: str, min_score: int = 0) -> List[dict]:
+    """Get all images for a keyword, sorted by score descending.
+
+    Phase 6: Returns images with score, subject, message_id attached.
+
+    Args:
+        index_data: Dictionary of messages from image index
+        keyword: Keyword to filter by (case-insensitive)
+        min_score: Minimum score threshold (default: 0)
+
+    Returns:
+        List of image dictionaries with added metadata, sorted by score descending
+    """
+    images = []
+    keyword_lower = keyword.lower()
+
+    for msg_id, msg_data in index_data.items():
+        metadata = msg_data.get("metadata", {})
+
+        for image in msg_data.get("images", []):
+            # Check if this image has the keyword
+            for kw, score in image.get("keywords", []):
+                if kw.lower() == keyword_lower and score >= min_score:
+                    # Create enriched image dict with metadata
+                    img_copy = image.copy()
+                    img_copy["message_id"] = msg_id
+                    img_copy["subject"] = metadata.get("subject", "")
+                    img_copy["score"] = score
+                    img_copy["original_url"] = image.get("url", "")
+                    img_copy["thumbnail_path"] = f"../thumbs/{image.get('local_filename', '')}"
+
+                    images.append(img_copy)
+                    break  # Only add each image once per keyword
+
+    # Sort by score descending (highest scores first)
+    images.sort(key=lambda x: x["score"], reverse=True)
+
+    return images
+
+
 def filter_messages_by_keyword(index_data: dict, keyword: str) -> dict:
-    """Filter messages that have a specific keyword.
+    """DEPRECATED: Use get_images_for_keyword instead.
+
+    Filter messages that have a specific keyword.
 
     Args:
         index_data: Dictionary of messages from image index
@@ -306,11 +388,12 @@ def filter_messages_by_keyword(index_data: dict, keyword: str) -> dict:
     keyword_lower = keyword.lower()
 
     for msg_id, msg_data in index_data.items():
-        keywords = msg_data.get("keywords", [])
-        # Case-insensitive comparison
-        keywords_lower = [k.lower() for k in keywords]
-        if keyword_lower in keywords_lower:
-            filtered[msg_id] = msg_data
+        # Phase 6: Check image-level keywords
+        for image in msg_data.get("images", []):
+            for kw, score in image.get("keywords", []):
+                if kw.lower() == keyword_lower:
+                    filtered[msg_id] = msg_data
+                    break  # Found keyword in this message
 
     return filtered
 
@@ -390,9 +473,16 @@ def generate_keyword_page(
                 html.append(f"        <a href='{img.get('original_url', '')}'>")
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
                 html.append("        </a>")
-                keywords_str = ", ".join(img.get('keywords', [])[:5])
-                if len(img.get('keywords', [])) > 5:
-                    keywords_str += "..."
+                # Phase 6: Display keywords with scores
+                keywords_list = img.get('keywords', [])
+                if keywords_list:
+                    # Format as "keyword (score), keyword (score), ..."
+                    kw_strings = [f"{kw} ({score})" for kw, score in keywords_list[:5]]
+                    keywords_str = ", ".join(kw_strings)
+                    if len(keywords_list) > 5:
+                        keywords_str += "..."
+                else:
+                    keywords_str = ""
                 html.append(f"        <div class='keywords'>{keywords_str}</div>")
                 html.append("      </div>")
         html.append("    </div>")
