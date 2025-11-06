@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# ABOUTME: CLI tool for tagging messages with keywords using search and stemming
-# ABOUTME: Fast, deterministic alternative to LLM-based tagging
+# ABOUTME: CLI tool for scoring keywords per image based on proximity to image URLs
+# ABOUTME: Fast, deterministic proximity-based scoring with subject line bonuses
 
 import argparse
 import json
@@ -14,9 +14,9 @@ from config import INVALID_KEYWORDS
 
 
 def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
-    """Filter keywords to only those in allowed vocabulary.
+    """Filter image keywords to only those in allowed vocabulary.
 
-    Filters both message-level and image-level keywords.
+    Handles scored keyword format: [keyword, score] tuples.
 
     Args:
         index_data: Dictionary of messages to filter
@@ -24,35 +24,24 @@ def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
 
     Returns:
         Dictionary with statistics:
-        - message_keywords_removed: Count of message keywords removed
         - image_keywords_removed: Count of image keywords removed
     """
     # Create case-insensitive set of allowed keywords
     allowed_lower = {kw.lower() for kw in allowed_keywords}
 
     stats = {
-        'message_keywords_removed': 0,
         'image_keywords_removed': 0
     }
 
     # Process each message
     for message in index_data.values():
-        # Filter message-level keywords
-        if 'keywords' in message:
-            original_count = len(message['keywords'])
-            message['keywords'] = [
-                kw for kw in message['keywords']
-                if kw.lower() in allowed_lower
-            ]
-            removed = original_count - len(message['keywords'])
-            stats['message_keywords_removed'] += removed
-
-        # Filter image-level keywords
+        # Filter image-level scored keywords
         for image in message.get('images', []):
             if 'keywords' in image:
                 original_count = len(image['keywords'])
+                # Filter [keyword, score] tuples
                 image['keywords'] = [
-                    kw for kw in image['keywords']
+                    (kw, score) for kw, score in image['keywords']
                     if kw.lower() in allowed_lower
                 ]
                 removed = original_count - len(image['keywords'])
@@ -64,42 +53,31 @@ def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
 def clean_invalid_keywords_from_index(index_data: dict) -> dict:
     """Remove invalid keywords from index data (in-place).
 
-    Cleans both message-level and image-level keywords.
+    Cleans image-level scored keywords.
 
     Args:
         index_data: Dictionary of messages to clean
 
     Returns:
         Dictionary with statistics:
-        - message_keywords_removed: Count of message keywords removed
         - image_keywords_removed: Count of image keywords removed
     """
     # Create case-insensitive set of invalid keywords
     invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
 
     stats = {
-        'message_keywords_removed': 0,
         'image_keywords_removed': 0
     }
 
     # Process each message
     for message in index_data.values():
-        # Clean message-level keywords
-        if 'keywords' in message:
-            original_count = len(message['keywords'])
-            message['keywords'] = [
-                kw for kw in message['keywords']
-                if kw.lower() not in invalid_lower
-            ]
-            removed = original_count - len(message['keywords'])
-            stats['message_keywords_removed'] += removed
-
-        # Clean image-level keywords
+        # Clean image-level scored keywords
         for image in message.get('images', []):
             if 'keywords' in image:
                 original_count = len(image['keywords'])
+                # Filter [keyword, score] tuples
                 image['keywords'] = [
-                    kw for kw in image['keywords']
+                    (kw, score) for kw, score in image['keywords']
                     if kw.lower() not in invalid_lower
                 ]
                 removed = original_count - len(image['keywords'])
@@ -110,8 +88,8 @@ def clean_invalid_keywords_from_index(index_data: dict) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Tag messages with keywords using search and stemming (fast)',
-        usage='%(prog)s [-h] [--keywords KEYWORDS] [--msgs-md-dir DIR] [--limit N] [--verbose] [--no-clean] [--keep-existing-keywords] SOURCE [DEST]'
+        description='Score keywords per image based on proximity to image URLs (fast, proximity-based)',
+        usage='%(prog)s [-h] [--keywords KEYWORDS] [--msgs-md-dir DIR] [--limit N] [--verbose] [--no-clean] SOURCE [DEST]'
     )
 
     # Positional arguments
@@ -130,9 +108,7 @@ def main():
     parser.add_argument('--verbose', action='store_true',
                         help='Show detailed progress for each message')
     parser.add_argument('--no-clean', action='store_true',
-                        help='Skip cleaning invalid keywords before tagging (default: clean)')
-    parser.add_argument('--keep-existing-keywords', action='store_true',
-                        help='Merge with existing keywords instead of replacing (default: replace)')
+                        help='Skip cleaning invalid keywords before scoring (default: clean)')
 
     args = parser.parse_args()
 
@@ -175,11 +151,8 @@ def main():
     if not args.no_clean:
         print("Cleaning invalid keywords from index...")
         clean_stats = clean_invalid_keywords_from_index(index_data)
-        total_removed = clean_stats['message_keywords_removed'] + clean_stats['image_keywords_removed']
-        if total_removed > 0:
-            print(f"  Removed {clean_stats['message_keywords_removed']} message keywords (invalid)")
-            print(f"  Removed {clean_stats['image_keywords_removed']} image keywords (invalid)")
-            print(f"  Total removed: {total_removed}")
+        if clean_stats['image_keywords_removed'] > 0:
+            print(f"  Removed {clean_stats['image_keywords_removed']} image keyword entries (invalid)")
         else:
             print("  No invalid keywords found")
         print()
@@ -187,11 +160,8 @@ def main():
         # Also filter against allowed vocabulary
         print("Restricting to allowed vocabulary...")
         vocab_stats = filter_to_vocabulary(index_data, keywords)
-        total_vocab_removed = vocab_stats['message_keywords_removed'] + vocab_stats['image_keywords_removed']
-        if total_vocab_removed > 0:
-            print(f"  Removed {vocab_stats['message_keywords_removed']} message keywords (not in vocabulary)")
-            print(f"  Removed {vocab_stats['image_keywords_removed']} image keywords (not in vocabulary)")
-            print(f"  Total removed: {total_vocab_removed}")
+        if vocab_stats['image_keywords_removed'] > 0:
+            print(f"  Removed {vocab_stats['image_keywords_removed']} image keyword entries (not in vocabulary)")
         else:
             print("  All keywords in vocabulary")
 
@@ -201,21 +171,16 @@ def main():
             json.dump(index_data, f, indent=2)
         print()
 
-    # Count messages with existing keywords (from cleaned data)
-    messages_with_keywords = sum(1 for m in index_data.values() if m.get("keywords"))
+    # Count messages and images
     messages_to_process = len(index_data)
-
     if args.limit and args.limit < messages_to_process:
         messages_to_process = args.limit
 
     print(f"Messages to process: {messages_to_process}")
-    if messages_with_keywords > 0:
-        mode = "will be merged" if args.keep_existing_keywords else "will be replaced"
-        print(f"Messages with existing keywords: {messages_with_keywords} ({mode})")
     print()
 
     # Process messages
-    print("Tagging messages with keywords...")
+    print("Scoring keywords for images...")
     if args.verbose:
         print("Verbose mode enabled - showing progress for each message")
     print()
@@ -230,12 +195,12 @@ def main():
         output_file=args.dest,
         limit=args.limit,
         verbose=args.verbose,
-        keep_existing=args.keep_existing_keywords,
+        keep_existing=False,  # Not used in image-level scoring
         msgs_md_dir=args.msgs_md_dir
     )
 
     processed_count = stats["processed"]
-    skipped_count = stats["skipped"]
+    images_scored = stats.get("images_scored", 0)
     error_count = stats["errors"]
 
     # Reload index to get updated data for statistics
@@ -243,24 +208,39 @@ def main():
 
     # Statistics
     print("\n" + "="*60)
-    print("TAGGING STATISTICS")
+    print("KEYWORD SCORING STATISTICS")
     print("="*60)
     print(f"Total messages in index:     {total_messages}")
     print(f"Messages processed:          {processed_count}")
-    print(f"Messages skipped:            {skipped_count}")
+    print(f"Images scored:               {images_scored}")
     print(f"Messages with errors:        {error_count}")
 
-    # Keyword statistics
+    # Image keyword statistics
     keyword_counts = []
+    all_scores = []
+    images_with_keywords = 0
+
     for message in index_data.values():
-        if "keywords" in message:
-            keyword_counts.append(len(message["keywords"]))
+        for image in message.get("images", []):
+            if "keywords" in image and len(image["keywords"]) > 0:
+                images_with_keywords += 1
+                keyword_counts.append(len(image["keywords"]))
+                # Extract scores from [keyword, score] tuples
+                for kw, score in image["keywords"]:
+                    all_scores.append(score)
 
     if keyword_counts:
-        print(f"\nKeywords per message:")
+        print(f"\nKeywords per image:")
         print(f"  Average:                   {sum(keyword_counts)/len(keyword_counts):.1f}")
         print(f"  Min:                       {min(keyword_counts)}")
         print(f"  Max:                       {max(keyword_counts)}")
+        print(f"  Images with keywords:      {images_with_keywords}")
+
+    if all_scores:
+        print(f"\nScore range:")
+        print(f"  Min:                       {min(all_scores)}")
+        print(f"  Max:                       {max(all_scores)}")
+        print(f"  Average:                   {sum(all_scores)/len(all_scores):.1f}")
 
     print("="*60)
     print()
