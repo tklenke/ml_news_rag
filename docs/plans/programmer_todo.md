@@ -1,50 +1,567 @@
 # Programmer Todo - Image Database Project
 
-**Last Updated:** 2025-11-05
-**Status:** Phases 1-5 Complete, Ready for Deployment
-**Tests:** 158 passing, 14 skipped
+**Last Updated:** 2025-11-06
+**Status:** Phase 6 (Keyword Scoring) Ready for Implementation
+**Tests:** 158 passing, 14 skipped (Phase 5)
 
-## Ready for Deployment
+---
 
-**What's Complete:**
-- Full static site generator with Skeleton CSS
-- Index page, chronological pages, keyword-filtered pages
-- Google Groups integration (clickable subjects, direct image links)
-- 18 comprehensive tests (all passing)
-- UI refinements based on user testing
+## Phase 6: Keyword Scoring Implementation
 
-**CLI Tool:**
+**Goal:** Replace binary keyword presence with relevance-based scoring per image.
+
+**Reference:** See `docs/plans/image_database_design.md` Phase 6 section and `docs/input/score_method.txt` for algorithm.
+
+---
+
+## Tasks
+
+### Task 1: Archive Unused LLM Tagger Code
+**Status:** [ ]
+
+Archive the following files (not deleted, moved to docs/archive/imageGetter/):
 ```bash
-python imageGetter/generate_static_site_cli.py ../data/image_index.json ../data/static_site
+git mv imageGetter/llm_config.py docs/archive/imageGetter/
+git mv imageGetter/llm_tagger.py docs/archive/imageGetter/
+git mv imageGetter/llm_tag_messages.py docs/archive/imageGetter/
+git mv imageGetter/llm_tag_messages_cli.py docs/archive/imageGetter/
 ```
 
-**Deployment Target:** http://m24tom.com/cgimages/
+Create archive directory if needed:
+```bash
+mkdir -p docs/archive/imageGetter
+```
+
+**Acceptance Criteria:**
+- Files moved using `git mv` (preserves history)
+- Files no longer in imageGetter/ directory
+- Files accessible in docs/archive/imageGetter/
+- Commit with message: "Archive unused LLM tagger code"
+
+**Tests:** No tests for this task (file move only)
 
 ---
 
-## Pending User Validation
+### Task 2: Create keyword_scorer.py Module
+**Status:** [ ]
 
-**Tasks:**
-1. [ ] Generate production site from full image_index.json
-2. [ ] Deploy to cgimages/ directory
-3. [ ] Validate site functionality:
-   - Index page navigation
-   - Chronological pages
-   - Keyword filtering
-   - Google Groups links
-   - Thumbnail display
-4. [ ] Test edge cases (keywords with 1 page, messages without keywords, etc.)
-5. [ ] Document results if issues found
+Create `imageGetter/keyword_scorer.py` based on `docs/input/score_method.txt`.
 
-**Escalation:** Use "Strange things are afoot at the Circle K" if issues arise
+**Implementation Details:**
+
+1. Copy KeywordScorer class from score_method.txt
+2. Modify constructor to accept specific image URL position:
+   ```python
+   def __init__(self, message_body, subject, image_url_position):
+       self.body = message_body
+       self.subject = subject
+       self.url_position = image_url_position  # Specific image position
+       # ... rest of initialization
+   ```
+
+3. Add ABOUTME comments at top of file:
+   ```python
+   # ABOUTME: Scores keywords based on proximity to image URLs in message text
+   # ABOUTME: Uses exponential decay, subject bonus, frequency and length multipliers
+   ```
+
+4. Keep the KeywordScorer class (exponential decay version)
+5. Remove KeywordScorerSimple class (not needed)
+6. Remove usage examples at bottom (not needed)
+
+**TDD Approach:**
+
+**RED Phase:**
+Write `tests/test_keyword_scorer.py`:
+```python
+def test_scorer_initialization():
+    body = "Here is my firewall build"
+    subject = "Firewall installation"
+    scorer = KeywordScorer(body, subject, image_url_position=10)
+    assert scorer.url_position == 10
+
+def test_score_keyword_in_subject():
+    body = "Here is the build"
+    subject = "Firewall installation"
+    scorer = KeywordScorer(body, subject, image_url_position=10)
+    scores = scorer.score_keywords_batch(["firewall", "wing"])
+    assert scores["firewall"] > 200  # Subject bonus
+    assert scores["wing"] == 0
+
+def test_score_keyword_near_url():
+    body = "Here is my firewall build at position [IMAGE]"
+    subject = "Build update"
+    image_pos = body.find("[IMAGE]")
+    scorer = KeywordScorer(body, subject, image_url_position=image_pos)
+    scores = scorer.score_keywords_batch(["firewall", "wing"])
+    assert scores["firewall"] > 0  # Near image
+    assert scores["wing"] == 0
+
+def test_score_keyword_far_from_url():
+    body = "Wing discussion here. [IMAGE] Later: firewall stuff"
+    subject = "Build update"
+    image_pos = body.find("[IMAGE]")
+    scorer = KeywordScorer(body, subject, image_url_position=image_pos)
+    scores = scorer.score_keywords_batch(["wing", "firewall"])
+    # Wing is closer to image, should score higher
+    assert scores["wing"] > scores["firewall"]
+```
+
+**GREEN Phase:**
+Implement KeywordScorer to make tests pass.
+
+**Acceptance Criteria:**
+- All tests pass
+- ABOUTME comments present
+- Module follows existing code style
+- Commit with message: "Add KeywordScorer module for proximity-based scoring"
 
 ---
 
-## Implementation History
+### Task 3: Update search_tag_messages.py for Image-Level Scoring
+**Status:** [ ]
 
-See `docs/plans/image_database_design.md` for complete architecture and design history.
-See git log for detailed implementation commits.
+Modify `imageGetter/search_tag_messages.py` to:
+1. Process each image independently
+2. Find each image's URL position in message text
+3. Score keywords per-image using KeywordScorer
+4. Store scores as `[keyword, score]` tuples
+5. Remove message-level keyword field
+
+**Implementation Details:**
+
+Main algorithm changes in `tag_messages_with_keywords()`:
+
+```python
+def tag_messages_with_keywords(image_index, keywords_file, data_dir):
+    """Tag each image with scored keywords"""
+
+    # Load master keyword list
+    with open(keywords_file) as f:
+        master_keywords = [line.strip() for line in f if line.strip()]
+
+    for msg_id, msg_data in image_index.items():
+        # Load full message text
+        md_path = Path(data_dir) / msg_data["metadata"]["message_md"]
+        if not md_path.exists():
+            continue
+
+        message_body = md_path.read_text()
+        subject = msg_data["metadata"]["subject"]
+
+        # Process each image independently
+        for image in msg_data["images"]:
+            # Find this specific image's URL position in message text
+            url_pos = message_body.find(image["url"])
+            if url_pos == -1:
+                # Fallback: use part number to estimate position
+                url_pos = len(message_body) // 2
+
+            # Score keywords for this image
+            scorer = KeywordScorer(message_body, subject, url_pos)
+            scores = scorer.score_keywords_batch(master_keywords)
+
+            # Store non-zero scores as [keyword, score] tuples, sorted descending
+            scored_keywords = [(kw, int(score)) for kw, score in scores.items() if score > 0]
+            scored_keywords.sort(key=lambda x: x[1], reverse=True)
+
+            image["keywords"] = scored_keywords
+
+        # Remove message-level keywords field if it exists
+        if "keywords" in msg_data:
+            del msg_data["keywords"]
+
+    return image_index
+```
+
+**TDD Approach:**
+
+**RED Phase:**
+Update existing tests in `tests/test_search_tag_messages.py`:
+
+```python
+def test_image_level_scoring():
+    """Test that each image gets its own scored keywords"""
+    # Create test message with 2 images
+    image_index = {
+        "MSG001": {
+            "metadata": {
+                "subject": "Firewall and wing build",
+                "message_md": "test_message.md"
+            },
+            "images": [
+                {"url": "https://example.com/img1.jpg", "part": "0.1"},
+                {"url": "https://example.com/img2.jpg", "part": "0.2"}
+            ]
+        }
+    }
+
+    # Create test message: firewall near img1, wing near img2
+    message = """
+    Here's my firewall installation.
+    https://example.com/img1.jpg
+
+    And here's the wing spar layup.
+    https://example.com/img2.jpg
+    """
+    write_test_file("test_message.md", message)
+
+    # Tag with keywords
+    result = tag_messages_with_keywords(image_index, keywords_file, test_dir)
+
+    # Verify image 1 scores firewall higher than wing
+    img1_kw = dict(result["MSG001"]["images"][0]["keywords"])
+    assert img1_kw["firewall"] > img1_kw.get("wing", 0)
+
+    # Verify image 2 scores wing higher than firewall
+    img2_kw = dict(result["MSG001"]["images"][1]["keywords"])
+    assert img2_kw["wing"] > img2_kw.get("firewall", 0)
+
+def test_keywords_are_tuples_with_scores():
+    """Test that keywords are stored as [keyword, score] tuples"""
+    result = tag_messages_with_keywords(sample_index, keywords_file, test_dir)
+
+    image = result["MSG001"]["images"][0]
+    assert isinstance(image["keywords"], list)
+    assert len(image["keywords"]) > 0
+
+    # Check format
+    kw, score = image["keywords"][0]
+    assert isinstance(kw, str)
+    assert isinstance(score, int)
+    assert score > 0
+
+def test_message_level_keywords_removed():
+    """Test that message-level keywords field is removed"""
+    # Start with old format that has message-level keywords
+    image_index = {
+        "MSG001": {
+            "metadata": {...},
+            "images": [...],
+            "keywords": ["old", "keywords"]  # Should be removed
+        }
+    }
+
+    result = tag_messages_with_keywords(image_index, keywords_file, test_dir)
+    assert "keywords" not in result["MSG001"]
+
+def test_scores_sorted_descending():
+    """Test that keywords are sorted by score descending"""
+    result = tag_messages_with_keywords(sample_index, keywords_file, test_dir)
+
+    keywords = result["MSG001"]["images"][0]["keywords"]
+    scores = [score for _, score in keywords]
+    assert scores == sorted(scores, reverse=True)
+```
+
+**GREEN Phase:**
+Implement changes to make tests pass.
+
+**Acceptance Criteria:**
+- All new tests pass
+- All existing tests still pass (or updated appropriately)
+- Each image has independent keyword scores
+- Message-level keywords removed
+- Scores are integers, sorted descending
+- Only non-zero scores stored
+- Commit with message: "Implement image-level keyword scoring"
 
 ---
 
-**Last Updated:** 2025-11-05 by Claude (Architect)
+### Task 4: Update search_tag_messages_cli.py
+**Status:** [ ]
+
+Update CLI to match new search_tag_messages.py behavior.
+
+**Changes Needed:**
+1. Update help text to mention "scored keywords per image"
+2. Update statistics output to show score ranges
+3. No changes to command-line arguments needed
+
+**Example statistics output:**
+```
+Tagged 1,234 images
+Average keywords per image: 18.5
+Score range: 12 - 847
+Images with 0 keywords: 23
+```
+
+**TDD Approach:**
+
+**RED Phase:**
+Update `tests/test_search_tag_messages_cli.py`:
+```python
+def test_cli_shows_score_statistics(capsys):
+    """Test that CLI shows score range statistics"""
+    result = subprocess.run([
+        "python", "imageGetter/search_tag_messages_cli.py",
+        "test_index.json", "keywords.txt"
+    ], capture_output=True, text=True)
+
+    assert "Score range:" in result.stdout
+    assert "Average keywords per image:" in result.stdout
+```
+
+**GREEN Phase:**
+Update CLI to make tests pass.
+
+**Acceptance Criteria:**
+- Tests pass
+- Help text updated
+- Statistics output enhanced
+- Commit with message: "Update search_tag_messages CLI for scoring"
+
+---
+
+### Task 5: Update generate_static_site.py for Score-Based Sorting
+**Status:** [ ]
+
+Modify `imageGetter/generate_static_site.py` to:
+1. Build keyword index with scores
+2. Sort keyword pages by score descending
+3. Add `min_score` threshold parameter
+4. Display scores on thumbnails
+
+**Implementation Details:**
+
+Update `build_keyword_index()`:
+```python
+def build_keyword_index(image_index, min_score=0):
+    """Build inverted index: keyword → [(msg_id, image, score), ...]"""
+    keyword_index = defaultdict(list)
+
+    for msg_id, msg_data in image_index.items():
+        for image in msg_data["images"]:
+            # Extract keywords with scores
+            for keyword, score in image.get("keywords", []):
+                if score >= min_score:  # Apply threshold
+                    keyword_index[keyword].append((msg_id, image, score))
+
+    # Sort each keyword's images by score descending
+    for keyword in keyword_index:
+        keyword_index[keyword].sort(key=lambda x: x[2], reverse=True)
+
+    return keyword_index
+```
+
+Update thumbnail display to show scores:
+```html
+<div class="keyword-list">
+  Keywords:
+  {% for kw, score in image_keywords %}
+    <span class="keyword">{{ kw }} ({{ score }})</span>
+  {% endfor %}
+</div>
+```
+
+**TDD Approach:**
+
+**RED Phase:**
+Update `tests/test_generate_static_site.py`:
+
+```python
+def test_keyword_pages_sorted_by_score():
+    """Test that images on keyword pages are sorted by score"""
+    # Create test index with scored keywords
+    image_index = {
+        "MSG001": {
+            "metadata": {...},
+            "images": [{
+                "keywords": [["firewall", 100]],
+                ...
+            }]
+        },
+        "MSG002": {
+            "metadata": {...},
+            "images": [{
+                "keywords": [["firewall", 300]],
+                ...
+            }]
+        },
+        "MSG003": {
+            "metadata": {...},
+            "images": [{
+                "keywords": [["firewall", 200]],
+                ...
+            }]
+        }
+    }
+
+    generate_static_site(image_index, output_dir)
+
+    # Read firewall page HTML
+    page = read_file(output_dir / "keywords/firewall_page1.html")
+
+    # Extract message IDs in order they appear
+    msg_ids = extract_message_ids_from_html(page)
+
+    # Should be sorted by score: MSG002 (300), MSG003 (200), MSG001 (100)
+    assert msg_ids == ["MSG002", "MSG003", "MSG001"]
+
+def test_score_threshold_filters_images():
+    """Test that min_score threshold filters low-scoring images"""
+    image_index = {
+        "MSG001": {"images": [{"keywords": [["firewall", 5]], ...}]},
+        "MSG002": {"images": [{"keywords": [["firewall", 50]], ...}]}
+    }
+
+    # Generate with threshold of 10
+    generate_static_site(image_index, output_dir, min_score=10)
+
+    page = read_file(output_dir / "keywords/firewall_page1.html")
+
+    # Should only show MSG002 (score 50), not MSG001 (score 5)
+    assert "MSG002" in page
+    assert "MSG001" not in page
+
+def test_scores_displayed_on_thumbnails():
+    """Test that scores are displayed next to keywords"""
+    image_index = {
+        "MSG001": {
+            "metadata": {...},
+            "images": [{
+                "keywords": [["firewall", 245], ["baffles", 189]],
+                ...
+            }]
+        }
+    }
+
+    generate_static_site(image_index, output_dir)
+
+    page = read_file(output_dir / "all/page1.html")
+
+    # Check that scores are displayed
+    assert "firewall (245)" in page
+    assert "baffles (189)" in page
+```
+
+**GREEN Phase:**
+Implement changes to make tests pass.
+
+**Acceptance Criteria:**
+- All new tests pass
+- Keyword pages sorted by score (highest first)
+- min_score threshold implemented (default: 0)
+- Scores displayed on thumbnails
+- All existing tests still pass
+- Commit with message: "Add score-based sorting and display to static site"
+
+---
+
+### Task 6: Update generate_static_site_cli.py
+**Status:** [ ]
+
+Add `--min-score` command-line argument.
+
+**Changes:**
+```python
+parser.add_argument(
+    '--min-score',
+    type=int,
+    default=0,
+    help='Minimum score threshold for displaying images (default: 0)'
+)
+
+# Pass to generator
+generate_static_site(image_index, output_dir, min_score=args.min_score)
+```
+
+**TDD Approach:**
+
+**RED Phase:**
+```python
+def test_cli_min_score_argument():
+    """Test that --min-score argument is accepted"""
+    result = subprocess.run([
+        "python", "imageGetter/generate_static_site_cli.py",
+        "test_index.json", "output_dir", "--min-score", "20"
+    ], capture_output=True, text=True)
+
+    assert result.returncode == 0
+```
+
+**GREEN Phase:**
+Add argument and make test pass.
+
+**Acceptance Criteria:**
+- Test passes
+- Help text shows --min-score option
+- Commit with message: "Add min-score threshold to static site CLI"
+
+---
+
+### Task 7: Update Documentation and Help Text
+**Status:** [ ]
+
+Update all CLI `--help` output to reflect Phase 6 changes:
+
+1. `search_tag_messages_cli.py --help`: Mention "scored keywords"
+2. `generate_static_site_cli.py --help`: Document --min-score
+3. Update any relevant README files
+
+**Acceptance Criteria:**
+- Help text is accurate and clear
+- No references to old binary keyword approach
+- Commit with message: "Update documentation for Phase 6 scoring"
+
+---
+
+## Testing Strategy
+
+**Test Coverage Requirements:**
+- Unit tests for KeywordScorer class (proximity, subject bonus, scoring)
+- Integration tests for search_tag_messages (image-level scoring)
+- End-to-end tests for static site generation (sorting, filtering, display)
+- All tests must pass before marking tasks complete
+
+**Test Data:**
+- Use existing test fixtures where possible
+- Create minimal test messages for new scenarios
+- Test edge cases: 1 image, multiple images, no keywords, high/low scores
+
+---
+
+## Commit Strategy
+
+Follow TDD cycle: RED → GREEN → REFACTOR → COMMIT
+
+Commit after each completed task:
+1. "Archive unused LLM tagger code"
+2. "Add KeywordScorer module for proximity-based scoring"
+3. "Implement image-level keyword scoring"
+4. "Update search_tag_messages CLI for scoring"
+5. "Add score-based sorting and display to static site"
+6. "Add min-score threshold to static site CLI"
+7. "Update documentation for Phase 6 scoring"
+
+---
+
+## Success Criteria
+
+Phase 6 is complete when:
+- [ ] All tasks marked complete
+- [ ] All tests passing (158+ tests)
+- [ ] LLM tagger code archived
+- [ ] KeywordScorer implemented and tested
+- [ ] Image-level scoring working
+- [ ] Static site sorts by score
+- [ ] Scores displayed on thumbnails
+- [ ] min-score threshold functional
+- [ ] Documentation updated
+- [ ] All changes committed
+
+---
+
+## Escalation
+
+If you encounter:
+- Design ambiguities or conflicts
+- Test failures you can't resolve
+- Performance issues with scoring
+- Questions about algorithm parameters
+
+Use "Strange things are afoot at the Circle K" to alert Tom.
+
+---
+
+**Last Updated:** 2025-11-06 by Claude (Architect)

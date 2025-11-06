@@ -1,0 +1,189 @@
+import re
+import math
+from collections import defaultdict
+
+class KeywordScorer:
+    def __init__(self, message_body, subject, url_pattern=r'https?://[^\s]+'):
+        self.body = message_body
+        self.subject = subject
+        self.body_lower = message_body.lower()
+        self.subject_lower = subject.lower()
+        
+        # Find URL position(s)
+        url_match = re.search(url_pattern, message_body)
+        self.url_position = url_match.start() if url_match else len(message_body) // 2
+        
+        # Pre-compute word positions and character indices
+        self.words = message_body.split()
+        self.word_positions = {}  # word -> [positions]
+        self.word_count = len(self.words)
+        
+        # Build word position index
+        char_pos = 0
+        for i, word in enumerate(self.words):
+            word_lower = word.lower()
+            if word_lower not in self.word_positions:
+                self.word_positions[word_lower] = []
+            self.word_positions[word_lower].append((i, char_pos))
+            char_pos += len(word) + 1  # +1 for space
+    
+    def score_keywords_batch(self, keywords):
+        """Score all keywords efficiently in one pass"""
+        scores = {}
+        
+        for keyword in keywords:
+            keyword_lower = keyword.lower()
+            
+            # Fast check for existence
+            if keyword_lower not in self.body_lower and keyword_lower not in self.subject_lower:
+                scores[keyword] = 0
+                continue
+            
+            # Calculate score
+            scores[keyword] = self._calculate_score(keyword_lower)
+        
+        return scores
+    
+    def _calculate_score(self, keyword_lower):
+        score = 0
+        
+        # Find all occurrences efficiently
+        positions = []
+        
+        # Check for exact word matches first (fastest)
+        if keyword_lower in self.word_positions:
+            positions.extend([pos for _, pos in self.word_positions[keyword_lower]])
+        
+        # For multi-word keywords or partial matches
+        if ' ' in keyword_lower or keyword_lower not in self.word_positions:
+            start = 0
+            while True:
+                pos = self.body_lower.find(keyword_lower, start)
+                if pos == -1:
+                    break
+                positions.append(pos)
+                start = pos + 1
+        
+        # Calculate proximity scores using exponential decay
+        if positions:
+            for pos in positions:
+                distance = abs(pos - self.url_position)
+                # Exponential decay scoring: e^(-0.001 * distance)
+                score += 100 * math.exp(-0.001 * distance)
+        
+        # Subject bonus (highest weight)
+        subject_count = self.subject_lower.count(keyword_lower)
+        score += subject_count * 200
+        
+        # Length and frequency multipliers
+        total_occurrences = len(positions) + subject_count
+        if total_occurrences > 0:
+            frequency_bonus = math.sqrt(total_occurrences)
+            # Natural logarithm of (1 + word_count)
+            length_multiplier = 1 + math.log1p(self.word_count) / 10
+            return score * frequency_bonus * length_multiplier
+        
+        return 0
+
+# Alternative version with different scoring options
+class KeywordScorerSimple:
+    """Simpler version without exponential decay if math.exp is too slow"""
+    
+    def __init__(self, message_body, subject, url_pattern=r'https?://[^\s]+'):
+        self.body = message_body
+        self.subject = subject
+        self.body_lower = message_body.lower()
+        self.subject_lower = subject.lower()
+        
+        # Find URL position
+        url_match = re.search(url_pattern, message_body)
+        self.url_position = url_match.start() if url_match else len(message_body) // 2
+        
+        self.word_count = len(message_body.split())
+        
+        # Pre-build a character map for faster lookups (optional optimization)
+        self._build_substring_index()
+    
+    def _build_substring_index(self):
+        """Build index of 2-3 character substrings for faster filtering"""
+        self.substring_index = set()
+        for i in range(len(self.body_lower) - 1):
+            self.substring_index.add(self.body_lower[i:i+2])
+            if i < len(self.body_lower) - 2:
+                self.substring_index.add(self.body_lower[i:i+3])
+    
+    def _quick_exists(self, keyword_lower):
+        """Quick check if keyword might exist using substring index"""
+        if len(keyword_lower) >= 2:
+            # Check if first 2 chars of keyword exist in text
+            return keyword_lower[:2] in self.substring_index
+        return keyword_lower in self.body_lower
+    
+    def score_keywords_batch(self, keywords):
+        """Score all keywords with simpler inverse distance scoring"""
+        scores = {}
+        
+        for keyword in keywords:
+            keyword_lower = keyword.lower()
+            
+            # Quick existence check
+            if not self._quick_exists(keyword_lower) and keyword_lower not in self.subject_lower:
+                scores[keyword] = 0
+                continue
+            
+            scores[keyword] = self._calculate_score_simple(keyword_lower)
+        
+        return scores
+    
+    def _calculate_score_simple(self, keyword_lower):
+        """Simpler scoring using inverse distance instead of exponential"""
+        score = 0
+        positions = []
+        
+        # Find all occurrences in body
+        start = 0
+        while True:
+            pos = self.body_lower.find(keyword_lower, start)
+            if pos == -1:
+                break
+            positions.append(pos)
+            start = pos + len(keyword_lower)  # Skip past this occurrence
+        
+        # Calculate proximity scores using inverse distance
+        for pos in positions:
+            distance = abs(pos - self.url_position)
+            # Inverse distance with minimum distance to avoid division by zero
+            score += 100 / (1 + distance / 50)  # 50 chars = half score
+        
+        # Subject bonus
+        subject_count = self.subject_lower.count(keyword_lower)
+        score += subject_count * 200
+        
+        # Apply multipliers
+        total_occurrences = len(positions) + subject_count
+        if total_occurrences > 0:
+            # Square root for frequency bonus
+            frequency_bonus = total_occurrences ** 0.5
+            # Logarithmic length bonus
+            length_multiplier = 1 + (math.log(self.word_count + 1) / 10)
+            return score * frequency_bonus * length_multiplier
+        
+        return 0
+
+# Usage example
+def score_keywords(message_body, subject, keywords):
+    """Convenience function to score keywords"""
+    scorer = KeywordScorer(message_body, subject)
+    return scorer.score_keywords_batch(keywords)
+
+# Example with sorting
+def get_top_keywords(message_body, subject, keywords, top_n=10):
+    """Get top N keywords by score"""
+    scorer = KeywordScorer(message_body, subject)
+    scores = scorer.score_keywords_batch(keywords)
+    
+    # Sort by score (highest first)
+    sorted_keywords = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    
+    # Return top N
+    return sorted_keywords[:top_n]

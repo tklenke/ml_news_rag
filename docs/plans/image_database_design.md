@@ -1,8 +1,8 @@
 # Image Database Architecture
 
 **Created:** 2025-11-01
-**Last Updated:** 2025-11-05
-**Status:** Phases 1-5 Complete, Ready for User Testing
+**Last Updated:** 2025-11-06
+**Status:** Phases 1-5 Complete, Phase 6 (Keyword Scoring) In Design
 
 ## Overview
 
@@ -35,7 +35,9 @@ data/
 
 ### 2. Image Index Schema
 
-**Actual Implementation (as built):**
+**[REVISED - 2025-11-06]**
+
+**Current Implementation (Phase 6):**
 
 ```json
 {
@@ -51,23 +53,41 @@ data/
       {
         "url": "https://groups.google.com/group/cozy_builders/attach/.../image.jpg?part=0.1",
         "part": "0.1",
-        "filename": "image.jpg",
-        "local_filename": "A1NtxlDfY4c_part0_1_image.jpg",
-        "keywords": ["landing", "light", "van", "baffles"]
+        "filename": "firewall_install.jpg",
+        "local_filename": "A1NtxlDfY4c_part0_1_firewall_install.jpg",
+        "keywords": [
+          ["firewall", 245],
+          ["baffles", 189],
+          ["cowling", 156],
+          ["engine", 89]
+        ]
+      },
+      {
+        "url": "https://groups.google.com/group/cozy_builders/attach/.../image.jpg?part=0.2",
+        "part": "0.2",
+        "filename": "wing_spar.jpg",
+        "local_filename": "A1NtxlDfY4c_part0_2_wing_spar.jpg",
+        "keywords": [
+          ["wing", 312],
+          ["spar", 287],
+          ["layup", 145]
+        ]
       }
-    ],
-    "keywords": ["firewall", "baffles", "cowling", "engine"]
+    ]
   }
 }
 ```
 
 **Notes:**
 - Top-level keys are message IDs
-- `images[].keywords` extracted from image filename (Phase 1)
-- `keywords` (message-level) added by taggers from master keyword list (Phase 4b)
-  - Can be populated by LLM tagger (semantic matching) or search tagger (fast keyword matching with stemming)
-  - Empty list `[]` = tagged but no matches (valid state)
-  - Field missing = not yet tagged
+- `images[].keywords` now stores `[keyword, score]` tuples (Phase 6 revision)
+  - Scores calculated per-image based on keyword proximity to that specific image URL
+  - Array sorted descending by score (most relevant keywords first)
+  - Integer scores (0-500+ range typical)
+  - Only non-zero scores stored
+- Message-level `keywords` field **removed** (Phase 6 revision)
+  - Image-level scoring makes message-level keywords redundant
+  - Each image scored independently based on its position in message text
 - `message_md` field stores path to markdown file for full message body access
 - `local_filename` uses normalized format: `{messageID}_part{X}_{Y}_{filename}`
 
@@ -81,15 +101,24 @@ Extracts image URLs from markdown files, downloads images, and manages image dat
 - `download_images_cli.py` - Download images with Selenium/cookie-based approach
 - `generate_thumbnails_cli.py` - Create 200x200px center-cropped thumbnails
 
-**Keyword Tagging:**
+**Keyword Tagging (Phase 6 - Scoring):**
 - `aircraft_keywords.txt` - Master keyword list (557 keywords, curated with Claude Opus)
-- `llm_config.py` - LLM configuration (model, Ollama host, prompts) - **Tom edits this**
-- `llm_tagger.py` - KeywordTagger class using Ollama (semantic matching, handles synonyms)
-- `llm_tag_messages.py` - Batch processor for LLM-based tagging
-- `llm_tag_messages_cli.py` - CLI interface for LLM tagging (slow but semantic)
-- `search_tagger.py` - SearchTagger class using stemming (fast, deterministic keyword matching)
-- `search_tag_messages.py` - Batch processor for search-based tagging
-- `search_tag_messages_cli.py` - CLI interface for search tagging (fast, recommended default)
+- `keyword_scorer.py` - KeywordScorer class for proximity-based scoring (Phase 6)
+  - Scores keywords based on proximity to specific image URLs
+  - Subject line bonus (200 points per occurrence)
+  - Exponential decay for distance from image URL
+  - Frequency and message length multipliers
+- `search_tag_messages.py` - Batch processor for image-level keyword scoring
+- `search_tag_messages_cli.py` - CLI interface for scoring (Phase 6 updated)
+  - Processes each image independently
+  - Stores [keyword, score] tuples per image
+  - Filters to non-zero scores only
+- **ARCHIVED (not in use):**
+  - `llm_config.py` - LLM configuration (moved to docs/archive/imageGetter/)
+  - `llm_tagger.py` - LLM-based semantic tagger (moved to docs/archive/imageGetter/)
+  - `llm_tag_messages.py` - LLM batch processor (moved to docs/archive/imageGetter/)
+  - `llm_tag_messages_cli.py` - LLM CLI interface (moved to docs/archive/imageGetter/)
+  - `search_tagger.py` - Old binary presence tagger (superseded by keyword_scorer.py)
 
 **Image Curation:**
 - `dedupe_images_cli.py` - Remove duplicate images by file size
@@ -253,7 +282,7 @@ Each thumbnail shows:
 - Image thumbnail (clickable to full resolution at Google Groups)
 - Clickable message subject (links to Google Groups thread)
 - Message ID
-- List of keywords for that message
+- List of keywords with scores (Phase 6: displayed with scores, e.g., "firewall (245)")
 
 **Implementation Details:**
 - Static files only (no backend, no JavaScript)
@@ -269,9 +298,30 @@ Each thumbnail shows:
 - Thumbnail paths use relative `../thumbs/` for proper navigation
 - Image links include `&view=1` parameter for direct viewing
 
-### Phase 6: Web Interface 📋 DEFERRED
-**Status:** Not needed - Phase 5 static site sufficient for initial use
-- Can revisit if static site limitations become problematic
+### Phase 6: Keyword Scoring 🚧 IN PROGRESS
+**Status:** Implementing relevance-based keyword scoring per image
+**Goal:** Rank images by relevance when displaying keyword-specific pages
+
+**Changes from Phase 4b:**
+- Replace binary keyword presence with scored relevance
+- Score each image independently based on its URL position in message text
+- Store [keyword, score] tuples instead of keyword strings
+- Remove message-level keywords (image-level only)
+
+**Implementation:**
+1. Create `keyword_scorer.py` with KeywordScorer class
+2. Update `search_tag_messages.py` to process images individually
+3. Update `generate_static_site_cli.py` to:
+   - Sort keyword pages by score (highest first)
+   - Add score threshold parameter (default: 0)
+   - Display scores on thumbnails
+4. Archive unused LLM tagger code
+
+**Benefits:**
+- Best firewall images appear first on "firewall" page
+- Users see most relevant content immediately
+- Reduces noise from incidental keyword mentions
+- Maintains fast processing (no LLM required)
 
 ## Technical Considerations
 
@@ -292,36 +342,62 @@ Each thumbnail shows:
 - **Corrupt downloads:** Validate image can be opened before marking complete
 - **Disk space:** Check available space before download batches
 
-### Keyword Tagging Approach
-**Two Parallel Implementations:**
+### Keyword Scoring Algorithm (Phase 6)
 
-1. **Search Tagger (Recommended Default):**
-   - Fast: Processes entire dataset in seconds
-   - Stemming: Matches plurals and variations (e.g., "firewall" matches "firewalls", "installing")
-   - Deterministic: Same input always produces same output
-   - Full message text: Reads complete message body from markdown files
-   - Vocabulary enforcement: Restricts keywords to allowed list (557 keywords)
-   - Trade-off: No synonym matching, misses context-dependent terms
+**[REVISED - 2025-11-06]**
 
-2. **LLM Tagger (Semantic Alternative):**
-   - Semantic: Understands synonyms and context
-   - Accurate: 90-95% precision
-   - Slow: ~30s per message = ~10 hours for 1200 messages
-   - Can timeout or error
-   - Trade-off: Time and reliability vs. accuracy
+**Overview:**
+Each image is scored independently based on keyword proximity to that specific image's URL within the message text.
 
-**Keyword Merging Strategy:**
-- Image-level keywords: Extracted from filename (Phase 1)
-- Message-level keywords: Added by taggers (Phase 4b)
-- Default behavior: Replace existing message keywords with newly searched
-- Merge mode: Use `--keep-existing-keywords` to merge instead
-- Invalid filtering: Removes "cozy" and other noise terms at source
+**KeywordScorer Algorithm:**
 
-**Vocabulary Restriction:**
-- All keywords filtered against aircraft_keywords.txt (557 allowed terms)
-- Stemming applied to both message text and keywords for fuzzy matching
-- Result: 472 unique keywords in use (subset of 557 allowed)
-- ~25 keywords per message average
+1. **Initialization (per message):**
+   - Load message body and subject from markdown file
+   - Find all image URL positions in message text
+   - Build word position index for efficient lookup
+   - Pre-compute message word count
+
+2. **Scoring (per image, per keyword):**
+
+   **Proximity Score:**
+   - Find all occurrences of keyword in message body
+   - For each occurrence, calculate distance to this image's URL position
+   - Apply exponential decay: `score += 100 * exp(-0.001 * distance)`
+   - Keywords near the image URL score higher than distant ones
+
+   **Subject Line Bonus:**
+   - Subject mentions weighted heavily: `+200 points per occurrence`
+   - Subject sets topic context for entire message
+
+   **Frequency Bonus:**
+   - Square root of total occurrences: `sqrt(occurrences)`
+   - Repeated mentions indicate importance
+
+   **Message Length Multiplier:**
+   - Longer messages need stronger evidence: `1 + log(word_count + 1) / 10`
+   - Prevents short messages from dominating scores
+
+3. **Final Score Calculation:**
+   ```python
+   total_score = (proximity_score + subject_bonus) * frequency_bonus * length_multiplier
+   ```
+
+4. **Storage:**
+   - Round to integers for compact JSON storage
+   - Store only non-zero scores
+   - Sort by score descending (most relevant first)
+
+**Example:**
+Message: "Here's my firewall installation [IMAGE_URL] and wing spar layup [IMAGE_URL]"
+
+- Image 1 (firewall): scores high for "firewall", "installation", low for "wing"
+- Image 2 (wing spar): scores high for "wing", "spar", low for "firewall"
+
+**Performance:**
+- Fast: No LLM required, pure text processing
+- Deterministic: Same input always produces same output
+- Vocabulary restricted: Only 557 allowed keywords scored
+- Typical: 10-25 non-zero keywords per image
 
 ## Future Enhancements
 
@@ -488,14 +564,40 @@ Each thumbnail shows:
 - Google Groups integration (clickable subjects, direct image links)
 **Result:** 18 comprehensive tests, ready for deployment to `/cgimages/`
 
+### Phase 6: Keyword Scoring (Nov 2025)
+**Original Approach:** Binary keyword presence (keyword exists or doesn't)
+**Revised Approach:** Relevance-based scoring per image
+
+**Rationale:**
+- Binary presence treats "firewall mentioned once at end of message" same as "firewall discussed extensively near image"
+- Users want best/most-relevant images first, not just any match
+- Proximity scoring: keywords near image URL are more relevant than distant ones
+- Subject line bonus: topic keywords should weigh heavily
+- Image-level scoring: each image in multi-image message scored independently
+
+**Implementation Changes:**
+- Create `keyword_scorer.py` with proximity-based algorithm
+- Update schema: `["firewall"]` → `[["firewall", 245], ["baffles", 189]]`
+- Remove message-level keywords (image-level only)
+- Archive LLM tagger code (not being used, search-based scoring sufficient)
+- Update static site generator to sort by score and display scores
+- Add score threshold parameter (WAPGNI - probably gonna need it!)
+
+**Benefits:**
+- "Firewall" page shows best firewall images first, not random order
+- Reduces noise from incidental mentions
+- Maintains fast processing (no LLM, pure text analysis)
+- Allows future tuning via score thresholds
+
 ---
 
 ## Open Questions
 
 1. Is vocabulary size (557 keywords) sufficient for coverage?
-2. Should we add multimodal embeddings if Phase 5 query quality is poor?
-3. Web interface framework preference (Flask, FastAPI, static HTML)?
-4. Should we track query analytics to improve keyword list?
+2. What score threshold should we use for display filtering? (default: 0, but may want 10-20)
+3. Should we display scores to users or keep them invisible for ranking only?
+4. Will image-level scoring be accurate enough, or do we need multimodal embeddings?
+5. Should we track query analytics to improve keyword list and scoring weights?
 
 ---
 
