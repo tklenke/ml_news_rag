@@ -52,18 +52,18 @@ class TestCountImagesPerKeyword:
         index_data = {
             "MSG001": {
                 "images": [
-                    {"filename": "img1.jpg", "keywords": [["firewall", 100], ["engine", 90]]},
-                    {"filename": "img2.jpg", "keywords": [["engine", 85]]}
+                    {"filename": "img1.jpg", "keywords": {"firewall": 100, "engine": 90}},
+                    {"filename": "img2.jpg", "keywords": {"engine": 85}}
                 ]
             },
             "MSG002": {
                 "images": [
-                    {"filename": "img3.jpg", "keywords": [["cowling", 120], ["firewall", 75]]}
+                    {"filename": "img3.jpg", "keywords": {"cowling": 120, "firewall": 75}}
                 ]
             },
             "MSG003": {
                 "images": [
-                    {"filename": "img4.jpg", "keywords": [["engine", 110]]}
+                    {"filename": "img4.jpg", "keywords": {"engine": 110}}
                 ]
             }
         }

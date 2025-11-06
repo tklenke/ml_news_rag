@@ -64,7 +64,7 @@ def clean_invalid_keywords(index_file: str, output_file: str = None) -> dict:
         output_file = index_file
 
     with open(output_file, 'w') as f:
-        json.dump(index_data, f, indent=2)
+        json.dump(index_data, f, indent=1)
 
     return stats
 

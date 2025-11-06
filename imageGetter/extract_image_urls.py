@@ -572,7 +572,7 @@ if __name__ == "__main__":
         try:
             # Write index JSON
             with open(pathIndexFile, 'w', encoding='utf-8') as f:
-                json.dump(dctIndex, f, indent=2, ensure_ascii=False)
+                json.dump(dctIndex, f, indent=1, ensure_ascii=False)
 
             print(f"Wrote index to: {pathIndexFile}")
             print(f"Index file size: {pathIndexFile.stat().st_size} bytes")

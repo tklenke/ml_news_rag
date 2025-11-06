@@ -194,14 +194,13 @@ def tag_messages(
                 scorer = KeywordScorer(message_text, subject, url_pos)
                 scores = scorer.score_keywords_batch(keywords)
 
-                # Store non-zero scores as [keyword, score] tuples, sorted descending
-                scored_keywords = [(kw, int(score)) for kw, score in scores.items() if score > 0]
-                scored_keywords.sort(key=lambda x: x[1], reverse=True)
+                # Store non-zero scores as dict {keyword: score}
+                scored_keywords = {kw: int(score) for kw, score in scores.items() if score > 0}
 
                 # Filter out invalid keywords
                 invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
-                scored_keywords = [(kw, score) for kw, score in scored_keywords
-                                   if kw.lower() not in invalid_lower]
+                scored_keywords = {kw: score for kw, score in scored_keywords.items()
+                                   if kw.lower() not in invalid_lower}
 
                 # Store in image
                 image["keywords"] = scored_keywords
@@ -212,7 +211,8 @@ def tag_messages(
                     print(f"  URL position: {url_pos}")
                     print(f"  Scored keywords: {len(scored_keywords)}")
                     if scored_keywords:
-                        top_5 = scored_keywords[:5]
+                        # Get top 5 keywords by score
+                        top_5 = sorted(scored_keywords.items(), key=lambda x: x[1], reverse=True)[:5]
                         print(f"  Top 5: {top_5}")
 
             # Remove message-level keywords field if it exists
@@ -251,4 +251,4 @@ def save_image_index(index_data: Dict, index_file: str):
     """
     # Write data directly (no backup needed since we write to new files)
     with open(index_file, 'w') as f:
-        json.dump(index_data, f, indent=2)
+        json.dump(index_data, f, indent=1)

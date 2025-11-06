@@ -38,8 +38,8 @@ def count_images_per_keyword(index_data: dict, min_score: int = 0) -> Dict[str, 
     for message in index_data.values():
         # Count images per keyword (Phase 6: image-level keywords)
         for image in message.get("images", []):
-            # Get scored keywords for this image: [["keyword", score], ...]
-            for kw, score in image.get("keywords", []):
+            # Get scored keywords for this image: {"keyword": score, ...}
+            for kw, score in image.get("keywords", {}).items():
                 if score >= min_score:
                     keyword_counts[kw.lower()] += 1
 
@@ -259,12 +259,14 @@ def generate_all_images_page(
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
                 html.append("        </a>")
                 # Phase 6: Display keywords with scores
-                keywords_list = img.get('keywords', [])
-                if keywords_list:
+                keywords_dict = img.get('keywords', {})
+                if keywords_dict:
+                    # Sort by score descending and take top 5
+                    top_keywords = sorted(keywords_dict.items(), key=lambda x: x[1], reverse=True)[:5]
                     # Format as "keyword (score), keyword (score), ..."
-                    kw_strings = [f"{kw} ({score})" for kw, score in keywords_list[:5]]
+                    kw_strings = [f"{kw} ({score})" for kw, score in top_keywords]
                     keywords_str = ", ".join(kw_strings)
-                    if len(keywords_list) > 5:
+                    if len(keywords_dict) > 5:
                         keywords_str += "..."
                 else:
                     keywords_str = ""
@@ -315,8 +317,8 @@ def build_keyword_index_with_scores(index_data: dict, min_score: int = 0) -> Dic
 
     for msg_id, msg_data in index_data.items():
         for image in msg_data.get("images", []):
-            # Extract scored keywords: [["keyword", score], ...]
-            for kw, score in image.get("keywords", []):
+            # Extract scored keywords: {"keyword": score, ...}
+            for kw, score in image.get("keywords", {}).items():
                 if score >= min_score:
                     kw_lower = kw.lower()
                     if kw_lower not in keyword_index:
@@ -352,19 +354,25 @@ def get_images_for_keyword(index_data: dict, keyword: str, min_score: int = 0) -
         metadata = msg_data.get("metadata", {})
 
         for image in msg_data.get("images", []):
-            # Check if this image has the keyword
-            for kw, score in image.get("keywords", []):
-                if kw.lower() == keyword_lower and score >= min_score:
-                    # Create enriched image dict with metadata
-                    img_copy = image.copy()
-                    img_copy["message_id"] = msg_id
-                    img_copy["subject"] = metadata.get("subject", "")
-                    img_copy["score"] = score
-                    img_copy["original_url"] = image.get("url", "")
-                    img_copy["thumbnail_path"] = f"../thumbs/{image.get('local_filename', '')}"
+            # Check if this image has the keyword (dict lookup is O(1))
+            keywords_dict = image.get("keywords", {})
+            # Check all keyword cases (keyword might be stored with different casing)
+            score = None
+            for kw, kw_score in keywords_dict.items():
+                if kw.lower() == keyword_lower:
+                    score = kw_score
+                    break
 
-                    images.append(img_copy)
-                    break  # Only add each image once per keyword
+            if score is not None and score >= min_score:
+                # Create enriched image dict with metadata
+                img_copy = image.copy()
+                img_copy["message_id"] = msg_id
+                img_copy["subject"] = metadata.get("subject", "")
+                img_copy["score"] = score
+                img_copy["original_url"] = image.get("url", "")
+                img_copy["thumbnail_path"] = f"../thumbs/{image.get('local_filename', '')}"
+
+                images.append(img_copy)
 
     # Sort by score descending (highest scores first)
     images.sort(key=lambda x: x["score"], reverse=True)
@@ -390,7 +398,7 @@ def filter_messages_by_keyword(index_data: dict, keyword: str) -> dict:
     for msg_id, msg_data in index_data.items():
         # Phase 6: Check image-level keywords
         for image in msg_data.get("images", []):
-            for kw, score in image.get("keywords", []):
+            for kw, score in image.get("keywords", {}).items():
                 if kw.lower() == keyword_lower:
                     filtered[msg_id] = msg_data
                     break  # Found keyword in this message
@@ -474,12 +482,14 @@ def generate_keyword_page(
                 html.append(f"          <img src='{img.get('thumbnail_path', '')}' class='thumbnail' />")
                 html.append("        </a>")
                 # Phase 6: Display keywords with scores
-                keywords_list = img.get('keywords', [])
-                if keywords_list:
+                keywords_dict = img.get('keywords', {})
+                if keywords_dict:
+                    # Sort by score descending and take top 5
+                    top_keywords = sorted(keywords_dict.items(), key=lambda x: x[1], reverse=True)[:5]
                     # Format as "keyword (score), keyword (score), ..."
-                    kw_strings = [f"{kw} ({score})" for kw, score in keywords_list[:5]]
+                    kw_strings = [f"{kw} ({score})" for kw, score in top_keywords]
                     keywords_str = ", ".join(kw_strings)
-                    if len(keywords_list) > 5:
+                    if len(keywords_dict) > 5:
                         keywords_str += "..."
                 else:
                     keywords_str = ""

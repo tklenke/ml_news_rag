@@ -127,18 +127,18 @@ https://example.com/img2.jpg
 
         msg = result["MSG001"]
 
-        # Verify image 1 has keywords
+        # Verify image 1 has keywords (dict format)
         assert "keywords" in msg["images"][0]
-        assert isinstance(msg["images"][0]["keywords"], list)
+        assert isinstance(msg["images"][0]["keywords"], dict)
         assert len(msg["images"][0]["keywords"]) > 0
 
-        # Verify image 2 has keywords
+        # Verify image 2 has keywords (dict format)
         assert "keywords" in msg["images"][1]
-        assert isinstance(msg["images"][1]["keywords"], list)
+        assert isinstance(msg["images"][1]["keywords"], dict)
         assert len(msg["images"][1]["keywords"]) > 0
 
-    def test_keywords_are_tuples_with_scores(self, test_index_with_images, test_keywords_scoring):
-        """Test that keywords are stored as [keyword, score] tuples."""
+    def test_keywords_are_dict_with_scores(self, test_index_with_images, test_keywords_scoring):
+        """Test that keywords are stored as {keyword: score} dict."""
         index_file, msgs_md_dir = test_index_with_images
 
         stats = tag_messages(index_file, test_keywords_scoring, msgs_md_dir=msgs_md_dir)
@@ -147,14 +147,14 @@ https://example.com/img2.jpg
             result = json.load(f)
 
         image = result["MSG001"]["images"][0]
-        assert isinstance(image["keywords"], list)
+        assert isinstance(image["keywords"], dict)
         assert len(image["keywords"]) > 0
 
-        # Check format: [keyword, score]
-        kw, score = image["keywords"][0]
-        assert isinstance(kw, str)
-        assert isinstance(score, int)
-        assert score > 0
+        # Check format: {keyword: score}
+        for kw, score in image["keywords"].items():
+            assert isinstance(kw, str)
+            assert isinstance(score, int)
+            assert score > 0
 
     def test_message_level_keywords_removed(self, test_index_with_images, test_keywords_scoring):
         """Test that message-level keywords field is removed."""
@@ -176,8 +176,8 @@ https://example.com/img2.jpg
         # Message-level keywords should be removed
         assert "keywords" not in result["MSG001"]
 
-    def test_scores_sorted_descending(self, test_index_with_images, test_keywords_scoring):
-        """Test that keywords are sorted by score descending."""
+    def test_all_scores_positive(self, test_index_with_images, test_keywords_scoring):
+        """Test that all keyword scores are positive (dict format)."""
         index_file, msgs_md_dir = test_index_with_images
 
         stats = tag_messages(index_file, test_keywords_scoring, msgs_md_dir=msgs_md_dir)
@@ -186,10 +186,9 @@ https://example.com/img2.jpg
             result = json.load(f)
 
         keywords = result["MSG001"]["images"][0]["keywords"]
-        scores = [score for _, score in keywords]
 
-        # Scores should be in descending order
-        assert scores == sorted(scores, reverse=True)
+        # All scores should be positive
+        assert all(score > 0 for score in keywords.values())
 
     def test_proximity_affects_scoring(self, test_index_with_images, test_keywords_scoring):
         """Test that keywords near image URL score higher."""

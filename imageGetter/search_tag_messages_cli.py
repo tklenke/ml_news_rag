@@ -16,7 +16,7 @@ from config import INVALID_KEYWORDS
 def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
     """Filter image keywords to only those in allowed vocabulary.
 
-    Handles both old string format and new scored tuple format.
+    Handles old string format, array-of-arrays, and new dict format.
 
     Args:
         index_data: Dictionary of messages to filter
@@ -40,20 +40,28 @@ def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
             if 'keywords' in image and len(image['keywords']) > 0:
                 original_count = len(image['keywords'])
 
-                # Check format: [keyword, score] tuples or plain strings
-                first_kw = image['keywords'][0]
-                if isinstance(first_kw, (list, tuple)) and len(first_kw) == 2:
-                    # New format: [keyword, score] tuples
-                    image['keywords'] = [
-                        (kw, score) for kw, score in image['keywords']
+                # Check format: dict, [keyword, score] tuples, or plain strings
+                keywords = image['keywords']
+                if isinstance(keywords, dict):
+                    # Dict format: {"keyword": score, ...}
+                    image['keywords'] = {
+                        kw: score for kw, score in keywords.items()
                         if kw.lower() in allowed_lower
-                    ]
-                else:
-                    # Old format: plain strings
-                    image['keywords'] = [
-                        kw for kw in image['keywords']
-                        if kw.lower() in allowed_lower
-                    ]
+                    }
+                elif isinstance(keywords, list) and len(keywords) > 0:
+                    first_kw = keywords[0]
+                    if isinstance(first_kw, (list, tuple)) and len(first_kw) == 2:
+                        # Array-of-arrays format: [["keyword", score], ...]
+                        image['keywords'] = [
+                            (kw, score) for kw, score in keywords
+                            if kw.lower() in allowed_lower
+                        ]
+                    else:
+                        # Old format: plain strings ["keyword", ...]
+                        image['keywords'] = [
+                            kw for kw in keywords
+                            if kw.lower() in allowed_lower
+                        ]
 
                 removed = original_count - len(image['keywords'])
                 stats['image_keywords_removed'] += removed
@@ -64,7 +72,7 @@ def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
 def clean_invalid_keywords_from_index(index_data: dict) -> dict:
     """Remove invalid keywords from index data (in-place).
 
-    Cleans image-level keywords (handles both old string format and new scored tuple format).
+    Cleans image-level keywords (handles old string format, array-of-arrays, and dict format).
 
     Args:
         index_data: Dictionary of messages to clean
@@ -87,20 +95,28 @@ def clean_invalid_keywords_from_index(index_data: dict) -> dict:
             if 'keywords' in image and len(image['keywords']) > 0:
                 original_count = len(image['keywords'])
 
-                # Check format: [keyword, score] tuples or plain strings
-                first_kw = image['keywords'][0]
-                if isinstance(first_kw, (list, tuple)) and len(first_kw) == 2:
-                    # New format: [keyword, score] tuples
-                    image['keywords'] = [
-                        (kw, score) for kw, score in image['keywords']
+                # Check format: dict, [keyword, score] tuples, or plain strings
+                keywords = image['keywords']
+                if isinstance(keywords, dict):
+                    # Dict format: {"keyword": score, ...}
+                    image['keywords'] = {
+                        kw: score for kw, score in keywords.items()
                         if kw.lower() not in invalid_lower
-                    ]
-                else:
-                    # Old format: plain strings
-                    image['keywords'] = [
-                        kw for kw in image['keywords']
-                        if kw.lower() not in invalid_lower
-                    ]
+                    }
+                elif isinstance(keywords, list) and len(keywords) > 0:
+                    first_kw = keywords[0]
+                    if isinstance(first_kw, (list, tuple)) and len(first_kw) == 2:
+                        # Array-of-arrays format: [["keyword", score], ...]
+                        image['keywords'] = [
+                            (kw, score) for kw, score in keywords
+                            if kw.lower() not in invalid_lower
+                        ]
+                    else:
+                        # Old format: plain strings ["keyword", ...]
+                        image['keywords'] = [
+                            kw for kw in keywords
+                            if kw.lower() not in invalid_lower
+                        ]
 
                 removed = original_count - len(image['keywords'])
                 stats['image_keywords_removed'] += removed
@@ -190,7 +206,7 @@ def main():
         # Save cleaned index to output file
         print(f"Saving cleaned index to {args.dest}...")
         with open(args.dest, 'w') as f:
-            json.dump(index_data, f, indent=2)
+            json.dump(index_data, f, indent=1)
         print()
 
     # Count messages and images
@@ -247,9 +263,14 @@ def main():
             if "keywords" in image and len(image["keywords"]) > 0:
                 images_with_keywords += 1
                 keyword_counts.append(len(image["keywords"]))
-                # Extract scores from [keyword, score] tuples
-                for kw, score in image["keywords"]:
-                    all_scores.append(score)
+                # Extract scores from dict or tuples
+                keywords = image["keywords"]
+                if isinstance(keywords, dict):
+                    all_scores.extend(keywords.values())
+                else:
+                    # Legacy format: [keyword, score] tuples
+                    for kw, score in keywords:
+                        all_scores.append(score)
 
     if keyword_counts:
         print(f"\nKeywords per image:")

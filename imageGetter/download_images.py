@@ -248,11 +248,11 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
 
             # Save index
             with open(strIndexPath, 'w', encoding='utf-8') as f:
-                json.dump(dctIndex, f, indent=2, ensure_ascii=False)
+                json.dump(dctIndex, f, indent=1, ensure_ascii=False)
 
     # Save final index
     with open(strIndexPath, 'w', encoding='utf-8') as f:
-        json.dump(dctIndex, f, indent=2, ensure_ascii=False)
+        json.dump(dctIndex, f, indent=1, ensure_ascii=False)
 
     # Close debug log
     fileDebug.write(f"\n=== Download Complete ===\n")

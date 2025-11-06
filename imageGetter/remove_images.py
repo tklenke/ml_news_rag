@@ -101,4 +101,4 @@ def save_index(index_data: Dict, output_file: str):
         output_file: Path to output file
     """
     with open(output_file, 'w') as f:
-        json.dump(index_data, f, indent=2)
+        json.dump(index_data, f, indent=1)
