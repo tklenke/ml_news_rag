@@ -149,12 +149,12 @@ Images after:            6075
 Saving deduped index to ../data/image_index_deduped.json...
 ```
 
-### Phase 5: Tag Messages with Keywords
+### Phase 5: Tag Images with Scored Keywords
 
-Tag messages with semantic keywords using LLM (automatically skips already-tagged messages):
+Score keywords per image based on proximity to image URLs in message text (fast, deterministic):
 
 ```bash
-python llm_tag_messages_cli.py \
+python search_tag_messages_cli.py \
   ../data/image_index_deduped.json \
   ../data/image_index_tagged.json \
   --keywords aircraft_keywords.txt
@@ -173,129 +173,102 @@ Loaded 1234 messages
 Loading keywords...
 Loaded 557 keywords
 
-Messages to process: 1234
-Already tagged (will skip): 0
-
-Tagging messages with keywords...
-LLM timeout per message: 30s (configurable in llm_config.py)
-
-[1/1234] Installing firewall today
-[2/1234] Re: Cowling attachment
-...
-  → Auto-saved after 50 messages
-...
+Scoring keywords for images...
 
 ============================================================
-TAGGING STATISTICS
+KEYWORD SCORING STATISTICS
 ============================================================
 Total messages in index:     1234
 Messages processed:          1234
-Messages skipped:            0
+Images scored:               6075
 Messages with errors:        0
 
-Keywords per message:
-  Average:                   2.3
+Keywords per image:
+  Average:                   18.5
   Min:                       0
-  Max:                       8
+  Max:                       127
+  Images with keywords:      6052
+
+Score range:
+  Min:                       12
+  Max:                       847
+  Average:                   156.3
 ============================================================
 
 Results saved to: ../data/image_index_tagged.json
 ```
 
 **Notes:**
-- Messages with existing `keywords` are skipped automatically (idempotent)
-- Auto-saves every 50 messages for crash recovery
-- Use `--limit N` to tag only first N messages (for testing)
-- Use `--verbose` to see detailed LLM responses
+- Scores based on keyword proximity to image URLs using exponential decay
+- Subject line keywords get +200 bonus points
+- Keywords stored as `[keyword, score]` tuples sorted by score descending
+- Use `--limit N` to process only first N messages (for testing)
+- Use `--verbose` to see detailed progress for each message
+- Use `--no-clean` to skip invalid keyword filtering
 
-### Phase 6: Generate Paginated HTML Review
+### Phase 6: Generate Static HTML Site
 
-Create an interactive HTML view to review images by keyword (210 images per page):
-
-```bash
-python analyze_tag_statistics.py \
-  ../data/image_index_tagged.json \
-  ../data/tag_review.txt \
-  --thumb-dir ../data/images/thumbs \
-  --page-size 210
-```
-
-**Example output:**
-```
-Loaded 1234 messages
-Extracted 45 unique keywords
-
-Tag Statistics:
-  aircraft: 1245 images
-  helicopters: 856 images
-  experimental: 634 images
-  ...
-
-HTML pages generated:
-  tag_review_view_page1.html (210 images)
-  tag_review_view_page2.html (210 images)
-  ...
-  tag_review_view_page29.html (75 images)
-```
-
-### Phase 7: Review and Select Images
-
-1. Open the HTML files in your browser (e.g., `tag_review_view_page1.html`)
-2. Review images and check boxes for images you want to remove
-3. Click "Export Selected to File" button on each page
-4. This creates `images_to_remove_pageN.txt` files for each page
-
-**Navigation:**
-- Each page includes << First | < Previous | Page N of M | Next > | Last >> links
-- "Select All" and "Clear All" buttons for bulk operations
-- Selected images highlighted in red
-
-### Phase 8: Remove Selected Images
-
-Process the removal list files to create a cleaned index:
+Create a complete static HTML site for browsing images by keyword:
 
 ```bash
-python remove_images_cli.py \
+python generate_static_site_cli.py \
   ../data/image_index_tagged.json \
-  ../data/image_index_cleaned.json \
-  --remove-list images_to_remove_page*.txt
+  ../data/site \
+  --images-per-page 210 \
+  --min-score 0
 ```
 
 **Example output:**
 ```
 Loading index from ../data/image_index_tagged.json...
-Loaded 1234 messages with 6075 images
+Loaded 1234 messages
 
-Loading removal lists...
-  - images_to_remove_page1.txt
-  - images_to_remove_page2.txt
-  - images_to_remove_page8.txt
-  - images_to_remove_page9.txt
-Loaded 356 unique filenames to remove
+Generating index page...
+  Generated index.html with 557 keywords
 
-Removing images from index...
+Preparing image list...
+  Found 6075 total images
+  Year distribution: {2024: 3245, 2023: 2830}
 
-============================================================
-REMOVAL SUMMARY
-============================================================
-Total messages:              1234
-Messages affected:           198
-Messages removed:            157
+Generating all images pages...
+  Generated all/page1.html (210 images)
+  Generated all/page2.html (210 images)
+  ...
+  Generated all/page29.html (75 images)
 
-Images before:               6075
-Images removed:              356
-Images after:                5719
-============================================================
+Generating keyword pages...
+  Generated 5 page(s) for 'firewall' (897 images)
+  Generated 3 page(s) for 'cowling' (512 images)
+  ...
 
-Saving cleaned index to ../data/image_index_cleaned.json...
-Cleaned index saved to: ../data/image_index_cleaned.json
+Site generation complete!
+Output: ../data/site
+  - index.html
+  - all/page1.html ... all/page29.html
+  - keywords/ (557 keywords)
+```
+
+**Generated Site Structure:**
+```
+site/
+├── index.html (keyword index with image counts)
+├── all/
+│   ├── page1.html (all images, newest first)
+│   ├── page2.html
+│   └── ...
+└── keywords/
+    ├── firewall_page1.html (images sorted by score)
+    ├── firewall_page2.html
+    ├── cowling_page1.html
+    └── ...
 ```
 
 **Notes:**
-- Messages with all images removed are deleted entirely from the index
-- Original index files are never modified (read-only)
-- Multiple removal list files are automatically deduplicated
-- The cleaned index is ready for further processing or analysis
+- Images on keyword pages sorted by score (highest first)
+- Scores displayed on thumbnails: "firewall (245)"
+- Use `--min-score N` to filter out low-scoring images
+- Each page has First/Previous/Next/Last navigation
+- Index page links to all keywords and "All Images" view
 
 ## Testing
 
