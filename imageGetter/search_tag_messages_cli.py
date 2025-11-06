@@ -16,7 +16,7 @@ from config import INVALID_KEYWORDS
 def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
     """Filter image keywords to only those in allowed vocabulary.
 
-    Handles scored keyword format: [keyword, score] tuples.
+    Handles both old string format and new scored tuple format.
 
     Args:
         index_data: Dictionary of messages to filter
@@ -35,15 +35,26 @@ def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
 
     # Process each message
     for message in index_data.values():
-        # Filter image-level scored keywords
+        # Filter image-level keywords
         for image in message.get('images', []):
-            if 'keywords' in image:
+            if 'keywords' in image and len(image['keywords']) > 0:
                 original_count = len(image['keywords'])
-                # Filter [keyword, score] tuples
-                image['keywords'] = [
-                    (kw, score) for kw, score in image['keywords']
-                    if kw.lower() in allowed_lower
-                ]
+
+                # Check format: [keyword, score] tuples or plain strings
+                first_kw = image['keywords'][0]
+                if isinstance(first_kw, (list, tuple)) and len(first_kw) == 2:
+                    # New format: [keyword, score] tuples
+                    image['keywords'] = [
+                        (kw, score) for kw, score in image['keywords']
+                        if kw.lower() in allowed_lower
+                    ]
+                else:
+                    # Old format: plain strings
+                    image['keywords'] = [
+                        kw for kw in image['keywords']
+                        if kw.lower() in allowed_lower
+                    ]
+
                 removed = original_count - len(image['keywords'])
                 stats['image_keywords_removed'] += removed
 
@@ -53,7 +64,7 @@ def filter_to_vocabulary(index_data: dict, allowed_keywords: list) -> dict:
 def clean_invalid_keywords_from_index(index_data: dict) -> dict:
     """Remove invalid keywords from index data (in-place).
 
-    Cleans image-level scored keywords.
+    Cleans image-level keywords (handles both old string format and new scored tuple format).
 
     Args:
         index_data: Dictionary of messages to clean
@@ -71,15 +82,26 @@ def clean_invalid_keywords_from_index(index_data: dict) -> dict:
 
     # Process each message
     for message in index_data.values():
-        # Clean image-level scored keywords
+        # Clean image-level keywords
         for image in message.get('images', []):
-            if 'keywords' in image:
+            if 'keywords' in image and len(image['keywords']) > 0:
                 original_count = len(image['keywords'])
-                # Filter [keyword, score] tuples
-                image['keywords'] = [
-                    (kw, score) for kw, score in image['keywords']
-                    if kw.lower() not in invalid_lower
-                ]
+
+                # Check format: [keyword, score] tuples or plain strings
+                first_kw = image['keywords'][0]
+                if isinstance(first_kw, (list, tuple)) and len(first_kw) == 2:
+                    # New format: [keyword, score] tuples
+                    image['keywords'] = [
+                        (kw, score) for kw, score in image['keywords']
+                        if kw.lower() not in invalid_lower
+                    ]
+                else:
+                    # Old format: plain strings
+                    image['keywords'] = [
+                        kw for kw in image['keywords']
+                        if kw.lower() not in invalid_lower
+                    ]
+
                 removed = original_count - len(image['keywords'])
                 stats['image_keywords_removed'] += removed
 
