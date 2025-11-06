@@ -1,12 +1,12 @@
-# ABOUTME: Batch processor for search-based keyword tagging
-# ABOUTME: Tags all messages in image index using SearchTagger with stemming
+# ABOUTME: Batch processor for image-level keyword scoring
+# ABOUTME: Scores keywords per image based on proximity to image URLs
 
 import json
 import shutil
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List
-from search_tagger import SearchTagger
+from keyword_scorer import KeywordScorer
 from config import INVALID_KEYWORDS
 
 
@@ -130,7 +130,7 @@ def tag_messages(
     keep_existing: bool = False,
     msgs_md_dir: str = "../data/msgs_md"
 ) -> Dict:
-    """Tag messages in index with keywords using search and stemming.
+    """Tag images with scored keywords based on proximity to image URLs.
 
     Args:
         index_file: Path to image index JSON file
@@ -138,13 +138,13 @@ def tag_messages(
         output_file: Path to output file (default: overwrite input file with backup)
         limit: If specified, process only first N messages
         verbose: If True, print detailed output for each message
-        keep_existing: If True, merge with existing keywords; if False, replace (default: False)
+        keep_existing: DEPRECATED - no longer used (image-level scoring always replaces)
         msgs_md_dir: Path to msgs_md directory (default: ../data/msgs_md)
 
     Returns:
         Dictionary with statistics:
-        - processed: Number of messages tagged
-        - skipped: Number of messages skipped (already tagged)
+        - processed: Number of messages processed
+        - images_scored: Number of images scored
         - errors: Number of errors encountered
     """
     # Default output to input file for backward compatibility
@@ -155,13 +155,10 @@ def tag_messages(
     index_data = load_image_index(index_file)
     keywords = load_keywords(keywords_file)
 
-    # Initialize tagger
-    tagger = SearchTagger()
-
     # Statistics
     stats = {
         "processed": 0,
-        "skipped": 0,
+        "images_scored": 0,
         "errors": 0
     }
 
@@ -177,62 +174,58 @@ def tag_messages(
         if limit is not None and messages_processed >= limit:
             break
 
-        # Extract message text from markdown file
+        # Extract full message text from markdown file
         message_text = extract_message_text(message, msgs_md_dir)
+        subject = message.get("metadata", {}).get("subject", "")
 
         try:
             if verbose:
-                subject = message.get("metadata", {}).get("subject", "Unknown")
                 print(f"[{messages_processed+1}/{total_to_process}] {subject[:60]}")
 
-            # Get existing keywords (if any)
-            existing_keywords = message.get("keywords", [])
+            # Process each image independently
+            for image in message.get("images", []):
+                # Find this specific image's URL position in message text
+                url_pos = message_text.find(image["url"])
+                if url_pos == -1:
+                    # Fallback: use middle of message if URL not found
+                    url_pos = len(message_text) // 2
 
-            # Create allowed vocabulary (case-insensitive) from aircraft_keywords.txt
-            allowed_keywords_lower = {kw.lower() for kw in keywords}
+                # Score keywords for this image
+                scorer = KeywordScorer(message_text, subject, url_pos)
+                scores = scorer.score_keywords_batch(keywords)
 
-            # Filter existing keywords: keep only those in allowed vocabulary
-            valid_existing = [kw for kw in existing_keywords if kw.lower() in allowed_keywords_lower]
+                # Store non-zero scores as [keyword, score] tuples, sorted descending
+                scored_keywords = [(kw, int(score)) for kw, score in scores.items() if score > 0]
+                scored_keywords.sort(key=lambda x: x[1], reverse=True)
 
-            # Search for keywords in message text
-            matched_keywords = tagger.find_keywords(message_text, keywords)
+                # Filter out invalid keywords
+                invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
+                scored_keywords = [(kw, score) for kw, score in scored_keywords
+                                   if kw.lower() not in invalid_lower]
 
-            # Decide whether to merge or replace
-            if keep_existing:
-                # Merge valid existing and newly matched keywords, deduplicate (case-insensitive)
-                combined = list(valid_existing) + matched_keywords
-                seen = set()
-                deduplicated = []
-                for kw in combined:
-                    if kw.lower() not in seen:
-                        seen.add(kw.lower())
-                        deduplicated.append(kw)
-            else:
-                # Replace: use only newly matched keywords (discard existing)
-                deduplicated = matched_keywords
+                # Store in image
+                image["keywords"] = scored_keywords
+                stats["images_scored"] += 1
 
-            # Filter out invalid keywords (should already be filtered, but belt-and-suspenders)
-            invalid_lower = {kw.lower() for kw in INVALID_KEYWORDS}
-            final_keywords = [kw for kw in deduplicated if kw.lower() not in invalid_lower]
+                if verbose:
+                    print(f"  Image: {image.get('filename', 'unknown')}")
+                    print(f"  URL position: {url_pos}")
+                    print(f"  Scored keywords: {len(scored_keywords)}")
+                    if scored_keywords:
+                        top_5 = scored_keywords[:5]
+                        print(f"  Top 5: {top_5}")
 
-            # Store keywords
-            message["keywords"] = final_keywords
-
-            if verbose:
-                print(f"  Existing: {existing_keywords}")
-                print(f"  Valid existing (in vocabulary): {valid_existing}")
-                print(f"  Matched: {matched_keywords}")
-                print(f"  Final: {final_keywords}")
-                print(f"  Mode: {'merge' if keep_existing else 'replace'}")
+            # Remove message-level keywords field if it exists
+            if "keywords" in message:
+                del message["keywords"]
 
             stats["processed"] += 1
             messages_processed += 1
 
         except Exception as e:
             print(f"ERROR processing message {msg_id}: {e}")
-            # Keep existing keywords on error
-            if "keywords" not in message:
-                message["keywords"] = []
+            import traceback
+            traceback.print_exc()
             stats["errors"] += 1
             stats["processed"] += 1
             messages_processed += 1

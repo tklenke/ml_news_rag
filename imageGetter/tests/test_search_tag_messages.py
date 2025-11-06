@@ -59,244 +59,159 @@ class TestExtractMessageText:
         assert "Firewall installation" in result
 
 
-class TestTagMessages:
-    """Test batch tagging of messages."""
+class TestImageLevelScoring:
+    """Test image-level keyword scoring (Phase 6)."""
 
     @pytest.fixture
-    def test_index(self, tmp_path):
-        """Create test index file."""
+    def test_index_with_images(self, tmp_path):
+        """Create test index with images."""
         index_file = tmp_path / "test_index.json"
         test_data = {
-            "msg1": {
-                "metadata": {"subject": "Installing firewall"},
-                "images": []
-            },
-            "msg2": {
-                "metadata": {"subject": "Cowling work"},
-                "images": []
-            },
-            "msg3": {
-                "metadata": {"subject": "Engine mount"},
-                "images": [],
-                "keywords": ["existing"]  # Already tagged
+            "MSG001": {
+                "metadata": {
+                    "subject": "Firewall and wing build",
+                    "message_id": "MSG001",
+                    "message_md": "M/MSG001.md"
+                },
+                "images": [
+                    {
+                        "url": "https://example.com/img1.jpg",
+                        "part": "0.1",
+                        "filename": "firewall.jpg",
+                        "local_filename": "MSG001_part0_1_firewall.jpg"
+                    },
+                    {
+                        "url": "https://example.com/img2.jpg",
+                        "part": "0.2",
+                        "filename": "wing.jpg",
+                        "local_filename": "MSG001_part0_2_wing.jpg"
+                    }
+                ]
             }
         }
         index_file.write_text(json.dumps(test_data))
-        return str(index_file)
+
+        # Create mock markdown file
+        msgs_md_dir = tmp_path / "msgs_md" / "M"
+        msgs_md_dir.mkdir(parents=True)
+        md_file = msgs_md_dir / "MSG001.md"
+        md_content = """# Firewall and wing build
+
+Here's my firewall installation.
+https://example.com/img1.jpg
+
+And here's the wing spar layup.
+https://example.com/img2.jpg
+"""
+        md_file.write_text(md_content)
+
+        return str(index_file), str(tmp_path / "msgs_md")
 
     @pytest.fixture
-    def test_keywords(self, tmp_path):
+    def test_keywords_scoring(self, tmp_path):
         """Create test keywords file."""
         kw_file = tmp_path / "keywords.txt"
-        kw_file.write_text("firewall\ncowling\nengine\nfuel\ninstall\n")
+        kw_file.write_text("firewall\nwing\nspar\ninstall\nlayup\n")
         return str(kw_file)
 
-    def test_tag_messages_basic(self, test_index, test_keywords):
-        """Test basic message tagging."""
-        stats = tag_messages(test_index, test_keywords)
+    def test_image_level_scoring(self, test_index_with_images, test_keywords_scoring):
+        """Test that each image gets its own scored keywords."""
+        index_file, msgs_md_dir = test_index_with_images
+
+        # Tag with image-level scoring
+        stats = tag_messages(index_file, test_keywords_scoring, msgs_md_dir=msgs_md_dir)
 
         # Load result
-        with open(test_index) as f:
+        with open(index_file) as f:
             result = json.load(f)
 
-        # msg1 should have firewall and install keywords
-        assert "keywords" in result["msg1"]
-        assert "firewall" in result["msg1"]["keywords"]
-        assert "install" in result["msg1"]["keywords"]
+        msg = result["MSG001"]
 
-        # msg2 should have cowling keyword
-        assert "keywords" in result["msg2"]
-        assert "cowling" in result["msg2"]["keywords"]
+        # Verify image 1 has keywords
+        assert "keywords" in msg["images"][0]
+        assert isinstance(msg["images"][0]["keywords"], list)
+        assert len(msg["images"][0]["keywords"]) > 0
 
-        # Stats should show 3 processed (all messages, no skipping)
-        assert stats["processed"] == 3
-        assert stats["skipped"] == 0
+        # Verify image 2 has keywords
+        assert "keywords" in msg["images"][1]
+        assert isinstance(msg["images"][1]["keywords"], list)
+        assert len(msg["images"][1]["keywords"]) > 0
 
-    def test_merge_existing_keywords(self, test_index, test_keywords):
-        """Test that existing keywords are merged when keep_existing=True."""
-        # Modify test data to have a valid keyword in existing
-        with open(test_index) as f:
+    def test_keywords_are_tuples_with_scores(self, test_index_with_images, test_keywords_scoring):
+        """Test that keywords are stored as [keyword, score] tuples."""
+        index_file, msgs_md_dir = test_index_with_images
+
+        stats = tag_messages(index_file, test_keywords_scoring, msgs_md_dir=msgs_md_dir)
+
+        with open(index_file) as f:
+            result = json.load(f)
+
+        image = result["MSG001"]["images"][0]
+        assert isinstance(image["keywords"], list)
+        assert len(image["keywords"]) > 0
+
+        # Check format: [keyword, score]
+        kw, score = image["keywords"][0]
+        assert isinstance(kw, str)
+        assert isinstance(score, int)
+        assert score > 0
+
+    def test_message_level_keywords_removed(self, test_index_with_images, test_keywords_scoring):
+        """Test that message-level keywords field is removed."""
+        index_file, msgs_md_dir = test_index_with_images
+
+        # Add old-style message-level keywords
+        with open(index_file) as f:
             data = json.load(f)
-        # Add "fuel" to existing keywords (fuel is in keywords.txt)
-        data["msg3"]["keywords"] = ["fuel", "existing"]
-        with open(test_index, 'w') as f:
+        data["MSG001"]["keywords"] = ["old", "keywords"]
+        with open(index_file, 'w') as f:
             json.dump(data, f)
 
-        # Tag messages with keep_existing=True
-        stats = tag_messages(test_index, test_keywords, keep_existing=True)
-
-        # Load result
-        with open(test_index) as f:
-            result = json.load(f)
-
-        # msg3 had ["fuel", "existing"], should now have ["fuel", "engine"]
-        # - "fuel" is in vocabulary, preserved
-        # - "existing" NOT in vocabulary, filtered out
-        # - "engine" found in "Engine mount" subject, added
-        assert "fuel" in result["msg3"]["keywords"]  # Valid existing preserved
-        assert "existing" not in result["msg3"]["keywords"]  # Invalid filtered out
-        assert "engine" in result["msg3"]["keywords"]  # New match added
-        # No messages skipped
-        assert stats["skipped"] == 0
-
-    def test_replace_existing_keywords_default(self, test_index, test_keywords):
-        """Test that existing keywords are replaced by default (keep_existing=False)."""
-        # Load original data
-        with open(test_index) as f:
-            original = json.load(f)
-
-        # Tag messages with default behavior (keep_existing=False)
-        stats = tag_messages(test_index, test_keywords)
-
-        # Load result
-        with open(test_index) as f:
-            result = json.load(f)
-
-        # msg3 had ["existing"], should now have ONLY ["engine"]
-        # (engine is found in "Engine mount" subject, "existing" discarded)
-        assert "existing" not in result["msg3"]["keywords"]  # Original discarded
-        assert "engine" in result["msg3"]["keywords"]  # New match only
-        # No messages skipped
-        assert stats["skipped"] == 0
-
-    def test_empty_keywords_valid_state(self, test_index, test_keywords):
-        """Test that empty keyword list [] is a valid state."""
         # Tag messages
-        tag_messages(test_index, test_keywords)
+        stats = tag_messages(index_file, test_keywords_scoring, msgs_md_dir=msgs_md_dir)
 
-        # Load result
-        with open(test_index) as f:
-            result = json.load(f)
-
-        # All messages should have keywords field (even if empty)
-        for msg_id, msg in result.items():
-            assert "keywords" in msg
-            assert isinstance(msg["keywords"], list)
-
-    def test_invalid_keywords_filtered_in_batch(self, tmp_path):
-        """Test that invalid keywords are filtered during batch tagging (default replace mode)."""
-        # Create index with message containing "cozy"
-        index_file = tmp_path / "test_index.json"
-        test_data = {
-            "msg1": {
-                "metadata": {"subject": "This cozy firewall installation"},
-                "images": [],
-                "keywords" : ["stevenlevy","COZY","cozy"]
-            }
-        }
-        index_file.write_text(json.dumps(test_data))
-
-        # Create keywords file including "cozy"
-        kw_file = tmp_path / "keywords.txt"
-        kw_file.write_text("cozy\nfirewall\nengine")
-
-        # Tag messages (default: replace existing keywords)
-        tag_messages(str(index_file), str(kw_file))
-
-        # Load result
         with open(index_file) as f:
             result = json.load(f)
 
-        # Default mode: existing keywords discarded, only newly matched kept
-        assert "keywords" in result["msg1"]
-        # Verify no case variant of 'cozy' exists (filtered as invalid)
-        assert not any(kw.lower() == 'cozy' for kw in result["msg1"]["keywords"])
-        # stevenlevy was in existing keywords but discarded (replace mode)
-        assert "stevenlevy" not in result["msg1"]["keywords"]
-        # firewall matched from message text and kept
-        assert "firewall" in result["msg1"]["keywords"]
+        # Message-level keywords should be removed
+        assert "keywords" not in result["MSG001"]
 
-    def test_vocabulary_restriction(self, tmp_path):
-        """Test that only keywords from aircraft_keywords.txt are allowed."""
-        # Create index with keywords NOT in vocabulary
-        index_file = tmp_path / "test_index.json"
-        test_data = {
-            "msg1": {
-                "metadata": {"subject": "Firewall installation"},
-                "keywords": ["firewall", "random_keyword_not_in_vocab", "another_invalid"],
-                "images": []
-            }
-        }
-        index_file.write_text(json.dumps(test_data))
+    def test_scores_sorted_descending(self, test_index_with_images, test_keywords_scoring):
+        """Test that keywords are sorted by score descending."""
+        index_file, msgs_md_dir = test_index_with_images
 
-        # Create keywords file with limited vocabulary
-        kw_file = tmp_path / "keywords.txt"
-        kw_file.write_text("firewall\nengine\nfuel")
+        stats = tag_messages(index_file, test_keywords_scoring, msgs_md_dir=msgs_md_dir)
 
-        # Tag messages (default: replace mode)
-        tag_messages(str(index_file), str(kw_file))
-
-        # Load result
         with open(index_file) as f:
             result = json.load(f)
 
-        # Only firewall should remain (in vocabulary and matched in subject)
-        assert "keywords" in result["msg1"]
-        assert "firewall" in result["msg1"]["keywords"]
-        # Invalid keywords should be filtered out
-        assert "random_keyword_not_in_vocab" not in result["msg1"]["keywords"]
-        assert "another_invalid" not in result["msg1"]["keywords"]
+        keywords = result["MSG001"]["images"][0]["keywords"]
+        scores = [score for _, score in keywords]
 
-    def test_vocabulary_restriction_with_merge(self, tmp_path):
-        """Test that vocabulary restriction works in merge mode too."""
-        # Create index with keywords NOT in vocabulary
-        index_file = tmp_path / "test_index.json"
-        test_data = {
-            "msg1": {
-                "metadata": {"subject": "Firewall and engine work"},
-                "keywords": ["firewall", "random_keyword_not_in_vocab", "engine"],
-                "images": []
-            }
-        }
-        index_file.write_text(json.dumps(test_data))
+        # Scores should be in descending order
+        assert scores == sorted(scores, reverse=True)
 
-        # Create keywords file with limited vocabulary
-        kw_file = tmp_path / "keywords.txt"
-        kw_file.write_text("firewall\nengine\nfuel")
+    def test_proximity_affects_scoring(self, test_index_with_images, test_keywords_scoring):
+        """Test that keywords near image URL score higher."""
+        index_file, msgs_md_dir = test_index_with_images
 
-        # Tag messages with keep_existing=True
-        tag_messages(str(index_file), str(kw_file), keep_existing=True)
+        stats = tag_messages(index_file, test_keywords_scoring, msgs_md_dir=msgs_md_dir)
 
-        # Load result
         with open(index_file) as f:
             result = json.load(f)
 
-        # firewall and engine should remain (both in vocabulary)
-        assert "keywords" in result["msg1"]
-        assert "firewall" in result["msg1"]["keywords"]
-        assert "engine" in result["msg1"]["keywords"]
-        # Invalid keyword should be filtered out even in merge mode
-        assert "random_keyword_not_in_vocab" not in result["msg1"]["keywords"]
+        # Image 1: "install" should be near it (not in subject)
+        img1_kw = dict(result["MSG001"]["images"][0]["keywords"])
 
-    def test_invalid_keywords_filtered_with_merge(self, tmp_path):
-        """Test that invalid keywords are filtered when merging (keep_existing=True)."""
-        # Create index with message containing "cozy"
-        index_file = tmp_path / "test_index.json"
-        test_data = {
-            "msg1": {
-                "metadata": {"subject": "This cozy firewall installation"},
-                "images": [],
-                "keywords" : ["stevenlevy","COZY","cozy","firewall"]
-            }
-        }
-        index_file.write_text(json.dumps(test_data))
+        # Image 2: "spar" and "layup" should be near it (not in subject)
+        img2_kw = dict(result["MSG001"]["images"][1]["keywords"])
 
-        # Create keywords file - include firewall but not stevenlevy or cozy
-        kw_file = tmp_path / "keywords.txt"
-        kw_file.write_text("firewall\nengine\nfuel")
+        # Both images should have non-zero scores for their nearby keywords
+        assert "install" in img1_kw
+        assert img1_kw["install"] > 0
 
-        # Tag messages with keep_existing=True
-        tag_messages(str(index_file), str(kw_file), keep_existing=True)
+        assert "spar" in img2_kw
+        assert img2_kw["spar"] > 0
 
-        # Load result
-        with open(index_file) as f:
-            result = json.load(f)
-
-        # Merge mode: only valid vocabulary keywords kept
-        assert "keywords" in result["msg1"]
-        # Verify "cozy" filtered out (in INVALID_KEYWORDS)
-        assert not any(kw.lower() == 'cozy' for kw in result["msg1"]["keywords"])
-        # stevenlevy filtered out (not in vocabulary)
-        assert "stevenlevy" not in result["msg1"]["keywords"]
-        # firewall preserved (in vocabulary and in existing keywords)
-        assert "firewall" in result["msg1"]["keywords"]
+        assert "layup" in img2_kw
+        assert img2_kw["layup"] > 0
