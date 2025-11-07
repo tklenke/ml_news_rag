@@ -370,7 +370,11 @@ def get_images_for_keyword(index_data: dict, keyword: str, min_score: int = 0) -
                 img_copy["subject"] = metadata.get("subject", "")
                 img_copy["score"] = score
                 img_copy["original_url"] = image.get("url", "")
-                img_copy["thumbnail_path"] = f"../thumbs/{image.get('local_filename', '')}"
+
+                # Build thumbnail path with _thumb.jpg suffix
+                local_filename = image.get('local_filename', '')
+                thumb_filename = local_filename.rsplit('.', 1)[0] + '_thumb.jpg'
+                img_copy["thumbnail_path"] = f"../thumbs/{thumb_filename}"
 
                 images.append(img_copy)
 

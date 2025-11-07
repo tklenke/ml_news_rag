@@ -487,3 +487,47 @@ class TestKeywordPageNavigation:
 
         # Should have link to page 1
         assert "test_page1.html" in content
+
+
+class TestGetImagesForKeyword:
+    """Tests for get_images_for_keyword function."""
+
+    def test_thumbnail_path_construction(self):
+        """Test that thumbnail paths are correctly constructed with _thumb.jpg suffix."""
+        from generate_static_site import get_images_for_keyword
+
+        # Create test index with images that have different file extensions
+        index_data = {
+            "MSG001": {
+                "metadata": {"subject": "Test firewall"},
+                "images": [
+                    {
+                        "local_filename": "MSG001_part0_1_image.png",
+                        "url": "https://example.com/image.png",
+                        "keywords": {"firewall": 100, "engine": 50}
+                    }
+                ]
+            },
+            "MSG002": {
+                "metadata": {"subject": "Another firewall"},
+                "images": [
+                    {
+                        "local_filename": "MSG002_part0_2_photo.jpg",
+                        "url": "https://example.com/photo.jpg",
+                        "keywords": {"firewall": 200}
+                    }
+                ]
+            }
+        }
+
+        # Get images for keyword "firewall"
+        result = get_images_for_keyword(index_data, "firewall")
+
+        # Should return 2 images sorted by score (MSG002 first with score 200)
+        assert len(result) == 2
+        assert result[0]["message_id"] == "MSG002"
+        assert result[1]["message_id"] == "MSG001"
+
+        # Check thumbnail paths are correctly constructed with _thumb.jpg
+        assert result[0]["thumbnail_path"] == "../thumbs/MSG002_part0_2_photo_thumb.jpg"
+        assert result[1]["thumbnail_path"] == "../thumbs/MSG001_part0_1_image_thumb.jpg"
