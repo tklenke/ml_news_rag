@@ -1,11 +1,17 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Plan approved in outline by Tom; ready for Programmer on Phase 1
+**Status:** Revised 2026-11-21; ready for Programmer on Phase 0
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-21 (second revision):** Phase 0 (infrastructure refresh) added at Tom's
+  request: current Python, Chroma, OpenAI SDK and images, DokuWiki removed, the repo
+  made to match production, delivery by `git pull`. Tom is not concerned about the
+  January 14 date, so work is reordered to avoid doing anything twice (see "Order of
+  work"): site fixes S4 to S6 move into the Phase 1 code change, S7 is replaced by
+  the DokuWiki removal, and the smoke calls move into Phase 0.
 - **2026-11-21:** Website refresh defined by Tom as reference links plus images (Phase 4).
   Phase 3 is now the fixes arising from a review of the site code and live server.
   Model evaluation gets checkpoints at 10, 20 and 30 questions. Chunk experiment
@@ -17,7 +23,11 @@ Keep CozyRAG running past the OpenAI model shutdown, find out whether a differen
 chunk size improves retrieval, refresh the website, and evaluate two user-facing
 additions (reference links in answers, image gallery for a result).
 
-## Hard deadline
+## Model shutdown date
+
+**[REVISED - 2026-11-21]** Tom expects the whole refresh to take a few days of effort
+and does not want the date to shape the order of work (D15). It remains the date
+after which the baseline (1.2) cannot be captured.
 
 **January 14, 2027.** OpenAI shuts down `gpt-4o-mini-2024-07-18` and
 `gpt-4.1-2025-04-14` on that date (notice dated Oct 14, 2026; recommended
@@ -42,7 +52,11 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D9 | Model evaluation is checked at 10, 20 and 30 questions so a call can be made early. |
 | D10 | A full email address is never sent to a web page. No password on the jobs page; Tom reads the job files on the server when he needs an address. |
 | D11 | Chunk experiment uses the mixed question set: the same 30 plus about 10 new. |
-| D12 | Site review findings are fixed: S1 and S2 alongside Phase 1, S3 with the reference links, S4 to S7 after Phase 1 is deployed. S8 is logged as an opportunity for improvement. |
+| D12 | Site review findings are fixed: S3 with the reference links, S8 logged as an opportunity for improvement. Scheduling of the rest revised by D15: see Phase 3. |
+| D13 | The server is refreshed to current stable versions: Python, Chroma, the OpenAI SDK and the other dependencies (Phase 0). |
+| D14 | The two DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed; they are not used. |
+| D15 | The January 14 date is not a constraint. Order the work for the least repeated effort. |
+| D16 | Finished image database sections of the todo files are archived. |
 
 ## Two repositories
 
@@ -52,8 +66,147 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | Retrieval, prompts, LLM calls, results page | `../site_2024/` | `fwww/src/llm_functions.py`, `fwww/site.ini`, `fwww/templates/` |
 | Image database | `ml/` | `imageGetter/` |
 
-`site_2024` is on `main`, clean, and has **no automated tests**. Programmer follows
-the same version-control rules there (WIP branch, frequent commits).
+`site_2024` has **no automated tests**. Its branch `wip/annual-refresh` exists with no
+commits yet. Programmer follows the same version-control rules there.
+
+## Order of work
+
+**[REVISED - 2026-11-21]** Chosen so that nothing is built, tested or deployed twice (D15).
+
+1. **Phase 0, one deploy:** infrastructure refresh. Tests and the evaluation harness
+   are then written once, on the stack production runs.
+2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6.
+   They touch the same files (`site_app.py`, `llm_functions.py`, `site_functions.py`).
+3. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
+4. **Phase 2,** overlapping step 3: the embedding runs take hours of machine time
+   while Tom rates.
+5. **Phase 4** with S3, designed once the model choice is known.
+
+One Programmer session per step. Code review once per deploy.
+
+---
+
+## Phase 0: Infrastructure refresh
+
+**[REVISED - 2026-11-21]** New phase (D13, D14).
+
+All changes are in `site_2024` unless stated. They ship as one deploy, which is only
+safe because the whole stack is first run locally (0.6).
+
+### Assumed, to confirm with Tom
+
+Architect proposed these on 2026-11-21 and Tom approved the order of work without
+commenting on them. Programmer confirms each at the point of need.
+
+- Docker's WSL integration can be enabled on Tom's machine. **If it cannot, the
+  Chroma upgrade (0.5) becomes its own deploy after the rest**, because a failure
+  would otherwise first appear on production.
+- Wiki data is tarred and kept on the server; old wiki URLs get a 404, no redirects.
+- Changes reach the server by `git pull`.
+
+### 0.1 Needed from Tom first
+
+- Enable Docker Desktop's WSL integration for this distro (Settings, Resources, WSL
+  integration). Docker Desktop is installed; `docker` in WSL currently reports that
+  integration is off.
+- `cat` the four untracked server files: `exclude_from_tar.txt`,
+  `sudo_renew_cert.sh`, `server/old.nginx_all_apps.conf`, and a listing of
+  `fwww/static/test_08_fixture/`.
+
+### 0.2 The repo becomes the source of truth for deployment config
+
+Production code already matches the repo's `main`; only two config files differ
+(details and Tom's verbatim outputs:
+`docs/references/site_2024_production_state_2026-11-21.md`).
+
+- Commit the production `server/nginx_all_apps.conf` (HTTPS blocks live, `/cgimages/`
+  served with `root /var/www/`) and the absolute mount
+  `/home/admin/www/cgimages:/var/www/cgimages/:ro` in `docker-compose.yaml`. This is
+  its own commit, before any other change, so it can be checked: on the server,
+  `git fetch` then `git diff <that commit> -- server/nginx_all_apps.conf docker-compose.yaml`
+  must show nothing.
+- Architect decides which untracked server files are tracked once Tom provides them.
+  Expected: `sudo_renew_cert.sh` and `exclude_from_tar.txt` yes,
+  `old.nginx_all_apps.conf` no.
+- An HTTP-only config for local runs is not built. Local rehearsal does not start nginx.
+
+### 0.3 Compose and nginx changes
+
+- **DokuWiki removal (D14, replaces S7):** remove both nginx `location` blocks, the
+  `php1` and `php2` services, their `depends_on` entries, the two volume mounts and the
+  README mention. Requests to the old paths then reach Flask and get a 404.
+  On the server the two `data/doku*` directories are tarred before the deploy and
+  left on disk; deleting them is a later, separate decision for Tom.
+- **Published ports:** bind flask 8001, chroma 8000 and ollama 11434 to `127.0.0.1`.
+  Today only the Lightsail firewall keeps them private.
+- **Pinned images:** `nginx` and `ollama/ollama` (in `ollama.dockerfile`) get a
+  current stable version tag instead of `latest`. Programmer records the tags chosen.
+
+### 0.4 Python and requirements
+
+- `flask.dockerfile` moves from `python:3.11-slim` to `python:3.13-slim`. 3.13 is what
+  Tom's Debian ships, so a plain local venv matches the image.
+- `requirements.txt` today is a 100-line `pip freeze`. Replace with a short file of
+  direct dependencies (Flask, gunicorn, openai, ollama, Markdown, Flask-Markdown,
+  python-dotenv, chromadb-client), let pip resolve the latest versions, and freeze
+  the result for the image. Test packages go in a separate file that the image does
+  not install.
+- Latest versions on 2026-11-21, for reference: openai 3.57.0 (pinned 1.51.2, two
+  major versions behind, so expect call-site changes), flask 3.1.3, gunicorn 27.0.1,
+  ollama 0.6.3, markdown 3.11.3.
+
+### 0.5 Chroma
+
+- Server image `chromadb/chroma:1.1.1` to **1.5.9**, in `site_2024/docker-compose.yaml`
+  and in `ml/docker-compose.yaml`. Both mount the same `site_2024/data/chroma` on
+  Tom's machine, so they must name the same version.
+- The site uses only `chromadb.HttpClient`. Replace the `chromadb` package with
+  `chromadb-client` 1.5.9, the HTTP-only client. This drops onnxruntime (the package
+  with no Python 3.13 build at the old pin, and the source of the stderr warning on
+  import) and most of the frozen pins.
+- Release notes: Architect scanned the GitHub release notes for 1.2.2 through 1.5.9
+  on 2026-11-21 for the words migration, breaking, compatibility, deprecation and
+  downgrade. Nothing refers to a single-server storage change or a breaking client
+  change; the migration entries concern the distributed (Spanner) deployment. This
+  was a keyword scan of change titles, not a guarantee. Whether the upgraded server
+  can be rolled back onto the same data is **unknown**: treat the upgrade as one-way
+  and rely on the backup.
+
+### 0.6 Local rehearsal (before any deploy)
+
+1. Copy `site_2024/data/chroma` (553 MB) to a backup directory. The rehearsal
+   upgrades the working copy in place.
+2. With the old stack: record each collection's name and count, and the top 10
+   result ids for three questions from `refresh_questions.csv`.
+3. Build and start `flask`, `chroma-rag` and `ollama-rag` with the new compose file.
+   nginx is not started locally (no certificates).
+4. Pass criteria: collection names and counts unchanged; the same top 10 ids for the
+   three questions; one question answered end to end through the Flask app on
+   `127.0.0.1:8001` (needs a local `site.ini` with a key from Tom); no errors in
+   the container logs.
+5. Report to Architect. Any failure stops the deploy.
+
+### 0.7 Smoke calls
+
+One call to each candidate in 1.3 and to both current models, on the upgraded SDK.
+This shows whether Tom's account has access and what the call looks like now. If the
+call sites need changing for the new SDK, that change is part of Phase 0.
+
+### 0.8 Deploy
+
+Tom runs the server commands; Programmer supplies them and reads the output.
+
+1. Code review of the branch, then merge to `main` with Tom's approval and push.
+2. On the server: stop the stack; tar `data/chroma`, `data/dokucozy` and
+   `data/dokuN657CZ` to a directory outside the checkout.
+3. `git stash` the server's local edits (do not discard), `git pull`, then compare the
+   stash with the new checkout to show nothing was lost. Git-ignored files
+   (`site.ini`, key files) are untouched by this.
+4. Rebuild and start. Check the nginx config with `nginx -t` in the container.
+5. Checks: the site loads over HTTPS; a question is answered; `/cgimages/` serves;
+   `/dokucozy/` returns 404; ports 8000, 8001 and 11434 listen on `127.0.0.1` only.
+6. Rollback: stop, restore the `data/chroma` tar, check out `906ffd8`, `git stash pop`,
+   rebuild, start.
 
 Each evaluation harness lives in the repo whose code it exercises: the model
 evaluation in `site_2024`, the chunk experiment in `ml`.
@@ -87,7 +240,7 @@ The model evaluation uses 30. The chunk experiment reuses those 30 and adds abou
 
 ---
 
-## Phase 1: Model migration (deadline-driven)
+## Phase 1: Model migration
 
 ### 1.1 Defects to settle before any comparison
 
@@ -128,10 +281,9 @@ https://developers.openai.com/api/docs/models (read 2026-11-21):
 | `gpt-6.2-sol` | $2 / $10 | | candidate |
 | `gpt-6.2-astra` | $8 / $40 | | only if `sol` is not good enough |
 
-Unknown: whether these models accept the same `chat.completions` call the site
-makes today. The site pins `openai==1.51.2` (October 2024), which may predate
-them. Programmer makes one smoke call per candidate before building on it and
-reports any difference, including a needed SDK upgrade, to Architect.
+**[REVISED - 2026-11-21]** Unknown: whether these models accept the same
+`chat.completions` call the site makes today. The SDK is upgraded in Phase 0 and the
+smoke calls are made there (0.7).
 
 ### 1.4 Evaluation method
 
@@ -167,8 +319,7 @@ ratings disagree.
 ### 1.6 Rollout
 
 Model names are already in `site.ini` (`LLM_DRAFT`, `LLM_REVISE`), so the switch is
-a config change plus the prompt wording from 1.1. Deploy with at least two weeks of
-margin before January 14.
+a config change. The prompt wording from 1.1 is already deployed by then.
 
 ---
 
@@ -283,7 +434,7 @@ lookups cannot escape their directories.
 | S4 | Low | `sanitize()` does the opposite of its name: it wraps input in `Markup`, declaring it safe. Not exploitable today because values pass through JSON before display, but one template change away from being so. | `site_functions.py` | Remove the `Markup` wrap. |
 | S5 | Low | Unknown job ids and several routes return HTTP 500: `processid` and `status` with a bad id, `jobs/<bad column>` (`abort` is never imported), and `revise` / `feedback` / `answer` without a session. | `site_app.py` | Return 404 or redirect to the question form. |
 | S6 | Low | Feedback accepts any text as the rating, which is why the log contains values outside the three buttons. | `cozyrag_feedback` | Accept only `perfect`, `ok`, `not_good`. |
-| S7 | Low | DokuWiki page source is served directly (`/dokucozy/data/pages/start.txt` returns 200), bypassing any wiki access rules. Matters only if a wiki has private pages. PHP 7 is past end of life. | nginx config, `php:7-fpm` | Deny `data/`, `conf/`, `bin/`, `inc/` in nginx. PHP upgrade is outside this refresh. |
+| S7 | Replaced | **[REVISED - 2026-11-21]** Both wikis are removed (D14, Phase 0.3). Original finding: DokuWiki page source is served directly (`/dokucozy/data/pages/start.txt` returns 200), bypassing any wiki access rules. Matters only if a wiki has private pages. PHP 7 is past end of life. | nginx config, `php:7-fpm` | Deny `data/`, `conf/`, `bin/`, `inc/` in nginx. PHP upgrade is outside this refresh. |
 | S8 | Low | Each of the 4 gunicorn workers starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
 | S9 | Info | `.env_flask` is tracked in git with an `OPENAI_KEY` value that looks like a placeholder (24 characters, no `sk-` prefix). Tom to confirm it was never a real key. The repo's nginx config has HTTPS commented out, so it does not match production. No security headers (HSTS and similar) are sent. | repo root, `server/` | Confirm; no action otherwise. |
 
@@ -308,17 +459,19 @@ Questions and answers remain public on the jobs page. That is accepted.
 
 - Tom sets a monthly spend cap on the OpenAI account. This is the real backstop.
 - `/cozyrag/revise` accepts POST only (the button already posts).
-- nginx `limit_req` on `/cozyrag/query` and `/cozyrag/followup`. The nginx config
-  in the repo has HTTPS commented out and does not match production, so
-  Programmer asks Tom how the production config is managed before editing it.
+- nginx `limit_req` on `/cozyrag/query` and `/cozyrag/followup`. The repo's nginx
+  config matches production after Phase 0.2. Programmer proposes the rate to Architect.
 
-### Scheduling (D12)
+### Scheduling
 
-- With Phase 1: S1, S2.
+**[REVISED - 2026-11-21]** (D15)
+
+- With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6.
 - With Phase 4.1 (reference links): S3.
-- After Phase 1 is deployed: S4, S5, S6, S7. S7 has the same production nginx
-  question as S2.
-- Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`), S9 (Tom confirms).
+- Replaced by the DokuWiki removal in Phase 0.3: S7.
+- Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`).
+- Closed: S9. Tom confirmed the tracked `.env_flask` only ever held a placeholder;
+  the nginx mismatch is fixed by Phase 0.2.
 
 ## Phase 4: Website refresh: reference links and images
 
@@ -346,8 +499,10 @@ this is a lookup. Design after Phase 1.
 
 | Risk | Mitigation |
 |---|---|
-| Deadline missed | Phase 1 goes first; fallback is setting both tiers to OpenAI's recommended `gpt-6-luna` in `site.ini` without evaluation. |
-| New models reject the current API call | Smoke call per candidate before anything else (1.3). |
+| Shutdown date reached before the model switch | Tom expects a few days of effort (D15). Fallback is setting both tiers to OpenAI's recommended `gpt-6-luna` in `site.ini` without evaluation, once 0.7 shows it can be called. |
+| New models reject the current API call | SDK upgraded and smoke calls made in Phase 0 (0.7). |
+| Chroma upgrade damages or cannot read the collection | Rehearsed on a local copy with before and after checks (0.6); server data tarred before the deploy (0.8). A re-embed takes hours if both fail. |
+| One deploy carries many changes | The full stack runs locally first; without Docker locally, Chroma is split out (Phase 0 assumptions). |
 | Tom's rating and labelling time | 30 questions, not 50; pooled candidates capped at top 10 per variant. |
 | Chunk experiment shows no clear winner | That is a valid result; the decision rule says leave it alone. |
-| `site_2024` has no tests | Phase 1.1 introduces the first ones around prompt construction. |
+| `site_2024` has no tests | Phase 1.1 introduces the first ones around prompt construction. Phase 0 is verified by the rehearsal checks instead. |

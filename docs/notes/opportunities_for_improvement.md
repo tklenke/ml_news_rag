@@ -18,8 +18,5 @@ Works at current volume (about 850 jobs). Revisit if answers stall or pages slow
 
 ## site_2024: housekeeping (logged 2026-11-21)
 
-- `requirements.txt` pins October 2024 versions and carries the full `chromadb`
-  server dependency tree; the site only needs a client.
-- `php:7-fpm` (DokuWiki) is past end of life; `nginx:latest` is unpinned.
 - No security headers (HSTS and similar) are sent.
 - `site.ini.template` has `LLM = gpt-4o-mini`; the code reads `LLM_DRAFT` and `LLM_REVISE`.
