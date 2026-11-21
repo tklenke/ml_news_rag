@@ -69,8 +69,7 @@ Annual refresh of the RAG system + website; image database later. Focus areas:
 - [x] Work moved to branch `wip/annual-refresh`.
 - [x] `docs/acronyms.md` and `docs/style-guide.md` named the wrong project (`ea_tools`); corrected
       to `ml_news_rag`. Unused KiCAD acronym (SD) removed, RAG added.
-- [ ] Untracked file `docs/input/compare.html` in working tree — awaiting Tom's decision
-      (delete / commit / leave).
+- [x] Untracked debugging snippet `docs/input/compare.html` deleted per Tom.
 - [ ] `docs/notes/opportunities_for_improvement.md` referenced by architect role but does not
       exist. Create it when there is a first item to log.
 - Note: no root `requirements.txt`; dependencies are per-module.
