@@ -16,13 +16,20 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] Site review findings are to be fixed; schedule in plan Phase 3 (2026-11-21)
 - [x] No password on the jobs page; a full email address is never sent to a web page (2026-11-21)
 - [x] Chunk experiment question set: same 30 plus about 10 new (2026-11-21)
-- [ ] How is the production nginx config managed? The copy in the repo does not match
-      production (needed for S2 rate limit and S7)
+- [~] How is the production nginx config managed? The copy in the repo does not match
+      production (needed for S2 rate limit and S7). Tom provided the live file on
+      2026-11-21: it is `~/site_2024/server/nginx_all_apps.conf` on the server, i.e. the
+      same path as the repo copy, edited in place. Differences from the repo copy: the
+      certbot, HTTPS redirect and HTTPS server blocks are uncommented, and `/cgimages/`
+      uses `root /var/www/;` with `try_files $uri $uri/ =404;` instead of the repo's
+      `alias /home/admin/www/cgimages/`. Still open: how Tom wants changes delivered.
+- [x] DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed in this refresh; they
+      are not used (2026-11-21)
 
 ## Work items
 
 - [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
-- [ ] Give the production nginx config to the Programmer at the start of their first session
+- [x] Give the production nginx config to the Programmer at the start of their first session (2026-11-21)
 - [ ] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5)
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250

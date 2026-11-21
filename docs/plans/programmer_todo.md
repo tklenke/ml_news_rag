@@ -105,6 +105,8 @@ Flask's test client is enough; no live services are needed for these.
       a redirect to the question form.
 - [ ] S7 nginx denies `data/`, `conf/`, `bin/`, `inc/` under both DokuWiki locations.
       Same production-config question as S2b. Verify the wikis still load afterwards.
+      **On hold (2026-11-21):** Tom is removing both DokuWiki sites in this refresh, so
+      S7 is waiting for Architect to rework it as removal (see `architect_todo.md`).
 
 ### With Phase 4.1 (not yet designed)
 

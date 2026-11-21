@@ -47,6 +47,15 @@ Annual refresh of the RAG system + website; image database later. Focus areas:
 - Note: `ml/asker/` harnesses query the `all-minilm` collection, but production + embedder use
   `nomic-embed-text`. The asker/ scripts are stale test harnesses, NOT the production path.
 
+**NOTE FROM PROGRAMMER (2026-11-21):** Tom decided the two DokuWiki sites
+(`/dokucozy/`, `/dokuN657CZ/`) are removed in this refresh because they are not used.
+This changes plan Phase 3: S7 (deny `data/`, `conf/`, `bin/`, `inc/`) becomes removal,
+and the `php:7-fpm` end-of-life item in `opportunities_for_improvement.md` goes away with it.
+Removal touches the nginx `location` blocks, the `php1`/`php2` services and the
+`./data/dokucozy`, `./data/dokuN657CZ` volume mounts in `site_2024/docker-compose.yaml`.
+Architect should decide where it is scheduled and whether the wiki data is archived
+before removal. Production nginx details are recorded in `required_from_tom.md`.
+
 ## Questions answered by Tom (2026-11-21)
 
 1. **User-requested feature:** reference links to source documents inside the answer text
