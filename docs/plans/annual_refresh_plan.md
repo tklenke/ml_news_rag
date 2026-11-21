@@ -40,6 +40,9 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D7 | Retrieval mechanism stays as is. |
 | D8 | The website refresh is the reference links and the images. No other redesign. |
 | D9 | Model evaluation is checked at 10, 20 and 30 questions so a call can be made early. |
+| D10 | A full email address is never sent to a web page. No password on the jobs page; Tom reads the job files on the server when he needs an address. |
+| D11 | Chunk experiment uses the mixed question set: the same 30 plus about 10 new. |
+| D12 | Site review findings are fixed: S1 and S2 alongside Phase 1, S3 with the reference links, S4 to S7 after Phase 1 is deployed. S8 is logged as an opportunity for improvement. |
 
 ## Two repositories
 
@@ -197,7 +200,7 @@ than a few hours, stop and discuss before running the rest.
 
 ### 2.3 Questions and labelling (needs Tom)
 
-**[REVISED - 2026-11-21]** Question set proposed by Architect, awaiting Tom's confirmation.
+**[REVISED - 2026-11-21]** Question set confirmed by Tom (D11).
 
 **Which questions:** the same 30 as the model evaluation, plus about 10 new ones.
 
@@ -267,7 +270,7 @@ lookups cannot escape their directories.
 
 | # | Severity | Finding | Where | Suggested fix |
 |---|---|---|---|---|
-| S1 | High (privacy) | Full submitter email addresses are public. `/cozyrag/<id>/status` returns the whole job record as JSON and the results page prints `Submitted By: <email>`. Every job id is listed on the public jobs page. | `site_app.py` `cozyrag_status`, `cozyrag_results.html` | Return only the fields the page needs from `status`; drop the email from the results page; put the jobs page behind a password (nginx basic auth is enough). |
+| S1 | High (privacy) | Full submitter email addresses are public. `/cozyrag/<id>/status` returns the whole job record as JSON and the results page prints `Submitted By: <email>`. Every job id is listed on the public jobs page. | `site_app.py` `cozyrag_status`, `cozyrag_results.html` | See "S1 design" below (D10). |
 | S2 | Medium (cost) | No rate limit on questions. Anyone can script submissions; each follow-up sends about 20,000 tokens to the better model. `/cozyrag/revise` also runs on a plain GET. | `site_app.py`, nginx | Set a monthly spend cap on the OpenAI account (Tom). Add nginx `limit_req` on `/cozyrag/`. Make revise POST-only. |
 | S3 | Medium | Model output is rendered as raw HTML: the answer goes through Markdown, which passes HTML through, and is marked `safe`. A question can instruct the model to emit a script tag, and the result is stored and linked from the jobs page. | `cozyrag_results.html` line 11 | Sanitise the rendered HTML with an allow-list (for example `nh3`) before marking it safe. |
 | S4 | Low | `sanitize()` does the opposite of its name: it wraps input in `Markup`, declaring it safe. Not exploitable today because values pass through JSON before display, but one template change away from being so. | `site_functions.py` | Remove the `Markup` wrap. |
@@ -277,8 +280,38 @@ lookups cannot escape their directories.
 | S8 | Low | Each of the 4 gunicorn workers starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
 | S9 | Info | `.env_flask` is tracked in git with an `OPENAI_KEY` value that looks like a placeholder (24 characters, no `sk-` prefix). Tom to confirm it was never a real key. The repo's nginx config has HTTPS commented out, so it does not match production. No security headers (HSTS and similar) are sent. | repo root, `server/` | Confirm; no action otherwise. |
 
-S1 and S2 are small and sit in code Phase 1 already touches, so they can be done
-alongside Phase 1 if Tom wants them.
+### S1 design (D10)
+
+A full email address never leaves the server in any response.
+
+- One function produces the shortened form of an address (the first 5 characters
+  followed by `...`, as the jobs page shows today; empty when there is none). It
+  is applied where a job record is prepared for display, not in each template, so
+  the three places below cannot drift apart.
+- `/cozyrag/<id>/status` returns only what the polling page uses: `status`,
+  `status_text`, `result_html`. It no longer returns the job record.
+- The results page and the jobs page show the shortened form only.
+- Job files on disk are unchanged and keep the full address.
+- Tests assert that a known full address does not appear anywhere in the response
+  body of `status`, `processid`, `jobs` and `jobs/email`.
+
+Questions and answers remain public on the jobs page. That is accepted.
+
+### S2 design
+
+- Tom sets a monthly spend cap on the OpenAI account. This is the real backstop.
+- `/cozyrag/revise` accepts POST only (the button already posts).
+- nginx `limit_req` on `/cozyrag/query` and `/cozyrag/followup`. The nginx config
+  in the repo has HTTPS commented out and does not match production, so
+  Programmer asks Tom how the production config is managed before editing it.
+
+### Scheduling (D12)
+
+- With Phase 1: S1, S2.
+- With Phase 4.1 (reference links): S3.
+- After Phase 1 is deployed: S4, S5, S6, S7. S7 has the same production nginx
+  question as S2.
+- Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`), S9 (Tom confirms).
 
 ## Phase 4: Website refresh: reference links and images
 

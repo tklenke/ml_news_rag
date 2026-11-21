@@ -44,10 +44,46 @@ All tasks follow TDD. Escalate design questions to Architect; do not resolve the
 - [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
       each batch (plan 2.4)
 
+- [ ] 2.5 Question set is the Phase 1 thirty plus about 10 new (plan 2.3); the harness reads
+      both from `refresh_questions.csv`
+
 ## Phase 3: Site fixes from review (repo: `../site_2024/`)
 
-Findings S1 to S9 are in the plan. **Do not start any of them** until Tom has chosen
-which to fix and Architect has added tasks here.
+Findings and designs are in plan Phase 3. Each fix starts with a failing test.
+Flask's test client is enough; no live services are needed for these.
+
+### With Phase 1 (do after 1.0, before 1.6 deploy)
+
+- [ ] S1a Function that shortens an email address for display: first 5 characters plus
+      `...`; empty string for none. Replaces the `safe_truncate(job['email'],5)` calls.
+- [ ] S1b `/cozyrag/<id>/status` returns only `status`, `status_text`, `result_html`.
+      Check `cozyrag_answer.html` still works; it reads only those three.
+- [ ] S1c Results page and jobs page (including `/cozyrag/jobs/email`) show the shortened
+      address only, applied where the job record is prepared for display.
+- [ ] S1d Tests: with a job file containing a known full address, that address appears in
+      none of the responses from `status`, `processid`, `jobs`, `jobs/email`.
+- [ ] S2a `/cozyrag/revise` accepts POST only; a GET gets 405.
+- [ ] S2b Ask Tom how the production nginx config is managed (the repo copy does not match
+      production). Then add `limit_req` for `/cozyrag/query` and `/cozyrag/followup`.
+      Propose the rate to Architect before deploying.
+
+### After Phase 1 is deployed
+
+- [ ] S4 `sanitize()` no longer wraps input in `Markup`. Rename it to say what it does, or
+      remove it if nothing remains; ask Architect if unsure.
+- [ ] S5a Unknown job id on `processid` and `status` returns 404, not 500.
+- [ ] S5b `/cozyrag/jobs/<unknown column>` returns 404 (`abort` is not imported today).
+- [ ] S5c `revise`, `followup`, `feedback` and `answer` without a session redirect to the
+      question form instead of returning 500.
+- [ ] S6 Feedback accepts only `perfect`, `ok`, `not_good`; anything else is ignored with
+      a redirect to the question form.
+- [ ] S7 nginx denies `data/`, `conf/`, `bin/`, `inc/` under both DokuWiki locations.
+      Same production-config question as S2b. Verify the wikis still load afterwards.
+
+### With Phase 4.1 (not yet designed)
+
+- [ ] S3 Sanitise rendered answer HTML with an allow-list before it is marked safe.
+      Wait for the reference-links design; it decides which tags and link targets are allowed.
 
 Phase 4 (reference links, image gallery) is not yet designed.
 

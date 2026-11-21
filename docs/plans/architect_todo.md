@@ -73,8 +73,11 @@ Annual refresh of the RAG system + website; image database later. Focus areas:
       findings S1 to S9 in plan Phase 3.
 - [x] Add 10 / 20 / 30 checkpoints to the model evaluation (plan 1.5).
 - [x] Propose the chunk experiment question set: same 30 plus about 10 new (plan 2.3).
-- [ ] Get Tom's choice of which S findings to fix, then add them to `programmer_todo.md`.
-- [ ] Get Tom's confirmation of the chunk experiment question set.
+- [x] Get Tom's choice of which S findings to fix; tasks added to `programmer_todo.md`,
+      S1 and S2 designs added to the plan.
+- [x] Get Tom's confirmation of the chunk experiment question set (mixed).
+- [x] Create `docs/notes/opportunities_for_improvement.md` with the job-processing item (S8).
+- [ ] Approve the nginx rate Programmer proposes for S2b.
 - [ ] Design reference links (plan 4.1) and image gallery (4.2) after Phase 1.
 
 ## Findings from the production job log (2026-11-21)
@@ -92,8 +95,7 @@ Annual refresh of the RAG system + website; image database later. Focus areas:
 - [x] `docs/acronyms.md` and `docs/style-guide.md` named the wrong project (`ea_tools`); corrected
       to `ml_news_rag`. Unused KiCAD acronym (SD) removed, RAG added.
 - [x] Untracked debugging snippet `docs/input/compare.html` deleted per Tom.
-- [ ] `docs/notes/opportunities_for_improvement.md` referenced by architect role but does not
-      exist. Create it when there is a first item to log.
+- [x] `docs/notes/opportunities_for_improvement.md` created with its first item.
 - Note: no root `requirements.txt`; dependencies are per-module.
 
 ---

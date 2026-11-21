@@ -13,10 +13,11 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] `CozyRAG_rev1_Back_Test.pdf` superseded (2026-11-21)
 - [x] Website refresh scope: reference links and images only (2026-11-21)
 - [x] Model evaluation checked at 10, 20 and 30 questions (2026-11-21)
-- [ ] Which site review findings to fix (plan Phase 3, S1 to S9), and whether S1 and S2
-      go in alongside Phase 1
-- [ ] Is the public `/cozyrag/jobs` page intended to be readable without login? (part of S1)
-- [ ] Confirm the chunk experiment question set: same 30 plus about 10 new (plan 2.3)
+- [x] Site review findings are to be fixed; schedule in plan Phase 3 (2026-11-21)
+- [x] No password on the jobs page; a full email address is never sent to a web page (2026-11-21)
+- [x] Chunk experiment question set: same 30 plus about 10 new (2026-11-21)
+- [ ] How is the production nginx config managed? The copy in the repo does not match
+      production (needed for S2 rate limit and S7)
 
 ## Work items
 
