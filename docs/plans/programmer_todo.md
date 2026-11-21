@@ -1,4 +1,52 @@
-# Programmer Todo - Image Database Project
+# Programmer Todo
+
+---
+
+# ACTIVE: Annual RAG / Website Refresh
+
+**Design:** `docs/plans/annual_refresh_plan.md` (read it first; section numbers below refer to it)
+**Deadline:** Phase 1 deployed before 2027-01-14
+**Branches:** `wip/annual-refresh` in `ml/`; create a WIP branch in `../site_2024/` before touching it
+
+All tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
+
+## Phase 1: Model migration (repo: `../site_2024/`)
+
+- [ ] 1.0 Set up pytest in `site_2024` (it has no tests today)
+- [ ] 1.1a Separate prompt construction from `process_question` into a function that takes
+      job data and document lists and returns the prompt string. Behaviour unchanged.
+- [ ] 1.1b Write a failing test for the suspected defect: revise and follow-up prompts must
+      contain the full text of every prior document. If the test passes without a code
+      change, the suspicion is wrong: note it in `architect_todo.md` and skip the fix.
+- [ ] 1.1c Fix the prior-context join if 1.1b failed
+- [ ] 1.1d Reword `revise_prompt` and `followup_prompt` so they name no model
+- [ ] 1.1e Ask Tom before fixing or removing the stale `__main__` block in `llm_functions.py`
+- [ ] 1.2 Smoke call to each candidate model (plan 1.3); report any API difference to Architect
+- [ ] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
+      sends the same documents to each model, records answer, tokens, latency, cost
+- [ ] 1.4 Capture the baseline with the current models (must happen before 2027-01-14)
+- [ ] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate
+- [ ] 1.6 After Tom's decision: update `site.ini` and `site.ini.template`, deploy
+
+**Blocked on Tom:** the 30 questions (`refresh_questions.csv`) for 1.3 onward. 1.0 to 1.2 are not blocked.
+
+## Phase 2: Chunk-size experiment (repo: `ml/`)
+
+- [ ] 2.1a Tests for `chunksplitter` covering current behaviour
+- [ ] 2.1b Failing test, then fix: no prefix-only chunk when the word count is an exact
+      multiple of the chunk size, or for an empty file
+- [ ] 2.1c Add overlap to `chunksplitter` (default 0 reproduces current chunks)
+- [ ] 2.1d `embedder.py` takes chunk size, overlap and collection name as parameters,
+      with a progress file per collection
+- [ ] 2.2 Embed variant B on the full corpus and report the time taken before running C, D, E
+- [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom (plan 2.3)
+- [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels (plan 2.4)
+
+Phases 3 and 4 are not yet designed.
+
+---
+
+# Image Database Project
 
 **Last Updated:** 2025-11-06
 **Status:** Phase 6 (Keyword Scoring) Complete - All Tasks Done

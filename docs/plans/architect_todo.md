@@ -6,7 +6,8 @@
 
 # ACTIVE WORKSTREAM: Annual RAG/Website Refresh (started 2026-11-21)
 
-**Status:** Discovery complete, plan NOT yet written. Resume here next session.
+**Status:** Plan written: `annual_refresh_plan.md`. Tom's decisions recorded there and in
+`required_from_tom.md`. Phase 1 (model migration, deadline 2027-01-14) is ready for Programmer.
 
 ## Goal (from Tom)
 
@@ -46,23 +47,39 @@ Annual refresh of the RAG system + website; image database later. Focus areas:
 - Note: `ml/asker/` harnesses query the `all-minilm` collection, but production + embedder use
   `nomic-embed-text`. The asker/ scripts are stale test harnesses, NOT the production path.
 
-## OPEN QUESTIONS — blocking plan authoring (need Tom)
+## Questions answered by Tom (2026-11-21)
 
-1. **User-requested features** — Tom mentioned "a couple of features users would like to add."
-   NOT yet described. Need the list to scope them.
-2. **OpenAI sunset specifics** — WHICH model is sunset (`gpt-4o-mini`, `gpt-4.1`, or both)?
-   Deadline? (Then research successor options.)
-3. **LLM strategy decision** (options prepared, not yet answered): evaluate-then-decide
-   (use modelTesting harness) / stay OpenAI successors / go local Ollama / switch to Claude.
-4. **Chunk-size approach decision** (options prepared, not yet answered): run a sweep
-   experiment / pick a value & re-embed / leave as-is.
+1. **User-requested feature:** reference links to source documents inside the answer text
+   (as Gemini does). Nice-to-have; evaluate after the other work.
+2. **OpenAI sunset:** all GPT-4 versions. Both production models shut down 2027-01-14.
+3. **LLM strategy:** stay with OpenAI; keep cheap first answer plus better "dig deeper" model.
+4. **Chunk size:** test it; Architect guides test design and evaluation criteria.
+
+## Completed
+
+- [x] Get answers to the 4 open questions.
+- [x] Decide plan-doc location: master plan in `ml/docs/plans/annual_refresh_plan.md`,
+      cross-repo tasks noted per phase.
+- [x] Write the refresh plan, `required_from_tom.md`, and the Phase 1 / Phase 2 breakdown
+      in `programmer_todo.md`.
 
 ## NEXT STEPS (resume point)
 
-- [ ] Get answers to the 4 open questions above (was mid-asking when session paused).
-- [ ] Decide plan-doc location/scope (proposed: a master refresh plan in `ml/docs/plans/`,
-      noting cross-repo tasks that land in `../site_2024/`).
-- [ ] Write the refresh plan + programmer_todo breakdown.
+- [ ] Propose a 30-question shortlist from https://m24tom.com/cozyrag/jobs for Tom to pick from.
+- [ ] Review Programmer's finding on the suspected revise-context defect (plan 1.1).
+- [ ] Review Programmer's smoke-call report on the GPT-6 candidates (plan 1.3).
+- [ ] Scope the website refresh with Tom (plan Phase 3), including whether the public
+      jobs page is intended.
+- [ ] Design reference links (plan 4.1) after Phase 1; image gallery (4.2) after Phase 3 scope.
+
+## Findings from the production job log (2026-11-21)
+
+- About 850 logged questions; about 45 carry a rating and roughly 20 of those are `n/a`.
+  Rating scale changed over time (awesome/useful/meh, later perfect/ok/not_good).
+- Typical first answer: about 4,500 tokens in, 300 out, 5 s on `gpt-4o-mini`.
+  Follow-up sampled: about 21,000 tokens in on `gpt-4.1`.
+- Answers do not cite sources in their text.
+- `site_2024` has no automated tests.
 
 ## Housekeeping
 
