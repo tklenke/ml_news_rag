@@ -33,6 +33,11 @@ so nothing stalls later. Record each answer in `docs/plans/required_from_tom.md`
 Ask again at the point of need if an answer is still open: item 2 before 1.2, item 1
 before S2b, item 3 before 1.6.
 
+**Status 2026-11-21:** All four questions asked; answers in `required_from_tom.md`.
+Task 1.0 is **blocked on Architect**: Tom wants a Python / chromadb / dependency refresh
+added to the plan first (see "NOTES FROM PROGRAMMER SESSION 2026-11-21" in
+`architect_todo.md`). Branch `wip/annual-refresh` exists in `site_2024` with no commits yet.
+
 ## Phase 1: Model migration (repo: `../site_2024/`)
 
 - [ ] 1.0 Set up pytest in `site_2024` (it has no tests today)
