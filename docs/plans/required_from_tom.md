@@ -21,7 +21,8 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Work items
 
-- [ ] Pick the 30 evaluation questions from the production log (Architect proposes a shortlist)
+- [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
+- [ ] Give the production nginx config to the Programmer at the start of their first session
 - [ ] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5)
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250

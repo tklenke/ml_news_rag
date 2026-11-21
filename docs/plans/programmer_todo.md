@@ -34,7 +34,9 @@ he wants changes to it delivered. Tasks S2b and S7 depend on it.
       of 10 questions at a time, with a per-tier tally after each batch (plan 1.5)
 - [ ] 1.6 After Tom's decision: update `site.ini` and `site.ini.template`, deploy
 
-**Blocked on Tom:** the 30 questions (`refresh_questions.csv`) for 1.3 onward. 1.0 to 1.2 are not blocked.
+**Questions are ready:** `docs/plans/refresh_questions.csv`. Use the rows whose `use` is
+`batch1`, `batch2`, `batch3`, in that order. Nothing in Phase 1 is blocked on Tom except
+the production nginx config.
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
@@ -49,8 +51,9 @@ he wants changes to it delivered. Tasks S2b and S7 depend on it.
 - [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
       each batch (plan 2.4)
 
-- [ ] 2.5 Question set is the Phase 1 thirty plus about 10 new (plan 2.3); the harness reads
-      both from `refresh_questions.csv`
+- [ ] 2.5 Question set is the three batches plus the `chunk_only` rows of
+      `refresh_questions.csv` (40 questions, plan 2.3). `reserve` rows are not used unless
+      Architect says so.
 
 ## Phase 3: Site fixes from review (repo: `../site_2024/`)
 

@@ -73,8 +73,15 @@ The model evaluation uses 30. The chunk experiment reuses those 30 and adds abou
   lookups (torque values, part numbers, where-to-buy) with broad questions
   (experience, sentiment, comparisons). Include the questions users rated
   `not_good` and several rated `perfect`. Exclude test entries.
-- **Format:** `docs/plans/refresh_questions.csv` with columns `question_id`,
-  `question`, `kind` (`factual` / `broad`), `prod_job_id`, `prod_rating`.
+- **Format:** `docs/plans/refresh_questions.csv` with columns `question_id`, `use`,
+  `kind` (`factual` / `broad`), `long_doc`, `prod_rating`, `prod_job_id`, `question`.
+- **`use` column:** `batch1`, `batch2`, `batch3` are the 30 for the model
+  evaluation (5 factual and 5 broad each). `chunk_only` are the 10 extra for the
+  chunk experiment, all expected to be answered from long documents. `reserve`
+  are 12 approved spares: use them to replace a question that proves unusable or
+  to extend either experiment if a result is too close to call.
+- Tom approved all 52 on 2026-11-21 and asked that weak-looking ones (for example
+  "length of a cozy") stay in, since they show how a model handles thin questions.
 - The logged per-question sources are **not** an answer key. They are what the
   current 250-word setup retrieved, so using them as truth would favour the baseline.
 

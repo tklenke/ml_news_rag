@@ -69,8 +69,8 @@ Annual refresh of the RAG system + website; image database later. Focus areas:
       52 candidates in `refresh_question_candidates.csv` (25 factual, 27 broad; `long_doc`
       marks likely newsletter / Canard Pusher / AeroElectric answers). Built from the 835
       logged jobs: 691 first-answer jobs, 624 after dropping short entries and exact repeats.
-- [ ] After Tom's cut: write `refresh_questions.csv` (30 in three balanced batches of 10,
-      plus about 10 chunk-only questions) and archive the candidates file with Tom's approval.
+- [x] Tom approved all 52. Candidates file renamed to `refresh_questions.csv` with a `use`
+      column: three balanced batches of 10, 10 chunk-only, 12 reserve.
 - [x] Note for Programmer to get the production nginx config from Tom at the start.
 - [ ] Review Programmer's finding on the suspected revise-context defect (plan 1.1).
 - [ ] Review Programmer's smoke-call report on the GPT-6 candidates (plan 1.3).

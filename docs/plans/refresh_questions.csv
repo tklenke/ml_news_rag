@@ -1,0 +1,53 @@
+question_id,use,kind,long_doc,prod_rating,prod_job_id,question
+Q01,batch1,factual,,not_good,DvIza1IvDb,length of a cozy
+Q03,batch1,factual,,,TtVeim8CUi,Saber prop extension bolt torque
+Q04,batch1,factual,,perfect,QpWfMfrjQR,what is the empty weight of the average cozy
+Q10,batch1,factual,,,iEhZSbFqQH,What size and type of tubing is used for fuel lines?
+Q14,batch1,factual,y,,g4DiJfjFnX,What is the range of travel for the ailerons?
+Q26,batch1,broad,,perfect,ExorlOpAEV,What main tires are recommended for the Cozy?
+Q28,batch1,broad,,ok,DinDaYkibT,Tell me about moving the Cozy by trailer
+Q35,batch1,broad,,,B1r3NDrJPK,Looking for suggestions on bleeding Matco brakes.
+Q41,batch1,broad,,,NYhxqsS41d,What are the best modifications for drag reduction?
+Q44,batch1,broad,y,,NkXmofR2Xn,"plans pitch trim, davenport pitch trim or strong pitch trim. which is the most common and preferred among flyers"
+Q02,batch2,factual,,not_good,Rt2ZqJfSMt,How do I determine what length throttle and mixture cables I need using a bendix rs5a fuel injection servo
+Q05,batch2,factual,,perfect,uLHzZ7a8uC,Where are Desser Monster retreads purchased?
+Q09,batch2,factual,,ok,uu5hlTKYNe,changing the front tire. where can i find data of the bolt torque requires for the wheel and axil
+Q16,batch2,factual,y,,esiki5GjSS,What is the correct angle of incidence for the canard
+Q21,batch2,factual,,,kCuwob9Q5I,what is an acceptable leak rate when testing the fuel tanks using the manometer method
+Q27,batch2,broad,,perfect,ZxeVTAvmQp,What is the sentiment of owners in regard to using alternative engines like rotax
+Q30,batch2,broad,,ok,CuD9PtYXeA,how useful have vortex generators been for reducing landing speeds and distances
+Q37,batch2,broad,,,U8nWChXFSd,"What is currently the alternative to EZ-Poxy in terms of fuel resistance, given that EZ-Poxy 10A/87B is no longer produced?"
+Q38,batch2,broad,,,HOQObNmMpA,"explain common and uncommon failure, breakages of Wilhelmson electric nose gear actuator"
+Q48,batch2,broad,y,,3TWiDT33hb,what are the best takeoff and landing techniques
+Q06,batch3,factual,,perfect,u7XzdHZAQO,What grease is recommended for nose gear fork?
+Q07,batch3,factual,,perfect,omYREBNz9k,what is the new electronic fuel injection system builders are using that requires a high pressure fuel return lines to each of the tanks?
+Q08,batch3,factual,,perfect,asDRjWGOwC,how do you set the pre load on the front wheel axil and bearing
+Q18,batch3,factual,y,,Yyj0r6CviI,When was F28 moved aft to clear the canard?
+Q25,batch3,factual,y,,52hV5cDHfq,What is the takeoff roll for a Cozy Mk IV?
+Q32,batch3,broad,,useful,sgxMRzsAvv,pros and cons of front hinged canopy vs per plans side hinged canopy
+Q34,batch3,broad,,meh,lR1bsFvNiX,can you list websites of builders that describe or spell out the build order they took
+Q36,batch3,broad,,,XlSzbNf7JX,finding leaks in the fuel tanks that are very slight. what are the methods and did any builders decide to proceed with less than perfect tanks
+Q43,batch3,broad,,,hUZzNHwjw1,what is the best location for the oil cooler and what manufacturer's and models
+Q47,batch3,broad,,,TXV9RLEui6,How do I ensure that the nose gearz on a COZY MKIV will not shimmy?
+Q12,chunk_only,factual,y,,DkhxWWUfEI,what is the datum location for weight and balance. is it FS 113.9 for all cozy aircraft
+Q13,chunk_only,factual,y,,wmntFBCDiA,"what is the Fuselage Station (FS) of the instrument panel (IP), the pilot seat back and the firewall in the Cozy IV"
+Q15,chunk_only,factual,y,,yYzEi9F2pA,what is the elevator's range of deflection?
+Q17,chunk_only,factual,y,,srjsQDovRV,How many plies of fiberglass does the forward face of the firewall get when the entire face is initially glassed?
+Q19,chunk_only,factual,y,,2pnVvqvRQT,Which newsletter described the cantilever style pitch trim spring?
+Q24,chunk_only,factual,y,,yC6jgyWXrm,What is maximum weight of COZY MKIV
+Q45,chunk_only,broad,y,,GkExTf2at6,find examples in the Cozy Newsletter or Canard Pusher newsletter where Nat Puffer or Burt Rutan make statements about builders following the build instructions in the plans they created and not making changes to those plans
+Q50,chunk_only,broad,y,n/a,v3cHaBm4T3,what has rutan said about the COZY design
+Q51,chunk_only,broad,y,,IrcbGd4EGe,from aeroelectric connection explain the rational and components on the endurance bus
+Q52,chunk_only,broad,y,,i6XEBTUsiN,"Which ""Z"" electrical architecture is the most suitable for a Cozy Mk IV?"
+Q11,reserve,factual,,,WkWbqm9aqv,What size tubing is used for pitot static system?
+Q20,reserve,factual,,,oFcSe00P03,what is the minimum insertion depth for mm-4 rod ends
+Q22,reserve,factual,,,4thTCN9R5z,What caster is required for the nose landing gear?
+Q23,reserve,factual,,,YlF0kgzWCA,What is the thickness of BID?
+Q29,reserve,broad,,ok,lsplz5ouKf,Gap sealing the cockpit for heating. What have people found useful
+Q31,reserve,broad,,ok,FMxqGPAIW1,What should I use between cylinder baffling and cylinders to prevent chatter between metal surfaces
+Q33,reserve,broad,,useful,AiZFpZsTy7,what are the main obstacles during the build
+Q39,reserve,broad,,,8MyQWdsOHZ,How to keep oil temperatures down during long taxi?
+Q40,reserve,broad,,,20aoKlRudQ,tell me about using piano hinges for cowling attachment
+Q42,reserve,broad,,,nDnHag5oHJ,"do builders installing the Light Speed Plasma III ignition system, do they prefer to use dual Light Speed ignition or one Light Speed and one magneto"
+Q46,reserve,broad,,,itVt8oEve2,what chapter sequence is best. how do I know what chapters I can start when. how do I deal with sequencing and superintendency of chapters?
+Q49,reserve,broad,,,4iaihzJZi8,How does an epoxy like ProSet or Aeropoxy compare to MGS?
