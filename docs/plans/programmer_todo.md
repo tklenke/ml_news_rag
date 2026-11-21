@@ -4,16 +4,34 @@
 
 # ACTIVE: Annual RAG / Website Refresh
 
-**Design:** `docs/plans/annual_refresh_plan.md` (read it first; section numbers below refer to it)
+**READ FIRST: `docs/plans/annual_refresh_plan.md`.** Read the whole document before any
+task, every session. It gives the big picture: why the work is ordered this way, Tom's
+decisions (D1 to D12), the evaluation methods and decision rules, and the site review
+findings. The tasks below are only a checklist; section numbers refer to the plan.
+
 **Deadline:** Phase 1 deployed before 2027-01-14
 **Branches:** `wip/annual-refresh` in `ml/`; create a WIP branch in `../site_2024/` before touching it
 
 All tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
-**BEFORE YOU START: get the production nginx config from Tom.** The copy in
-`site_2024/server/nginx_all_apps.conf` has HTTPS commented out and is not what runs in
-production. Ask Tom for the live config at the start of your first session, and ask how
-he wants changes to it delivered. Tasks S2b and S7 depend on it.
+## Ask Tom at the start of your first session
+
+Tom will work through these with you directly. Ask all four up front, before task 1.0,
+so nothing stalls later. Record each answer in `docs/plans/required_from_tom.md`.
+
+1. **Production nginx config.** The copy in `site_2024/server/nginx_all_apps.conf` has
+   HTTPS commented out and is not what runs in production. Ask for the live config and
+   how Tom wants changes to it delivered. Needed for S2b and S7.
+2. **OpenAI model access.** Can the account use `gpt-6-luna`, `gpt-6.1-terra` and
+   `gpt-6.2-sol`? Needed before the smoke calls in task 1.2.
+3. **OpenAI spend cap.** Has Tom set a monthly limit on the account? It is the backstop
+   for finding S2 and must be in place before the deploy in task 1.6.
+4. **`.env_flask`.** It is tracked in `site_2024` with an `OPENAI_KEY` value that looks
+   like a placeholder. Ask Tom to confirm it was never a real key. If it was, stop and
+   tell Tom the key must be revoked; do not try to rewrite git history yourself.
+
+Ask again at the point of need if an answer is still open: item 2 before 1.2, item 1
+before S2b, item 3 before 1.6.
 
 ## Phase 1: Model migration (repo: `../site_2024/`)
 
