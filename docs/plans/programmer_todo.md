@@ -25,7 +25,8 @@ All tasks follow TDD. Escalate design questions to Architect; do not resolve the
 - [ ] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
       sends the same documents to each model, records answer, tokens, latency, cost
 - [ ] 1.4 Capture the baseline with the current models (must happen before 2027-01-14)
-- [ ] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate
+- [ ] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
+      of 10 questions at a time, with a per-tier tally after each batch (plan 1.5)
 - [ ] 1.6 After Tom's decision: update `site.ini` and `site.ini.template`, deploy
 
 **Blocked on Tom:** the 30 questions (`refresh_questions.csv`) for 1.3 onward. 1.0 to 1.2 are not blocked.
@@ -39,10 +40,16 @@ All tasks follow TDD. Escalate design questions to Architect; do not resolve the
 - [ ] 2.1d `embedder.py` takes chunk size, overlap and collection name as parameters,
       with a progress file per collection
 - [ ] 2.2 Embed variant B on the full corpus and report the time taken before running C, D, E
-- [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom (plan 2.3)
-- [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels (plan 2.4)
+- [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom, one batch of 10 questions at a time (plan 2.3)
+- [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
+      each batch (plan 2.4)
 
-Phases 3 and 4 are not yet designed.
+## Phase 3: Site fixes from review (repo: `../site_2024/`)
+
+Findings S1 to S9 are in the plan. **Do not start any of them** until Tom has chosen
+which to fix and Architect has added tasks here.
+
+Phase 4 (reference links, image gallery) is not yet designed.
 
 ---
 

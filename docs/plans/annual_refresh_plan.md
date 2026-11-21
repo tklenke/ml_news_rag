@@ -4,6 +4,13 @@
 **Status:** Plan approved in outline by Tom; ready for Programmer on Phase 1
 **Owner:** Architect (design), Programmer (implementation)
 
+## Design Revision History
+
+- **2026-11-21:** Website refresh defined by Tom as reference links plus images (Phase 4).
+  Phase 3 is now the fixes arising from a review of the site code and live server.
+  Model evaluation gets checkpoints at 10, 20 and 30 questions. Chunk experiment
+  question set proposed as the same 30 plus about 10 new, labelled in batches.
+
 ## Goal
 
 Keep CozyRAG running past the OpenAI model shutdown, find out whether a different
@@ -31,6 +38,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D5 | Reference links in answers are a nice-to-have. Evaluate after the other work is done. |
 | D6 | `site_2024/CozyRAG_rev1_Back_Test.pdf` is superseded by the evaluation in this plan. |
 | D7 | Retrieval mechanism stays as is. |
+| D8 | The website refresh is the reference links and the images. No other redesign. |
+| D9 | Model evaluation is checked at 10, 20 and 30 questions so a call can be made early. |
 
 ## Two repositories
 
@@ -48,10 +57,15 @@ evaluation in `site_2024`, the chunk experiment in `ml`.
 
 ## Shared asset: the question set
 
-Both experiments use one question set drawn from the production log at
-https://m24tom.com/cozyrag/jobs (about 850 real questions as of 2026-11-21).
+**[REVISED - 2026-11-21]**
 
-- **Size:** 30 questions.
+Questions are drawn from the production log at
+https://m24tom.com/cozyrag/jobs (about 850 real questions as of 2026-11-21).
+The model evaluation uses 30. The chunk experiment reuses those 30 and adds about
+10 more (see 2.3).
+
+- **Size:** 30 questions, ordered into three batches of 10. Each batch has the same
+  mix of `factual` and `broad` so a checkpoint after any batch is a fair sample.
 - **Selection:** Tom picks, with Architect proposing a shortlist. Mix narrow factual
   lookups (torque values, part numbers, where-to-buy) with broad questions
   (experience, sentiment, comparisons). Include the questions users rated
@@ -105,8 +119,9 @@ https://developers.openai.com/api/docs/models (read 2026-11-21):
 | `gpt-6.2-astra` | $8 / $40 | | only if `sol` is not good enough |
 
 Unknown: whether these models accept the same `chat.completions` call the site
-makes today. Programmer makes one smoke call per candidate before building on it
-and reports any difference to Architect.
+makes today. The site pins `openai==1.51.2` (October 2024), which may predate
+them. Programmer makes one smoke call per candidate before building on it and
+reports any difference, including a needed SDK upgrade, to Architect.
 
 ### 1.4 Evaluation method
 
@@ -121,9 +136,23 @@ and reports any difference to Architect.
 
 ### 1.5 Decision rule
 
+**[REVISED - 2026-11-21]** Checkpoints added at Tom's request.
+
 For each tier, choose the **cheapest** candidate that has no more `not_good`
 ratings and no more factual errors than the baseline. If none qualifies, escalate
 to the next model up and discuss with Tom.
+
+Tom rates one batch of 10 at a time. After each batch, per tier:
+
+- **Stop and adopt** the cheapest candidate if it has no `not_good` and no factual
+  error so far, and at least as many `perfect` ratings as the baseline.
+- **Drop a candidate** if it has 3 or more `not_good` or factual errors beyond the
+  baseline's count. It is not rated in later batches.
+- **Otherwise continue** to the next batch. After 30, apply the rule above as written.
+
+Ten questions is a small sample. Stopping early is acceptable here because the
+choice is a `site.ini` setting and can be reversed in minutes if production
+ratings disagree.
 
 ### 1.6 Rollout
 
@@ -166,7 +195,27 @@ Embedding model (`nomic-embed-text`) and prefixes stay fixed.
 artificially easy. Programmer times variant B first; if a full variant takes more
 than a few hours, stop and discuss before running the rest.
 
-### 2.3 Labelling (needs Tom)
+### 2.3 Questions and labelling (needs Tom)
+
+**[REVISED - 2026-11-21]** Question set proposed by Architect, awaiting Tom's confirmation.
+
+**Which questions:** the same 30 as the model evaluation, plus about 10 new ones.
+
+- Reusing the 30 is safe: nothing is tuned on the model ratings, so there is no
+  contamination. Tom already knows what a good answer to each looks like, which
+  makes labelling faster, and the winner's answers can be compared with the
+  Phase 1 answers afterwards.
+- The 10 new ones target where chunk size matters most: answers inside long
+  documents (newsletters, Canard Pusher, long threads). Measured on the corpus
+  2026-11-21: 92% of message words are in files over 250 words, and newsletters
+  have a median of about 7,900 words. Files of 250 words or fewer (45% of
+  messages) are a single chunk in every variant except B.
+
+**Batches:** labelled 10 questions at a time, with the metrics recomputed after
+each batch. Stop early if one variant is already ahead by the 2.5 margin or if
+all variants are within one question of each other after 20.
+
+**Labelling steps:**
 
 1. For each question, take the top 10 chunks from every variant and merge them by
    source document.
@@ -175,8 +224,8 @@ than a few hours, stop and discuss before running the rest.
    shuffled and do not say which variant found them.
 3. Tom marks each row `y` or `n`: does this document help answer the question?
 
-Expected effort: roughly 15 to 25 rows per question, so 450 to 750 judgements, a
-few hours in total. This is the main cost of the experiment and it falls on Tom.
+Expected effort: roughly 15 to 25 rows per question, so 150 to 250 judgements per
+batch of 10 and 600 to 1,000 if all 40 are needed. This is the main cost of the experiment and it falls on Tom.
 
 ### 2.4 Metrics
 
@@ -190,8 +239,8 @@ Measured at a fixed 15 chunks (what the first-answer model receives), because th
 
 ### 2.5 Decision rule (fixed before running)
 
-Re-embed production only if a variant beats the baseline on hit rate by 3 or more
-questions out of 30, or matches it on hit rate and finds clearly more relevant
+Re-embed production only if a variant beats the baseline on hit rate by at least
+one question in ten (3 of 30, 4 of 40), or matches it on hit rate and finds clearly more relevant
 sources. Otherwise leave chunking alone and record the result.
 
 If a variant wins:
@@ -203,16 +252,37 @@ If a variant wins:
 
 ---
 
-## Phase 3: Website refresh
+## Phase 3: Site fixes from review
 
-**Not yet scoped.** Tom has said "refresh" but not what it covers. Needs a scoping
-conversation before any design. Known inputs:
+**[REVISED - 2026-11-21]**
 
-- The jobs page (`/cozyrag/jobs`) is readable without login and shows every
-  question and truncated submitter names. Tom to say whether that is intended.
-- `README.md` TODO notes (docker front end, dokucozy, TkBlog) may or may not belong here.
+Architect reviewed `site_2024` code and made a small number of read-only requests
+to the live server on 2026-11-21. Tom's stated risk tolerance is low concern:
+nothing else of value is on the server. Tom chooses which findings to fix.
 
-## Phase 4: Evaluations
+What was checked and found sound: Chroma (8000), Ollama (11434) and gunicorn (8001)
+are not reachable from outside; HTTP redirects to HTTPS; `site.ini` and the key
+files are git-ignored; route parameters cannot contain a slash, so job and page
+lookups cannot escape their directories.
+
+| # | Severity | Finding | Where | Suggested fix |
+|---|---|---|---|---|
+| S1 | High (privacy) | Full submitter email addresses are public. `/cozyrag/<id>/status` returns the whole job record as JSON and the results page prints `Submitted By: <email>`. Every job id is listed on the public jobs page. | `site_app.py` `cozyrag_status`, `cozyrag_results.html` | Return only the fields the page needs from `status`; drop the email from the results page; put the jobs page behind a password (nginx basic auth is enough). |
+| S2 | Medium (cost) | No rate limit on questions. Anyone can script submissions; each follow-up sends about 20,000 tokens to the better model. `/cozyrag/revise` also runs on a plain GET. | `site_app.py`, nginx | Set a monthly spend cap on the OpenAI account (Tom). Add nginx `limit_req` on `/cozyrag/`. Make revise POST-only. |
+| S3 | Medium | Model output is rendered as raw HTML: the answer goes through Markdown, which passes HTML through, and is marked `safe`. A question can instruct the model to emit a script tag, and the result is stored and linked from the jobs page. | `cozyrag_results.html` line 11 | Sanitise the rendered HTML with an allow-list (for example `nh3`) before marking it safe. |
+| S4 | Low | `sanitize()` does the opposite of its name: it wraps input in `Markup`, declaring it safe. Not exploitable today because values pass through JSON before display, but one template change away from being so. | `site_functions.py` | Remove the `Markup` wrap. |
+| S5 | Low | Unknown job ids and several routes return HTTP 500: `processid` and `status` with a bad id, `jobs/<bad column>` (`abort` is never imported), and `revise` / `feedback` / `answer` without a session. | `site_app.py` | Return 404 or redirect to the question form. |
+| S6 | Low | Feedback accepts any text as the rating, which is why the log contains values outside the three buttons. | `cozyrag_feedback` | Accept only `perfect`, `ok`, `not_good`. |
+| S7 | Low | DokuWiki page source is served directly (`/dokucozy/data/pages/start.txt` returns 200), bypassing any wiki access rules. Matters only if a wiki has private pages. PHP 7 is past end of life. | nginx config, `php:7-fpm` | Deny `data/`, `conf/`, `bin/`, `inc/` in nginx. PHP upgrade is outside this refresh. |
+| S8 | Low | Each of the 4 gunicorn workers starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
+| S9 | Info | `.env_flask` is tracked in git with an `OPENAI_KEY` value that looks like a placeholder (24 characters, no `sk-` prefix). Tom to confirm it was never a real key. The repo's nginx config has HTTPS commented out, so it does not match production. No security headers (HSTS and similar) are sent. | repo root, `server/` | Confirm; no action otherwise. |
+
+S1 and S2 are small and sit in code Phase 1 already touches, so they can be done
+alongside Phase 1 if Tom wants them.
+
+## Phase 4: Website refresh: reference links and images
+
+**[REVISED - 2026-11-21]** Per D8 these two items are the website refresh.
 
 ### 4.1 Reference links inside answers (D5)
 
@@ -220,14 +290,15 @@ Users want links to the source documents within the answer text, as Gemini does.
 Today sources are listed below the answer only. To evaluate: label each chunk in
 the prompt with its source id, ask the model to cite ids, convert ids to links
 when rendering. Open points: citation accuracy of the cheap tier, and how to link
-non-message sources (newsletters, Canard Pusher). Design after Phase 1.
+non-message sources (newsletters, Canard Pusher). Links rendered from model
+output must go through the same sanitising as S3. Design after Phase 1.
 
-### 4.2 Image gallery for a result (stretch)
+### 4.2 Image gallery for a result
 
 A link on the results page to a page showing images from the messages that were
 given to the model. The results page already carries each document's `source`
 (Google Groups message id) and `imageGetter`'s index is keyed by the same ids, so
-this is a lookup. Design after Phase 3 scope is known.
+this is a lookup. Design after Phase 1.
 
 ---
 

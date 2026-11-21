@@ -68,9 +68,14 @@ Annual refresh of the RAG system + website; image database later. Focus areas:
 - [ ] Propose a 30-question shortlist from https://m24tom.com/cozyrag/jobs for Tom to pick from.
 - [ ] Review Programmer's finding on the suspected revise-context defect (plan 1.1).
 - [ ] Review Programmer's smoke-call report on the GPT-6 candidates (plan 1.3).
-- [ ] Scope the website refresh with Tom (plan Phase 3), including whether the public
-      jobs page is intended.
-- [ ] Design reference links (plan 4.1) after Phase 1; image gallery (4.2) after Phase 3 scope.
+- [x] Scope the website refresh with Tom: reference links and images only (plan Phase 4).
+- [x] Review `site_2024` code and live server for serious errors and security concerns;
+      findings S1 to S9 in plan Phase 3.
+- [x] Add 10 / 20 / 30 checkpoints to the model evaluation (plan 1.5).
+- [x] Propose the chunk experiment question set: same 30 plus about 10 new (plan 2.3).
+- [ ] Get Tom's choice of which S findings to fix, then add them to `programmer_todo.md`.
+- [ ] Get Tom's confirmation of the chunk experiment question set.
+- [ ] Design reference links (plan 4.1) and image gallery (4.2) after Phase 1.
 
 ## Findings from the production job log (2026-11-21)
 
