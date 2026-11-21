@@ -10,6 +10,11 @@
 
 All tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
+**BEFORE YOU START: get the production nginx config from Tom.** The copy in
+`site_2024/server/nginx_all_apps.conf` has HTTPS commented out and is not what runs in
+production. Ask Tom for the live config at the start of your first session, and ask how
+he wants changes to it delivered. Tasks S2b and S7 depend on it.
+
 ## Phase 1: Model migration (repo: `../site_2024/`)
 
 - [ ] 1.0 Set up pytest in `site_2024` (it has no tests today)
