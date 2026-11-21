@@ -27,8 +27,14 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
       uncommitted changes to `README.md`, `docker-compose.yaml`, `fwww/site_app.py`,
       `fwww/src/llm_functions.py`, `server/nginx_all_apps.conf`, and untracked
       `exclude_from_tar.txt`, `fwww/static/test_08_fixture/`,
-      `server/old.nginx_all_apps.conf`, `sudo_renew_cert.sh`. Production code therefore
-      differs from the repo; the diff is needed before Phase 1.1 or Phase 3 code changes.
+      `server/old.nginx_all_apps.conf`, `sudo_renew_cert.sh`.
+      From Tom's `git diff` (2026-11-21): the server's HEAD is `906ffd8` (it has not
+      pulled since then) and its edited `README.md`, `fwww/site_app.py` and
+      `fwww/src/llm_functions.py` are byte-identical to the repo's current `main`.
+      Production code matches the repo. Only deployment config differs:
+      `server/nginx_all_apps.conf` (above) and `docker-compose.yaml`, where production
+      mounts `/home/admin/www/cgimages` (absolute) and the repo mounts
+      `./home/admin/www/cgimages` (relative).
 - [x] DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed in this refresh; they
       are not used (2026-11-21)
 
