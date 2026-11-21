@@ -2,6 +2,81 @@
 
 **Last Updated:** 2025-11-06
 
+---
+
+# ACTIVE WORKSTREAM: Annual RAG/Website Refresh (started 2026-11-21)
+
+**Status:** Discovery complete, plan NOT yet written. Resume here next session.
+
+## Goal (from Tom)
+
+Annual refresh of the RAG system + website; image database later. Focus areas:
+1. **Retrieval mechanism** — "cludgy but works," probably leave as-is.
+2. **RAG ingestion** — reconsider chunk size (currently 250 words, no overlap).
+3. **Model + results** — OpenAI is sunsetting the model in use; must choose a replacement.
+4. **Website** — refresh.
+5. **Stretch:** add a link on the results page to a dynamic page showing all images
+   from the messages that "made the RAG cut." (Ties back to image database.)
+
+## Key Architecture Findings (from code investigation)
+
+**The refresh spans TWO repositories:**
+
+| Concern | Lives in | Current state |
+|---|---|---|
+| RAG ingestion (chunk + embed) | `ml/embedder/` (this repo) | `nomic-embed-text`; **chunk = 250 words, NO overlap** (`CHUNKSIZE=250` in `embedder.py`, split logic in `f_embed.py:chunksplitter`); doc prefix `search_document:` |
+| Retrieval + LLM + results page | `../site_2024/fwww/` (SEPARATE git repo) | Flask job-queue; **two-stage LLM: draft=`gpt-4o-mini` → revise=`gpt-4.1`** (`fwww/src/llm_functions.py`) |
+| Model experimentation | `ml/asker/`, `ml/modelTesting/` | throwaway harnesses (`ask_models.py`, `ask_chatgpt.py`, `askQuestions.py`) |
+| Image database | `ml/imageGetter/` | Phase 6 done; revisit later |
+
+**Live production RAG config** (`../site_2024/fwww/site.ini`):
+- `EMBED = nomic-embed-text`, `PREFIX = search_query:` (asymmetric prefix is CORRECT — no bug)
+- `LLM_DRAFT = gpt-4o-mini`, `LLM_REVISE = gpt-4.1` (both OpenAI → sunset exposure)
+- `MAX_DISTANCE = .35`, `MIN_DOCUMENTS = 5`, `MAX_DOCUMENTS = 60`, `MAX_DRAFT_DOCUMENTS = 15`
+- `USE_GPT = True`, `SHOW_REVISE = True`
+
+**Observations shaping the plan:**
+- Retrieval is fine. Only cludgy bit: `get_num_draft_docs()` in `llm_functions.py` (scans
+  backward for last doc under threshold). Works; low priority.
+- **Image-gallery stretch feature is very feasible.** Results page (`fwww/templates/cozyrag_results.html`)
+  already renders each doc's `source` (= Google Groups message ID) via `originid_anchor`.
+  The image DB (`imageGetter/`) is keyed by the SAME message IDs → direct join.
+- **Chunk-size change = full corpus re-embed** (data/msgs, news, aeroelectric, cozybuilders).
+  Only worth it if it measurably improves retrieval → wants an experiment, not a guess.
+- Note: `ml/asker/` harnesses query the `all-minilm` collection, but production + embedder use
+  `nomic-embed-text`. The asker/ scripts are stale test harnesses, NOT the production path.
+
+## OPEN QUESTIONS — blocking plan authoring (need Tom)
+
+1. **User-requested features** — Tom mentioned "a couple of features users would like to add."
+   NOT yet described. Need the list to scope them.
+2. **OpenAI sunset specifics** — WHICH model is sunset (`gpt-4o-mini`, `gpt-4.1`, or both)?
+   Deadline? (Then research successor options.)
+3. **LLM strategy decision** (options prepared, not yet answered): evaluate-then-decide
+   (use modelTesting harness) / stay OpenAI successors / go local Ollama / switch to Claude.
+4. **Chunk-size approach decision** (options prepared, not yet answered): run a sweep
+   experiment / pick a value & re-embed / leave as-is.
+
+## NEXT STEPS (resume point)
+
+- [ ] Get answers to the 4 open questions above (was mid-asking when session paused).
+- [ ] Decide plan-doc location/scope (proposed: a master refresh plan in `ml/docs/plans/`,
+      noting cross-repo tasks that land in `../site_2024/`).
+- [ ] Write the refresh plan + programmer_todo breakdown.
+
+## Housekeeping
+
+- [x] Work moved to branch `wip/annual-refresh`.
+- [x] `docs/acronyms.md` and `docs/style-guide.md` named the wrong project (`ea_tools`); corrected
+      to `ml_news_rag`. Unused KiCAD acronym (SD) removed, RAG added.
+- [ ] Untracked file `docs/input/compare.html` in working tree — awaiting Tom's decision
+      (delete / commit / leave).
+- [ ] `docs/notes/opportunities_for_improvement.md` referenced by architect role but does not
+      exist. Create it when there is a first item to log.
+- Note: no root `requirements.txt`; dependencies are per-module.
+
+---
+
 ## Current Status
 
 **Phase:** Phase 6 (Keyword Scoring) design complete, ready for Programmer implementation

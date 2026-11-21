@@ -1,6 +1,6 @@
 # Code Style Guide
 
-This document outlines the coding standards and naming conventions for the ea_tools project.
+This document outlines the coding standards and naming conventions for the ml_news_rag project.
 
 ## Naming Conventions
 
