@@ -110,7 +110,7 @@ Still useful:
       The revise listed the question's provided then related chunks exactly in order. The two
       follow-ups cut their retrieval to 15; 6 and 5 of those were already in the previous content
       (8,136 and 6,811 characters sent twice).
-- [ ] Merge `site_2024` `wip/annual-refresh` to `main` (fast-forward) and push, with Tom's approval.
+- [x] Merge `site_2024` `wip/annual-refresh` to `main` (fast-forward) and push: `3278e9e`.
 - [ ] Deploy: the server steps below, with Tom. Requirements are unchanged since `bed83f4`, so
       nothing is rebuilt.
 
