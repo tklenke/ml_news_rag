@@ -211,6 +211,9 @@ do not start those of `ml/docker-compose.yaml`.
       are both stored whole.
 - [~] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
       continued. Report how many vectors were updated and how many chunks were added (80 expected).
+      F1 done: 80 chunks added. F2 runs on the GPU with the site's Ollama image (container
+      `cu_ollama_gpu`, port 11998; same vectors as the CPU, cosine above 0.9999); continue it from
+      `embedder/` with `../venv/bin/python repair_collection.py 11998`. Remove the container after.
 - [~] CU6 The messages:
       a. Copy the 227 markdown files, and the 10 refetched ones once Tom reports them done, from
          the Windows copy to `data/msgs_md`. A refetched file shorter than the one it replaces
@@ -220,6 +223,11 @@ do not start those of `ml/docker-compose.yaml`.
       d. For the refetched threads: delete their stored chunks and their lines in
          `embedstatus.txt`.
       e. Run the embedder. Report the files and chunks added.
+      Done: a, b (no difference), c (24 files changed), e for the 227 new threads (727 chunks,
+      42,234 in the collection). Of the 10 refetched, 8 have new posts; `IO1b3H0WdYI` and
+      `UklKWGIn43Q` came back with the same posts and are not used. Left, after F2 has ended
+      (deletes while it runs could collide): the `.txt` of the 8, d, and e for them. Their ids are
+      in `data/corpus_update/refetched_ids.txt`, the scripts beside it.
 - [ ] CU7 The plan's "Checks before the deploy". Report 1 to 3 to Architect.
 - [ ] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
       the tar to "Server cleanup".
