@@ -9,10 +9,9 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0 is done. The Phase 1 code change and the site fixes are deployed; next is the
-follow-on deploy below, then the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per
-group; start each session fresh. Code review happens once per deploy, not per commit; Tom
-waived it for this deploy (2026-11-21).
+**Order:** Phase 0, the Phase 1 code change with the site fixes, and the follow-on fixes are
+deployed. Next is the evaluation (1.3 to 1.6). Phase 2 can overlap it. One session per
+group; start each session fresh. Code review happens once per deploy, not per commit.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
@@ -27,7 +26,6 @@ Still useful:
 
 - The server runs Docker 29.10.0 and Compose 5.8.0; the local rehearsals used 28.3.2 and 2.39.1.
 - The server has a 2 GB swap file, and gunicorn runs 2 workers.
-- The site stays down after a server reboot until `docker compose up -d` is run.
 - `python-dotenv` stays in `requirements.txt` because `pydantic-settings` requires it.
 - Known log warnings: gunicorn wants its config file to have a `.py` extension; Ollama reports
   the requested context (8192) exceeds the embedding model's 2048. Neither investigated.
@@ -115,151 +113,31 @@ the old stack.
 The tests that read the collection need the local Chroma (`docker compose up -d chroma-rag`); the
 page tests use Flask's test client.
 
-## Follow-on fixes (repo: `../site_2024/`, one deploy, before the evaluation)
+## Follow-on fixes (repo: `../site_2024/`, one deploy)
 
-Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waives it.
-
-- [x] 1.1k A follow-up's additional content leaves out chunks already in its previous
-      content; cut first, then remove, no filling (plan 1.1 item 8, the paragraph on D29).
-      The prompt reads sensibly with no additional content.
-- [x] S12 An exception while processing a job marks it `error` and the thread carries on;
-      the status response and the polling page tell the visitor and stop polling (plan
-      "S12 design").
-- [~] D31 `restart: unless-stopped` on the four services (plan "Restart after a reboot").
-      Deploy check on the server: `systemctl is-enabled docker`. Ask Tom whether to reboot
-      the server to prove it.
-      Done and committed; the server check is left. Checked locally: flask started while
-      Chroma was down, kept restarting, and served pages after Chroma came back.
-- [x] D32a nginx: `www` redirects to `m24tom.com` on HTTP and HTTPS (plan "The `www` name").
-- [x] D32b Before changing the script: read certbot's documentation on `certonly` with a
-      changed `-d` list, and have Tom run `certbot certificates` on the server. Report to
-      Architect if the choice of archive directory needs redesign.
-      Documentation and source read, output received (2026-11-22): no redesign needed. The one
-      usable certificate is `m24tom.com-0010`, which is also the highest directory. Certbot
-      will ask to expand it, in the dry run and in the real run: answer Expand. The result
-      should be `fullchain4.pem` in `archive/m24tom.com-0010`.
-- [x] D32c `sudo_renew_cert.sh` asks for both names and checks the certificate it is about to
-      install (both names, not older than the one in place) before replacing anything.
-- [x] D33 A failed OpenAI call ends the job in `error`; a cause Tom has to fix is saved
-      as `error_reason` and shown to the visitor (plan "OpenAI failures and the reason
-      shown"; review finding R4). First confirm the `insufficient_quota` code from OpenAI's
-      documentation. These commits join the commit range of the code review of this deploy.
-      Done in `6ea9ece` and `d95f42e`. OpenAI documents other codes than `insufficient_quota`
-      for a used-up budget; Tom approved the rule now in the code (2026-11-22). The plan's table
-      still gives the old rule (note of 2026-11-22 in `architect_todo.md`). Not seen: a real
-      response of a used-up budget.
-- [~] Deploy, run the renewal script once, and make the checks in the plan. Add the rollback
-      left on the server to "Server cleanup".
-      Rehearsed locally (2026-11-22): the stack came up with the restart policy; with an
-      invalid key the real OpenAI API answered 401 and the visitor was shown "OpenAI key
-      rejected"; rollback to `3278e9e` and forward again. nginx and the renewal script were not
-      in the rehearsal, only in the tests. No image needs a rebuild and no file is set aside, so
-      nothing is left on the server to clean up. Steps on the server, after the merge and push:
-
-          cd ~/site_2024
-          git status -sb
-          git log --oneline -1
-          openssl version
-          date --version | head -1
-          systemctl is-enabled docker
-
-      Expect no changed tracked file, `3278e9e`, OpenSSL 1.1.1 or later, GNU date, `enabled`.
-      Any other answer: stop.
-
-          git pull
-          docker compose up -d
-          docker compose ps
-          docker exec site_nginx nginx -t
-          docker logs site_flask 2>&1 | tail -20
-
-      Then ask a question on the site. Then the certificate; answer Expand where certbot asks:
-
-          sudo ./sudo_renew_cert.sh
-
-      Checks: each of the three answers 301 with `Location: https://m24tom.com/x`, and the
-      certificate names both:
-
-          curl -sI http://www.m24tom.com/x
-          curl -sI https://www.m24tom.com/x
-          curl -sI http://m24tom.com/x
-
-      Rollback (do not run the renewal script while rolled back):
-
-          git checkout 3278e9e
-          docker compose up -d
-
-      Forward again: `git checkout main`, `docker compose up -d`.
+Deployed 2026-11-22 (`c311cda`): 1.1k, S12, D31, D32a to D32c, D33, and the review findings R1
+to R3. Tom waived the rest of the code review (the check of R1 and `09e3ca4..c311cda`). Task
+details and the review results are in the git history of this file.
 
 Still useful:
 
-- Commits `9c1d14f` to `c311cda` of `site_2024`: merged to `main` and pushed (2026-11-22), not
-  yet pulled on the server. Tom will reboot the server at the end to prove D31.
-- Found while doing S12 and fixed, each with a test: setting the status of an unreadable
-  job file replaced its content; an unreadable job file made the jobs page answer 500;
-  feedback on a missing or unreadable job left a file holding only the rating.
-- Fixed: the test of the running job's status text failed one second in ten.
-- S12: the Chroma and Ollama failures were reproduced with unreachable addresses, and ended
-  the loop before the change. The polling page's script was run with node, before and after;
-  that check is not in the test suite.
-- The renewal script now needs `openssl` (with `x509 -ext`) and GNU `date` on the server. Check
-  before the deploy: `openssl version` (1.1.1 or later). Without them it stops and replaces
-  nothing. Its tests use real certificates; only the docker command is a stand-in.
-- `tests/test_nginx_redirects.py` runs the nginx image of the compose file with docker.
+- D33 recognises a used-up budget by the rule Tom approved, not the one in the plan's table (note
+  in `architect_todo.md`). A real response of a used-up budget has not been seen. The rejected
+  key was tried against the real API, locally.
+- The tests need docker, node and openssl.
+- Checked on the live site: a question and a revise (reported by Tom), the three `www` and HTTP
+  redirects, both names in the certificate (valid to 2027-02-20), and a question answered after
+  a server reboot with no command run. A failed job was not checked there.
+- The renewal script ran once on the server with both names. Its rollback was not needed.
+- No rollback files were left on the server, so "Server cleanup" has no entry for this deploy.
 
-### Code review results (2026-11-22)
+Rollback (rehearsed locally; do not run the renewal script while rolled back):
 
-**Tom waived the rest of this review (2026-11-22)**: the Code Reviewer's check of R1 and the
-review of `09e3ca4..c311cda`. The deploy may go ahead.
+    cd ~/site_2024
+    git checkout 3278e9e
+    docker compose up -d
 
-Reviewed: `site_2024` `3278e9e..09e3ca4` (9 commits). **Not approved: R1 is open.** No bug
-introduced by these commits was found. 188 tests pass with clean output; 36 of them fail
-against the code at `3278e9e`. `programmer_todo.md` matches the code.
-
-For Programmer:
-
-- [x] R1 **MUST FIX** `fwww/templates/cozyrag_answer.html:23`: no test covers the polling page's
-      handling of `error` (stop polling, show `status_text`). With the branch disabled
-      (`data.status === 'never'`) all 188 tests pass; CLAUDE.md requires tests for all
-      functionality. Suggested: run the page's script in node from a test. Done when that
-      change to the branch makes a test fail. Tom may grant an exception instead; not decided.
-      Tom will discuss it with the Programmer at the start of the next session: ask first.
-      Fixed in `1c20078`; Tom chose the node test over an exception (2026-11-22). The
-      reviewer's change to the branch now makes 2 tests fail. The tests need node.
-- [x] R2 **SHOULD FIX** `fwww/src/site_functions.py:131`: `get_process_info` catches only
-      `JSONDecodeError`. A job file holding `b"\xff"` or `[1]` gives 500 on `/cozyrag/jobs`,
-      `/cozyrag/<id>/status`, `/cozyrag/<id>/processid` and the feedback POST (reproduced with
-      the test client); `not json` gives 200, 404, 404 and a redirect. The job thread survives
-      `b"\xff"` already. Suggested: catch `ValueError` and return `{}` for content that is not
-      a dict. Unlikely outside disk corruption. Done when tests show that both contents are
-      treated like `not json` on those four routes.
-      Fixed in `ed99f81`.
-- [x] R3 **SHOULD FIX** `docker-certbot.yaml:8`, and `README.md` "Renew ssl certificate", which
-      sends the reader to it: the command asks for `m24tom.com` only. From the notes of D32b
-      (not tried), a real run of it would make `m24tom.com-0011` without `www`, which the
-      renewal script would then choose and refuse at every run. Suggested: both point to
-      `sudo_renew_cert.sh`. Done when neither gives a command that asks for one name.
-      Fixed in `0ea4908`. The manual steps that followed it in the README are gone too: the
-      script does them, and one (renaming `-0001` over `m24tom.com`) no longer fits.
-
-For Architect (both decided 2026-11-22):
-
-- [x] R4 **SHOULD FIX** `fwww/src/llm_functions.py:246`, there since `4e2f8d5`: OpenAI failures do not reach
-      S12. `process_question` catches `openai.APIError` and returns the error text as the
-      answer, so the job ends `complete`. Reproduced on a revise with OpenAI unreachable and
-      with a 429 for quota: the draft answer was replaced by the error text. The plan lists
-      OpenAI among the causes in S12 and says a failed revise keeps its `result`. A used-up
-      budget (D25) is a likely way to reach it. Preferably decided before the harness (1.3).
-      Done when the Architect's decision is in the plan.
-      Decided: D33 in the plan; the Programmer's task is D33 above.
-- [x] R5 **CONSIDER** `fwww/src/llm_functions.py:306`, adds to the Programmer's S12 note in `architect_todo.md`: a job file read
-      while still empty can also end as `error`, if it becomes readable before
-      `mark_job_failed` reads it again. Seen by forcing the timing; 0 times in 12,000 jobs
-      unforced. Done when the Architect has fixed or accepted it in the plan.
-      Accepted by Tom: D34 in the plan. No Programmer work.
-
-Checked: 9 of 10 deliberate breakages of the code were caught by the tests (the tenth is R1).
-D31: with stand-in containers, nginx reached flask in 5 of 5 simulated boots in which flask
-stopped twice; this does not replace the reboot of the server.
+Forward again: `git checkout main`, `docker compose up -d`.
 
 ## Phase 1 evaluation (repo: `../site_2024/`)
 

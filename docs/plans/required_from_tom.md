@@ -11,8 +11,6 @@ finished work items are in the git history of this file.
 
 ## Work items
 
-- [x] At the follow-on deploy: decide whether to reboot the server to prove the restart policy.
-      Yes (2026-11-22), after the other checks.
 - [x] For the Programmer, before the renewal script is changed: run `certbot certificates`
       on the server (the Programmer supplies the command).
 - [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
@@ -25,7 +23,8 @@ finished work items are in the git history of this file.
 
 ## Still true
 
-- Tom waived the code review of the Phase 1 deploy (2026-11-21).
+- Tom waived the code review of the Phase 1 deploy (2026-11-21) and the rest of that of the
+  follow-on deploy (2026-11-22).
 - The OpenAI account has a budget limit with no auto reload (S2).
 - The account can call `gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol` and `gpt-6.2-astra`.
 - One OpenAI key serves the server and local runs.

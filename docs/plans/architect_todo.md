@@ -74,6 +74,11 @@ Two smaller points, not decided and nothing built for them. The page documents n
 `openai_model` is as the plan says and unconfirmed. And in 0.7 a model the project had no access
 to answered 403, which D33 shows as "OpenAI key rejected"; the log has OpenAI's message.
 
+**NOTE FROM PROGRAMMER (2026-11-22): the follow-on deploy is done** (`c311cda`; Tom waived the rest
+of the review). The resume point and these facts below are out of date: the server runs
+`c311cda`; the containers come back after a reboot (proven); `www` redirects and the certificate
+covers both names, to 2027-02-20. Architect should verify and update.
+
 The two S12 gaps the Programmer left as they are (2026-11-22) are in
 `docs/notes/opportunities_for_improvement.md`.
 
