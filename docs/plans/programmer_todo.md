@@ -171,30 +171,33 @@ For Programmer:
       (`data.status === 'never'`) all 188 tests pass; CLAUDE.md requires tests for all
       functionality. Suggested: run the page's script in node from a test. Done when that
       change to the branch makes a test fail. Tom may grant an exception instead; not decided.
+      Tom will discuss it with the Programmer at the start of the next session: ask first.
 - [ ] R2 **SHOULD FIX** `fwww/src/site_functions.py:131`: `get_process_info` catches only
       `JSONDecodeError`. A job file holding `b"\xff"` or `[1]` gives 500 on `/cozyrag/jobs`,
       `/cozyrag/<id>/status`, `/cozyrag/<id>/processid` and the feedback POST (reproduced with
       the test client); `not json` gives 200, 404, 404 and a redirect. The job thread survives
       `b"\xff"` already. Suggested: catch `ValueError` and return `{}` for content that is not
-      a dict. Unlikely outside disk corruption.
+      a dict. Unlikely outside disk corruption. Done when tests show that both contents are
+      treated like `not json` on those four routes.
 - [ ] R3 **SHOULD FIX** `docker-certbot.yaml:8`, and `README.md` "Renew ssl certificate", which
       sends the reader to it: the command asks for `m24tom.com` only. From the notes of D32b
       (not tried), a real run of it would make `m24tom.com-0011` without `www`, which the
       renewal script would then choose and refuse at every run. Suggested: both point to
-      `sudo_renew_cert.sh`.
+      `sudo_renew_cert.sh`. Done when neither gives a command that asks for one name.
 
 For Architect (no Programmer work until decided):
 
-- [ ] R4 `fwww/src/llm_functions.py:246`, there since `4e2f8d5`: OpenAI failures do not reach
+- [ ] R4 **SHOULD FIX** `fwww/src/llm_functions.py:246`, there since `4e2f8d5`: OpenAI failures do not reach
       S12. `process_question` catches `openai.APIError` and returns the error text as the
       answer, so the job ends `complete`. Reproduced on a revise with OpenAI unreachable and
       with a 429 for quota: the draft answer was replaced by the error text. The plan lists
       OpenAI among the causes in S12 and says a failed revise keeps its `result`. A used-up
       budget (D25) is a likely way to reach it. Preferably decided before the harness (1.3).
-- [ ] R5 **CONSIDER**, adds to the Programmer's S12 note in `architect_todo.md`: a job file read
+      Done when the Architect's decision is in the plan.
+- [ ] R5 **CONSIDER** `fwww/src/llm_functions.py:306`, adds to the Programmer's S12 note in `architect_todo.md`: a job file read
       while still empty can also end as `error`, if it becomes readable before
       `mark_job_failed` reads it again. Seen by forcing the timing; 0 times in 12,000 jobs
-      unforced.
+      unforced. Done when the Architect has fixed or accepted it in the plan.
 
 Checked: 9 of 10 deliberate breakages of the code were caught by the tests (the tenth is R1).
 D31: with stand-in containers, nginx reached flask in 5 of 5 simulated boots in which flask

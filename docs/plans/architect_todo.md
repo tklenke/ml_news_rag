@@ -60,6 +60,17 @@ tried.
   never answer it. Before S12 the same read ended the thread. The scan reads only jobs it has
   not seen, so the chance is very small.
 
+## Notes from Code Reviewer
+
+**NOTE FROM CODE REVIEWER (2026-11-22): R4 and R5 wait on Architect.** Details are in
+`programmer_todo.md`, "Code review results (2026-11-22)".
+
+- R4: OpenAI failures are caught in `process_question` and never reach S12. A failed revise
+  ends `complete` with its draft answer replaced by the error text. Preferably decided before
+  the harness (1.3). Not introduced by the follow-on deploy.
+- R5: a job file read while still empty can also end as `error`; adds to the Programmer's
+  S12 note above.
+
 ## Completed
 
 Phase 0, the Phase 1 code change and the eight plan revisions through 2026-11-22 are done:
