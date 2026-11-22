@@ -24,8 +24,9 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
 (Python 3.13, resolved requirements), 0.5a and 0.5b (Chroma 1.5.9, `chromadb-client`),
 0.6 (rehearsal passed; Architect approved the deploy).
 
-- [ ] 0.2b `exclude_from_tar.txt`: remove the `dokucozy` and `dokuN667CZ` lines, add
-      `fwww/site.ini`.
+- [x] 0.2b `exclude_from_tar.txt`: remove the `dokucozy` and `dokuN667CZ` lines, add
+      `fwww/site.ini`. Checked with a tar listing: `site.ini` was in the tar before the
+      edit and is not after it; `site.ini.template` still is.
 - [ ] 0.2c `sudo_renew_cert.sh`: ask Tom for the script text again (it is not saved in
       either repo), then fix it to the behaviour in plan 0.2 and commit it. Test it
       against a scratch directory laid out like `archive/m24tom.com-NNNN/` with files
@@ -34,12 +35,20 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       `fullchain.pem` and `privkey.pem` are still there. If the script cannot be run
       against a scratch directory as written, say how you propose to test it before
       changing it.
-- [ ] 0.4c Remove `Flask-Markdown` and `python-dotenv` from `requirements_direct.txt` and
-      freeze `requirements.txt` again.
-- [ ] 0.6b Rebuild the flask image after 0.4c and answer one question locally through
-      the app; `pip check` clean; no errors in the logs.
-- [ ] Remove the empty stray directory `site_2024/home/` if nothing uses it (it appeared
-      locally; check what created it first).
+- [x] 0.4c Remove `Flask-Markdown` and `python-dotenv` from `requirements_direct.txt` and
+      freeze `requirements.txt` again. Frozen in a clean Python 3.13 venv: the only change is
+      that `Flask-Markdown` is gone. `python-dotenv` stays in `requirements.txt` because
+      `pydantic-settings` (needed by `chromadb-client`) requires it.
+- [x] 0.6b Rebuild the flask image after 0.4c and answer one question locally through
+      the app; `pip check` clean; no errors in the logs. Passed 2026-11-21 (Q01, 3.6 s).
+      The logs held one error, a 500 from `/cozyrag/answer` without a question in the
+      session (S5c, sent by mistake while testing), and two warnings: gunicorn wants its
+      config file to have a `.py` extension, and Ollama reports the requested context
+      (8192) exceeds the model's 2048.
+- [~] Remove the empty stray directory `site_2024/home/`. Cause found: commit `42db312`
+      mounted the relative path `./home/admin/www/cgimages`, so Docker created it as root;
+      the mount is absolute since `65764e2`, so nothing uses it. Needs `sudo`: Tom removes
+      it (command in `required_from_tom.md`).
 - [~] 0.7 Smoke calls. Current models work with no call-site change. All four candidates
       return 403; rerun when Tom says access is enabled, and report to Architect.
       The deploy does not wait for this.

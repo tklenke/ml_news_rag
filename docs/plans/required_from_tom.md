@@ -52,6 +52,8 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
       Tom approved using the key already there (2026-11-21)
 - [ ] Paste `sudo_renew_cert.sh` to the Programmer again (`cat sudo_renew_cert.sh` on the
       server); the text was not saved and the script is to be fixed and tracked.
+- [ ] Remove the empty root-owned directory on the local machine:
+      `cd ~/projects/site_2024 && sudo rmdir -p home/admin/www/cgimages`
 - [ ] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
       fixed `sudo_renew_cert.sh` once. The certificate expires 2027-01-26.
 - [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
