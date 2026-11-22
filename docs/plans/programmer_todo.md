@@ -93,9 +93,9 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
 - [x] S1d Tests: with a job file containing a known full address, that address appears in
       none of the responses from `status`, `processid`, `jobs`, `jobs/email`.
 - [x] S2a `/cozyrag/revise` accepts POST only; a GET gets 405.
-- [~] S2b nginx `limit_req` for `/cozyrag/query` and `/cozyrag/followup`. Propose the rate
-      to Architect before deploying.
-      Proposed 2026-11-21 in `architect_todo.md`; waiting for Architect.
+- [x] S2b Tom decided (2026-11-21): no nginx rate limit. The OpenAI budget limit has no auto
+      reload, so a script can use up the budget but not more. Instead the job starts when
+      the question is submitted; reading pages starts none. Architect to update plan S2.
 - [x] S4 `sanitize()` no longer wraps input in `Markup`. Rename it to say what it does, or
       remove it if nothing remains; ask Architect if unsure.
 - [x] S5a Unknown job id on `processid` and `status` returns 404, not 500.
@@ -149,7 +149,6 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
         `job['email']` as given, which the code before this deploy does not shorten.
       - Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
       - `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
-      - The nginx change of S2b, when it exists, needs a restart of nginx as well.
 - [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements
       changed, restart.
 
