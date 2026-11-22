@@ -29,6 +29,35 @@ Programmer starts at Phase 0 once Tom has done the two items at the top of
       role files tell every session to read it; it does not exist).
 - [ ] Design reference links (plan 4.1) and image gallery (4.2) once the model choice is known.
 
+## Notes from Programmer
+
+**NOTE FROM PROGRAMMER (2026-11-21):** findings from the Phase 0 startup checks. The plan
+is not edited; these need Architect decisions.
+
+- **Plan 0.8 step 3, `git pull` aborts.** `exclude_from_tar.txt` is tracked on `main` since
+  `63cca77` but untracked on the server, which is at `906ffd8`. A plain `git stash` leaves
+  untracked files, so the pull refuses to overwrite it (reproduced in a scratch clone). The
+  text of the two copies is the same. The server copy must be moved aside first, and so
+  must any other untracked server file the repo starts tracking.
+- **Plan 0.2, untracked files.** `old.nginx_all_apps.conf` is the production config
+  without `/cgimages/`; suggest not tracking. `test_08_fixture/` is 41 generated
+  wiring-diagram files (SVG, BOM, HTML), unrelated to CozyRAG; suggest not tracking, and
+  asking Tom whether it should be publicly served. `exclude_from_tar.txt` has a typo:
+  `dokuN667CZ` should be `dokuN657CZ`.
+- **`sudo_renew_cert.sh` fails at step 5.** It copies `fullchain.pem` and `privkey.pem` from
+  `archive/m24tom.com-NNNN/`, where every file is numbered (`fullchain1.pem`,
+  `fullchain2.pem`), after deleting the live copies, and does not stop on error. It also
+  has to pick the highest number: `-0010` holds both 1 and 2, and 2 is the latest. The live
+  certificate expires 2027-01-26. Suggest fixing it before tracking it.
+- **Draft context is 14 chunks at most, not 15.** `get_num_draft_docs` returns the index of
+  the last chunk inside the cutoff, and the caller uses it as a count, so that chunk is
+  dropped (60 close matches return 14). Plan 2.4 assumes 15. Decide before the 1.4 baseline.
+- **`[PROMPTS]` `INITIAL` and `SECONDARY` in `site.ini` have no effect.** `process_question`
+  uses the module constants, not the values given to `set_prompts`.
+- **`site.ini.template` has `LLM`**, but the app reads `LLM_DRAFT` and `LLM_REVISE`.
+- **`server/nginx_all_apps.conf` in the reference file lost trailing spaces** in pasting.
+  The committed file is the exact one.
+
 ## Completed
 
 - [x] Tom's four opening questions answered; plan, `required_from_tom.md` and task

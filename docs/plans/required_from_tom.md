@@ -34,10 +34,11 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 **Before the Programmer can start Phase 0:**
 
-- [ ] Enable Docker Desktop's WSL integration for this distro (Settings, Resources, WSL
+- [x] Enable Docker Desktop's WSL integration for this distro (Settings, Resources, WSL
       integration). If that is not possible, say so: the plan changes (Phase 0).
-- [ ] On the server, `cat exclude_from_tar.txt sudo_renew_cert.sh server/old.nginx_all_apps.conf`
-      and `ls -R fwww/static/test_08_fixture/`, and paste the output.
+      Engine 28.3.2, Compose 2.39.1; a container can read `data/chroma` (2026-11-21)
+- [x] On the server, `cat exclude_from_tar.txt sudo_renew_cert.sh server/old.nginx_all_apps.conf`
+      and `ls -R fwww/static/test_08_fixture/`, and paste the output. (2026-11-21)
 
 **Later:**
 

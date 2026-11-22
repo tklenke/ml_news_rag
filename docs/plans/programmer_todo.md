@@ -7,7 +7,7 @@
 **READ FIRST: `docs/plans/annual_refresh_plan.md`.** Read the whole document before any
 task, every session. The tasks below are only a checklist; section numbers refer to the plan.
 
-**Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/` (exists, no commits yet).
+**Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0, then the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6), then
 the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
@@ -19,13 +19,14 @@ The finished image database tasks are in `docs/archive/programmer_todo_image_dat
 
 ## Phase 0: Infrastructure refresh (repo: `../site_2024/`, one deploy)
 
-Blocked until Tom has enabled Docker's WSL integration and provided the four untracked
-server files (`required_from_tom.md`). If Docker cannot be enabled, stop and tell Architect.
+Docker works from WSL and Tom has provided the server files (2026-11-21).
 
-- [ ] 0.2a Make `server/nginx_all_apps.conf` and the `cgimages` mount in
+- [x] 0.2a Make `server/nginx_all_apps.conf` and the `cgimages` mount in
       `docker-compose.yaml` match production (text in
       `docs/references/site_2024_production_state_2026-11-21.md`). Commit this alone.
-- [ ] 0.2b Add the untracked server files Architect says to track.
+      Both files match production's blob hashes (nginx `382fd3a`, compose `4dfb441`).
+- [ ] 0.2b Add the untracked server files Architect says to track. Waiting on Architect
+      (notes in `architect_todo.md`).
 - [ ] 0.3a Remove DokuWiki: both nginx `location` blocks, `php1`, `php2`, their
       `depends_on` entries, both volume mounts, the README mention.
 - [ ] 0.3b Bind the published ports for flask, chroma and ollama to `127.0.0.1`.
