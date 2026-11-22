@@ -150,7 +150,7 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       Every model is called exactly as production calls it, with no reasoning setting.
       Reasoning tokens are recorded as a separate figure and not added to the cost a
       second time (plan 1.3, 1.4).
-      Done (`259a988`, not pushed): `site_2024/evaluation/answer_models.py`. No deployed
+      Done (`259a988`): `site_2024/evaluation/answer_models.py`. No deployed
       file changes. Prompts and answers go in `evaluation/output/` (git-ignored); a saved prompt
       is used for every later model, a saved answer is not paid for again, and a failed call is
       made again by the next run. Prices read 2026-11-22. The 30 prompts were built with real
@@ -161,19 +161,20 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
 - [x] 1.4 Capture the baseline with the current first-answer model, `gpt-4o-mini` (it shuts
       down 2027-01-14). Done 2026-11-22 with Tom's approval: all 30 answered, $0.026, median
       5.3 s, no reasoning tokens. The answers are in `docs/archive/gpt4o_mini_baseline_answers`
-      (exporter: `72ca581` in `site_2024`, not pushed), without the text sent to the model,
+      (exporter: `72ca581` in `site_2024`), without the text sent to the model,
       which can hold email addresses; that text is only in `evaluation/output/`. The files name
-      the model: Tom does not open them before rating. The candidates have not been run; ask
-      Tom before that.
+      the model: Tom does not open them before rating. The candidates `gpt-6-luna` and
+      `gpt-6.1-terra` were started on all 30 on 2026-11-22 with Tom's approval.
 - [~] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
       of 10 questions at a time, with a tally after each batch (plan 1.5). The
       tally shows median latency, median reasoning tokens and cost per answer per model.
-      The review page is built (`f008b10`, not pushed) in place of a review file:
+      The review page is built (`f008b10`) in place of a review file:
       `evaluation/review_answers.py`, on this machine only. It saves ratings in
       `ratings.json` and the hidden order in `key.json`. Tom found the
       design good (2026-11-22) and tried it on five `chunk_only` answers, kept in
       `evaluation/output/trial`: random clicks, not scores, but every one was saved. The tally
-      is still to be built. To serve batch 1, from `site_2024`, once all its models are
+      is built (`ada6110`): `evaluation/tally_ratings.py batch1` refuses until every answer
+      of the batch is rated. To serve batch 1, from `site_2024`, once all its models are
       answered (the key refuses models added later):
 
           PYTHONPATH=fwww .venv/bin/python evaluation/review_answers.py batch1
