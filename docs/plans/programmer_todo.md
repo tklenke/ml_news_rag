@@ -9,7 +9,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0, then the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6, S10), then
+**Order:** Phase 0 is done. Next is the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6, S10), then
 the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
@@ -17,69 +17,20 @@ All code tasks follow TDD. Escalate design questions to Architect; do not resolv
 
 The finished image database tasks are in `docs/archive/programmer_todo_image_database.md`.
 
-## Phase 0: Infrastructure refresh (repo: `../site_2024/`, one deploy)
+## Phase 0: Infrastructure refresh (done)
 
-Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.3a to 0.3c
-(DokuWiki removed, ports on `127.0.0.1`, nginx `1.30.7`, ollama `0.40.17`), 0.4a and 0.4b
-(Python 3.13, resolved requirements), 0.5a and 0.5b (Chroma 1.5.9, `chromadb-client`),
-0.6 (rehearsal passed; Architect approved the deploy).
+Deployed 2026-11-21 (`bed83f4`) and every plan 0.8 check passed; Tom waived the code review.
+Certificate renewed to 2027-02-20. Task details are in the git history of this file.
 
-- [x] 0.2b `exclude_from_tar.txt`: remove the `dokucozy` and `dokuN667CZ` lines, add
-      `fwww/site.ini`. Checked with a tar listing: `site.ini` was in the tar before the
-      edit and is not after it; `site.ini.template` still is.
-- [x] 0.2c `sudo_renew_cert.sh` fixed to the behaviour in plan 0.2 and tracked.
-      `tests/test_sudo_renew_cert.py` (15 tests) runs it in a scratch directory laid out
-      like the server; docker is a stand-in command, the file operations are real. 11
-      of the 15 failed on the script as it is on the server. Two things beyond plan 0.2:
-      it also used a relative archive path after changing directory, so the copy failed
-      whatever the file names; and a failed `docker compose restart` does not stop the
-      script, because stopping there would skip the question that offers the rollback.
-- [x] 0.4c Remove `Flask-Markdown` and `python-dotenv` from `requirements_direct.txt` and
-      freeze `requirements.txt` again. Frozen in a clean Python 3.13 venv: the only change is
-      that `Flask-Markdown` is gone. `python-dotenv` stays in `requirements.txt` because
-      `pydantic-settings` (needed by `chromadb-client`) requires it.
-- [x] 0.6b Rebuild the flask image after 0.4c and answer one question locally through
-      the app; `pip check` clean; no errors in the logs. Passed 2026-11-21 (Q01, 3.6 s).
-      The logs held one error, a 500 from `/cozyrag/answer` without a question in the
-      session (S5c, sent by mistake while testing), and two warnings: gunicorn wants its
-      config file to have a `.py` extension, and Ollama reports the requested context
-      (8192) exceeds the model's 2048.
-- [x] Remove the empty stray directory `site_2024/home/`. Cause: commit `42db312` mounted the
-      relative path `./home/admin/www/cgimages`, so Docker created it as root; the mount is
-      absolute since `65764e2`. Tom removed it.
-- [x] 0.7 Smoke calls. 2026-11-21, SDK 3.57.0 in the flask image: both current models and
-      all four candidates answer the production call unchanged. Short prompt only (17 to 18
-      tokens in). Reported to Architect, with the reasoning token finding.
-- [x] 0.8 Local checks before the deploy passed 2026-11-21: `main` fast-forwards to the branch,
-      no secrets in the diff, compose file valid, `nginx -t` passes on nginx `1.30.7` with a
-      throwaway certificate, and the only untracked server files the pull would hit are the
-      two plan 0.8 step 4 moves. Tom waived the code review.
-      Server checks passed too: config diff empty, 36 GB free, archive `-0010` is the highest
-      and `live/m24tom.com-0010` exists. Merged and pushed to
-      `main`, with 2 gunicorn workers (Tom, 2026-11-21). The git and rollback steps were
-      rehearsed in a scratch clone set up like the server; the rollback restores it exactly.
-      Deployed 2026-11-21 (`bed83f4`): all plan 0.8 checks pass, question and dig deeper
-      answer, 771 MiB available with the model loaded, 46 MiB of swap used. Backup is
-      `~/site_backup_2026-11-21` on the server; the git stash is still there. Tom had
-      rebooted and patched the server, which also moved Docker to 29.10.0 and Compose to 5.8.0.
-      Both wikis, the test upload and the php image are removed; their URLs return 404.
-      Deploy with Tom, following plan 0.8 step by step (rewritten 2026-11-21: tag the
-      old images first, move the two untracked files aside before the pull). Read
-      `docker images` on the server to get the image names to tag. After the deploy
-      checks pass, in `~/site_2024`, looking at each directory before removing it:
+Still useful:
 
-          ls -la data/dokucozy data/dokuN657CZ fwww/static/test_08_fixture
-          sudo rm -r data/dokucozy
-          sudo rm -r data/dokuN657CZ
-          sudo rm -r fwww/static/test_08_fixture
-          docker ps -a --filter name=php
-          docker image rm php:7-fpm
-
-      Then `/dokucozy/`, `/dokuN657CZ/` and `/static/test_08_fixture/index.html` return 404,
-      and no `php1` or `php2` container is listed.
-- [x] 0.9 `sudo_renew_cert.sh` run on the server 2026-11-21: certbot renewed `-0010` and the
-      script put `fullchain3`/`privkey3` in place. The live certificate changed from expiry
-      2027-01-26 to 2027-02-20 and verifies. The rollback path was not exercised there.
+- The server runs Docker 29.10.0 and Compose 5.8.0; the local rehearsals used 28.3.2 and 2.39.1.
+- The server has a 2 GB swap file, and gunicorn runs 2 workers.
+- The site stays down after a server reboot until `docker compose up -d` is run.
+- `python-dotenv` stays in `requirements.txt` because `pydantic-settings` requires it.
+- Known log warnings: gunicorn wants its config file to have a `.py` extension; Ollama reports
+  the requested context (8192) exceeds the embedding model's 2048. Neither investigated.
+- Not exercised on the server: the rollback in `sudo_renew_cert.sh`.
 
 ## Server cleanup (with Tom)
 
