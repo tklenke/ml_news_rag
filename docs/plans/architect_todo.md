@@ -25,18 +25,14 @@ directory back.
 
 ## Notes from Programmer
 
-The notes of 2026-11-21 on the prior context and the `PREFIX` space are answered in plan 1.1
-(items 6 to 8, and "Checked and left alone").
-
-The note of 2026-11-21 on the Phase 1 deploy is taken up: the deploy and the waived review are
-in the plan (status line, D28), and its two questions are decided (D29, D30; plan 1.1 item 8
-and S12).
+None open. Earlier notes are answered in the plan; they are in the git history of this file.
 
 ## Completed
 
-Phase 0 and the four plan revisions of 2026-11-21 are done: planning, question set, site
-review, Phase 0 design and deploy approval, decisions D1 to D24, and the Programmer's notes
-through the deploy. The item list is in the git history of this file.
+Phase 0, the Phase 1 code change and the eight plan revisions through 2026-11-22 are done:
+planning, question set, site review, the designs of both deploys and of the follow-on deploy,
+decisions D1 to D32, and the Programmer's notes through the Phase 1 deploy. The item list is in
+the git history of this file.
 
 ## Facts worth keeping
 
