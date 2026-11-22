@@ -9,7 +9,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0 is done. Next are 1.1h to 1.1j, which finish the Phase 1 code change, then its
+**Order:** Phase 0 is done. The Phase 1 code change (1.1) is written; next are the local paid check and the code review, then its
 deploy, then the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
@@ -68,7 +68,7 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
 Written and committed in `site_2024` (`wip/annual-refresh`), not yet reviewed or deployed: 1.0,
-1.1a to 1.1g, S1, S2, S4, S5, S6, S10, S11. Task details are in the git history of this file.
+1.1a to 1.1j, S1, S2, S4, S5, S6, S10, S11. Task details are in the git history of this file.
 
 Still useful:
 
@@ -87,7 +87,7 @@ Still useful:
       local Chroma service as in 1.1b: the prompt holds every provided and related chunk,
       provided first, each in the order of the record, whatever order `collection.get()`
       returns.
-- [~] 1.1j Follow-up context (plan 1.1 item 8, D27). Failing tests first: previous content
+- [x] 1.1j Follow-up context (plan 1.1 item 8, D27). Failing tests first: previous content
       is the prior record's `provided_docs` only; additional content is cut by
       `get_num_draft_docs`; the record's `provided_docs` is previous then additional with
       no id twice, and there is no `related_docs`. A second follow-up on that record
