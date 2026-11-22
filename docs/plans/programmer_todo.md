@@ -203,9 +203,9 @@ do not start those of `ml/docker-compose.yaml`.
 - [x] CU1 `ml/requirements.txt` (`chromadb-client` 1.5.9, `ollama`, `markdownify`, `pytest`, and
       what the tests need) and the venv brought to it. The client works with the local server.
 - [x] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
-- [~] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
+- [x] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
       the chunk size, or for an empty file (was 2.1b).
-- [ ] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
+- [~] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
       are both stored whole.
 - [ ] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
       continued. Report how many vectors were updated and how many chunks were added (80 expected).

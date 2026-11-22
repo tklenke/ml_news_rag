@@ -36,3 +36,14 @@ def test_words_keep_their_order_over_chunks():
     lstWords = [f"w{i}" for i in range(1000)]
     lstChunks = split(" ".join(lstWords), 250)
     assert " ".join(strChunk[len(PREFIX) + 1:] for strChunk in lstChunks).split() == lstWords
+
+
+@pytest.mark.parametrize("intWords", [3, 6])
+def test_no_chunk_without_words_after_the_last_full_chunk(intWords):
+    lstChunks = split(" ".join(["w"] * intWords))
+    assert lstChunks == [f"{PREFIX} w w w"] * (intWords // 3)
+
+
+@pytest.mark.parametrize("strText", ["", " \n\t "])
+def test_text_without_words_has_no_chunks(strText):
+    assert split(strText) == []

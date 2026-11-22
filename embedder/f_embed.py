@@ -1,3 +1,6 @@
+# ABOUTME: Embeds text files in chunks of words into a Chroma collection
+# ABOUTME: Splits texts, gets the vectors from Ollama and stores chunks with their source
+
 import os, re, time
 import chromadb, ollama
 from f_misc import get_id_from_path, get_filepaths_list
@@ -74,7 +77,7 @@ class Embedder():
           current_chunk = [self.prefix]
           word_count = 0
 
-      if current_chunk:
+      if word_count > 0:
         chunks.append(' '.join(current_chunk))
 
       return chunks
