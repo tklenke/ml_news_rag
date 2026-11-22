@@ -3,7 +3,7 @@
 
 import os, re, time
 import chromadb, ollama
-from f_misc import get_id_from_path, get_filepaths_list
+from f_misc import get_id_from_path, get_filepaths_list, get_chunk_id
 
 
 
@@ -95,7 +95,7 @@ class Embedder():
         embeds = self.get_embedding(chunks)
         chunknumber = list(range(len(chunks)))
         id = get_id_from_path(filename)
-        ids = [id + str(index) for index in chunknumber]
+        ids = [get_chunk_id(id, index) for index in chunknumber]
         metadatas = [{"source": id} for index in chunknumber]
         self.chromacollection.add(ids=ids, documents=chunks, embeddings=embeds, metadatas=metadatas)
       return

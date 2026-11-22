@@ -205,9 +205,9 @@ do not start those of `ml/docker-compose.yaml`.
 - [x] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
 - [x] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
       the chunk size, or for an empty file (was 2.1b).
-- [~] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
+- [x] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
       are both stored whole.
-- [ ] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
+- [~] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
       continued. Report how many vectors were updated and how many chunks were added (80 expected).
 - [ ] CU6 The messages:
       a. Copy the 227 markdown files, and the 10 refetched ones once Tom reports them done, from

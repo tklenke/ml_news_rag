@@ -1,3 +1,5 @@
+# ABOUTME: Helper functions for the embedder: file lists, id lists and chunk ids
+# ABOUTME: Ids of documents are file names without the extension
 import os
 
 #Scans a directory and subdirectories for files
@@ -40,6 +42,13 @@ def get_id_from_path(path):
     # Otherwise, return the part before the dot
     else:
         return parts[0]
+
+#Makes the id of a chunk. The separator keeps apart sources whose names end in digits.
+#Args:      source: The id of the document the chunk is from.
+#           index: The number of the chunk in the document, from 0.
+#Returns:   The id as a string.
+def get_chunk_id(source, index):
+    return f"{source}#{index}"
 
 if __name__ == "__main__":
     MSG_DIR = r"../data/msgs"
