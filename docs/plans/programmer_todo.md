@@ -166,7 +166,7 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       the model: Tom does not open them before rating. The candidates `gpt-6-luna` and
       `gpt-6.1-terra` answered all 30 on 2026-11-22 with Tom's approval, no failures ($0.022 and
       $0.172).
-- [~] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
+- [x] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
       of 10 questions at a time, with a tally after each batch (plan 1.5). The
       tally shows median latency, median reasoning tokens and cost per answer per model.
       The review page is built (`f008b10`) in place of a review file:
@@ -202,6 +202,19 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       Rule 1.5: no early adoption (`gpt-6-luna` has 2 `not_good`, 1 factual error and fewer
       `perfect`), no candidate dropped, so batch 3 is rated next. Tom agreed that a copy of the
       ratings and the key is committed to `ml` after the last batch.
+
+      Batch 3 rated by Tom 2026-11-22. All three batches (30 answers per model, counted a second
+      time apart from the tally script), in `docs/archive/first_answer_ratings` (`ratings.json`,
+      `key.json`):
+
+          model             perfect        ok  not_good    errors  median_s reasoning  $/answer
+          gpt-4o-mini            17         8         5         2       5.3         0   0.00086
+          gpt-6-luna             14        13         3         2       5.6       328   0.00074
+          gpt-6.1-terra          11        15         4         1       5.0        30   0.00574
+
+      Rule 1.5 after 30: the cheapest candidate with no more `not_good` (5) and no more factual
+      errors (2) than the baseline is `gpt-6-luna` (3 and 2). Tom decides (1.6). Both candidates
+      have fewer `perfect` than the baseline; the rule does not count `perfect` after 30.
 
 - [ ] 1.6 After Tom's decision: update the tracked `site.ini`, `LLM_DRAFT` to the model chosen
       and `LLM_REVISE` to the one above it

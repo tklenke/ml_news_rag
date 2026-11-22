@@ -1,0 +1,152 @@
+{
+  "Q01": {
+    "A": "gpt-6-luna",
+    "B": "gpt-4o-mini",
+    "C": "gpt-6.1-terra"
+  },
+  "Q03": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-6-luna"
+  },
+  "Q04": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6-luna",
+    "C": "gpt-6.1-terra"
+  },
+  "Q10": {
+    "A": "gpt-6-luna",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-4o-mini"
+  },
+  "Q14": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6-luna",
+    "C": "gpt-6.1-terra"
+  },
+  "Q26": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q28": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q35": {
+    "A": "gpt-6-luna",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-4o-mini"
+  },
+  "Q41": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-4o-mini",
+    "C": "gpt-6-luna"
+  },
+  "Q44": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q02": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6-luna",
+    "C": "gpt-6.1-terra"
+  },
+  "Q05": {
+    "A": "gpt-6-luna",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-4o-mini"
+  },
+  "Q09": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6-luna",
+    "C": "gpt-6.1-terra"
+  },
+  "Q16": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q21": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6-luna",
+    "C": "gpt-6.1-terra"
+  },
+  "Q27": {
+    "A": "gpt-6-luna",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-4o-mini"
+  },
+  "Q30": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q37": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-6-luna"
+  },
+  "Q38": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q48": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-6-luna"
+  },
+  "Q06": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-6-luna"
+  },
+  "Q07": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6.1-terra",
+    "C": "gpt-6-luna"
+  },
+  "Q08": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q18": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-4o-mini",
+    "C": "gpt-6-luna"
+  },
+  "Q25": {
+    "A": "gpt-6-luna",
+    "B": "gpt-4o-mini",
+    "C": "gpt-6.1-terra"
+  },
+  "Q32": {
+    "A": "gpt-4o-mini",
+    "B": "gpt-6-luna",
+    "C": "gpt-6.1-terra"
+  },
+  "Q34": {
+    "A": "gpt-6-luna",
+    "B": "gpt-4o-mini",
+    "C": "gpt-6.1-terra"
+  },
+  "Q36": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-4o-mini",
+    "C": "gpt-6-luna"
+  },
+  "Q43": {
+    "A": "gpt-6.1-terra",
+    "B": "gpt-6-luna",
+    "C": "gpt-4o-mini"
+  },
+  "Q47": {
+    "A": "gpt-6-luna",
+    "B": "gpt-4o-mini",
+    "C": "gpt-6.1-terra"
+  }
+}

@@ -1,0 +1,512 @@
+{
+  "Q01": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "not_good",
+      "factual_error": true,
+      "note": "responding to propeller length not aircraft length"
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q03": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q04": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q10": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q14": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q26": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q28": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": "follow up prompt is not helpful"
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q35": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q41": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q44": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "not_good",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q02": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q05": {
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "A": {
+      "rating": "not_good",
+      "factual_error": true,
+      "note": ""
+    }
+  },
+  "Q09": {
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "A": {
+      "rating": "not_good",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q16": {
+    "A": {
+      "rating": "not_good",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q21": {
+    "A": {
+      "rating": "not_good",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q27": {
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q30": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "not_good",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q37": {
+    "A": {
+      "rating": "not_good",
+      "factual_error": true,
+      "note": "jeffco 9700 is not a structural epoxy"
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q38": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q48": {
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q06": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q07": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q08": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q18": {
+    "A": {
+      "rating": "not_good",
+      "factual_error": true,
+      "note": ""
+    },
+    "C": {
+      "rating": "not_good",
+      "factual_error": true,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q25": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q32": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "not_good",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q34": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q36": {
+    "A": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q43": {
+    "A": {
+      "rating": "not_good",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    }
+  },
+  "Q47": {
+    "A": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "B": {
+      "rating": "perfect",
+      "factual_error": false,
+      "note": ""
+    },
+    "C": {
+      "rating": "ok",
+      "factual_error": false,
+      "note": ""
+    }
+  }
+}
