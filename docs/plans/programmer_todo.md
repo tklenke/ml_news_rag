@@ -83,11 +83,11 @@ Still useful:
       id, in the order retrieved. The one-row-per-source reduction moves to where a job is
       prepared for display, and works for entries with no `score`. Test the displayed
       list too: one row per source, for a first answer and for a revise.
-- [~] 1.1i Revise context in rank order (plan 1.1 item 7, D26). Failing test first, on the
+- [x] 1.1i Revise context in rank order (plan 1.1 item 7, D26). Failing test first, on the
       local Chroma service as in 1.1b: the prompt holds every provided and related chunk,
       provided first, each in the order of the record, whatever order `collection.get()`
       returns.
-- [ ] 1.1j Follow-up context (plan 1.1 item 8, D27). Failing tests first: previous content
+- [~] 1.1j Follow-up context (plan 1.1 item 8, D27). Failing tests first: previous content
       is the prior record's `provided_docs` only; additional content is cut by
       `get_num_draft_docs`; the record's `provided_docs` is previous then additional with
       no id twice, and there is no `related_docs`. A second follow-up on that record
