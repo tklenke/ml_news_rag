@@ -151,7 +151,7 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       Reasoning tokens are recorded as a separate figure and not added to the cost a
       second time (plan 1.3, 1.4).
       Done (`259a988`, not pushed): `site_2024/evaluation/answer_models.py`. No deployed
-      file changes. Prompts and answers go in `data/evaluation/` (git-ignored); a saved prompt
+      file changes. Prompts and answers go in `evaluation/output/` (git-ignored); a saved prompt
       is used for every later model, a saved answer is not paid for again, and a failed call is
       made again by the next run. Prices read 2026-11-22. The 30 prompts were built with real
       retrieval and a stand-in for OpenAI; no paid call was made. To run (needs Chroma and
@@ -160,9 +160,18 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
           PYTHONPATH=fwww .venv/bin/python evaluation/answer_models.py batch1 --models gpt-4o-mini
 - [ ] 1.4 Capture the baseline with the current first-answer model, `gpt-4o-mini` (it shuts
       down 2027-01-14). Ask Tom before the first paid run.
-- [ ] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
+- [~] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
       of 10 questions at a time, with a tally after each batch (plan 1.5). The
-      tally shows median latency, median reasoning tokens and cost per answer per model
+      tally shows median latency, median reasoning tokens and cost per answer per model.
+      The review page is built (`f008b10`, not pushed) in place of a review file:
+      `evaluation/review_answers.py`, on this machine only. It saves ratings in
+      `ratings.json` and the hidden order in `key.json`. Tom is trying it on five `gpt-4o-mini`
+      answers (`evaluation/output/trial`, `chunk_only` questions Q12, Q17, Q24, Q50, Q52, so
+      that no question of the 30 is seen with its model known; paid, $0.004). The tally is
+      still to be built. To serve the trial, from `site_2024`:
+
+          PYTHONPATH=fwww .venv/bin/python evaluation/review_answers.py chunk_only \
+              --ids Q12 Q17 Q24 Q50 Q52 --output evaluation/output/trial
 - [ ] 1.6 After Tom's decision: update the tracked `site.ini`, `LLM_DRAFT` to the model chosen
       and `LLM_REVISE` to the one above it
 
