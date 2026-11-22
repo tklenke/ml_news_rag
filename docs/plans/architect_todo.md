@@ -35,9 +35,10 @@ pip gives; the server's `certbot/certbot:latest` may be another):
   expand and replace this existing certificate", in the dry run as well. Cancel ends it with
   an error, so the script stops. Expand adds the next numbered files to the archive directory
   of that certificate. No new directory is made.
-- Among several such certificates of equal size it takes the first it reads. Not determined:
-  the order in which it reads them. If that is not the highest `-NNNN`, the script would
-  install an older certificate, as the plan feared; the check in D32c would stop it.
+- Among several such certificates of equal size it takes the first by name, so the lowest
+  `-NNNN`. The script takes the highest, so with more than one usable certificate on the server
+  it would install an older one, as the plan feared; the check in D32c would stop it, at every
+  run. With one usable certificate that is also the highest `-NNNN`, the two agree.
 - A certificate whose `live/` files are not all symlinks is skipped as broken. The script
   replaces them in `live/m24tom.com`, so that one is skipped, which explains the `-NNNN`
   directories. With no usable one, a new `-NNNN` certificate is made under the first free name
