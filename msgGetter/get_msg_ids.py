@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 ## Set up
-startDate = '2024-09-03'
+startDate = '2025-10-02'
 endDate = time.strftime("%Y-%m-%d", time.localtime())
 url = 'https://groups.google.com/g/cozy_builders'  # Replace with your desired URL
 urlBase = 'https://groups.google.com/g/cozy_builders/search?q=after%3A'

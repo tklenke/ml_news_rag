@@ -59,7 +59,7 @@ remove_patterns.append(r'[A-Za-z0-9=&_\-]{25,}') #repeating characters in urls
 remove_patterns.append(r'([A-Za-z0-9=\-_])(%)([A-Za-z0-9=\-_])') #spaces in urls
 remove_patterns.append(r'(http|https)') #http
 remove_patterns.append(r'(googlegroups\.com|groups\.google\.com|googleusercontent\.com|google|gmail\.com|groups\.yahoo\.com|yahoogroups\.com|yahoo\.com|\.jpg)') #extra url stuff not
-remove_patterns.append(r'(sbcglobal|aol|verizon|gmail|yahoo|hotmail|earthlink)\.(com|org|net')
+remove_patterns.append(r'(sbcglobal|aol|verizon|gmail|yahoo|hotmail|earthlink)\.(com|org|net)')
 remove_patterns.append(r'msgid')
 remove_patterns.append(r'%[0-9A-Fa-foO]2') #url encoded characters
 remove_patterns.append(r'\s+')
