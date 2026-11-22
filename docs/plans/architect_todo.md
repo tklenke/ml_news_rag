@@ -58,8 +58,11 @@ each with a revise, model calls faked. Peak anonymous memory, MiB:
 - Estimate for the new stack just after a question, from those readings and the local
   differences: about 400 MB available with 4 workers, about 570 with 2. It fits either way.
 - With the stack stopped for the build, only about 300 MB is in use.
-- Decision wanted from Tom: 2 gunicorn workers (two questions processed at once rather than
-  four), and a swap file on the server. Neither is needed for the deploy to fit.
+- Tom decided (2026-11-21): 2 gunicorn workers (two questions processed at once rather than
+  four; `server/gunicorn.conf`) and a 2 GB swap file on the server.
+- One `docker stats` reading of Ollama was 630 MiB. Not reproduced: 411 to 426 MiB anonymous
+  in every later run. A cold file cache adds about 260 MiB, which the kernel can reclaim; that
+  is the likely explanation, not a proven one.
 
 **NOTE FROM PROGRAMMER (2026-11-21):** One 500 from `/status` in these runs: the job file was read
 as empty, so `get_process_info` returned `{}` and `cozyrag_status` raised `KeyError: 'created'`.
