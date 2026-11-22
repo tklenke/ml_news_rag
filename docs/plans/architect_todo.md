@@ -37,6 +37,31 @@ of 72. The current models, `gpt-6.2-sol` and `gpt-6.2-astra` spent none. One sam
 short prompt. The plan does not say whether reasoning effort is left at the default or set
 (1.3), nor that the harness records reasoning tokens separately (1.4).
 
+**NOTE FROM PROGRAMMER (2026-11-21):** Memory measured again at Tom's request; the 882 against
+806 MiB in plan 0.6 were single readings. Method: both stacks on copies of the 1.1.1 backup,
+2 CPUs, sampled at 10 Hz through startup, first question, ten in turn and eight at once,
+each with a revise, model calls faked. Peak anonymous memory, MiB:
+
+| | chroma | ollama | flask | peak of the sum |
+|---|---|---|---|---|
+| old stack | 162 | 316 | 313 | 790 |
+| new stack, 4 workers (3 runs) | 166 to 168 | 413 to 431 | 320 to 323 | 900 to 919 |
+| new stack, 2 workers (1 run) | 166 | 412 | 172 | 750 |
+
+- The increase is Ollama, mostly its server process (120 anonymous against 26 MiB).
+  `GOMEMLIMIT=64MiB` with `OLLAMA_NUM_PARALLEL=1` made no difference.
+- The 1.5.9 first start on 1.1.1 data showed no memory spike.
+- Not measured: the server itself, the image build, and real model calls.
+- Decision wanted: 2 gunicorn workers (two questions processed at once rather than four),
+  and a swap file on the server. Waiting on server readings from Tom.
+
+**NOTE FROM PROGRAMMER (2026-11-21):** One 500 from `/status` in these runs: the job file was read
+as empty, so `get_process_info` returned `{}` and `cozyrag_status` raised `KeyError: 'created'`.
+The polling page stops on that, so the visitor keeps seeing "Running Query". Opening with
+`"w"` empties the file before the lock can be held; not yet reproduced in a test. The same
+read in `update_process_status` would save the job without its question. Existing code, not
+caused by Phase 0; not in S1 to S10. Suggest it joins the Phase 1 code change.
+
 ## Completed
 
 - [x] Plan, question set (52 in `refresh_questions.csv`), site review (S1 to S9) and
