@@ -164,6 +164,34 @@ When asked to do something, just do it - including obvious follow-up actions nee
 - Test output MUST BE PRISTINE TO PASS. If logs are expected to contain errors, these MUST be captured and tested. If a test is intentionally triggering an error, we *must* capture and validate that the error output is as we expect
 
 
+## Code Review Hand-off
+
+Applies to Code Reviewer, Programmer and Architect.
+
+**Code Reviewer, at the end of a review:**
+- Write the results to `docs/plans/programmer_todo.md` in a section "Code review results
+  (YYYY-MM-DD)", directly below the work reviewed. Use that section even if nothing was found.
+- Start with the repo and commit range reviewed and the verdict: **Approved** or
+  **Not approved**. Any open MUST FIX means Not approved.
+- Give each finding a checkbox, an id (R1, R2, ...), a severity (MUST FIX, SHOULD FIX,
+  CONSIDER), `file:line`, what is wrong, how it was seen (reproduced, or read from the code
+  and not tried), and what counts as done.
+- List findings that need a design decision under "For Architect", and add a short note
+  to `docs/plans/architect_todo.md` that points to them.
+- Commit the todo files. Do not change code.
+
+**Programmer:**
+- Read the open results before starting other work in that section of the todo.
+- Fix under TDD. Mark a finding `[x]` with the commit that fixes it.
+- If you disagree, leave it `[ ]`, write the reason below it and ask Tom.
+- Do not start "For Architect" findings until the Architect has decided.
+- Do not merge or deploy while the verdict is Not approved, unless Tom waives it.
+
+**Closing:**
+- Code Reviewer checks each fixed MUST FIX finding, then updates the verdict.
+- Only Tom grants an exception or waives a review. Record it with the date.
+- After the deploy, Programmer removes the section; it stays in the git history.
+
 ## Issue tracking
 
 - You MUST use your TodoWrite tool to keep track of what you're doing 
