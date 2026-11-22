@@ -10,9 +10,9 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0, the Phase 1 code change with the site fixes, and the follow-on fixes are
-deployed. The evaluation (1.3 to 1.5) is done; 1.6 waits for the UI design. Phase 2 can
-overlap it. One session per
-group; start each session fresh. Code review happens once per deploy, not per commit.
+deployed. The evaluation is done; its deploy (1.6) waits for the UI design. Phase 2 can overlap
+it. One session per group; start each session fresh. Code review happens once per deploy, not
+per commit.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
@@ -140,95 +140,40 @@ Rollback (rehearsed locally; do not run the renewal script while rolled back):
 
 Forward again: `git checkout main`, `docker compose up -d`.
 
-## Phase 1 evaluation (repo: `../site_2024/`)
+## Phase 1 evaluation and model change (repo: `../site_2024/`)
 
-Tom decided on 2026-11-22: only the first answer is evaluated. The dig-deeper model is not
-evaluated; it was to be the model one above the one chosen, and Tom then chose
-`gpt-6.2-sol` (1.6). The plan still has the dig-deeper tier
-in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section holds.
+1.3 to 1.5 were done on 2026-11-22; task details and the tally after each batch are in the git
+history of this file. Tom decided that only the first answer is evaluated; the plan still has the
+dig-deeper tier in 1.2 to 1.5 (note in `architect_todo.md`). Where they differ, this section holds.
 
-- [x] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
-      sends the same documents to each model, records answer, tokens, latency, cost.
-      Every model is called exactly as production calls it, with no reasoning setting.
-      Reasoning tokens are recorded as a separate figure and not added to the cost a
-      second time (plan 1.3, 1.4).
-      Done (`259a988`): `site_2024/evaluation/answer_models.py`. No deployed
-      file changes. Prompts and answers go in `evaluation/output/` (git-ignored); a saved prompt
-      is used for every later model, a saved answer is not paid for again, and a failed call is
-      made again by the next run. Prices read 2026-11-22. The 30 prompts were built with real
-      retrieval and a stand-in for OpenAI; no paid call was made. To run (needs Chroma and
-      Ollama; paid), from `site_2024`:
+Result, 30 answers per model, rated blind by Tom:
 
-          PYTHONPATH=fwww .venv/bin/python evaluation/answer_models.py batch1 --models gpt-4o-mini
-- [x] 1.4 Capture the baseline with the current first-answer model, `gpt-4o-mini` (it shuts
-      down 2027-01-14). Done 2026-11-22 with Tom's approval: all 30 answered, $0.026, median
-      5.3 s, no reasoning tokens. The answers are in `docs/archive/gpt4o_mini_baseline_answers`
-      (exporter: `72ca581` in `site_2024`), without the text sent to the model,
-      which can hold email addresses; that text is only in `evaluation/output/`. The files name
-      the model: Tom does not open them before rating. The candidates `gpt-6-luna` and
-      `gpt-6.1-terra` answered all 30 on 2026-11-22 with Tom's approval, no failures ($0.022 and
-      $0.172).
-- [x] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
-      of 10 questions at a time, with a tally after each batch (plan 1.5). The
-      tally shows median latency, median reasoning tokens and cost per answer per model.
-      The review page is built (`f008b10`) in place of a review file:
-      `evaluation/review_answers.py`, on this machine only. It saves ratings in
-      `ratings.json` and the hidden order in `key.json`. Tom found the
-      design good (2026-11-22) and tried it on five `chunk_only` answers, kept in
-      `evaluation/output/trial`: random clicks, not scores, but every one was saved. The tally
-      is built (`ada6110`): `evaluation/tally_ratings.py batch1` refuses until every answer
-      of the batch is rated. To serve batch 1, from `site_2024`, once all its models are
-      answered (the key refuses models added later):
+    model             perfect        ok  not_good    errors  median_s reasoning  $/answer
+    gpt-4o-mini            17         8         5         2       5.3         0   0.00086
+    gpt-6-luna             14        13         3         2       5.6       328   0.00074
+    gpt-6.1-terra          11        15         4         1       5.0        30   0.00574
 
-          PYTHONPATH=fwww .venv/bin/python evaluation/review_answers.py batch1
+- [ ] 1.6 Deploy Tom's choice of 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` =
+      `gpt-6.2-sol` (not evaluated). Set in the tracked `site.ini` (`1e72014`) and tried on the
+      local site with one question and one dig deeper. Tom waived the code review of this change.
+      **Do not merge or deploy yet:** it goes out in one deploy with the UI changes Tom designs
+      with Architect. The server still uses `gpt-4o-mini` and `gpt-4.1`, which shut down
+      2027-01-14.
 
-      Batch 1 rated by Tom 2026-11-22 (10 answers per model; the counts were checked by hand
-      against the ratings and the key):
+Still useful:
 
-          model             perfect        ok  not_good    errors  median_s reasoning  $/answer
-          gpt-4o-mini             8         1         1         1       5.7         0   0.00082
-          gpt-6-luna              6         3         1         0       3.2       134   0.00064
-          gpt-6.1-terra           6         4         0         0       2.7         0   0.00530
+- The scripts are in `site_2024/evaluation/` and are not used by the site: `answer_models.py`
+  (paid; needs Chroma, and Ollama for a question without a saved prompt), `review_answers.py` (the
+  rating page), `tally_ratings.py`, `export_answers.py`. Run from `site_2024`, for example:
 
-      Rule 1.5: no early adoption (`gpt-6-luna` has a `not_good`; both candidates have fewer
-      `perfect` than the baseline), no candidate dropped, so batch 2 is rated next.
+      PYTHONPATH=fwww .venv/bin/python evaluation/tally_ratings.py batch1 batch2 batch3
 
-      Batch 2 rated by Tom 2026-11-22. Batches 1 and 2 together (20 answers per model, counted
-      a second time apart from the tally script):
-
-          model             perfect        ok  not_good    errors  median_s reasoning  $/answer
-          gpt-4o-mini            12         3         5         2       5.8         0   0.00084
-          gpt-6-luna             11         7         2         1       4.5       217   0.00070
-          gpt-6.1-terra           9        10         1         0       4.6         0   0.00558
-
-      Rule 1.5: no early adoption (`gpt-6-luna` has 2 `not_good`, 1 factual error and fewer
-      `perfect`), no candidate dropped, so batch 3 is rated next. Tom agreed that a copy of the
-      ratings and the key is committed to `ml` after the last batch.
-
-      Batch 3 rated by Tom 2026-11-22. All three batches (30 answers per model, counted a second
-      time apart from the tally script), in `docs/archive/first_answer_ratings` (`ratings.json`,
-      `key.json`):
-
-          model             perfect        ok  not_good    errors  median_s reasoning  $/answer
-          gpt-4o-mini            17         8         5         2       5.3         0   0.00086
-          gpt-6-luna             14        13         3         2       5.6       328   0.00074
-          gpt-6.1-terra          11        15         4         1       5.0        30   0.00574
-
-      Rule 1.5 after 30: the cheapest candidate with no more `not_good` (5) and no more factual
-      errors (2) than the baseline is `gpt-6-luna` (3 and 2). Tom decides (1.6). Both candidates
-      have fewer `perfect` than the baseline; the rule does not count `perfect` after 30.
-
-- [~] 1.6 Tom chose on 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` = `gpt-6.2-sol`
-      (two above `gpt-6-luna` in the plan's table; not evaluated). Set in the tracked `site.ini`
-      (`1e72014` in `site_2024`). Tried on the local site with Q44, one question (7.2 s) and one dig
-      deeper (6.1 s): both answered, no error in the log. A job does not record its model; the
-      container was started after the change. Tom waived the code review of
-      this change (2026-11-22). **Do not merge or deploy yet:** Tom decided on 2026-11-22 that
-      it goes out in one deploy with the UI changes he designs with Architect. The server still
-      uses `gpt-4o-mini` and `gpt-4.1`, which shut down 2027-01-14.
-
-Questions: `docs/plans/refresh_questions.csv`, rows whose `use` is `batch1`, `batch2`,
-`batch3`, in that order.
+- The ratings and key are in `docs/archive/first_answer_ratings`; the answers of the three models
+  are in `docs/archive/gpt4o_mini_baseline_answers`, `gpt6_luna_candidate_answers` and
+  `gpt6_1_terra_candidate_answers`. The prompts are only in `evaluation/output/` (git-ignored),
+  because they can hold email addresses.
+- `evaluation/output/trial` holds random clicks of a trial. They are not ratings.
+- A job does not record the model that answered it.
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
