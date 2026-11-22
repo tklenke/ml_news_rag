@@ -51,6 +51,27 @@ Tom's output (2026-11-22): no redesign needed. `m24tom.com-0010` is the only usa
 (names: `m24tom.com`; files numbered to 3) and the highest directory. `-0001` to `-0009` and
 `m24tom.com` are reported as broken. D32c is done as planned.
 
+**NOTE FROM PROGRAMMER (2026-11-22): D33, the code of a used-up budget differs from the plan.**
+Read: https://developers.openai.com/api/docs/guides/error-codes, through a page-reading agent.
+Not read: the spend-limits guide and the help center article. All of these are HTTP 429:
+
+- `credit_balance_exhausted`: no prepaid credits left.
+- `organization_spend_limit_exceeded`, `project_spend_limit_exceeded`: the enforced monthly
+  spend limit of the organization or the project.
+- `organization_usage_limit_exceeded`: the usage limit OpenAI assigns; a higher one is requested
+  from OpenAI.
+- `insufficient_quota` is not given as a `code`. The page says to look at `error.code` for
+  billing errors and that the broader `error.type` "can still be" `insufficient_quota`.
+
+With the rule in the plan a used-up budget would show the general text. Suggested: a
+`RateLimitError` whose `code` is one of the four, or whose `code` or `type` is
+`insufficient_quota`. No response of a used-up budget was seen, and the account was not used up
+to get one. Everything else of D33 is built (`6ea9ece` in `site_2024`).
+
+Two smaller points for the same decision. The page documents no 404 for a model that is gone, so
+`openai_model` is as the plan says and unconfirmed. And in 0.7 a model the project had no access
+to answered 403, which D33 shows as "OpenAI key rejected"; the log has OpenAI's message.
+
 The two S12 gaps the Programmer left as they are (2026-11-22) are in
 `docs/notes/opportunities_for_improvement.md`.
 

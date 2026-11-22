@@ -140,16 +140,20 @@ Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waiv
       should be `fullchain4.pem` in `archive/m24tom.com-0010`.
 - [x] D32c `sudo_renew_cert.sh` asks for both names and checks the certificate it is about to
       install (both names, not older than the one in place) before replacing anything.
-- [ ] D33 A failed OpenAI call ends the job in `error`; a cause Tom has to fix is saved
+- [~] D33 A failed OpenAI call ends the job in `error`; a cause Tom has to fix is saved
       as `error_reason` and shown to the visitor (plan "OpenAI failures and the reason
       shown"; review finding R4). First confirm the `insufficient_quota` code from OpenAI's
       documentation. These commits join the commit range of the code review of this deploy.
+      Done except the `openai_budget` row (`6ea9ece`): OpenAI documents other codes than
+      `insufficient_quota` for a used-up budget. Reported to Architect (note of 2026-11-22 in
+      `architect_todo.md`); not started until decided. Until then a used-up budget ends the
+      job in `error` with the general text.
 - [ ] Deploy, run the renewal script once, and make the checks in the plan. Add the rollback
       left on the server to "Server cleanup".
 
 Still useful:
 
-- Commits `9c1d14f` to `09e3ca4` on `wip/annual-refresh` of `site_2024`, not pushed.
+- Commits `9c1d14f` to `6ea9ece` on `wip/annual-refresh` of `site_2024`, not pushed.
 - Found while doing S12 and fixed, each with a test: setting the status of an unreadable
   job file replaced its content; an unreadable job file made the jobs page answer 500;
   feedback on a missing or unreadable job left a file holding only the rating.
@@ -170,24 +174,29 @@ against the code at `3278e9e`. `programmer_todo.md` matches the code.
 
 For Programmer:
 
-- [ ] R1 **MUST FIX** `fwww/templates/cozyrag_answer.html:23`: no test covers the polling page's
+- [x] R1 **MUST FIX** `fwww/templates/cozyrag_answer.html:23`: no test covers the polling page's
       handling of `error` (stop polling, show `status_text`). With the branch disabled
       (`data.status === 'never'`) all 188 tests pass; CLAUDE.md requires tests for all
       functionality. Suggested: run the page's script in node from a test. Done when that
       change to the branch makes a test fail. Tom may grant an exception instead; not decided.
       Tom will discuss it with the Programmer at the start of the next session: ask first.
-- [ ] R2 **SHOULD FIX** `fwww/src/site_functions.py:131`: `get_process_info` catches only
+      Fixed in `1c20078`; Tom chose the node test over an exception (2026-11-22). The
+      reviewer's change to the branch now makes 2 tests fail. The tests need node.
+- [x] R2 **SHOULD FIX** `fwww/src/site_functions.py:131`: `get_process_info` catches only
       `JSONDecodeError`. A job file holding `b"\xff"` or `[1]` gives 500 on `/cozyrag/jobs`,
       `/cozyrag/<id>/status`, `/cozyrag/<id>/processid` and the feedback POST (reproduced with
       the test client); `not json` gives 200, 404, 404 and a redirect. The job thread survives
       `b"\xff"` already. Suggested: catch `ValueError` and return `{}` for content that is not
       a dict. Unlikely outside disk corruption. Done when tests show that both contents are
       treated like `not json` on those four routes.
-- [ ] R3 **SHOULD FIX** `docker-certbot.yaml:8`, and `README.md` "Renew ssl certificate", which
+      Fixed in `ed99f81`.
+- [x] R3 **SHOULD FIX** `docker-certbot.yaml:8`, and `README.md` "Renew ssl certificate", which
       sends the reader to it: the command asks for `m24tom.com` only. From the notes of D32b
       (not tried), a real run of it would make `m24tom.com-0011` without `www`, which the
       renewal script would then choose and refuse at every run. Suggested: both point to
       `sudo_renew_cert.sh`. Done when neither gives a command that asks for one name.
+      Fixed in `0ea4908`. The manual steps that followed it in the README are gone too: the
+      script does them, and one (renaming `-0001` over `m24tom.com`) no longer fits.
 
 For Architect (both decided 2026-11-22):
 
