@@ -1,11 +1,19 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-21 (third revision); rehearsal approved, Phase 0 deploy next
+**Status:** Revised 2026-11-21 (fourth revision); Phase 0 deployed, Phase 1 code change next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-21 (fourth revision):** Phase 0 is deployed (`bed83f4`) and the certificate
+  is renewed to 2027-02-20. Memory was measured again; gunicorn runs 2 workers and the
+  server has a swap file (D23). All four candidate models answer the production call
+  (0.7); two of them spend reasoning tokens, so the evaluation runs them as production
+  would call them and records those tokens (1.3, 1.4). A defect found during the
+  memory runs, a job file read as empty while it is being rewritten, joins the Phase 1
+  code change as S11. One exception to "stop at the first error" in the renewal script
+  is confirmed (0.2).
 - **2026-11-21 (third revision):** Rehearsal (0.6) passed and is approved. Tom's
   decisions D17 to D21 folded in: the wikis are deleted, not tarred; delivery by
   `git pull` is confirmed; the draft context is corrected to 15 chunks; keys move out
@@ -69,6 +77,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D19 | Changes reach the server by `git pull`. |
 | D20 | The first answer gets 15 chunks, as `MAX_DRAFT_DOCUMENTS` says. The code that sends 14 is corrected before the baseline (1.1). |
 | D21 | Keys move out of `site.ini` into a git-ignored `site_local.ini` (S10). One OpenAI key serves the server and local runs. |
+| D22 | Code review of the Phase 0 branch is waived. |
+| D23 | gunicorn runs 2 workers, and the server has a 2 GB swap file. |
 
 ## Two repositories
 
@@ -78,8 +88,10 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | Retrieval, prompts, LLM calls, results page | `../site_2024/` | `fwww/src/llm_functions.py`, `fwww/site.ini`, `fwww/templates/` |
 | Image database | `ml/` | `imageGetter/` |
 
-`site_2024` has **no automated tests**. Its branch `wip/annual-refresh` exists with no
-commits yet. Programmer follows the same version-control rules there.
+**[REVISED - 2026-11-21]** The only automated tests in `site_2024` are those of the
+certificate renewal script (`tests/test_sudo_renew_cert.py`); the application code has
+none until Phase 1.1. Its branch `wip/annual-refresh` carries Phase 0, merged to `main`
+at `bed83f4`. Programmer follows the same version-control rules there.
 
 ## Order of work
 
@@ -87,8 +99,9 @@ commits yet. Programmer follows the same version-control rules there.
 
 1. **Phase 0, one deploy:** infrastructure refresh. Tests and the evaluation harness
    are then written once, on the stack production runs.
-2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6, S10.
-   They touch the same files (`site_app.py`, `llm_functions.py`, `site_functions.py`).
+2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6, S10, S11.
+   They touch the same files (`site_app.py`, `llm_functions.py`, `site_functions.py`,
+   `open_with_lock.py`).
 3. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
 4. **Phase 2,** overlapping step 3: the embedding runs take hours of machine time
    while Tom rates.
@@ -145,8 +158,13 @@ Production code already matches the repo's `main`; only two config files differ
     error. The site would then have no certificate. Required behaviour: stop at the
     first error; take the highest-numbered `fullchainN.pem` and `privkeyN.pem`; put
     the copies in place before removing anything, so a failure leaves the current
-    certificate working. The live certificate expires 2027-01-26, so this must be
-    deployed and tried before then.
+    certificate working. **[REVISED - 2026-11-21]** One exception to stopping at the
+    first error, confirmed by Architect: a failed `docker compose restart` after the
+    new files are in place goes on to the "is the site responding" question, because
+    that question is what offers the rollback. Stopping there would leave the new
+    files in place with nginx in an unknown state. The script was deployed and run
+    once on 2026-11-21: the certificate now expires 2027-02-20. Its rollback branch
+    has not been exercised on the server.
   - `server/old.nginx_all_apps.conf`: not tracked. It is the production config
     without `/cgimages/`. It stays on the server untouched; Tom may delete it.
   - `fwww/static/test_08_fixture/`: removed from the server (D18).
@@ -212,8 +230,15 @@ Production code already matches the repo's `main`; only two config files differ
 **[REVISED - 2026-11-21]** Result: every criterion passed and Architect approved the
 deploy. The rehearsal ran with `Flask-Markdown` and `python-dotenv` installed; after
 they are dropped, the image is rebuilt and one question answered locally before the
-merge. Memory on the new stack is 882 MiB against 806 MiB; the server has room. The
-backup is `site_2024/data/chroma_backup_1.1.1`.
+merge. The backup is `site_2024/data/chroma_backup_1.1.1`.
+
+**[REVISED - 2026-11-21]** Memory, measured again by the Programmer (the earlier 882
+against 806 MiB were single readings). Peak anonymous memory of the three containers
+together, measured locally with model calls faked: old stack 790 MiB; new stack with
+4 workers 900 to 919 MiB; new stack with 2 workers 750 MiB. The increase is Ollama's
+server process. Tom decided on 2 workers and a 2 GB swap file (D23). On the server
+after the deploy, with the model loaded, 771 MiB is available. The method
+and the full table are in `docs/notes/refresh_phase0_memory.md`.
 
 ### 0.7 Smoke calls
 
@@ -226,6 +251,10 @@ call-site change. All four candidates return 403 (no access for this OpenAI proj
 Tom is arranging access; the candidate calls are repeated then. The Phase 0 deploy
 does not wait for this.
 
+**[REVISED - 2026-11-21]** Repeated after Tom arranged access: all four candidates
+answer the production `chat.completions` call unchanged. Two spend reasoning tokens
+on it; see 1.3.
+
 ### 0.8 Deploy
 
 **[REVISED - 2026-11-21]** Steps rewritten. A plain `git pull` aborts on the server
@@ -233,6 +262,12 @@ because untracked files there are tracked in the new `main`; the old images are
 tagged so a rollback needs no rebuild; the wikis are deleted rather than tarred.
 
 Tom runs the server commands; Programmer supplies them and reads the output.
+
+**[REVISED - 2026-11-21]** Done on 2026-11-21: `bed83f4` is deployed and every check
+in step 6 passed. Tom waived the code review in step 1 (D22). Tom patched and rebooted
+the server first; it runs Docker 29.10.0 and Compose 5.8.0 (the rehearsal used 28.3.2
+and 2.39.1). What the deploy left on the server as its rollback, and when to remove
+it, is in `programmer_todo.md`, "Server cleanup".
 
 1. Code review of the branch, then merge to `main` with Tom's approval and push.
 2. On the server, before stopping anything: tag the two locally built images (flask
@@ -338,9 +373,23 @@ https://developers.openai.com/api/docs/models (read 2026-11-21):
 | `gpt-6.2-sol` | $2 / $10 | | candidate |
 | `gpt-6.2-astra` | $8 / $40 | | only if `sol` is not good enough |
 
-**[REVISED - 2026-11-21]** Unknown: whether these models accept the same
-`chat.completions` call the site makes today. The SDK is upgraded in Phase 0 and the
-smoke calls are made there (0.7).
+**[REVISED - 2026-11-21]** All four accept the `chat.completions` call the site makes
+today (0.7).
+
+**Reasoning tokens.** On a one-sentence question `gpt-6-luna` spent 50 of its 80
+completion tokens on hidden reasoning and `gpt-6.1-terra` 34 of 72; `gpt-6.2-sol` and
+`gpt-6.2-astra` spent none. One sample each on a short prompt, so the share on a real
+4,500-token question is unknown. Reasoning tokens are billed as output and add to the
+response time.
+
+Decision (Architect): the evaluation calls every model exactly as production does,
+with no reasoning setting, so each runs at its own default. That measures what the
+`site.ini` switch (1.6) would deliver, and it needs no code beyond the harness. A
+reasoning setting in `site.ini` is built only if the results call for it: a candidate
+that fails on quality or is too slow at its default, where another effort level might
+change the outcome. That case goes back to Tom before anything is built. The API's
+reasoning parameter and each model's default have not been read from OpenAI's
+documentation; that is done only if the setting is needed.
 
 ### 1.4 Evaluation method
 
@@ -352,6 +401,12 @@ smoke calls are made there (0.7).
   uses) and notes any factual error. Factual errors matter most: this is aircraft
   construction advice.
 - Harness also records tokens in, tokens out, latency, and computed cost per answer.
+  **[REVISED - 2026-11-21]** It records reasoning tokens as a separate figure, read from
+  the same usage details the Programmer read them from in 0.7 (zero when absent).
+  They are already inside `completion_tokens`, so cost is computed from
+  `completion_tokens` and they are not added again. The tally after each batch (1.5)
+  shows, per model, median latency, median reasoning tokens and cost per answer beside
+  the ratings. These inform Tom's choice; the decision rule itself is unchanged.
 
 ### 1.5 Decision rule
 
@@ -494,8 +549,9 @@ lookups cannot escape their directories.
 | S5 | Low | Unknown job ids and several routes return HTTP 500: `processid` and `status` with a bad id, `jobs/<bad column>` (`abort` is never imported), and `revise` / `feedback` / `answer` without a session. | `site_app.py` | Return 404 or redirect to the question form. |
 | S6 | Low | Feedback accepts any text as the rating, which is why the log contains values outside the three buttons. | `cozyrag_feedback` | Accept only `perfect`, `ok`, `not_good`. |
 | S7 | Replaced | **[REVISED - 2026-11-21]** Both wikis are removed (D14, Phase 0.3). Original finding: DokuWiki page source is served directly (`/dokucozy/data/pages/start.txt` returns 200), bypassing any wiki access rules. Matters only if a wiki has private pages. PHP 7 is past end of life. | nginx config, `php:7-fpm` | Deny `data/`, `conf/`, `bin/`, `inc/` in nginx. PHP upgrade is outside this refresh. |
-| S8 | Low | Each of the 4 gunicorn workers starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
+| S8 | Low | Each gunicorn worker (4 at the review, 2 since D23) starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
 | S10 | Low | **[REVISED - 2026-11-21]** Keys share a file with the settings. `site.ini` holds the OpenAI and session keys beside the model names and retrieval limits, so it cannot be tracked: production settings are not in the repo, the template has drifted from what the code reads, and every tool or person reading a setting also reads the keys. The README's project tar includes `site.ini`. | `site.ini`, `site_app.py`, `exclude_from_tar.txt` | See "S10 design" below (D21). |
+| S11 | Medium | **[REVISED - 2026-11-21]** A job file can be read as empty while it is being rewritten. `open_with_lock` opens an existing file for writing with `O_TRUNC`, which empties it before the lock is held; if a reader holds the lock, the writer waits and retries with the file left empty. A read in that window returns `{}`: `/status` then raises `KeyError: 'created'` (500) and the polling page stops, so the visitor keeps seeing "Running Query"; the jobs page fails the same way; and `update_process_status` would save the job back without its question. Seen once as a 500 in the Phase 0 memory runs. Each retry also leaves a file descriptor open. | `open_with_lock.py`, `site_functions.py` | See "S11 design" below. |
 | S9 | Info | `.env_flask` is tracked in git with an `OPENAI_KEY` value that looks like a placeholder (24 characters, no `sk-` prefix). Tom to confirm it was never a real key. The repo's nginx config has HTTPS commented out, so it does not match production. No security headers (HSTS and similar) are sent. | repo root, `server/` | Confirm; no action otherwise. |
 
 ### S1 design (D10)
@@ -552,11 +608,34 @@ could, and put the production settings under version control.
 Not done: moving keys to environment variables or Docker secrets. For one container
 on a single-user server that adds parts without removing a real exposure.
 
+### S11 design
+
+**[REVISED - 2026-11-21]** New. Found by the Programmer, cause confirmed by Architect
+from the code.
+
+- `open_with_lock` opens an existing file for writing without emptying it, takes the
+  exclusive lock, and only then empties it. Readers take a shared lock, so they see
+  the previous content or the complete replacement, never an empty file. The
+  descriptor is closed before each retry.
+- The locking scheme stays. Writing to a temporary file and renaming it was considered
+  and not chosen: a rename replaces the file the locks are held on, so it would mean
+  redesigning the locking rather than correcting it.
+- Test, deterministic and without timing luck: hold a shared lock on a job file that
+  has content, start a write in a second thread, and while the writer is waiting read
+  the file directly. It must still hold the previous content. Then release the lock
+  and check the write completes with the replacement.
+- Not addressed: two read-then-write updates of the same job (for example feedback
+  arriving while the job thread saves a status) can still overwrite each other. Not
+  observed; logged with S8 in `docs/notes/opportunities_for_improvement.md`.
+- Not added: a retry in the polling page after a failed request. With the cause
+  removed and S5a returning 404 for an unknown job, a page that retried would poll a
+  missing job without end.
+
 ### Scheduling
 
 **[REVISED - 2026-11-21]** (D15)
 
-- With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6, S10.
+- With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6, S10, S11.
 - With Phase 4.1 (reference links): S3.
 - Replaced by the DokuWiki removal in Phase 0.3: S7.
 - Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`).
@@ -589,10 +668,10 @@ this is a lookup. Design after Phase 1.
 
 | Risk | Mitigation |
 |---|---|
-| Shutdown date reached before the model switch | Tom expects a few days of effort (D15). Fallback is setting both tiers to OpenAI's recommended `gpt-6-luna` in `site.ini` without evaluation, once 0.7 shows it can be called. |
-| New models reject the current API call | SDK upgraded and smoke calls made in Phase 0 (0.7). |
+| Shutdown date reached before the model switch | Tom expects a few days of effort (D15). Fallback is setting both tiers to OpenAI's recommended `gpt-6-luna` in `site.ini` without evaluation; 0.7 showed it can be called. |
+| New models reject the current API call | Closed: all four candidates answer the current call on the upgraded SDK (0.7). |
 | Chroma upgrade damages or cannot read the collection | Rehearsed on a local copy with before and after checks (0.6, passed); server data tarred before the deploy (0.8). A re-embed takes hours if both fail. |
 | One deploy carries many changes | The full stack runs locally first; without Docker locally, Chroma is split out (Phase 0 assumptions). |
 | Tom's rating and labelling time | 30 questions, not 50; pooled candidates capped at top 10 per variant. |
 | Chunk experiment shows no clear winner | That is a valid result; the decision rule says leave it alone. |
-| `site_2024` has no tests | Phase 1.1 introduces the first ones around prompt construction. Phase 0 is verified by the rehearsal checks instead. |
+| `site_2024` application code has no tests | Phase 1.1 introduces the first ones around prompt construction. Phase 0 was verified by the rehearsal checks instead. |

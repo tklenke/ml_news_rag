@@ -6,8 +6,8 @@ Things worth doing later that are not scheduled now.
 
 Works at current volume (about 850 jobs). Revisit if answers stall or pages slow down.
 
-- Each of the 4 gunicorn workers starts its own job-processing thread, and each
-  scans every job file when it wakes. At startup all four scan at once and can
+- Each gunicorn worker (2 in production) starts its own job-processing thread, and
+  each scans every job file when it wakes. At startup they scan at once and can
   pick up the same unprocessed job.
 - `FileProcessorThread.__init__` sets `daemon = True` and then calls
   `super().__init__()`, which resets it.
@@ -15,6 +15,9 @@ Works at current volume (about 850 jobs). Revisit if answers stall or pages slow
   page polls without end.
 - The jobs page opens and parses every job file on each view.
 - The OpenAI call has no timeout set; one hung call blocks that worker's queue.
+- A job file is updated by reading it, changing a value and writing it back, with
+  the lock released in between. Two updates of the same job at once (feedback
+  arriving while the job thread saves a status) can overwrite each other.
 
 ## site_2024: housekeeping (logged 2026-11-21)
 

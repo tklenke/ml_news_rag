@@ -9,7 +9,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0 is done. Next is the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6, S10), then
+**Order:** Phase 0 is done. Next is the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6, S10, S11), then
 the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
@@ -103,6 +103,13 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       question form instead of returning 500.
 - [ ] S6 Feedback accepts only `perfect`, `ok`, `not_good`; anything else is ignored with
       a redirect to the question form.
+- [ ] S11a Failing test for the empty job file read (plan "S11 design"): hold a shared lock
+      on a job file that has content, start a write in a second thread, and while the
+      writer waits read the file directly; it must still hold the previous content. After
+      the lock is released the write completes with the replacement.
+- [ ] S11b Fix `open_with_lock`: an existing file opened for writing is emptied only after
+      the exclusive lock is held, and the descriptor is closed before each retry. The
+      locking scheme stays; no change to the callers.
 - [ ] S10a The app reads `site.ini` then `site_local.ini`; a value in the second wins.
       Missing `SESSION` or `OPENAI` key stops startup with a message naming
       `site_local.ini`. Tests use files in a temporary directory, never the real ones.
@@ -121,11 +128,15 @@ Flask's test client is enough for the S tasks; only 1.1b needs a live service.
 ## Phase 1 evaluation (repo: `../site_2024/`)
 
 - [ ] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
-      sends the same documents to each model, records answer, tokens, latency, cost
+      sends the same documents to each model, records answer, tokens, latency, cost.
+      Every model is called exactly as production calls it, with no reasoning setting.
+      Reasoning tokens are recorded as a separate figure and not added to the cost a
+      second time (plan 1.3, 1.4).
 - [ ] 1.4 Capture the baseline with the current models (they shut down 2027-01-14)
 - [ ] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
-      of 10 questions at a time, with a per-tier tally after each batch (plan 1.5)
-- [ ] 1.6 After Tom's decision: update `site.ini` and `site.ini.template`
+      of 10 questions at a time, with a per-tier tally after each batch (plan 1.5). The
+      tally shows median latency, median reasoning tokens and cost per answer per model
+- [ ] 1.6 After Tom's decision: update the tracked `site.ini` (S10 removes the template)
 
 Questions: `docs/plans/refresh_questions.csv`, rows whose `use` is `batch1`, `batch2`,
 `batch3`, in that order.

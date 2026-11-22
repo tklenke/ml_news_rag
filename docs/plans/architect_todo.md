@@ -8,73 +8,24 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-21 (third revision). The Phase 0 rehearsal passed and is
-approved. Programmer finishes Phase 0 (tasks 0.2b, 0.2c, 0.4c, 0.6b), then code review, then
-the deploy with Tom. The Programmer's notes of 2026-11-21 are all decided and folded
-into the plan; none are outstanding.
+Plan revised on 2026-11-21 (fourth revision). Phase 0 is deployed. The Programmer's notes
+of 2026-11-21 are all decided and folded into the plan; none are outstanding. Next is the
+Programmer's Phase 1 code change (1.0, 1.1, S1, S2, S4, S5, S6, S10, S11), one deploy, with
+a code review before it.
 
 ## Open
 
-- [ ] Review Programmer's smoke-call report on the GPT-6 candidates once Tom has
-      arranged access (plan 0.7, 1.3). All four returned 403 on 2026-11-21.
 - [ ] Approve the nginx rate Programmer proposes for S2b.
+- [ ] If the evaluation shows a candidate failing or too slow at its default reasoning
+      effort: read OpenAI's documentation for the reasoning setting and take the question
+      of a `site.ini` setting to Tom (plan 1.3).
 - [ ] Have `ml/requirements.txt` created when Phase 2 adds tests to `embedder/` (the
       role files tell every session to read it; it does not exist).
 - [ ] Design reference links (plan 4.1) and image gallery (4.2) once the model choice is known.
 
 ## Notes from Programmer
 
-**NOTE FROM PROGRAMMER (2026-11-21):** 0.2b, 0.2c, 0.4c and 0.6b are done; results are in
-`programmer_todo.md`. Please confirm one choice in 0.2c: a failed `docker compose restart`
-in `sudo_renew_cert.sh` continues to the rollback question, although plan 0.2 says to stop at
-the first error.
-
-**NOTE FROM PROGRAMMER (2026-11-21):** Smoke calls (0.7) repeated: all four candidates answer
-the production `chat.completions` call unchanged, so the review item above can proceed and plan
-0.7 and 1.3 need updating. On a one-sentence question two candidates spent hidden reasoning
-tokens, reported inside `completion_tokens`: `gpt-6-luna` 50 of 80, `gpt-6.1-terra` 34
-of 72. The current models, `gpt-6.2-sol` and `gpt-6.2-astra` spent none. One sample each,
-short prompt. The plan does not say whether reasoning effort is left at the default or set
-(1.3), nor that the harness records reasoning tokens separately (1.4).
-
-**NOTE FROM PROGRAMMER (2026-11-21):** Phase 0 is deployed (`bed83f4`) and the certificate is
-renewed to 2027-02-20; the plan and the facts below still say 2027-01-26. With the model loaded
-the server has 771 MiB available. Tom patched and rebooted the server first: Docker is 29.10.0,
-Compose 5.8.0. Open for Tom: restart policy, and a certificate for `www`.
-
-**NOTE FROM PROGRAMMER (2026-11-21):** Memory measured again at Tom's request; the 882 against
-806 MiB in plan 0.6 were single readings. Method: both stacks on copies of the 1.1.1 backup,
-2 CPUs, sampled at 10 Hz through startup, first question, ten in turn and eight at once,
-each with a revise, model calls faked. Peak anonymous memory, MiB:
-
-| | chroma | ollama | flask | peak of the sum |
-|---|---|---|---|---|
-| old stack | 162 | 316 | 313 | 790 |
-| new stack, 4 workers (3 runs) | 166 to 168 | 413 to 431 | 320 to 323 | 900 to 919 |
-| new stack, 2 workers (1 run) | 166 | 412 | 172 | 750 |
-
-- The increase is Ollama, mostly its server process (120 anonymous against 26 MiB).
-  `GOMEMLIMIT=64MiB` with `OLLAMA_NUM_PARALLEL=1` made no difference.
-- The 1.5.9 first start on 1.1.1 data showed no memory spike.
-- Not measured: the server itself, the image build, and real model calls.
-- Server, old stack, 2 CPUs, no swap, 1941 MB (Tom, 2026-11-21): available 774 MB with the
-  model unloaded, 518 MB just after a question. `docker stats` then: flask 431, ollama 476,
-  chroma 167, php 34 and 9, nginx 9 MiB. No out-of-memory lines in `dmesg`.
-- Estimate for the new stack just after a question, from those readings and the local
-  differences: about 400 MB available with 4 workers, about 570 with 2. It fits either way.
-- With the stack stopped for the build, only about 300 MB is in use.
-- Tom decided (2026-11-21): 2 gunicorn workers (two questions processed at once rather than
-  four; `server/gunicorn.conf`) and a 2 GB swap file on the server.
-- One `docker stats` reading of Ollama was 630 MiB. Not reproduced: 411 to 426 MiB anonymous
-  in every later run. A cold file cache adds about 260 MiB, which the kernel can reclaim; that
-  is the likely explanation, not a proven one.
-
-**NOTE FROM PROGRAMMER (2026-11-21):** One 500 from `/status` in these runs: the job file was read
-as empty, so `get_process_info` returned `{}` and `cozyrag_status` raised `KeyError: 'created'`.
-The polling page stops on that, so the visitor keeps seeing "Running Query". Opening with
-`"w"` empties the file before the lock can be held; not yet reproduced in a test. The same
-read in `update_process_status` would save the job without its question. Existing code, not
-caused by Phase 0; not in S1 to S10. Suggest it joins the Phase 1 code change.
+None outstanding.
 
 ## Completed
 
@@ -89,6 +40,12 @@ caused by Phase 0; not in S1 to S10. Suggest it joins the Phase 1 code change.
       confirmed (1.1).
 - [x] Key handling reviewed at Tom's request; design S10 (D21).
 - [x] Tom's decisions D17 to D21 recorded in the plan and `required_from_tom.md`.
+- [x] Programmer's five notes after the Phase 0 deploy decided and folded into the plan
+      (fourth revision, 2026-11-21): the restart exception in `sudo_renew_cert.sh`
+      confirmed (0.2); smoke-call report reviewed, models evaluated at their default
+      reasoning effort with reasoning tokens recorded (0.7, 1.3, 1.4); deploy facts and
+      memory measurements recorded (0.6, 0.8, D22, D23,
+      `docs/notes/refresh_phase0_memory.md`); the empty job file read designed as S11.
 
 ## Facts worth keeping
 
@@ -106,9 +63,14 @@ caused by Phase 0; not in S1 to S10. Suggest it joins the Phase 1 code change.
 - Production job log (2026-11-21): about 850 questions, about 45 rated (roughly 20 of
   those `n/a`; the scale changed over time). Typical first answer: about 4,500 tokens
   in, 300 out, 5 s. A sampled follow-up: about 21,000 tokens in.
-- The server checkout is at `906ffd8` with uncommitted edits; its code is byte-identical
-  to the repo's `main`, only `server/nginx_all_apps.conf` and `docker-compose.yaml` differ.
-  The server has 1.9 GiB of memory, no swap, and 36 GB of disk free.
+- The server runs `main` at `bed83f4`, delivered by `git pull`. The state before Phase 0
+  (`906ffd8` plus a stash) is kept there as the rollback until the server cleanup
+  (`programmer_todo.md`).
+- The server has 1.9 GiB of memory, 2 CPUs, a 2 GB swap file, Docker 29.10.0 and Compose
+  5.8.0. gunicorn runs 2 workers. With the model loaded, 771 MiB is available. 36 GB of
+  disk was free before the Phase 0 deploy.
+- The site stays down after a server reboot until `docker compose up -d` is run (open
+  with Tom in `required_from_tom.md`).
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is
@@ -116,4 +78,4 @@ caused by Phase 0; not in S1 to S10. Suggest it joins the Phase 1 code change.
   `site_2024/data/rehearsal/`. Both old images are kept locally under the tag `old-stack`.
 - The copy of `server/nginx_all_apps.conf` in the reference file lost trailing spaces in
   pasting. The committed file is the exact one.
-- The live certificate expires 2027-01-26.
+- The live certificate expires 2027-02-20.
