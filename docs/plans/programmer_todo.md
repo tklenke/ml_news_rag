@@ -141,16 +141,22 @@ Forward again: `git checkout main`, `docker compose up -d`.
 
 ## Phase 1 evaluation (repo: `../site_2024/`)
 
-- [ ] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
+Tom decided on 2026-11-22: only the first answer is evaluated. The dig-deeper model is not
+evaluated; it is the model one above the one chosen. The plan still has the dig-deeper tier
+in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section holds.
+
+- [~] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
       sends the same documents to each model, records answer, tokens, latency, cost.
       Every model is called exactly as production calls it, with no reasoning setting.
       Reasoning tokens are recorded as a separate figure and not added to the cost a
       second time (plan 1.3, 1.4).
-- [ ] 1.4 Capture the baseline with the current models (they shut down 2027-01-14)
+- [ ] 1.4 Capture the baseline with the current first-answer model, `gpt-4o-mini` (it shuts
+      down 2027-01-14). Ask Tom before the first paid run.
 - [ ] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
-      of 10 questions at a time, with a per-tier tally after each batch (plan 1.5). The
+      of 10 questions at a time, with a tally after each batch (plan 1.5). The
       tally shows median latency, median reasoning tokens and cost per answer per model
-- [ ] 1.6 After Tom's decision: update the tracked `site.ini` (S10 removes the template)
+- [ ] 1.6 After Tom's decision: update the tracked `site.ini`, `LLM_DRAFT` to the model chosen
+      and `LLM_REVISE` to the one above it
 
 Questions: `docs/plans/refresh_questions.csv`, rows whose `use` is `batch1`, `batch2`,
 `batch3`, in that order.

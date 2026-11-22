@@ -79,6 +79,15 @@ of the review). The resume point and these facts below are out of date: the serv
 `c311cda`; the containers come back after a reboot (proven); `www` redirects and the certificate
 covers both names, to 2027-02-20. Architect should verify and update.
 
+**NOTE FROM PROGRAMMER (2026-11-22): Tom decided what the evaluation covers.** The Programmer
+asked whose draft the dig-deeper models are to revise, which the plan does not say. Tom's
+decision: evaluate the first answer only; the dig-deeper model is assumed to be the model one
+above the one chosen. **For Architect: give it a decision number and put it in the plan (1.2 to
+1.6), which still has the dig-deeper tier, with its review file, its decision rule and the
+`gpt-4.1` baseline.** From the order of the plan's table, "one above" is `gpt-6.1-terra` for
+`gpt-6-luna` and `gpt-6.2-sol` for `gpt-6.1-terra`. That reading is the Programmer's. Consequence:
+no `gpt-4.1` answers are captured, and they cannot be after 2027-01-14.
+
 The two S12 gaps the Programmer left as they are (2026-11-22) are in
 `docs/notes/opportunities_for_improvement.md`.
 
