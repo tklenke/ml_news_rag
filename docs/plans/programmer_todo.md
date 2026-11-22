@@ -9,8 +9,8 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0 is done. Next is the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6, S10, S11), then
-the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
+**Order:** Phase 0 is done. Next are 1.1h to 1.1j, which finish the Phase 1 code change, then its
+deploy, then the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
@@ -67,86 +67,17 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
-- [x] 1.0 Set up pytest in `site_2024` (its only tests are those of 0.2c, which need
-      nothing but pytest)
-- [x] 1.1a Separate prompt construction from `process_question` into a function that takes
-      job data and document lists and returns the prompt string. Behaviour unchanged.
-- [x] 1.1b Write a failing test for the confirmed defect: revise and follow-up prompts must
-      contain the full text of every prior document. Use a real `collection.get()` result
-      from the local Chroma service, not a hand-built dict.
-- [x] 1.1c Fix the prior-context join
-- [x] 1.1d Reword `revise_prompt` and `followup_prompt` so they name no model
-- [x] 1.1e Remove the stale `__main__` block in `llm_functions.py`. Tom approved the
-      removal (2026-11-21).
-- [x] 1.1f Failing test, then fix: `get_num_draft_docs` returns a count, not an index
-      (plan 1.1 item 4). 60 matches inside the cutoff with a maximum of 15 gives 15; one
-      match fewer than the maximum inside the cutoff gives that number; none inside the
-      cutoff gives the minimum. Check every caller treats the value as a count.
-- [x] 1.1g Remove the `INITIAL` and `SECONDARY` settings and the code that carries them
-      (plan 1.1 item 5). `PREFIX` stays and keeps working.
-- [x] S1a Function that shortens an email address for display: first 5 characters plus
-      `...`; empty string for none. Replaces the `safe_truncate(job['email'],5)` calls.
-- [x] S1b `/cozyrag/<id>/status` returns only `status`, `status_text`, `result_html`.
-      Check `cozyrag_answer.html` still works; it reads only those three.
-- [x] S1c Results page and jobs page (including `/cozyrag/jobs/email`) show the shortened
-      address only, applied where the job record is prepared for display.
-- [x] S1d Tests: with a job file containing a known full address, that address appears in
-      none of the responses from `status`, `processid`, `jobs`, `jobs/email`.
-- [x] S2a `/cozyrag/revise` accepts POST only; a GET gets 405.
-- [x] S2b Tom decided (2026-11-21): no nginx rate limit. The OpenAI budget limit has no auto
-      reload, so a script can use up the budget but not more. Instead the job starts when
-      the question is submitted; reading pages starts none. Plan S2 is updated (D25).
-- [x] S4 `sanitize()` no longer wraps input in `Markup`. Rename it to say what it does, or
-      remove it if nothing remains; ask Architect if unsure.
-- [x] S5a Unknown job id on `processid` and `status` returns 404, not 500.
-- [x] S5b `/cozyrag/jobs/<unknown column>` returns 404 (`abort` is not imported today).
-- [x] S5c `revise`, `followup`, `feedback` and `answer` without a session redirect to the
-      question form instead of returning 500.
-- [x] S6 Feedback accepts only `perfect`, `ok`, `not_good`; anything else is ignored with
-      a redirect to the question form.
-- [x] S11a Failing test for the empty job file read (plan "S11 design"): hold a shared lock
-      on a job file that has content, start a write in a second thread, and while the
-      writer waits read the file directly; it must still hold the previous content. After
-      the lock is released the write completes with the replacement.
-- [x] S11b Fix `open_with_lock`: an existing file opened for writing is emptied only after
-      the exclusive lock is held, and the descriptor is closed before each retry. The
-      locking scheme stays; no change to the callers.
-- [x] S10a The app reads `site.ini` then `site_local.ini`; a value in the second wins.
-      Missing `SESSION` or `OPENAI` key stops startup with a message naming
-      `site_local.ini`. Tests use files in a temporary directory, never the real ones.
-- [x] Found while testing S1: the jobs page returned 500 while any job was unfinished. Fixed.
-      With it, `processid` of an unfinished job gives 404.
-- [x] S10b Track `site.ini` with the production settings and no `[KEYS]` section. Take
-      the values from the local `site.ini` by naming each setting; do not print the file.
-      Add `site_local.ini` to `.gitignore` and to `exclude_from_tar.txt`; add
-      `site_local.ini.template`; remove `site.ini.template`, `.env_flask` and the
-      commented `env_file` lines in `docker-compose.yaml`.
-      Values are the server's (Tom, 2026-11-21). The local file differed in `MAX_QUERY_LEN` (1024,
-      512 on the server). Checked: no key in the commits; the local stack starts on the two
-      files and its pages answer, with no question asked. Tom's backup with the keys is
-      `~/site.ini.before_s10` on the local machine; he deletes it.
-- [x] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
-      create the local `site_local.ini` with Tom.
-      Local file created. Server steps, rehearsed on throwaway repositories with fake keys:
+Written and committed in `site_2024` (`wip/annual-refresh`), not yet reviewed or deployed: 1.0,
+1.1a to 1.1g, S1, S2, S4, S5, S6, S10, S11. Task details are in the git history of this file.
 
-          cd ~/site_2024
-          docker compose stop flask
-          install -d -m 700 ~/site_ini_before_s10
-          mv fwww/site.ini ~/site_ini_before_s10/
-          git pull
-          ( umask 077; sed -n '/^\[KEYS\]/,/^\[/{/^\[KEYS\]/p;/^\[/!p}' ~/site_ini_before_s10/site.ini > fwww/site_local.ini )
-          ls -l fwww/site_local.ini
-          grep -cE '^(SESSION|OPENAI) *= *.' fwww/site_local.ini
-          names() { grep -E '^(DEBUG|JOBS_DIR|WWW_DIR|USE_GPT|MAX_[A-Z_]+|MIN_DOCUMENTS|PROCESS_ID_LEN|OLLAMA|CHROMA|EMBED|LLM_[A-Z]+|PREFIX|SHOW_REVISE) *=' "$1" | sort; }
-          diff <(names ~/site_ini_before_s10/site.ini) <(names fwww/site.ini) && echo same
-          docker compose up -d
+Still useful:
 
-      - **`site.ini` must be moved before the pull.** It is ignored, so git replaces it with the
-        tracked one without a word and the keys are lost (seen in the rehearsal).
-      - flask is stopped first because the templates are live: the jobs template shows
-        `job['email']` as given, which the code before this deploy does not shorten.
-      - Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
-      - `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
+- Found while testing S1 and fixed: the jobs page returned 500 while any job was unfinished.
+  With it, `processid` of an unfinished job gives 404.
+- S2: no nginx rate limit (D25). The job starts in the `query` POST; reading pages starts none.
+- The tracked `site.ini` holds the server's values. The local file had differed in
+  `MAX_QUERY_LEN` (1024; 512 on the server).
+
 - [ ] 1.1h Job record keeps every chunk (plan 1.1 item 6, D26). Failing test first: a
       query result with several chunks from one source gives a record with every chunk
       id, in the order retrieved. The one-row-per-source reduction moves to where a job is
@@ -163,13 +94,35 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       carries no more than `MAX_DRAFT_DOCUMENTS` further chunks.
 - [ ] Before the deploy: one question, one revise, one follow-up and a follow-up on that
       follow-up answered locally (paid calls), noting the prompt tokens of each; code review.
-- [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements
-      changed, restart.
+- [ ] Deploy: the server steps below, with Tom. Rebuild if requirements changed.
+
+### Server steps for the deploy
+
+Rehearsed on throwaway repositories with fake keys.
+
+    cd ~/site_2024
+    docker compose stop flask
+    install -d -m 700 ~/site_ini_before_s10
+    mv fwww/site.ini ~/site_ini_before_s10/
+    git pull
+    ( umask 077; sed -n '/^\[KEYS\]/,/^\[/{/^\[KEYS\]/p;/^\[/!p}' ~/site_ini_before_s10/site.ini > fwww/site_local.ini )
+    ls -l fwww/site_local.ini
+    grep -cE '^(SESSION|OPENAI) *= *.' fwww/site_local.ini
+    names() { grep -E '^(DEBUG|JOBS_DIR|WWW_DIR|USE_GPT|MAX_[A-Z_]+|MIN_DOCUMENTS|PROCESS_ID_LEN|OLLAMA|CHROMA|EMBED|LLM_[A-Z]+|PREFIX|SHOW_REVISE) *=' "$1" | sort; }
+    diff <(names ~/site_ini_before_s10/site.ini) <(names fwww/site.ini) && echo same
+    docker compose up -d
+
+- **`site.ini` must be moved before the pull.** It is ignored, so git replaces it with the
+  tracked one without a word and the keys are lost (seen in the rehearsal).
+- flask is stopped first because the templates are live: the jobs template shows
+  `job['email']` as given, which the code before this deploy does not shorten.
+- Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
+- `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
 
 Running the tests: `site_2024/README.md`. Use `site_2024/.venv`; `site_2024/venv` still holds
 the old stack.
 
-Flask's test client is enough for the S tasks; only 1.1b needs a live service.
+Flask's test client is enough for the S tasks; only 1.1b and 1.1i need a live service.
 
 ## Phase 1 evaluation (repo: `../site_2024/`)
 
