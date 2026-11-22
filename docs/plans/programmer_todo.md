@@ -78,12 +78,12 @@ Still useful:
 - The tracked `site.ini` holds the server's values. The local file had differed in
   `MAX_QUERY_LEN` (1024; 512 on the server).
 
-- [ ] 1.1h Job record keeps every chunk (plan 1.1 item 6, D26). Failing test first: a
+- [x] 1.1h Job record keeps every chunk (plan 1.1 item 6, D26). Failing test first: a
       query result with several chunks from one source gives a record with every chunk
       id, in the order retrieved. The one-row-per-source reduction moves to where a job is
       prepared for display, and works for entries with no `score`. Test the displayed
       list too: one row per source, for a first answer and for a revise.
-- [ ] 1.1i Revise context in rank order (plan 1.1 item 7, D26). Failing test first, on the
+- [~] 1.1i Revise context in rank order (plan 1.1 item 7, D26). Failing test first, on the
       local Chroma service as in 1.1b: the prompt holds every provided and related chunk,
       provided first, each in the order of the record, whatever order `collection.get()`
       returns.
