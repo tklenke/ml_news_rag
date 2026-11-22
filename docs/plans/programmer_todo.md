@@ -192,7 +192,8 @@ Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waiv
 
 Still useful:
 
-- Commits `9c1d14f` to `c311cda` on `wip/annual-refresh` of `site_2024`, not pushed.
+- Commits `9c1d14f` to `c311cda` of `site_2024`: merged to `main` and pushed (2026-11-22), not
+  yet pulled on the server. Tom will reboot the server at the end to prove D31.
 - Found while doing S12 and fixed, each with a test: setting the status of an unreadable
   job file replaced its content; an unreadable job file made the jobs page answer 500;
   feedback on a missing or unreadable job left a file holding only the rating.

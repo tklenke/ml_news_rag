@@ -11,7 +11,8 @@ finished work items are in the git history of this file.
 
 ## Work items
 
-- [ ] At the follow-on deploy: decide whether to reboot the server to prove the restart policy.
+- [x] At the follow-on deploy: decide whether to reboot the server to prove the restart policy.
+      Yes (2026-11-22), after the other checks.
 - [x] For the Programmer, before the renewal script is changed: run `certbot certificates`
       on the server (the Programmer supplies the command).
 - [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
