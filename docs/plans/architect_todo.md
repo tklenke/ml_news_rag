@@ -105,6 +105,22 @@ Q09; `gpt-4o-mini` Q32, all 14 list lines, and part of Q09). No other answer has
 **For Architect: decide that fix with the tables.** No answer has code, quotes, HTML, math or
 strikethrough. The survey holds no samples of the dig-deeper model, `gpt-6.2-sol`.
 
+**NOTE FROM PROGRAMMER (2026-11-22): next step is a UI design session with Tom.** Tom designs the
+UI changes with Architect, and they go out in one deploy with the model change (1.6). State:
+
+- Models: set and committed on `wip/annual-refresh` in `site_2024` (`1e72014`), pushed, not merged.
+  Tried on the local site with one question and one dig deeper. Tom waived the code review of this
+  change only; the waiver does not cover the UI changes.
+- Deadline: the server still uses `gpt-4o-mini` and `gpt-4.1`, which shut down 2027-01-14.
+- Decide: tables and unspaced lists (note above), and how they fit S3's allow-list and the
+  reference-links design.
+- Tom declined dig-deeper samples from `gpt-6.2-sol`, so the display of dig-deeper and follow-up
+  answers is designed without samples. One local dig-deeper answer was read in part (no table).
+- Watch after the deploy: `gpt-6-luna` named a seller in Q05 while saying the documents do not
+  mention it (rated a factual error). A wording search found no other such answer, but would miss
+  an unsupported claim made without saying so.
+- `README.md` of `site_2024` still recommends `gpt-4o-mini`, `gpt-4o` and `gpt-5`.
+
 The two S12 gaps the Programmer left as they are (2026-11-22) are in
 `docs/notes/opportunities_for_improvement.md`.
 

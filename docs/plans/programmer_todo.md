@@ -10,7 +10,8 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0, the Phase 1 code change with the site fixes, and the follow-on fixes are
-deployed. Next is the evaluation (1.3 to 1.6). Phase 2 can overlap it. One session per
+deployed. The evaluation (1.3 to 1.5) is done; 1.6 waits for the UI design. Phase 2 can
+overlap it. One session per
 group; start each session fresh. Code review happens once per deploy, not per commit.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
@@ -221,8 +222,10 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       (two above `gpt-6-luna` in the plan's table; not evaluated). Set in the tracked `site.ini`
       (`1e72014` in `site_2024`). Tried on the local site with Q44, one question (7.2 s) and one dig
       deeper (6.1 s): both answered, no error in the log. A job does not record its model; the
-      container was started after the change. Tom waived the code review (2026-11-22). Left: merge
-      and deploy, with Tom's approval.
+      container was started after the change. Tom waived the code review of
+      this change (2026-11-22). **Do not merge or deploy yet:** Tom decided on 2026-11-22 that
+      it goes out in one deploy with the UI changes he designs with Architect. The server still
+      uses `gpt-4o-mini` and `gpt-4.1`, which shut down 2027-01-14.
 
 Questions: `docs/plans/refresh_questions.csv`, rows whose `use` is `batch1`, `batch2`,
 `batch3`, in that order.
