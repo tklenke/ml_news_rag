@@ -95,6 +95,15 @@ Q32, Q34) hold a Markdown table. The site's `markdown.Markdown()` has no table e
 visitor sees raw `|` lines; read from the code, seen on the review page, which renders the same
 way. Nothing is changed. **For Architect: decide whether to turn the extension on; S3's
 allow-list then has to permit the table tags.**
+Tom wants answers with tables displayed usefully (2026-11-22). Samples, all 30 answers of each
+candidate, are in `docs/archive/gpt6_luna_candidate_answers` (tables in Q32, Q34) and
+`gpt6_1_terra_candidate_answers` (Q03, Q32). Tried, not built: with Python-Markdown's `tables`
+extension all four become tables with no `|` left over: 2 to 3 columns, up to 7 rows, longest cell
+357 characters, so a narrow screen needs checking too.
+Also found: a list that follows a text line with no blank line is shown as run-on text (`gpt-6-luna`
+Q09; `gpt-4o-mini` Q32, all 14 list lines, and part of Q09). No other answer has an unrendered list.
+**For Architect: decide that fix with the tables.** No answer has code, quotes, HTML, math or
+strikethrough. The survey holds no samples of the dig-deeper model, `gpt-6.2-sol`.
 
 The two S12 gaps the Programmer left as they are (2026-11-22) are in
 `docs/notes/opportunities_for_improvement.md`.
