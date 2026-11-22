@@ -142,7 +142,8 @@ Forward again: `git checkout main`, `docker compose up -d`.
 ## Phase 1 evaluation (repo: `../site_2024/`)
 
 Tom decided on 2026-11-22: only the first answer is evaluated. The dig-deeper model is not
-evaluated; it is the model one above the one chosen. The plan still has the dig-deeper tier
+evaluated; it was to be the model one above the one chosen, and Tom then chose
+`gpt-6.2-sol` (1.6). The plan still has the dig-deeper tier
 in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section holds.
 
 - [x] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
@@ -216,8 +217,11 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       errors (2) than the baseline is `gpt-6-luna` (3 and 2). Tom decides (1.6). Both candidates
       have fewer `perfect` than the baseline; the rule does not count `perfect` after 30.
 
-- [ ] 1.6 After Tom's decision: update the tracked `site.ini`, `LLM_DRAFT` to the model chosen
-      and `LLM_REVISE` to the one above it
+- [~] 1.6 Tom chose on 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` = `gpt-6.2-sol`
+      (two above `gpt-6-luna` in the plan's table; not evaluated). Set in the tracked `site.ini`
+      (`1e72014` in `site_2024`). Tried on the local site with Q44, one question (7.2 s) and one dig
+      deeper (6.1 s): both answered, no error in the log. A job does not record its model; the
+      container was started after the change. Left: merge and deploy, with Tom's approval.
 
 Questions: `docs/plans/refresh_questions.csv`, rows whose `use` is `batch1`, `batch2`,
 `batch3`, in that order.

@@ -87,6 +87,8 @@ above the one chosen. **For Architect: give it a decision number and put it in t
 `gpt-4.1` baseline.** From the order of the plan's table, "one above" is `gpt-6.1-terra` for
 `gpt-6-luna` and `gpt-6.2-sol` for `gpt-6.1-terra`. That reading is the Programmer's. Consequence:
 no `gpt-4.1` answers are captured, and they cannot be after 2027-01-14.
+Result: Tom chose `gpt-6-luna` for the first answer (14 `perfect`, 3 `not_good`, 2 factual errors
+of 30; baseline 17, 5, 2) and `gpt-6.2-sol` for dig deeper, which is two above, not one.
 
 **NOTE FROM PROGRAMMER (2026-11-22): answers with tables.** 4 of the 90 evaluation answers (Q03,
 Q32, Q34) hold a Markdown table. The site's `markdown.Markdown()` has no table extension, so a
