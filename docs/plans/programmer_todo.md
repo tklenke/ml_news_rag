@@ -191,6 +191,18 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       Rule 1.5: no early adoption (`gpt-6-luna` has a `not_good`; both candidates have fewer
       `perfect` than the baseline), no candidate dropped, so batch 2 is rated next.
 
+      Batch 2 rated by Tom 2026-11-22. Batches 1 and 2 together (20 answers per model, counted
+      a second time apart from the tally script):
+
+          model             perfect        ok  not_good    errors  median_s reasoning  $/answer
+          gpt-4o-mini            12         3         5         2       5.8         0   0.00084
+          gpt-6-luna             11         7         2         1       4.5       217   0.00070
+          gpt-6.1-terra           9        10         1         0       4.6         0   0.00558
+
+      Rule 1.5: no early adoption (`gpt-6-luna` has 2 `not_good`, 1 factual error and fewer
+      `perfect`), no candidate dropped, so batch 3 is rated next. Tom agreed that a copy of the
+      ratings and the key is committed to `ml` after the last batch.
+
 - [ ] 1.6 After Tom's decision: update the tracked `site.ini`, `LLM_DRAFT` to the model chosen
       and `LLM_REVISE` to the one above it
 
