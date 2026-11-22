@@ -10,8 +10,8 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0, the Phase 1 code change with the site fixes, and the follow-on fixes are
-deployed. The evaluation is done; its deploy (1.6) waits for the UI design. Phase 2 can overlap
-it. One session per group; start each session fresh. Code review happens once per deploy, not
+deployed. The evaluation is done. Next is the answer display, which deploys with the model change
+(1.6). Phase 2 can overlap it. One session per group; start each session fresh. Code review happens once per deploy, not
 per commit.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
@@ -155,9 +155,8 @@ Result, 30 answers per model, rated blind by Tom:
 - [ ] 1.6 Deploy Tom's choice of 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` =
       `gpt-6.2-sol` (not evaluated). Set in the tracked `site.ini` (`1e72014`) and tried on the
       local site with one question and one dig deeper. Tom waived the code review of this change.
-      **Do not merge or deploy yet:** it goes out in one deploy with the UI changes Tom designs
-      with Architect. The server still uses `gpt-4o-mini` and `gpt-4.1`, which shut down
-      2027-01-14.
+      **Do not merge or deploy alone:** it goes out with "Answer display" below (D38). The
+      server still uses `gpt-4o-mini` and `gpt-4.1`, which shut down 2027-01-14.
 
 Still useful:
 
@@ -172,7 +171,26 @@ Still useful:
   `gpt6_1_terra_candidate_answers`. The prompts are only in `evaluation/output/` (git-ignored),
   because they can hold email addresses.
 - `evaluation/output/trial` holds random clicks of a trial. They are not ratings.
-- A job does not record the model that answered it.
+- A job's `result` holds the model name OpenAI returned (`llm_functions.py`, `r['model']`), and
+  the results page shows it.
+
+## Answer display (repo: `../site_2024/`, one deploy with 1.6)
+
+Plan: "Answer display (D39, D40)". Read it whole; the tests are listed there. The archived
+answers named there are in `ml/docs/archive/`; copy the text a test needs into the test's own
+data, since the tests of `site_2024` do not read `ml/`.
+
+- [ ] AD1 Add `markdown-it-py` to `requirements_direct.txt` and freeze. Record the version.
+- [ ] AD2 The function that gives the HTML of an answer, with the settings of the plan. Tests
+      first: table, list after a text line, nested bullets, hostile text.
+- [ ] AD3 The results page uses it, with the answer in the `overflow-x` container. The site's own
+      pages keep `markdown_to_html`; test that one with raw HTML still shows it.
+- [ ] AD4 `evaluation/review_answers.py` uses the same function.
+- [ ] AD5 `README.md`: the models now used.
+- [ ] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
+      If it reads badly, stop and report to Architect; do not restyle on your own.
+- [ ] AD7 Code review (not waived for this part), then merge and deploy with 1.6 by the plan's
+      deploy steps and checks. Add what the deploy leaves on the server to "Server cleanup".
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
@@ -195,5 +213,4 @@ Chroma. Check that the `chromadb` client in the `ml` venv works with that server
 
 ## Phase 4 (not yet designed)
 
-- [ ] S3 Sanitise rendered answer HTML with an allow-list before it is marked safe.
-      Wait for the reference-links design; it decides which tags and link targets are allowed.
+Reference links (plan 4.1) and the image gallery (4.2). S3 is done by "Answer display".

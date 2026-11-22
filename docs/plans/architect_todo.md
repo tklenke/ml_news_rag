@@ -8,48 +8,25 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-22 (tenth revision: D35 to D38, the evaluation as it ran, the D33
-budget rule). Everything through the follow-on fixes is deployed (`c311cda`). The models are
-chosen and committed (`1e72014` in `site_2024`, not merged); their deploy waits for the UI
-changes (D38). Next for Architect: design those UI changes with Tom. Phase 2 is free for the
-Programmer to start.
+Plan revised on 2026-11-22 (eleventh revision: D39, D40, "Answer display"). Everything through
+the follow-on fixes is deployed (`c311cda`). Next for the Programmer: the answer display (AD1 to
+AD7 in `programmer_todo.md`), which deploys with the model change (`1e72014` in `site_2024`).
+Phase 2 can overlap. Waiting on Architect: nothing, unless AD6 shows that a table reads badly
+in a narrow window.
 
 ## Open
 
-- [~] Design the UI changes that deploy with the model change (D38), with Tom. To decide:
-      how answers with tables and lists without a blank line are displayed, what S3's
-      allow-list permits, and whether reference links (4.1) and the image gallery (4.2) are
-      part of this deploy. Inputs are in "For the UI design" below.
+- [ ] If the Programmer reports from AD6 that a table reads badly in a narrow window: design
+      its styling.
 - [ ] Have `ml/requirements.txt` created when Phase 2 adds tests to `embedder/` (the
       role files tell every session to read it; it does not exist).
-- [ ] Design whichever of reference links (plan 4.1) and image gallery (4.2) the UI deploy
-      does not cover.
-
-## For the UI design
-
-From the Programmer's notes of 2026-11-22; the notes themselves are in the git history of
-this file.
-
-- 4 of the 90 evaluation answers hold a Markdown table (`gpt-6-luna` Q32, Q34;
-  `gpt-6.1-terra` Q03, Q32). The site's `markdown.Markdown()` has no table extension, so a
-  visitor sees raw `|` lines. Tried by the Programmer, not built: with Python-Markdown's
-  `tables` extension all four become tables: 2 to 3 columns, up to 7 rows, longest cell 357
-  characters, so a narrow screen needs checking.
-- A list that follows a text line with no blank line is shown as run-on text (`gpt-6-luna`
-  Q09; `gpt-4o-mini` Q32, all 14 list lines, and part of Q09). No other answer has an
-  unrendered list.
-- No answer has code, quotes, HTML, math or strikethrough.
-- Samples: all 30 answers of each model in `docs/archive/gpt6_luna_candidate_answers`,
-  `gpt6_1_terra_candidate_answers` and `gpt4o_mini_baseline_answers`.
-- There are no samples of the dig-deeper model, `gpt-6.2-sol`: Tom declined them. Dig-deeper
-  and follow-up answers are designed for without samples. One local dig-deeper answer was
-  read in part (no table).
-- `README.md` of `site_2024` still recommends `gpt-4o-mini`, `gpt-4o` and `gpt-5`.
+- [ ] Design reference links (plan 4.1) and image gallery (4.2). The links are made by the site
+      from ids, since answers are rendered with raw HTML off (D40).
 
 ## Notes from Programmer
 
-All notes through 2026-11-22 are answered in the plan (tenth revision) or carried in "For the
-UI design"; they are in the git history of this file. The two S12 gaps the Programmer left as
+All notes through 2026-11-22 are answered in the plan (eleventh revision); they are in the git
+history of this file. The two S12 gaps the Programmer left as
 they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
 
 ## Notes from Code Reviewer
@@ -58,9 +35,9 @@ R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.
 
 ## Completed
 
-Phase 0, the Phase 1 code change, the follow-on fixes and the ten plan revisions through
-2026-11-22 are done: planning, question set, site review, the designs of the three deploys,
-decisions D1 to D38, the Programmer's notes through the evaluation, and the review findings
+Phase 0, the Phase 1 code change, the follow-on fixes and the eleven plan revisions through
+2026-11-22 are done: planning, question set, site review, the designs of the three deploys and
+of the answer display, decisions D1 to D40, the Programmer's notes through the evaluation, and the review findings
 R4 and R5. The evaluation showed no candidate slow at its default reasoning effort, so no
 reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
 file.
@@ -94,7 +71,9 @@ file.
 - `www.m24tom.com` redirects to `m24tom.com` over HTTP and HTTPS, and the certificate covers
   both names (D32; checked on the live site). `m24tom.com-0010` is the only usable
   certificate on the server.
-- A job does not record which model answered it.
+- A job's `result` holds the model name OpenAI returned, and the results page shows it.
+- The renderer trial of 2026-11-22 was run in a session scratchpad and is not kept; its
+  results are in the plan ("Answer display").
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is

@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (tenth revision); Phase 0, the Phase 1 code change and the follow-on fixes deployed (`c311cda`); models chosen, their deploy waits for the UI design
+**Status:** Revised 2026-11-22 (eleventh revision); Phase 0, the Phase 1 code change and the follow-on fixes deployed (`c311cda`); models chosen; the answer display is designed and deploys with them
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-22 (eleventh revision):** The UI changes that deploy with the model change
+  are designed ("Answer display"). They are the display of answers only (D39): tables,
+  lists that follow a text line directly, and S3. Answers are rendered by
+  `markdown-it-py` with raw HTML off (D40), which Tom chose after seeing the archived
+  answers rendered both ways. S3 is closed by that renderer and no longer waits for the
+  reference links; no allow-list sanitiser is added. A job does record the model that
+  answered it; the tenth revision said otherwise.
 - **2026-11-22 (tenth revision):** The evaluation is done and recorded as it was run.
   Tom decided that only the first answer is evaluated (D35), chose `gpt-6-luna` for it
   and `gpt-6.2-sol`, not evaluated, for dig deeper (D36), and wants the model change
@@ -127,6 +134,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D36 | (2026-11-22) First answer: `gpt-6-luna`. Dig deeper: `gpt-6.2-sol` (1.5). |
 | D37 | (2026-11-22) Code review of the model change (`1e72014`) is waived. The waiver does not cover the UI changes. |
 | D38 | (2026-11-22) The model change is deployed in one deploy with the UI changes Tom designs with Architect. Answers that hold a table are to be displayed usefully. |
+| D39 | (2026-11-22) The UI changes of that deploy are the display of answers only: tables, lists and S3. Reference links (4.1) and the image gallery (4.2) are not part of it, and the prompts do not change. |
+| D40 | (2026-11-22) Answers are rendered by `markdown-it-py` with raw HTML off. The site's own pages keep Python-Markdown. |
 
 ## Two repositories
 
@@ -160,9 +169,9 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    Tom. Done 2026-11-22 (1.5).
 5. **Phase 2,** overlapping step 4: the embedding runs take hours of machine time
    while Tom rates.
-6. **[REVISED - 2026-11-22] UI changes with the model change, one deploy (D38):** not
-   yet designed. Which of Phase 4 and S3 belong to it is decided in that design.
-7. **Phase 4** with S3, as far as step 6 does not cover them.
+6. **[REVISED - 2026-11-22] Answer display with the model change, one deploy (D38,
+   D39):** see "Answer display". It carries S3.
+7. **Phase 4:** reference links and image gallery, not yet designed.
 
 One Programmer session per step. Code review once per deploy.
 
@@ -565,8 +574,9 @@ ratings disagree.
 - To watch after the deploy: in Q05 `gpt-6-luna` named a seller while saying the
   documents do not mention one (rated a factual error). A search of its other answers
   for that wording found none, but would miss an unsupported claim made without saying so.
-- A job does not record which model answered it, so production ratings before and
-  after the switch are told apart by date only.
+- A job's `result` holds the model name OpenAI returned (`completion.model`), and the
+  results page shows it as "GPT Model". Production ratings before and after the switch
+  can be told apart by it.
 
 ### 1.6 Rollout
 
@@ -689,7 +699,7 @@ lookups cannot escape their directories.
 |---|---|---|---|---|
 | S1 | High (privacy) | Full submitter email addresses are public. `/cozyrag/<id>/status` returns the whole job record as JSON and the results page prints `Submitted By: <email>`. Every job id is listed on the public jobs page. | `site_app.py` `cozyrag_status`, `cozyrag_results.html` | See "S1 design" below (D10). |
 | S2 | Medium (cost) | No rate limit on questions. Anyone can script submissions; each follow-up sends about 20,000 tokens to the better model. `/cozyrag/revise` also runs on a plain GET. | `site_app.py`, nginx | **[REVISED - 2026-11-21]** See "S2 design" below (D25). |
-| S3 | Medium | Model output is rendered as raw HTML: the answer goes through Markdown, which passes HTML through, and is marked `safe`. A question can instruct the model to emit a script tag, and the result is stored and linked from the jobs page. | `cozyrag_results.html` line 11 | Sanitise the rendered HTML with an allow-list (for example `nh3`) before marking it safe. |
+| S3 | Medium | **[REVISED - 2026-11-22]** Fixed by the answer renderer, without a sanitiser: see "Answer display" (D40). Original finding: Model output is rendered as raw HTML: the answer goes through Markdown, which passes HTML through, and is marked `safe`. A question can instruct the model to emit a script tag, and the result is stored and linked from the jobs page. | `cozyrag_results.html` line 11 | Sanitise the rendered HTML with an allow-list (for example `nh3`) before marking it safe. |
 | S4 | Low | `sanitize()` does the opposite of its name: it wraps input in `Markup`, declaring it safe. Not exploitable today because values pass through JSON before display, but one template change away from being so. | `site_functions.py` | Remove the `Markup` wrap. |
 | S5 | Low | Unknown job ids and several routes return HTTP 500: `processid` and `status` with a bad id, `jobs/<bad column>` (`abort` is never imported), and `revise` / `feedback` / `answer` without a session. | `site_app.py` | Return 404 or redirect to the question form. |
 | S6 | Low | Feedback accepts any text as the rating, which is why the log contains values outside the three buttons. | `cozyrag_feedback` | Accept only `perfect`, `ok`, `not_good`. |
@@ -937,11 +947,106 @@ The script's rollback branch has still not been exercised on the server (0.2).
 
 - With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6, S10, S11.
 - **[REVISED - 2026-11-22]** In the follow-on deploy: S12 with D33, and D29, D31 and D32.
-- With Phase 4.1 (reference links): S3.
+- **[REVISED - 2026-11-22]** With the answer display and the model change: S3.
 - Replaced by the DokuWiki removal in Phase 0.3: S7.
 - Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`).
 - Closed: S9. Tom confirmed the tracked `.env_flask` only ever held a placeholder;
   the nginx mismatch is fixed by Phase 0.2.
+
+## Answer display (D39, D40)
+
+**[REVISED - 2026-11-22]** New. One deploy with the model change (D38).
+
+**What is wrong today.** Answers go through `markdown.Markdown()` with no extension and
+are marked `safe`. A Markdown table is shown as raw `|` lines (4 of the 90 evaluation
+answers). A list that follows a text line with no blank line between is shown as run-on
+text (3 of 90). Raw HTML in an answer reaches the page as HTML (S3).
+
+**Scope (D39).** The display of an answer on the results page. The prompts are not
+changed, so the answers are those of the prompt Tom rated. Not part of it: reference
+links, the image gallery, the jobs page.
+
+**Renderer (D40).**
+
+- One function takes the text of an answer and returns its HTML. It is the only place
+  that knows how an answer is rendered. The results page uses it, and so does the
+  rating page (`evaluation/review_answers.py`), so that page keeps showing answers as
+  the site does.
+- It renders with `markdown-it-py`: the `commonmark` preset with `html` set to false,
+  the `table` rule enabled and the `image` rule disabled.
+  - `html` false: a tag written in an answer is shown as text. This is the fix of S3.
+  - `table`: the tables the models write. A column alignment asked for in the table is
+    kept (a `style="text-align:..."` on the cell, written by the renderer).
+  - `image` disabled: an answer cannot make a visitor's browser load a picture from
+    another site. No evaluation answer has one. The Markdown for a picture becomes a
+    `!` followed by a link.
+- The site's own pages (`home`, `links`, `cozy`) keep Python-Markdown through
+  `markdown_to_html`. They are Tom's text, and may use raw HTML.
+- `markdown-it-py` joins `requirements_direct.txt` and the frozen file. `Markdown` stays.
+  The image is rebuilt at the deploy.
+
+**Why this and not Python-Markdown with a sanitiser.** Considered: Python-Markdown with
+its `tables` extension, a step of our own that puts a blank line before a list, and
+`nh3` to sanitise. Rendered by Architect on the 90 archived answers (2026-11-22, not
+site code): both fix the 4 tables and the 3 lists, and 79 of 90 answers come out the
+same. Where they differ, the alternative flattens bullets indented under a numbered item
+(4 `gpt-4o-mini` answers) and drops the column alignment of a table (`nh3` removes
+`style`). It is also two parts against one. Tom saw both and chose (D40).
+
+**What S3 now rests on.** The page holds only the tags the renderer itself writes; there
+is no allow-list. Tried by Architect with `markdown-it-py` 4.3.0: script and image tags,
+inline and as a block, are shown as text; links with `javascript:`, `vbscript:`,
+`data:` and `file:` targets, also in mixed case, as autolinks and as reference
+definitions, are not made into links; a quote in a link title is escaped. That is a set
+of samples, not an audit of the library. If a later feature needs HTML from the model,
+this has to be designed again.
+
+**Wide tables.** The answer is put in a `div` with `overflow-x: auto`, as an inline
+style like the other styles in the templates. A table wider than the screen then
+scrolls inside the answer and the page keeps its width. The tables seen have 2 to 3
+columns and cells up to 357 characters, which wrap. **Not seen:** a table on a real
+phone. Tom looks at one before the merge (local site, narrow window) and after the
+deploy.
+
+**Stored answers.** An answer is rendered when it is viewed, so the about 850 answers
+on the server change renderer too. Checked: the 30 `gpt-4o-mini` evaluation answers,
+where the only visible changes are lists that now show as lists and bullets that nest.
+The server's stored answers were not rendered. A deploy check looks at some.
+
+**Tests,** through the results page with Flask's test client where the page is the
+subject, and with real archived answers as the text:
+
+- An answer with a table (`gpt-6-luna` Q32) gives a `table`, and no line of the page
+  starts with `|`.
+- An answer whose list follows a text line directly (`gpt-6-luna` Q09) gives list items.
+- Bullets indented under a numbered item (`gpt-4o-mini` Q02) are a list inside that item.
+- Hostile text: the page has no `<script`, no `<img` and no `href` that starts with
+  `javascript:` or `data:` from an answer that tries each; the tags appear as text.
+- The answer is inside the `overflow-x` container.
+- A site page with raw HTML in its Markdown still shows it as HTML.
+- The rating page renders an answer with the same function.
+
+**Also in this deploy.** `README.md` of `site_2024` names the models now used; it still
+recommends `gpt-4o-mini`, `gpt-4o` and `gpt-5`.
+
+**Deploy.** Code review of everything after `c311cda` except the model commit `1e72014`
+(D37). Merge with Tom's approval, `git pull` on the server, rebuild the flask image,
+start. Checks:
+
+- A question is answered, and its statistics name `gpt-6-luna`.
+- A dig deeper is answered, and its statistics name `gpt-6.2-sol`.
+- A question that asks for a comparison in a table shows a table, also in a narrow window.
+- Three stored answers from before the deploy, one of them with a list, read well.
+- The home page looks as before.
+
+Rollback: `git checkout c311cda`, rebuild, start. That also returns to `gpt-4o-mini`
+and `gpt-4.1`, which answer until January 14.
+
+**To watch afterwards.** `gpt-6.2-sol` answers were never sampled, so what a dig deeper
+or a follow-up writes (code, quotes, wider tables) is unknown. CommonMark renders all of
+those; how they look with the site's stylesheet was not seen.
+
+---
 
 ## Phase 4: Website refresh: reference links and images
 
@@ -955,6 +1060,11 @@ the prompt with its source id, ask the model to cite ids, convert ids to links
 when rendering. Open points: citation accuracy of the cheap tier, and how to link
 non-message sources (newsletters, Canard Pusher). Links rendered from model
 output must go through the same sanitising as S3. Design after Phase 1.
+
+**[REVISED - 2026-11-22]** Not part of the deploy with the model change (D39). It changes
+the prompt, so its answers are not the ones Tom rated, and citation accuracy needs its
+own check. S3 is closed by the answer renderer ("Answer display"); the links of this
+feature are to be made by the site from ids, not taken as HTML from the model.
 
 ### 4.2 Image gallery for a result
 

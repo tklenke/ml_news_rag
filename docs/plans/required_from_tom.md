@@ -6,8 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-Decided so far: D1 to D38 in the plan's table. Open: the UI changes that deploy with the
-model change (D38), in a design session with Architect. The dated list of what Tom decided and the
+All decided: D1 to D40 in the plan's table. The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
 ## Work items
@@ -16,6 +15,8 @@ finished work items are in the git history of this file.
       on the server (the Programmer supplies the command).
 - [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
       (commands in `programmer_todo.md`, "Server cleanup").
+- [ ] With the Programmer, before the answer display is reviewed: look at an answer with a
+      table in a narrow browser window on the local site (AD6).
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
 - [x] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5). Done 2026-11-22, first answer only (D35).
