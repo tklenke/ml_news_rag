@@ -8,17 +8,13 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-21 (fifth revision: S2 without the nginx rate limit, D25). Phase 0
-is deployed. The Phase 1 code change is written and not deployed. Its deploy waits for the
-two open questions below, the paid local run and the code review (`programmer_todo.md`).
+Plan revised on 2026-11-21 (sixth revision: D25 to D27). Phase 0 is deployed. The Phase 1
+code change is written and not deployed. Tom's decisions on the prior context added three
+Programmer tasks (1.1h to 1.1j); after them come the paid local run, the code review and
+the deploy. Nothing is waiting on Architect.
 
 ## Open
 
-- [ ] Prior context for revise and follow-up (Programmer's note below): do the related
-      documents belong in it, and does the job record keep every chunk the draft saw?
-      Architect's recommendation is with Tom. The answer sets the revise baseline (1.2).
-- [ ] The missing space after `search_query:` (Programmer's note below): leave, fix, or
-      measure in Phase 2. With Tom.
 - [ ] If the evaluation shows a candidate failing or too slow at its default reasoning
       effort: read OpenAI's documentation for the reasoning setting and take the question
       of a `site.ini` setting to Tom (plan 1.3).
@@ -28,25 +24,8 @@ two open questions below, the paid local run and the code review (`programmer_to
 
 ## Notes from Programmer
 
-**NOTE FROM PROGRAMMER (2026-11-21):** Two facts about the corrected prior context (1.1c), measured
-on the 16 local job files with a first answer:
-
-- A revise prompt goes from about 5,000 characters (one garbled chunk) to 33,000 to 68,000 for the
-  jobs with 60 retrieved chunks. The context is every provided and related document, as the code
-  always intended. Each "dig deeper" costs and takes correspondingly more; follow-ups carry
-  this context plus 60 new chunks. The evaluation (1.4) will show the cost.
-- Job records keep one chunk per source (`dedupe_list_of_docs`), and revise fetches by those ids.
-  Where several chunks came from one source, the draft model saw chunks the revise model does not:
-  14 chunks became 9 to 14 ids, 19 became 12. Not changed; it is a design question whether the
-  record should keep every chunk id.
-
-Question for Architect: should the revise and follow-up context include the related documents, and
-should it hold every chunk the draft saw? Either answer changes the revise baseline (1.2).
-
-**NOTE FROM PROGRAMMER (2026-11-21):** `PREFIX = search_query:` reaches the embedder without a space
-before the question ("search_query:how many"), while documents are stored with one
-("search_document: Canard"). The ini parser drops trailing spaces. Unchanged (D7); recorded because
-Phase 2 measures retrieval.
+None outstanding. The notes of 2026-11-21 on the prior context and the `PREFIX` space are
+answered in plan 1.1 (items 6 to 8, and "Checked and left alone").
 
 ## Completed
 
@@ -60,7 +39,7 @@ through the deploy. The item list is in the git history of this file.
   `../site_2024/` (retrieval, prompts, LLM calls, pages, deployment). See the plan.
 - Production RAG settings (`site_2024/fwww/site.ini`): `EMBED = nomic-embed-text`,
   `PREFIX = search_query:` (documents are embedded with `search_document:`; the
-  asymmetry is correct), `LLM_DRAFT = gpt-4o-mini`, `LLM_REVISE = gpt-4.1`,
+  asymmetry is correct, and the missing space after the colon changes nothing: plan 1.1), `LLM_DRAFT = gpt-4o-mini`, `LLM_REVISE = gpt-4.1`,
   `MAX_DISTANCE = .35`, `MIN_DOCUMENTS = 5`, `MAX_DOCUMENTS = 60`,
   `MAX_DRAFT_DOCUMENTS = 15`.
 - `site.ini` holds real keys until S10 is done. Read settings from it with a pattern

@@ -147,8 +147,22 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
         `job['email']` as given, which the code before this deploy does not shorten.
       - Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
       - `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
-- [ ] Before the deploy: one question, one revise and one follow-up answered locally (paid calls);
-      code review; Architect's answers on the prior context (`architect_todo.md`).
+- [ ] 1.1h Job record keeps every chunk (plan 1.1 item 6, D26). Failing test first: a
+      query result with several chunks from one source gives a record with every chunk
+      id, in the order retrieved. The one-row-per-source reduction moves to where a job is
+      prepared for display, and works for entries with no `score`. Test the displayed
+      list too: one row per source, for a first answer and for a revise.
+- [ ] 1.1i Revise context in rank order (plan 1.1 item 7, D26). Failing test first, on the
+      local Chroma service as in 1.1b: the prompt holds every provided and related chunk,
+      provided first, each in the order of the record, whatever order `collection.get()`
+      returns.
+- [ ] 1.1j Follow-up context (plan 1.1 item 8, D27). Failing tests first: previous content
+      is the prior record's `provided_docs` only; additional content is cut by
+      `get_num_draft_docs`; the record's `provided_docs` is previous then additional with
+      no id twice, and there is no `related_docs`. A second follow-up on that record
+      carries no more than `MAX_DRAFT_DOCUMENTS` further chunks.
+- [ ] Before the deploy: one question, one revise, one follow-up and a follow-up on that
+      follow-up answered locally (paid calls), noting the prompt tokens of each; code review.
 - [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements
       changed, restart.
 

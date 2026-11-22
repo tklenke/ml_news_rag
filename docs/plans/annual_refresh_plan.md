@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-21 (fifth revision); Phase 0 deployed, Phase 1 code change written, deploy next
+**Status:** Revised 2026-11-21 (sixth revision); Phase 0 deployed, Phase 1 code change written, deploy next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-21 (sixth revision):** Tom decided what revise and follow-up receive (D26,
+  D27; 1.1 items 6 to 8). Correcting the garbled prior context (1.1 item 1) showed what
+  the code had always meant to send: up to 60 chunks to a revise, and those plus 60 new
+  ones to a follow-up, growing with each further follow-up. The job record also kept
+  one chunk per source, so a revise lacked text the draft was written from. The
+  missing space after `search_query:` is closed by measurement: it changes nothing
+  (1.1, "Checked and left alone").
 - **2026-11-21 (fifth revision):** S2 has no nginx rate limit (D25). The OpenAI budget
   has no auto reload, so abuse can use up the budget and no more; a limit in nginx
   would add a part without lowering that ceiling. In its place a question's job starts
@@ -85,6 +92,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D23 | gunicorn runs 2 workers, and the server has a 2 GB swap file. |
 | D24 | The model evaluation runs every model at its default reasoning effort; no reasoning setting is sent (1.3). |
 | D25 | No nginx rate limit. The OpenAI budget limit, which has no auto reload, is the limit on abuse (S2). |
+| D26 | A revise is given every chunk retrieved for the question (provided and related, up to `MAX_DOCUMENTS`), and the job record keeps every chunk id, not one per source (1.1). |
+| D27 | A follow-up is given only the chunks the previous answer was given, plus new chunks cut by the same rule as a first answer (1.1). |
 
 ## Two repositories
 
@@ -354,6 +363,42 @@ These change what the "dig deeper" tier actually sees, so they come first.
    `process_question` uses the module constants, not the values passed to
    `set_prompts`. The two settings and the code that carries them are removed; the
    prompts stay in the code, where 1.1 puts them under test. `PREFIX` stays.
+
+6. **[REVISED - 2026-11-21] The job record keeps every chunk (D26).** `provided_docs`
+   and `related_docs` hold one entry per chunk, in the order retrieved. Today
+   `get_doc_list_from_result` keeps one chunk per source, so a revise is asked to
+   verify a draft without some of the text the draft was written from (in one job 19
+   chunks became 12 ids). One row per source is still what the results page shows:
+   the reduction moves to where a job is prepared for display. It must also work for
+   entries with no `score`, which is what a revise or follow-up record holds. `number
+   provided docs` stays the chunk count. Job files written before this change are not
+   converted; a revise of one uses the ids it has.
+7. **[REVISED - 2026-11-21] A revise gets every retrieved chunk, in rank order (D26).**
+   Provided chunks first, then related, each in the order retrieved. Today the ids
+   pass through a `set` and `collection.get()`, so the text arrives in no particular
+   order. Its record's `provided_docs` lists those chunks in that order.
+8. **[REVISED - 2026-11-21] A follow-up gets less (D27).** Previous content: the
+   chunks the answer being followed up was given, which is that record's
+   `provided_docs` and not its `related_docs`. Additional content: the new retrieval,
+   cut by `get_num_draft_docs` exactly as for a first answer (5 to 15 chunks), not all
+   60. Its record's `provided_docs` is the previous chunks followed by the additional
+   ones, no id twice, and it has no `related_docs`. A chain of follow-ups then grows by
+   at most `MAX_DRAFT_DOCUMENTS` chunks each time. Before this, a follow-up carried up
+   to 60 prior chunks plus 60 new ones and saved all of them as the next one's prior
+   context.
+
+Size of a revise prompt with items 1, 6 and 7 (Programmer's measurement on 16 local
+jobs, before item 6 adds the dropped chunks): 33,000 to 68,000 characters where 60
+chunks were retrieved, against about 5,000 with the defect. The evaluation (1.4)
+records the cost.
+
+**Checked and left alone:** `PREFIX = search_query:` reaches the embedder with no
+space before the question, while documents were embedded as `search_document: ` with
+one. Architect measured it on 2026-11-21 against the local Ollama and Chroma: for all
+52 questions in `refresh_questions.csv` the embedding is identical with and without
+the space, and so are the top 60 results. The model's tokenizer splits at the colon
+either way. (Control: removing the prefix altogether does change the vector.) Nothing
+is changed and Phase 2 has no variant for it.
 
 To make these testable, prompt construction is separated from the thread and the
 API call: a function that takes the job data and document lists and returns the

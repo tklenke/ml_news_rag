@@ -41,9 +41,9 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
       are not used (2026-11-21)
 - [x] No nginx rate limit; the OpenAI budget limit with no auto reload is the limit on
       abuse (plan S2, D25) (2026-11-21)
-- [ ] Prior context for revise and follow-up: related documents in or out, and whether the
-      job record keeps every chunk (Architect's recommendation given 2026-11-21)
-- [ ] The missing space after `search_query:`: leave, fix, or measure in Phase 2
+- [x] A revise is given every retrieved chunk and the job record keeps every chunk id
+      (D26); a follow-up is given only what the previous answer was given, plus new chunks
+      cut as for a first answer (D27) (2026-11-21)
 
 ## Work items
 
