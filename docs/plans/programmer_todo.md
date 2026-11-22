@@ -67,22 +67,22 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
-- [ ] 1.0 Set up pytest in `site_2024` (its only tests are those of 0.2c, which need
+- [x] 1.0 Set up pytest in `site_2024` (its only tests are those of 0.2c, which need
       nothing but pytest)
-- [ ] 1.1a Separate prompt construction from `process_question` into a function that takes
+- [x] 1.1a Separate prompt construction from `process_question` into a function that takes
       job data and document lists and returns the prompt string. Behaviour unchanged.
-- [ ] 1.1b Write a failing test for the confirmed defect: revise and follow-up prompts must
+- [x] 1.1b Write a failing test for the confirmed defect: revise and follow-up prompts must
       contain the full text of every prior document. Use a real `collection.get()` result
       from the local Chroma service, not a hand-built dict.
-- [ ] 1.1c Fix the prior-context join
-- [ ] 1.1d Reword `revise_prompt` and `followup_prompt` so they name no model
-- [ ] 1.1e Remove the stale `__main__` block in `llm_functions.py`. Tom approved the
+- [x] 1.1c Fix the prior-context join
+- [x] 1.1d Reword `revise_prompt` and `followup_prompt` so they name no model
+- [x] 1.1e Remove the stale `__main__` block in `llm_functions.py`. Tom approved the
       removal (2026-11-21).
-- [ ] 1.1f Failing test, then fix: `get_num_draft_docs` returns a count, not an index
+- [x] 1.1f Failing test, then fix: `get_num_draft_docs` returns a count, not an index
       (plan 1.1 item 4). 60 matches inside the cutoff with a maximum of 15 gives 15; one
       match fewer than the maximum inside the cutoff gives that number; none inside the
       cutoff gives the minimum. Check every caller treats the value as a count.
-- [ ] 1.1g Remove the `INITIAL` and `SECONDARY` settings and the code that carries them
+- [x] 1.1g Remove the `INITIAL` and `SECONDARY` settings and the code that carries them
       (plan 1.1 item 5). `PREFIX` stays and keeps working.
 - [ ] S1a Function that shortens an email address for display: first 5 characters plus
       `...`; empty string for none. Replaces the `safe_truncate(job['email'],5)` calls.

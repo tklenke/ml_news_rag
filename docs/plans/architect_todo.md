@@ -25,7 +25,25 @@ a code review before it.
 
 ## Notes from Programmer
 
-None outstanding.
+**NOTE FROM PROGRAMMER (2026-11-21):** Two facts about the corrected prior context (1.1c), measured
+on the 16 local job files with a first answer:
+
+- A revise prompt goes from about 5,000 characters (one garbled chunk) to 33,000 to 68,000 for the
+  jobs with 60 retrieved chunks. The context is every provided and related document, as the code
+  always intended. Each "dig deeper" costs and takes correspondingly more; follow-ups carry
+  this context plus 60 new chunks. The evaluation (1.4) will show the cost.
+- Job records keep one chunk per source (`dedupe_list_of_docs`), and revise fetches by those ids.
+  Where several chunks came from one source, the draft model saw chunks the revise model does not:
+  14 chunks became 9 to 14 ids, 19 became 12. Not changed; it is a design question whether the
+  record should keep every chunk id.
+
+Question for Architect: should the revise and follow-up context include the related documents, and
+should it hold every chunk the draft saw? Either answer changes the revise baseline (1.2).
+
+**NOTE FROM PROGRAMMER (2026-11-21):** `PREFIX = search_query:` reaches the embedder without a space
+before the question ("search_query:how many"), while documents are stored with one
+("search_document: Canard"). The ini parser drops trailing spaces. Unchanged (D7); recorded because
+Phase 2 measures retrieval.
 
 ## Completed
 
