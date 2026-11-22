@@ -17,8 +17,6 @@ finished work items are in the git history of this file.
 - [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
       (commands in `programmer_todo.md`, "Server cleanup").
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
-- [ ] Run the Phase 1 deploy commands on the server with the Programmer (`programmer_todo.md`,
-      "Server steps for the deploy").
 - [ ] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5)
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250

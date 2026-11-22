@@ -9,8 +9,8 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0 is done. The Phase 1 code change is written and checked with paid calls; next are
-its deploy and the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per
+**Order:** Phase 0 is done. The Phase 1 code change and the site fixes are deployed; next is the
+evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per
 group; start each session fresh. Code review happens once per deploy, not per commit; Tom
 waived it for this deploy (2026-11-21).
 
@@ -66,9 +66,16 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       Tom's choice, not part of the rollback: the untracked `server/old.nginx_all_apps.conf`,
       `server/certbot/conf/live/m24tom.old`, and the two untagged images from before Phase 0.
 
+- [ ] **From the Phase 1 deploy (2026-11-21).** Not before 2026-11-28, and only if Tom says the
+      site has run well. Ends the rollback to `bed83f4` given below. The directory holds the keys.
+      Expect one file, `site.ini`:
+
+          ls -la ~/site_ini_before_s10
+          rm -r ~/site_ini_before_s10
+
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
-Written and committed in `site_2024` (`wip/annual-refresh`), not yet reviewed or deployed: 1.0,
+Deployed 2026-11-21 (`3278e9e`; Tom waived the code review): 1.0,
 1.1a to 1.1j, S1, S2, S4, S5, S6, S10, S11. Task details are in the git history of this file.
 
 Still useful:
@@ -111,45 +118,26 @@ Still useful:
       follow-ups cut their retrieval to 15; 6 and 5 of those were already in the previous content
       (8,136 and 6,811 characters sent twice).
 - [x] Merge `site_2024` `wip/annual-refresh` to `main` (fast-forward) and push: `3278e9e`.
-- [ ] Deploy: the server steps below, with Tom. Requirements are unchanged since `bed83f4`, so
-      nothing is rebuilt.
+- [x] Deploy. The server steps are in the git history of this file. Checked on the live site: a
+      question (15 chunks, 4,509 prompt tokens) and a revise (17,607 prompt tokens, 1,169
+      completion) answered; `/status` returns only `status` and `result_html`; no full address in
+      the email column of the 841 jobs, nor in "Submitted By" of the four newest; unknown jobs and
+      columns give 404; a GET of `/cozyrag/revise` gives 405. All 18 settings unchanged.
 
-### Server steps for the deploy
+Commands for the server: keep lines short. A long line wrapped when pasted, broke a `grep`
+pattern, and the comparison of two empty outputs then reported `same`. Print a line count beside
+any such comparison.
 
-Rehearsed on throwaway repositories with fake keys.
+Rollback until the cleanup (git and settings part rehearsed, containers not):
 
     cd ~/site_2024
     docker compose stop flask
-    install -d -m 700 ~/site_ini_before_s10
-    mv fwww/site.ini ~/site_ini_before_s10/
-    git pull
-    ( umask 077; sed -n '/^\[KEYS\]/,/^\[/{/^\[KEYS\]/p;/^\[/!p}' ~/site_ini_before_s10/site.ini > fwww/site_local.ini )
-    ls -l fwww/site_local.ini
-    grep -cE '^(SESSION|OPENAI) *= *.' fwww/site_local.ini
-    names() { grep -E '^(DEBUG|JOBS_DIR|WWW_DIR|USE_GPT|MAX_[A-Z_]+|MIN_DOCUMENTS|PROCESS_ID_LEN|OLLAMA|CHROMA|EMBED|LLM_[A-Z]+|PREFIX|SHOW_REVISE) *=' "$1" | sort; }
-    diff <(names ~/site_ini_before_s10/site.ini) <(names fwww/site.ini) && echo same
+    git checkout bed83f4
+    cp -p ~/site_ini_before_s10/site.ini fwww/site.ini
     docker compose up -d
 
-- **`site.ini` must be moved before the pull.** It is ignored, so git replaces it with the
-  tracked one without a word and the keys are lost (seen in the rehearsal).
-- flask is stopped first because the templates are live: the jobs template shows
-  `job['email']` as given, which the code before this deploy does not shorten.
-- Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
-- Checks after `up -d`: `docker compose ps` lists four containers and the flask log has no error;
-  the site loads over HTTPS; a question is answered and one revise of it; the new job's
-  `/status` in a browser shows no email address; `/cozyrag/jobs` loads. If the site gives 502,
-  flask has a new address: `docker compose restart nginx`. (In a local stop and start flask kept
-  its address.)
-- Rollback (rehearsed):
-
-      docker compose stop flask
-      git checkout bed83f4
-      cp -p ~/site_ini_before_s10/site.ini fwww/site.ini
-      docker compose up -d
-
-  `site_local.ini` is then untracked and not ignored; leave it. Forward again:
-  `rm fwww/site.ini`, `git checkout main`.
-- `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
+`site_local.ini` is then untracked and not ignored; leave it. Forward again:
+`rm fwww/site.ini`, `git checkout main`.
 
 Running the tests: `site_2024/README.md`. Use `site_2024/.venv`; `site_2024/venv` still holds
 the old stack.
