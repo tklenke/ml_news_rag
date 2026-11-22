@@ -37,6 +37,11 @@ of 72. The current models, `gpt-6.2-sol` and `gpt-6.2-astra` spent none. One sam
 short prompt. The plan does not say whether reasoning effort is left at the default or set
 (1.3), nor that the harness records reasoning tokens separately (1.4).
 
+**NOTE FROM PROGRAMMER (2026-11-21):** Phase 0 is deployed (`bed83f4`) and the certificate is
+renewed to 2027-02-20; the plan and the facts below still say 2027-01-26. With the model loaded
+the server has 771 MiB available. Tom patched and rebooted the server first: Docker is 29.10.0,
+Compose 5.8.0. Open for Tom: restart policy, and a certificate for `www`.
+
 **NOTE FROM PROGRAMMER (2026-11-21):** Memory measured again at Tom's request; the 882 against
 806 MiB in plan 0.6 were single readings. Method: both stacks on copies of the 1.1.1 backup,
 2 CPUs, sampled at 10 Hz through startup, first question, ten in turn and eight at once,

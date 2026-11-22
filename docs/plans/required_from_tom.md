@@ -55,8 +55,13 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] Paste `sudo_renew_cert.sh` to the Programmer again (2026-11-21)
 - [x] Remove the empty root-owned directory on the local machine (2026-11-21):
       `cd ~/projects/site_2024 && sudo rmdir -p home/admin/www/cgimages`
-- [~] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
-      fixed `sudo_renew_cert.sh` once. The certificate expires 2027-01-26.
+- [x] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
+      fixed `sudo_renew_cert.sh` once (2026-11-21). Certificate expires 2027-02-20.
+- [ ] Decide whether the site containers restart after a reboot (`restart: unless-stopped`).
+      Today the site stays down until started by hand.
+- [ ] Decide whether the certificate should also cover `www.m24tom.com`.
+- [ ] Around 2026-11-28, if the site has run well: drop the git stash, the `old-stack` images
+      and `~/site_backup_2026-11-21` on the server. The backup holds the private key.
 - [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
 - [x] Give the production nginx config to the Programmer at the start of their first session (2026-11-21)
 - [ ] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus

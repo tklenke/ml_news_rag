@@ -77,11 +77,9 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
 
       Then `/dokucozy/`, `/dokuN657CZ/` and `/static/test_08_fixture/index.html` return 404,
       and no `php1` or `php2` container is listed.
-- [~] 0.9 After the deploy, with Tom: run the fixed `sudo_renew_cert.sh` on the server
-      once and confirm the site still serves HTTPS. The certificate expires 2027-01-26.
-      Compare the expiry date before and after, since the site also loads with the old
-      certificate: `echo | openssl s_client -connect m24tom.com:443 -servername m24tom.com
-      2>/dev/null | openssl x509 -noout -enddate`
+- [x] 0.9 `sudo_renew_cert.sh` run on the server 2026-11-21: certbot renewed `-0010` and the
+      script put `fullchain3`/`privkey3` in place. The live certificate changed from expiry
+      2027-01-26 to 2027-02-20 and verifies. The rollback path was not exercised there.
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
