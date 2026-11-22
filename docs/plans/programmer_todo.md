@@ -50,7 +50,7 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
 - [x] 0.7 Smoke calls. 2026-11-21, SDK 3.57.0 in the flask image: both current models and
       all four candidates answer the production call unchanged. Short prompt only (17 to 18
       tokens in). Reported to Architect, with the reasoning token finding.
-- [~] 0.8 Local checks before the deploy passed 2026-11-21: `main` fast-forwards to the branch,
+- [x] 0.8 Local checks before the deploy passed 2026-11-21: `main` fast-forwards to the branch,
       no secrets in the diff, compose file valid, `nginx -t` passes on nginx `1.30.7` with a
       throwaway certificate, and the only untracked server files the pull would hit are the
       two plan 0.8 step 4 moves. Tom waived the code review.
@@ -62,7 +62,7 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       answer, 771 MiB available with the model loaded, 46 MiB of swap used. Backup is
       `~/site_backup_2026-11-21` on the server; the git stash is still there. Tom had
       rebooted and patched the server, which also moved Docker to 29.10.0 and Compose to 5.8.0.
-      Remaining: the deletions below.
+      Both wikis, the test upload and the php image are removed; their URLs return 404.
       Deploy with Tom, following plan 0.8 step by step (rewritten 2026-11-21: tag the
       old images first, move the two untracked files aside before the pull). Read
       `docker images` on the server to get the image names to tag. After the deploy
@@ -77,7 +77,7 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
 
       Then `/dokucozy/`, `/dokuN657CZ/` and `/static/test_08_fixture/index.html` return 404,
       and no `php1` or `php2` container is listed.
-- [ ] 0.9 After the deploy, with Tom: run the fixed `sudo_renew_cert.sh` on the server
+- [~] 0.9 After the deploy, with Tom: run the fixed `sudo_renew_cert.sh` on the server
       once and confirm the site still serves HTTPS. The certificate expires 2027-01-26.
       Compare the expiry date before and after, since the site also loads with the old
       certificate: `echo | openssl s_client -connect m24tom.com:443 -servername m24tom.com
