@@ -33,6 +33,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] Keys move out of `site.ini` into a git-ignored `site_local.ini` (plan S10) (2026-11-21)
 - [x] One OpenAI key for the server and local runs; no second key (2026-11-21)
 - [x] The stale `__main__` block in `llm_functions.py` is removed (plan 1.1) (2026-11-21)
+- [x] Code review of the Phase 0 branch is waived (2026-11-21)
 - [x] DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed in this refresh; they
       are not used (2026-11-21)
 

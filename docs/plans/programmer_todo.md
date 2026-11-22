@@ -53,7 +53,9 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
 - [~] 0.8 Local checks before the deploy passed 2026-11-21: `main` fast-forwards to the branch,
       no secrets in the diff, compose file valid, `nginx -t` passes on nginx `1.30.7` with a
       throwaway certificate, and the only untracked server files the pull would hit are the
-      two plan 0.8 step 4 moves. Not started: code review, merge, server steps.
+      two plan 0.8 step 4 moves. Tom waived the code review.
+      Server checks passed too: config diff empty, 36 GB free, archive `-0010` is the highest
+      and `live/m24tom.com-0010` exists. Not started: merge, server steps.
       Deploy with Tom, following plan 0.8 step by step (rewritten 2026-11-21: tag the
       old images first, move the two untracked files aside before the pull). Read
       `docker images` on the server to get the image names to tag. After the deploy
