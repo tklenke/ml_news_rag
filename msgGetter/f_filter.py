@@ -1,3 +1,5 @@
+# ABOUTME: Converts Google Groups posts to markdown and filters markdown into text to embed
+# ABOUTME: Removes page furniture, addresses, links and dates that carry no meaning
 import markdownify
 import re, random, time
 
@@ -15,6 +17,7 @@ remove_patterns.append(r'<.+?\@.+?>') #email address in brackets and the bracket
 remove_patterns.append(r'\[(.*?)\]\((.*?)\)') #[stuff](stuff)  markdown weblink
 remove_patterns.append(r'https?:\/\/\S+')  #http or https:// and all the non whitespace characters after
 remove_patterns.append(r'###.?') # remove lines with ### (author)
+remove_patterns.append(r'Reply\s*to\s*author\s*You\s*cannot\s*reply\s*privately\s*to\s*your\s*own\s*message\s*Forward\s*Delete\s*Copy\s*link\s*Report\s*message\s*You\s*cannot\s*report\s*your\s*own\s*message\s*Show') #own post
 remove_patterns.append(r'reply\s*all\s*Reply\s*to\s*author\s*Forward\s*Delete')
 remove_patterns.append(r'reply\s*all\s*reply\s*to\s*author\s*forward')
 remove_patterns.append(r'reply\s*to\s*author\s*forward\s*delete')

@@ -211,7 +211,7 @@ do not start those of `ml/docker-compose.yaml`.
       are both stored whole.
 - [~] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
       continued. Report how many vectors were updated and how many chunks were added (80 expected).
-- [ ] CU6 The messages:
+- [~] CU6 The messages:
       a. Copy the 227 markdown files, and the 10 refetched ones once Tom reports them done, from
          the Windows copy to `data/msgs_md`. A refetched file shorter than the one it replaces
          is not used; report it.
