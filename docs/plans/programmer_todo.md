@@ -9,8 +9,8 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0 is done. The Phase 1 code change (1.1) is written; next are the local paid check and the code review, then its
-deploy, then the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
+**Order:** Phase 0 is done. The Phase 1 code change is written; next are the local paid check and
+the code review, then its deploy, then the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
@@ -75,6 +75,9 @@ Still useful:
 - Found while testing S1 and fixed: the jobs page returned 500 while any job was unfinished.
   With it, `processid` of an unfinished job gives 404.
 - S2: no nginx rate limit (D25). The job starts in the `query` POST; reading pages starts none.
+- Found while doing 1.1j and fixed: a revise or follow-up of a job without an answer ended the
+  job thread (`KeyError: 'result'`); it now redirects to the question form. Any other exception
+  in the job thread (Chroma or Ollama unreachable) still ends it; for Architect, with S8.
 - The tracked `site.ini` holds the server's values. The local file had differed in
   `MAX_QUERY_LEN` (1024; 512 on the server).
 
