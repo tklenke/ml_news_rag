@@ -202,8 +202,8 @@ do not start those of `ml/docker-compose.yaml`.
       the 52 questions saved. Before anything below writes to the collection.
 - [x] CU1 `ml/requirements.txt` (`chromadb-client` 1.5.9, `ollama`, `markdownify`, `pytest`, and
       what the tests need) and the venv brought to it. The client works with the local server.
-- [~] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
-- [ ] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
+- [x] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
+- [~] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
       the chunk size, or for an empty file (was 2.1b).
 - [ ] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
       are both stored whole.
