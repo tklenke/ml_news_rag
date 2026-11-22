@@ -148,8 +148,47 @@ Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waiv
       for a used-up budget; Tom approved the rule now in the code (2026-11-22). The plan's table
       still gives the old rule (note of 2026-11-22 in `architect_todo.md`). Not seen: a real
       response of a used-up budget.
-- [ ] Deploy, run the renewal script once, and make the checks in the plan. Add the rollback
+- [~] Deploy, run the renewal script once, and make the checks in the plan. Add the rollback
       left on the server to "Server cleanup".
+      Rehearsed locally (2026-11-22): the stack came up with the restart policy; with an
+      invalid key the real OpenAI API answered 401 and the visitor was shown "OpenAI key
+      rejected"; rollback to `3278e9e` and forward again. nginx and the renewal script were not
+      in the rehearsal, only in the tests. No image needs a rebuild and no file is set aside, so
+      nothing is left on the server to clean up. Steps on the server, after the merge and push:
+
+          cd ~/site_2024
+          git status -sb
+          git log --oneline -1
+          openssl version
+          date --version | head -1
+          systemctl is-enabled docker
+
+      Expect no changed tracked file, `3278e9e`, OpenSSL 1.1.1 or later, GNU date, `enabled`.
+      Any other answer: stop.
+
+          git pull
+          docker compose up -d
+          docker compose ps
+          docker exec site_nginx nginx -t
+          docker logs site_flask 2>&1 | tail -20
+
+      Then ask a question on the site. Then the certificate; answer Expand where certbot asks:
+
+          sudo ./sudo_renew_cert.sh
+
+      Checks: each of the three answers 301 with `Location: https://m24tom.com/x`, and the
+      certificate names both:
+
+          curl -sI http://www.m24tom.com/x
+          curl -sI https://www.m24tom.com/x
+          curl -sI http://m24tom.com/x
+
+      Rollback (do not run the renewal script while rolled back):
+
+          git checkout 3278e9e
+          docker compose up -d
+
+      Forward again: `git checkout main`, `docker compose up -d`.
 
 Still useful:
 
