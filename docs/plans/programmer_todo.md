@@ -116,17 +116,40 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       `site_local.ini`. Tests use files in a temporary directory, never the real ones.
 - [x] Found while testing S1: the jobs page returned 500 while any job was unfinished. Fixed.
       With it, `processid` of an unfinished job gives 404.
-- [ ] S10b Track `site.ini` with the production settings and no `[KEYS]` section. Take
+- [~] S10b Track `site.ini` with the production settings and no `[KEYS]` section. Take
       the values from the local `site.ini` by naming each setting; do not print the file.
       Add `site_local.ini` to `.gitignore` and to `exclude_from_tar.txt`; add
       `site_local.ini.template`; remove `site.ini.template`, `.env_flask` and the
       commented `env_file` lines in `docker-compose.yaml`.
-      Waiting for Tom: the server's non-key settings (the local file has `DEBUG = True`), and
-      his agreement to move the keys of the local `site.ini` into `site_local.ini`.
-      Remove both `.gitignore` lines (`site.ini` and `fwww/site.ini`) only after the keys have
-      left the file.
-- [ ] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
+      Done: local `site_local.ini` (keys copied, verified equal, mode 600), its template,
+      ignore and tar entries, `.env_flask` and the `env_file` lines removed.
+      Left: replace the local `site.ini` with the production settings (Tom gave them
+      2026-11-21; `MAX_QUERY_LEN` is 512 there, 1024 locally), then in one commit remove both
+      `.gitignore` lines (`site.ini`, `fwww/site.ini`), the `fwww/site.ini` tar entry and
+      `site.ini.template`, and add `site.ini`. Check that no key is in the commit.
+- [~] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
       create the local `site_local.ini` with Tom.
+      Local file created. Server steps, rehearsed on throwaway repositories with fake keys:
+
+          cd ~/site_2024
+          docker compose stop flask
+          install -d -m 700 ~/site_ini_before_s10
+          mv fwww/site.ini ~/site_ini_before_s10/
+          git pull
+          ( umask 077; sed -n '/^\[KEYS\]/,/^\[/{/^\[KEYS\]/p;/^\[/!p}' ~/site_ini_before_s10/site.ini > fwww/site_local.ini )
+          ls -l fwww/site_local.ini
+          grep -cE '^(SESSION|OPENAI) *= *.' fwww/site_local.ini
+          names() { grep -E '^(DEBUG|JOBS_DIR|WWW_DIR|USE_GPT|MAX_[A-Z_]+|MIN_DOCUMENTS|PROCESS_ID_LEN|OLLAMA|CHROMA|EMBED|LLM_[A-Z]+|PREFIX|SHOW_REVISE) *=' "$1" | sort; }
+          diff <(names ~/site_ini_before_s10/site.ini) <(names fwww/site.ini) && echo same
+          docker compose up -d
+
+      - **`site.ini` must be moved before the pull.** It is ignored, so git replaces it with the
+        tracked one without a word and the keys are lost (seen in the rehearsal).
+      - flask is stopped first because the templates are live: the jobs template shows
+        `job['email']` as given, which the code before this deploy does not shorten.
+      - Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
+      - `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
+      - The nginx change of S2b, when it exists, needs a restart of nginx as well.
 - [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements
       changed, restart.
 
