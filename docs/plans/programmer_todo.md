@@ -168,6 +168,9 @@ Still useful:
 
 ### Code review results (2026-11-22)
 
+**Tom waived the rest of this review (2026-11-22)**: the Code Reviewer's check of R1 and the
+review of `09e3ca4..c311cda`. The deploy may go ahead.
+
 Reviewed: `site_2024` `3278e9e..09e3ca4` (9 commits). **Not approved: R1 is open.** No bug
 introduced by these commits was found. 188 tests pass with clean output; 36 of them fail
 against the code at `3278e9e`. `programmer_todo.md` matches the code.
