@@ -145,11 +145,19 @@ Tom decided on 2026-11-22: only the first answer is evaluated. The dig-deeper mo
 evaluated; it is the model one above the one chosen. The plan still has the dig-deeper tier
 in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section holds.
 
-- [~] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
+- [x] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
       sends the same documents to each model, records answer, tokens, latency, cost.
       Every model is called exactly as production calls it, with no reasoning setting.
       Reasoning tokens are recorded as a separate figure and not added to the cost a
       second time (plan 1.3, 1.4).
+      Done (`259a988`, not pushed): `site_2024/evaluation/answer_models.py`. No deployed
+      file changes. Prompts and answers go in `data/evaluation/` (git-ignored); a saved prompt
+      is used for every later model, a saved answer is not paid for again, and a failed call is
+      made again by the next run. Prices read 2026-11-22. The 30 prompts were built with real
+      retrieval and a stand-in for OpenAI; no paid call was made. To run (needs Chroma and
+      Ollama; paid), from `site_2024`:
+
+          PYTHONPATH=fwww .venv/bin/python evaluation/answer_models.py batch1 --models gpt-4o-mini
 - [ ] 1.4 Capture the baseline with the current first-answer model, `gpt-4o-mini` (it shuts
       down 2027-01-14). Ask Tom before the first paid run.
 - [ ] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
