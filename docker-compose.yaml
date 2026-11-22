@@ -2,7 +2,7 @@
 services:
   chroma-rag:
     #image: chromadb/chroma@sha256:7c44cf61eb3f210fa8641c6c943d5621b9626ce863d89247183ffde37717e576
-    image: chromadb/chroma:1.1.1
+    image: chromadb/chroma:1.5.9
     ports:
       - "8000:8000"
     volumes:

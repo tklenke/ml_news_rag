@@ -27,18 +27,20 @@ Docker works from WSL and Tom has provided the server files (2026-11-21).
       Both files match production's blob hashes (nginx `382fd3a`, compose `4dfb441`).
 - [ ] 0.2b Add the untracked server files Architect says to track. Waiting on Architect
       (notes in `architect_todo.md`).
-- [ ] 0.3a Remove DokuWiki: both nginx `location` blocks, `php1`, `php2`, their
+- [x] 0.3a Remove DokuWiki: both nginx `location` blocks, `php1`, `php2`, their
       `depends_on` entries, both volume mounts, the README mention.
-- [ ] 0.3b Bind the published ports for flask, chroma and ollama to `127.0.0.1`.
-- [ ] 0.3c Pin `nginx` and `ollama/ollama` to a current stable version tag.
-- [ ] 0.4a `flask.dockerfile` on `python:3.13-slim`.
-- [ ] 0.4b Requirements: a file of direct dependencies only, resolved and frozen into
+- [x] 0.3b Bind the published ports for flask, chroma and ollama to `127.0.0.1`.
+- [x] 0.3c Pin `nginx` and `ollama/ollama` to a current stable version tag.
+      nginx `1.30.7`, ollama `0.40.17`.
+- [x] 0.4a `flask.dockerfile` on `python:3.13-slim`.
+- [x] 0.4b Requirements: a file of direct dependencies only, resolved and frozen into
       `requirements.txt`; test packages in a separate file not installed in the image.
-- [ ] 0.5a Chroma server image to the plan's target version in `site_2024` **and** in
+- [x] 0.5a Chroma server image to the plan's target version in `site_2024` **and** in
       `ml/docker-compose.yaml` (same data directory).
-- [ ] 0.5b Replace `chromadb` with `chromadb-client` at the same version.
-- [ ] 0.6 Local rehearsal per plan 0.6. Copy `data/chroma` first. Report the results to
-      Architect before any deploy.
+- [x] 0.5b Replace `chromadb` with `chromadb-client` at the same version.
+- [~] 0.6 Local rehearsal per plan 0.6. Copy `data/chroma` first. Report the results to
+      Architect before any deploy. All passed except a real OpenAI answer, which needs a
+      key from Tom. Report in `architect_todo.md`.
 - [ ] 0.7 Smoke call to each candidate model and both current models on the upgraded
       OpenAI SDK; fix the call sites if the SDK changed them. Report to Architect.
 - [ ] 0.8 Deploy with Tom per plan 0.8.

@@ -58,6 +58,31 @@ is not edited; these need Architect decisions.
 - **`server/nginx_all_apps.conf` in the reference file lost trailing spaces** in pasting.
   The committed file is the exact one.
 
+**NOTE FROM PROGRAMMER (2026-11-21): rehearsal report (plan 0.6).** Phase 0.2a to 0.5 are
+committed on `wip/annual-refresh` in `site_2024`; nothing is deployed or pushed.
+
+- **Passed:** collections and counts unchanged (`nomic-embed-text` 41,427, `defaultdb` 0);
+  the same top 10 in the same order for Q01, Q03, Q04 (largest distance change 0.0001);
+  new question and revise complete through the app on 3.13; `/dokucozy/` 404; ports on
+  `127.0.0.1` only; `pip check` clean; `nginx -t` passes on 1.30.7 with a throwaway
+  certificate; no errors in the logs.
+- **Not yet tested:** a real OpenAI answer on SDK 3.57.0. The app ran with `USE_GPT = False`.
+- **Log warnings, not errors:** ollama 0.40.17 `requested context size too large for model`
+  (8192 against 2048; not compared with the old image); gunicorn 27 wants a `.py` config name.
+- **Backup:** `site_2024/data/chroma_backup_1.1.1`, checksums verified. The working copy has
+  been opened by 1.5.9. Baseline results and probe script: `site_2024/data/rehearsal/`.
+- **Old stack:** Programmer overwrote the local old `site_2024-ollama-rag` image after the
+  baseline was recorded; it can be rebuilt from `ollama/ollama:0.12.3`. The old Flask image
+  is kept as `site_2024-flask:old-stack`. The server's old images should be tagged before
+  the deploy rebuild so plan 0.8 step 6 does not need a rebuild.
+- **Server disk:** the new Ollama image is larger than the old one locally (9.05 GB against
+  5.45 GB). Check free disk on the server before deploying.
+- **`Flask-Markdown` and `python-dotenv` are never imported.** Kept because plan 0.4 lists
+  them; suggest dropping both.
+- **Plan 1.1 suspicion confirmed on real data:** `collection.get()` returns a flat list of
+  strings, so revise and follow-up prompts get one chunk split into characters. The failing
+  test is still to be written (1.1b).
+
 ## Completed
 
 - [x] Tom's four opening questions answered; plan, `required_from_tom.md` and task
