@@ -1,7 +1,7 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-21 (sixth revision); Phase 0 deployed, Phase 1 code change written, deploy next
+**Status:** Revised 2026-11-21 (sixth revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), evaluation next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
@@ -94,6 +94,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D25 | No nginx rate limit. The OpenAI budget limit, which has no auto reload, is the limit on abuse (S2). |
 | D26 | A revise is given every chunk retrieved for the question (provided and related, up to `MAX_DOCUMENTS`), and the job record keeps every chunk id, not one per source (1.1). |
 | D27 | A follow-up is given only the chunks the previous answer was given, plus new chunks cut by the same rule as a first answer (1.1). |
+| D28 | Code review of the Phase 1 deploy (`3278e9e`) is waived. |
 
 ## Two repositories
 

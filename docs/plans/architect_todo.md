@@ -1,6 +1,6 @@
 # Architect Todo
 
-**Last Updated:** 2026-11-21
+**Last Updated:** 2026-11-22
 
 Active workstream: the annual RAG / website refresh. The plan is
 `annual_refresh_plan.md`; read it first. The finished image database work is in
@@ -8,13 +8,19 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-21 (sixth revision: D25 to D27). Phase 0 is deployed. The Phase 1
-code change is written and not deployed. Tom's decisions on the prior context added three
-Programmer tasks (1.1h to 1.1j); after them come the paid local run, the code review and
-the deploy. Nothing is waiting on Architect.
+Plan revised on 2026-11-21 (sixth revision: D25 to D27; D28 added 2026-11-22). Phase 0 and
+the Phase 1 code change are deployed (`3278e9e`). Next for the Programmer is the evaluation
+(1.3 to 1.6), with Phase 2 overlapping. Waiting on Architect: the two questions from the
+Programmer under "Open", each of which needs Tom's decision.
 
 ## Open
 
+- [ ] Follow-up, additional content (plan 1.1 item 8): the plan does not say whether a chunk
+      already in the previous content is left out. Built as written: sent in both places,
+      recorded once (6 and 5 of 15 in the paid run). Take to Tom, then state it in the plan.
+- [ ] Job thread: any exception in `run()` ends it, and that worker answers nothing until a
+      restart. One cause is fixed; Chroma or Ollama being unreachable would do the same (read
+      from the code, not tried). Take to Tom: fix now or leave with S8.
 - [ ] If the evaluation shows a candidate failing or too slow at its default reasoning
       effort: read OpenAI's documentation for the reasoning setting and take the question
       of a `site.ini` setting to Tom (plan 1.3).
@@ -27,18 +33,8 @@ the deploy. Nothing is waiting on Architect.
 The notes of 2026-11-21 on the prior context and the `PREFIX` space are answered in plan 1.1
 (items 6 to 8, and "Checked and left alone").
 
-**NOTE FROM PROGRAMMER (2026-11-21):**
-
-- Phase 1 is deployed (`3278e9e`, 2026-11-21) and checked; the plan's status line and the server
-  facts below still say `bed83f4`. 1.1h to 1.1j are done, and the paid run passed (token counts in `programmer_todo.md`). Tom
-  waived the code review of the Phase 1 deploy; it is not yet in the plan's decision table.
-- Plan 1.1 item 8 does not say whether the additional content of a follow-up leaves out chunks
-  that are already in the previous content. Built as written: they are sent in both places and
-  recorded once. In the paid run 6 and 5 of the 15 were sent twice.
-- Any exception in the job thread ends it (no handler in `run()`), and that worker then answers
-  nothing until a restart. One cause was found and fixed (a revise or follow-up of a job without
-  an answer). Chroma or Ollama being unreachable would do the same, from reading the code; not
-  tried. Related to S8.
+The note of 2026-11-21 on the Phase 1 deploy is taken up: the deploy and the waived review are
+in the plan (status line, D28), and its two questions are under "Open".
 
 ## Completed
 
@@ -62,9 +58,9 @@ through the deploy. The item list is in the git history of this file.
 - Production job log (2026-11-21): about 850 questions, about 45 rated (roughly 20 of
   those `n/a`; the scale changed over time). Typical first answer: about 4,500 tokens
   in, 300 out, 5 s. A sampled follow-up: about 21,000 tokens in.
-- The server runs `main` at `bed83f4`, delivered by `git pull`. The state before Phase 0
-  (`906ffd8` plus a stash) is kept there as the rollback until the server cleanup
-  (`programmer_todo.md`).
+- The server runs `main` at `3278e9e`, delivered by `git pull`. The rollbacks to `bed83f4`
+  and to the state before Phase 0 (`906ffd8` plus a stash) are kept there until the server
+  cleanup (`programmer_todo.md`).
 - The server has 1.9 GiB of memory, 2 CPUs, a 2 GB swap file, Docker 29.10.0 and Compose
   5.8.0. gunicorn runs 2 workers. With the model loaded, 771 MiB is available. 36 GB of
   disk was free before the Phase 0 deploy.

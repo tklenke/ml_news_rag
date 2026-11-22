@@ -1,12 +1,12 @@
 # Required From Tom
 
-**Last Updated:** 2026-11-21
+**Last Updated:** 2026-11-22
 
 Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D27 in the plan's table. The dated list of what Tom decided and the
+All decided: D1 to D28 in the plan's table. The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
 ## Work items
