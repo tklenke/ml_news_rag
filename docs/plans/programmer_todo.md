@@ -88,41 +88,11 @@ Still useful:
   in the job thread (Chroma or Ollama unreachable) still ends it; for Architect, with S8.
 - The tracked `site.ini` holds the server's values. The local file had differed in
   `MAX_QUERY_LEN` (1024; 512 on the server).
-
-- [x] 1.1h Job record keeps every chunk (plan 1.1 item 6, D26). Failing test first: a
-      query result with several chunks from one source gives a record with every chunk
-      id, in the order retrieved. The one-row-per-source reduction moves to where a job is
-      prepared for display, and works for entries with no `score`. Test the displayed
-      list too: one row per source, for a first answer and for a revise.
-- [x] 1.1i Revise context in rank order (plan 1.1 item 7, D26). Failing test first, on the
-      local Chroma service as in 1.1b: the prompt holds every provided and related chunk,
-      provided first, each in the order of the record, whatever order `collection.get()`
-      returns.
-- [x] 1.1j Follow-up context (plan 1.1 item 8, D27). Failing tests first: previous content
-      is the prior record's `provided_docs` only; additional content is cut by
-      `get_num_draft_docs`; the record's `provided_docs` is previous then additional with
-      no id twice, and there is no `related_docs`. A second follow-up on that record
-      carries no more than `MAX_DRAFT_DOCUMENTS` further chunks.
-- [x] Before the deploy: one question, one revise, one follow-up and a follow-up on that
-      follow-up answered locally (paid calls), noting the prompt tokens of each. Tom waived
-      the code review (2026-11-21). Question Q44, through the site's routes:
-
-      | Job | Model | Chunks | Prompt tokens | Completion tokens | Model and retrieval time |
-      |---|---|---|---|---|---|
-      | question | `gpt-4o-mini` | 15 | 4,504 | 231 | 5.1 s |
-      | revise | `gpt-4.1` | 60 | 17,438 | 1,127 | 7.3 s |
-      | follow-up on the revise | `gpt-4.1` | 69 | 22,652 | 1,441 | 9.1 s |
-      | follow-up on that | `gpt-4.1` | 79 | 24,780 | 826 | 6.8 s |
-
-      The revise listed the question's provided then related chunks exactly in order. The two
-      follow-ups cut their retrieval to 15; 6 and 5 of those were already in the previous content
-      (8,136 and 6,811 characters sent twice).
-- [x] Merge `site_2024` `wip/annual-refresh` to `main` (fast-forward) and push: `3278e9e`.
-- [x] Deploy. The server steps are in the git history of this file. Checked on the live site: a
-      question (15 chunks, 4,509 prompt tokens) and a revise (17,607 prompt tokens, 1,169
-      completion) answered; `/status` returns only `status` and `result_html`; no full address in
-      the email column of the 841 jobs, nor in "Submitted By" of the four newest; unknown jobs and
-      columns give 404; a GET of `/cozyrag/revise` gives 405. All 18 settings unchanged.
+- Prompt tokens in the local paid check (Q44): question 4,504 (15 chunks), revise 17,438 (60),
+  follow-up on the revise 22,652 (69), follow-up on that 24,780 (79). The follow-ups sent 6 and 5
+  of their 15 additional chunks twice, as the plan is written (note with Architect).
+- Checked on the live site: a question, a revise, the pages and that no full address is shown. A
+  follow-up was checked locally only.
 
 Commands for the server: keep lines short. A long line wrapped when pasted, broke a `grep`
 pattern, and the comparison of two empty outputs then reported `same`. Print a line count beside
@@ -142,7 +112,8 @@ Rollback until the cleanup (git and settings part rehearsed, containers not):
 Running the tests: `site_2024/README.md`. Use `site_2024/.venv`; `site_2024/venv` still holds
 the old stack.
 
-Flask's test client is enough for the S tasks; only 1.1b and 1.1i need a live service.
+The tests that read the collection need the local Chroma (`docker compose up -d chroma-rag`); the
+page tests use Flask's test client.
 
 ## Phase 1 evaluation (repo: `../site_2024/`)
 
