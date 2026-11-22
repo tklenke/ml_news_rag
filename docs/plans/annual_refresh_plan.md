@@ -1,11 +1,17 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (eighth revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), a small follow-on deploy and the evaluation next
+**Status:** Revised 2026-11-22 (ninth revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), a small follow-on deploy and the evaluation next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-22 (ninth revision):** Two findings of the code review of the follow-on
+  deploy, decided by Tom. A failed OpenAI call now ends the job in `error` like any other
+  failure, and where Tom has to act the visitor is shown the reason to pass on (D33;
+  "OpenAI failures and the reason shown"). Until now the error text was saved as the
+  answer of a `complete` job, and replaced the draft on a failed revise (R4). A job file
+  read in the moment it is still empty is accepted as it is (D34, R5).
 - **2026-11-22 (eighth revision):** The certificate also covers `www.m24tom.com`, and
   nginx sends `www` to `m24tom.com` (D32; "The `www` name"). Until now `www` resolved to
   the server and showed a certificate warning over HTTPS. Joins the follow-on deploy.
@@ -108,6 +114,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D30 | (2026-11-22) An exception in the job thread is fixed now, not left with S8: the job is marked failed and the thread carries on (S12). |
 | D31 | (2026-11-22) The site containers start again after a server reboot (`restart: unless-stopped`). |
 | D32 | (2026-11-22) The certificate covers `www.m24tom.com` as well, and nginx redirects `www` to `m24tom.com`. |
+| D33 | (2026-11-22) A failed OpenAI call ends the job in `error` (S12). When the cause is one Tom has to fix (budget used up, key rejected, model gone), the visitor is asked to let Tom know and is given the reason. No contact address is shown: those who know Tom can reach him. |
+| D34 | (2026-11-22) A job file read while still empty, which can leave the job unanswered or in `error`, is accepted and logged as an opportunity for improvement (R5). |
 
 ## Two repositories
 
@@ -131,10 +139,11 @@ at `bed83f4`. Programmer follows the same version-control rules there.
 2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6, S10, S11.
    They touch the same files (`site_app.py`, `llm_functions.py`, `site_functions.py`,
    `open_with_lock.py`). Deployed 2026-11-21 (`3278e9e`).
-3. **[REVISED - 2026-11-22] Follow-on fixes, one small deploy:** D29 (1.1 item 8), S12,
-   the restart policy (D31) and the `www` name (D32). Before the harness, so the harness is written against the
-   prompt code production then runs. None of the three changes a first answer or a
-   revise, which is all the evaluation measures.
+3. **[REVISED - 2026-11-22] Follow-on fixes, one small deploy:** D29 (1.1 item 8), S12
+   with the OpenAI failures (D33), the restart policy (D31) and the `www` name (D32).
+   Before the harness, so the harness is written against the
+   prompt code production then runs. None of them changes a first answer or a
+   revise that succeeds, which is all the evaluation measures.
 4. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
 5. **Phase 2,** overlapping step 4: the embedding runs take hours of machine time
    while Tom rates.
@@ -484,6 +493,8 @@ documentation; that is done only if the setting is needed.
   `completion_tokens` and they are not added again. The tally after each batch (1.5)
   shows, per model, median latency, median reasoning tokens and cost per answer beside
   the ratings. These inform Tom's choice; the decision rule itself is unchanged.
+- **[REVISED - 2026-11-22]** A model call that fails is recorded as a failure with its
+  cause. Error text is never recorded as an answer or put in a review file (D33).
 
 ### 1.5 Decision rule
 
@@ -730,7 +741,8 @@ from the code.
 - A failed revise or follow-up changes only the status: the `result` already in the
   job file is left as it was.
 - The visitor is told. `/cozyrag/<id>/status` for a job in `error` returns a
-  `status_text` saying the question could not be answered and to try again, and the
+  `status_text` (**[REVISED - 2026-11-22]** its wording is in "OpenAI failures and the
+  reason shown" below), and the
   polling page stops polling when the status is `error`. Today it would show
   `Status: error` and poll without end.
 - Tests: a job whose processing raises is left in `error`, and a second job queued
@@ -740,6 +752,59 @@ from the code.
   not by a mocked exception inside the code under test, where that is practical.
 - Not addressed, still with S8: a worker killed mid-job leaves the job in `start`; the
   OpenAI call has no timeout.
+- **[REVISED - 2026-11-22]** Accepted (D34, review finding R5): a job file is empty for a
+  moment between its creation and the lock. A scan that reads it then treats it as
+  unreadable and that worker never answers it; if the file becomes readable before the
+  status is saved, the job ends in `error` instead. Not seen in 12,000 jobs unless the
+  timing was forced. Logged with S8.
+
+### OpenAI failures and the reason shown (D33)
+
+**[REVISED - 2026-11-22]** New. Review finding R4.
+
+As deployed, `process_question` catches `openai.APIError` and returns the error text as
+the answer. The job ends `complete`; on a revise the error text replaces the draft. The
+S12 handler never sees the failure.
+
+- `process_question` no longer catches OpenAI errors. They reach the handler in `run()`
+  like any other exception, so the job ends in `error`, the traceback with OpenAI's own
+  message is in the container log, and a failed revise or follow-up keeps its `result`.
+- The handler works out a **reason** from the exception and saves it in the job file as
+  `error_reason` together with the `error` status. Only failures that Tom has to fix have
+  a reason:
+
+  | `error_reason` | Recognised by | Shown to the visitor as |
+  |---|---|---|
+  | `openai_budget` | `openai.RateLimitError` whose `code` is `insufficient_quota` | OpenAI budget used up |
+  | `openai_access` | `openai.AuthenticationError`, `openai.PermissionDeniedError` | OpenAI key rejected |
+  | `openai_model` | `openai.NotFoundError` | OpenAI model not available |
+
+  Every other failure has none: other rate limits, timeouts, connection errors, OpenAI
+  5xx, and whatever is not an OpenAI error (Chroma, Ollama, a malformed job file). A
+  failure without a reason removes an `error_reason` left by an earlier failure of the
+  same job.
+- The status response chooses the `status_text` of an `error` job by the reason:
+  - with a reason: "The site cannot answer questions until Tom fixes it. Please let him
+    know: OpenAI budget used up." (the phrase from the table)
+  - without: "The question could not be answered. Please try again in a few minutes. If
+    it keeps failing, please let Tom know."
+- The reason codes, how each is recognised and its phrase are defined in one place.
+- Never shown to a visitor or saved in the job file: the exception's own text. It can
+  carry account details.
+- No contact address is shown (D33). The visitors Tom cares about know how to reach him.
+- **Not verified:** that a used-up budget arrives with the code `insufficient_quota`. The
+  reviewer reproduced the case as a 429; the Programmer confirms the code from OpenAI's
+  documentation of its error codes before relying on it, and reports to Architect if it
+  differs.
+- Tests: each row of the table and one failure without a reason, from the exception to
+  the `status_text`; a failed revise keeps its draft and ends in `error`; a failure
+  without a reason clears an earlier one. The failures are raised by the real SDK
+  against a local address that answers with the status and body (or does not answer),
+  not by raising inside the code under test.
+- Not done: the jobs page does not show the reason (the job file and the log hold it);
+  the site does not send Tom a message itself. Tom may set a spend alert in the OpenAI
+  account, which would reach him before a visitor does; what the account offers was not
+  checked.
 
 ### Restart after a reboot (D31)
 
@@ -810,7 +875,7 @@ The script's rollback branch has still not been exercised on the server (0.2).
 **[REVISED - 2026-11-21]** (D15)
 
 - With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6, S10, S11.
-- **[REVISED - 2026-11-22]** In the follow-on deploy: S12, with D29, D31 and D32.
+- **[REVISED - 2026-11-22]** In the follow-on deploy: S12 with D33, and D29, D31 and D32.
 - With Phase 4.1 (reference links): S3.
 - Replaced by the DokuWiki removal in Phase 0.3: S7.
 - Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`).

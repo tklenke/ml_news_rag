@@ -18,6 +18,14 @@ Works at current volume (about 850 jobs). Revisit if answers stall or pages slow
 - A job file is updated by reading it, changing a value and writing it back, with
   the lock released in between. Two updates of the same job at once (feedback
   arriving while the job thread saves a status) can overwrite each other.
+- (logged 2026-11-22, review finding R5, accepted as D34) A job file is empty for a moment
+  between its creation and the lock. A scan that reads it then treats it as unreadable and
+  does not look at it again, so that worker never answers it; if the file becomes readable
+  before the status is saved, the job ends in `error` instead. Not seen in 12,000 jobs
+  unless the timing was forced.
+- (logged 2026-11-22, read from the code, not tried) `update_process_info` prints an
+  `IOError` and returns, so a result that cannot be saved raises nothing: the job stays
+  in `start`.
 
 ## site_2024: housekeeping (logged 2026-11-21)
 

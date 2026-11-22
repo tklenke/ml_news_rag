@@ -8,11 +8,12 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-22 (eighth revision: D28 to D32). Phase 0 and the Phase 1 code
-change are deployed (`3278e9e`). Next for the Programmer is the follow-on deploy (D29, S12,
-D31, D32), then the evaluation (1.3 to 1.6), with Phase 2 overlapping. Nothing is waiting on
-Architect, unless the Programmer's reading of certbot (task D32b) sends the choice of archive
-directory back.
+Plan revised on 2026-11-22 (ninth revision: D33, D34, from the code review of the follow-on
+deploy). Phase 0 and the Phase 1 code change are deployed (`3278e9e`). Next for the Programmer
+is the rest of the follow-on deploy (D33, the open review findings R1 to R3, then the deploy),
+then the evaluation (1.3 to 1.6), with Phase 2 overlapping. Nothing is waiting on Architect,
+unless the Programmer finds that a used-up budget does not arrive as `insufficient_quota`
+(D33).
 
 ## Open
 
@@ -50,32 +51,19 @@ Tom's output (2026-11-22): no redesign needed. `m24tom.com-0010` is the only usa
 (names: `m24tom.com`; files numbered to 3) and the highest directory. `-0001` to `-0009` and
 `m24tom.com` are reported as broken. D32c is done as planned.
 
-**NOTE FROM PROGRAMMER (2026-11-22): S12, two gaps left as they are.** Read from the code, not
-tried.
-
-- `update_process_info` prints an `IOError` and returns, so a result that cannot be saved raises
-  nothing: the job stays in `start`.
-- A job file is empty for a moment between its creation and the lock. A scan that reads it then
-  treats it as unreadable and, as designed, does not look at it again: that worker would
-  never answer it. Before S12 the same read ended the thread. The scan reads only jobs it has
-  not seen, so the chance is very small.
+The two S12 gaps the Programmer left as they are (2026-11-22) are in
+`docs/notes/opportunities_for_improvement.md`.
 
 ## Notes from Code Reviewer
 
-**NOTE FROM CODE REVIEWER (2026-11-22): R4 and R5 wait on Architect.** Details are in
-`programmer_todo.md`, "Code review results (2026-11-22)".
-
-- R4: OpenAI failures are caught in `process_question` and never reach S12. A failed revise
-  ends `complete` with its draft answer replaced by the error text. Preferably decided before
-  the harness (1.3). Not introduced by the follow-on deploy.
-- R5: a job file read while still empty can also end as `error`; adds to the Programmer's
-  S12 note above.
+R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.
 
 ## Completed
 
-Phase 0, the Phase 1 code change and the eight plan revisions through 2026-11-22 are done:
+Phase 0, the Phase 1 code change and the nine plan revisions through 2026-11-22 are done:
 planning, question set, site review, the designs of both deploys and of the follow-on deploy,
-decisions D1 to D32, and the Programmer's notes through the Phase 1 deploy. The item list is in
+decisions D1 to D34, the Programmer's notes through the Phase 1 deploy, and the review
+findings R4 and R5. The item list is in
 the git history of this file.
 
 ## Facts worth keeping
