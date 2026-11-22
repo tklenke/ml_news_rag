@@ -51,7 +51,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] Provide an OpenAI key for a local `site.ini` (rehearsal 0.6, smoke calls 0.7).
       Tom approved using the key already there (2026-11-21)
 - [x] Paste `sudo_renew_cert.sh` to the Programmer again (2026-11-21)
-- [ ] Remove the empty root-owned directory on the local machine:
+- [x] Remove the empty root-owned directory on the local machine (2026-11-21):
       `cd ~/projects/site_2024 && sudo rmdir -p home/admin/www/cgimages`
 - [ ] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
       fixed `sudo_renew_cert.sh` once. The certificate expires 2027-01-26.
@@ -61,10 +61,8 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
       factual errors (Phase 1.4, 1.5)
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
-- [~] Confirm OpenAI account has access to `gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol`.
-      Smoke calls (2026-11-21): all three, and `gpt-6.2-astra`, return 403 for the
-      project `site.ini` uses. Tom (2026-11-21): probably not yet; find out with the smoke calls in plan 0.7,
-      and Tom changes account access as needed.
+- [x] Confirm OpenAI account has access to `gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol`.
+      Smoke calls repeated 2026-11-21: all three, and `gpt-6.2-astra`, answer.
 - [x] Set a monthly spend cap on the OpenAI account (S2). Tom confirmed it is on (2026-11-21)
 - [x] Confirm the `OPENAI_KEY` value in the tracked `.env_flask` was never a real key (S9).
       The server copy and every committed version contain only

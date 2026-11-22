@@ -44,13 +44,12 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       session (S5c, sent by mistake while testing), and two warnings: gunicorn wants its
       config file to have a `.py` extension, and Ollama reports the requested context
       (8192) exceeds the model's 2048.
-- [~] Remove the empty stray directory `site_2024/home/`. Cause found: commit `42db312`
-      mounted the relative path `./home/admin/www/cgimages`, so Docker created it as root;
-      the mount is absolute since `65764e2`, so nothing uses it. Needs `sudo`: Tom removes
-      it (command in `required_from_tom.md`).
-- [~] 0.7 Smoke calls. Current models work with no call-site change. All four candidates
-      return 403; rerun when Tom says access is enabled, and report to Architect.
-      The deploy does not wait for this.
+- [x] Remove the empty stray directory `site_2024/home/`. Cause: commit `42db312` mounted the
+      relative path `./home/admin/www/cgimages`, so Docker created it as root; the mount is
+      absolute since `65764e2`. Tom removed it.
+- [x] 0.7 Smoke calls. 2026-11-21, SDK 3.57.0 in the flask image: both current models and
+      all four candidates answer the production call unchanged. Short prompt only (17 to 18
+      tokens in). Reported to Architect, with the reasoning token finding.
 - [ ] 0.8 Deploy with Tom, following plan 0.8 step by step (rewritten 2026-11-21: tag the
       old images first, move the two untracked files aside before the pull). Read
       `docker images` on the server to get the image names to tag. After the deploy

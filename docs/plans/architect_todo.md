@@ -29,6 +29,14 @@ into the plan; none are outstanding.
 in `sudo_renew_cert.sh` continues to the rollback question, although plan 0.2 says to stop at
 the first error.
 
+**NOTE FROM PROGRAMMER (2026-11-21):** Smoke calls (0.7) repeated: all four candidates answer
+the production `chat.completions` call unchanged, so the review item above can proceed and plan
+0.7 and 1.3 need updating. On a one-sentence question two candidates spent hidden reasoning
+tokens, reported inside `completion_tokens`: `gpt-6-luna` 50 of 80, `gpt-6.1-terra` 34
+of 72. The current models, `gpt-6.2-sol` and `gpt-6.2-astra` spent none. One sample each,
+short prompt. The plan does not say whether reasoning effort is left at the default or set
+(1.3), nor that the harness records reasoning tokens separately (1.4).
+
 ## Completed
 
 - [x] Plan, question set (52 in `refresh_questions.csv`), site review (S1 to S9) and
