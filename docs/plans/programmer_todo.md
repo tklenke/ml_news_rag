@@ -58,7 +58,11 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       and `live/m24tom.com-0010` exists. Merged and pushed to
       `main`, with 2 gunicorn workers (Tom, 2026-11-21). The git and rollback steps were
       rehearsed in a scratch clone set up like the server; the rollback restores it exactly.
-      Not started: server steps (swap file first).
+      Deployed 2026-11-21 (`bed83f4`): all plan 0.8 checks pass, question and dig deeper
+      answer, 771 MiB available with the model loaded, 46 MiB of swap used. Backup is
+      `~/site_backup_2026-11-21` on the server; the git stash is still there. Tom had
+      rebooted and patched the server, which also moved Docker to 29.10.0 and Compose to 5.8.0.
+      Remaining: the deletions below.
       Deploy with Tom, following plan 0.8 step by step (rewritten 2026-11-21: tag the
       old images first, move the two untracked files aside before the pull). Read
       `docker images` on the server to get the image names to tag. After the deploy

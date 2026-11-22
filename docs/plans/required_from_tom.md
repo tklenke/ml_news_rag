@@ -55,7 +55,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] Paste `sudo_renew_cert.sh` to the Programmer again (2026-11-21)
 - [x] Remove the empty root-owned directory on the local machine (2026-11-21):
       `cd ~/projects/site_2024 && sudo rmdir -p home/admin/www/cgimages`
-- [ ] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
+- [~] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
       fixed `sudo_renew_cert.sh` once. The certificate expires 2027-01-26.
 - [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
 - [x] Give the production nginx config to the Programmer at the start of their first session (2026-11-21)
