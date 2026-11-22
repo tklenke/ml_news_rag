@@ -52,8 +52,14 @@ each with a revise, model calls faked. Peak anonymous memory, MiB:
   `GOMEMLIMIT=64MiB` with `OLLAMA_NUM_PARALLEL=1` made no difference.
 - The 1.5.9 first start on 1.1.1 data showed no memory spike.
 - Not measured: the server itself, the image build, and real model calls.
-- Decision wanted: 2 gunicorn workers (two questions processed at once rather than four),
-  and a swap file on the server. Waiting on server readings from Tom.
+- Server, old stack, 2 CPUs, no swap, 1941 MB (Tom, 2026-11-21): available 774 MB with the
+  model unloaded, 518 MB just after a question. `docker stats` then: flask 431, ollama 476,
+  chroma 167, php 34 and 9, nginx 9 MiB. No out-of-memory lines in `dmesg`.
+- Estimate for the new stack just after a question, from those readings and the local
+  differences: about 400 MB available with 4 workers, about 570 with 2. It fits either way.
+- With the stack stopped for the build, only about 300 MB is in use.
+- Decision wanted from Tom: 2 gunicorn workers (two questions processed at once rather than
+  four), and a swap file on the server. Neither is needed for the deploy to fit.
 
 **NOTE FROM PROGRAMMER (2026-11-21):** One 500 from `/status` in these runs: the job file was read
 as empty, so `get_process_info` returned `{}` and `cozyrag_status` raised `KeyError: 'created'`.
