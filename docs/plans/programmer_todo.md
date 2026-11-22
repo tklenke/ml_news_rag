@@ -122,8 +122,8 @@ details and the review results are in the git history of this file.
 
 Still useful:
 
-- D33 recognises a used-up budget by the rule Tom approved, not the one in the plan's table (note
-  in `architect_todo.md`). A real response of a used-up budget has not been seen. The rejected
+- D33 recognises a used-up budget by the rule Tom approved (plan, D33 table). A real response of
+  a used-up budget has not been seen. The rejected
   key was tried against the real API, locally.
 - The tests need docker, node and openssl.
 - Checked on the live site: a question and a revise (reported by Tom), the three `www` and HTTP
@@ -143,8 +143,7 @@ Forward again: `git checkout main`, `docker compose up -d`.
 ## Phase 1 evaluation and model change (repo: `../site_2024/`)
 
 1.3 to 1.5 were done on 2026-11-22; task details and the tally after each batch are in the git
-history of this file. Tom decided that only the first answer is evaluated; the plan still has the
-dig-deeper tier in 1.2 to 1.5 (note in `architect_todo.md`). Where they differ, this section holds.
+history of this file. Tom decided that only the first answer is evaluated (D35).
 
 Result, 30 answers per model, rated blind by Tom:
 

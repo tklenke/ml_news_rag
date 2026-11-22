@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (ninth revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), a small follow-on deploy and the evaluation next
+**Status:** Revised 2026-11-22 (tenth revision); Phase 0, the Phase 1 code change and the follow-on fixes deployed (`c311cda`); models chosen, their deploy waits for the UI design
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-22 (tenth revision):** The evaluation is done and recorded as it was run.
+  Tom decided that only the first answer is evaluated (D35), chose `gpt-6-luna` for it
+  and `gpt-6.2-sol`, not evaluated, for dig deeper (D36), and wants the model change
+  deployed together with UI changes that are still to be designed (D38). 1.2 to 1.6
+  until now described two evaluated tiers. The rule that recognises a used-up OpenAI
+  budget is the one Tom approved and the Programmer built, from OpenAI's documentation
+  (D33 table). The follow-on fixes are deployed (`c311cda`).
 - **2026-11-22 (ninth revision):** Two findings of the code review of the follow-on
   deploy, decided by Tom. A failed OpenAI call now ends the job in `error` like any other
   failure, and where Tom has to act the visitor is shown the reason to pass on (D33;
@@ -116,6 +123,10 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D32 | (2026-11-22) The certificate covers `www.m24tom.com` as well, and nginx redirects `www` to `m24tom.com`. |
 | D33 | (2026-11-22) A failed OpenAI call ends the job in `error` (S12). When the cause is one Tom has to fix (budget used up, key rejected, model gone), the visitor is asked to let Tom know and is given the reason. No contact address is shown: those who know Tom can reach him. |
 | D34 | (2026-11-22) A job file read while still empty, which can leave the job unanswered or in `error`, is accepted and logged as an opportunity for improvement (R5). |
+| D35 | (2026-11-22) The model evaluation covers the first answer only. The dig-deeper model is not evaluated (1.2 to 1.5). |
+| D36 | (2026-11-22) First answer: `gpt-6-luna`. Dig deeper: `gpt-6.2-sol` (1.5). |
+| D37 | (2026-11-22) Code review of the model change (`1e72014`) is waived. The waiver does not cover the UI changes. |
+| D38 | (2026-11-22) The model change is deployed in one deploy with the UI changes Tom designs with Architect. Answers that hold a table are to be displayed usefully. |
 
 ## Two repositories
 
@@ -143,11 +154,15 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    with the OpenAI failures (D33), the restart policy (D31) and the `www` name (D32).
    Before the harness, so the harness is written against the
    prompt code production then runs. None of them changes a first answer or a
-   revise that succeeds, which is all the evaluation measures.
-4. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
+   revise that succeeds, which is all the evaluation measures. Deployed 2026-11-22
+   (`c311cda`).
+4. **[REVISED - 2026-11-22] Phase 1 evaluation:** harness, baseline, blind rating by
+   Tom. Done 2026-11-22 (1.5).
 5. **Phase 2,** overlapping step 4: the embedding runs take hours of machine time
    while Tom rates.
-6. **Phase 4** with S3, designed once the model choice is known.
+6. **[REVISED - 2026-11-22] UI changes with the model change, one deploy (D38):** not
+   yet designed. Which of Phase 4 and S3 belong to it is decided in that design.
+7. **Phase 4** with S3, as far as step 6 does not cover them.
 
 One Programmer session per step. Code review once per deploy.
 
@@ -447,6 +462,11 @@ Run the 30 questions through the current models (`gpt-4o-mini` first answer,
 this cannot be recreated. Do this after 1.1 so the baseline reflects the corrected
 revise step; if 1.1 slips, capture the baseline anyway and note which code produced it.
 
+**[REVISED - 2026-11-22]** Captured for the first answer only (D35): the 30 answers of
+`gpt-4o-mini`, by the code of `c311cda`, are in
+`docs/archive/gpt4o_mini_baseline_answers`. No `gpt-4.1` revise was captured, and after
+January 14 none can be.
+
 ### 1.3 Candidates
 
 Prices per million tokens, input / output, from
@@ -477,6 +497,13 @@ change the outcome. That case goes back to Tom before anything is built. The API
 reasoning parameter and each model's default have not been read from OpenAI's
 documentation; that is done only if the setting is needed.
 
+**[REVISED - 2026-11-22]** Evaluated: `gpt-6-luna` and `gpt-6.1-terra` for the first
+answer. The dig-deeper column was not evaluated (D35), and `gpt-6.2-astra` was not
+tried. On the 30 questions the median reasoning tokens were 328 for `gpt-6-luna` and 30
+for `gpt-6.1-terra`, with median latencies of 5.6 s and 5.0 s against 5.3 s for
+`gpt-4o-mini`. Neither is slow at its default, so no reasoning setting is built for the
+first answer. The speed and cost of `gpt-6.2-sol` on a dig deeper were not measured.
+
 ### 1.4 Evaluation method
 
 - Retrieval is run once per question and the same documents are given to every
@@ -495,6 +522,10 @@ documentation; that is done only if the setting is needed.
   the ratings. These inform Tom's choice; the decision rule itself is unchanged.
 - **[REVISED - 2026-11-22]** A model call that fails is recorded as a failure with its
   cause. Error text is never recorded as an answer or put in a review file (D33).
+- **[REVISED - 2026-11-22]** As run: one tier, the first answer (D35). Tom rated on a
+  local page that shows the answers unlabelled (`evaluation/review_answers.py` in
+  `site_2024`), not in a review file. The ratings and the key are in
+  `docs/archive/first_answer_ratings`.
 
 ### 1.5 Decision rule
 
@@ -516,12 +547,38 @@ Ten questions is a small sample. Stopping early is acceptable here because the
 choice is a `site.ini` setting and can be reversed in minutes if production
 ratings disagree.
 
+**[REVISED - 2026-11-22] Result.** All three batches were rated, 30 answers per model:
+
+| Model | `perfect` | `ok` | `not_good` | Factual errors | Median s | Median reasoning tokens | $ per answer |
+|---|---|---|---|---|---|---|---|
+| `gpt-4o-mini` (baseline) | 17 | 8 | 5 | 2 | 5.3 | 0 | 0.00086 |
+| `gpt-6-luna` | 14 | 13 | 3 | 2 | 5.6 | 328 | 0.00074 |
+| `gpt-6.1-terra` | 11 | 15 | 4 | 1 | 5.0 | 30 | 0.00574 |
+
+- **First answer: `gpt-6-luna` (D36).** It is the cheapest candidate and has no more
+  `not_good` ratings and no more factual errors than the baseline, which is the rule
+  after 30. It has fewer `perfect` ratings than the baseline (14 against 17); the rule
+  does not count those.
+- **Dig deeper: `gpt-6.2-sol` (D36).** Tom's choice. The rule was not applied: no
+  dig-deeper answer was rated (D35). It was tried on the local site with one question
+  and one dig deeper.
+- To watch after the deploy: in Q05 `gpt-6-luna` named a seller while saying the
+  documents do not mention one (rated a factual error). A search of its other answers
+  for that wording found none, but would miss an unsupported claim made without saying so.
+- A job does not record which model answered it, so production ratings before and
+  after the switch are told apart by date only.
+
 ### 1.6 Rollout
 
 Model names are already in `site.ini` (`LLM_DRAFT`, `LLM_REVISE`), so the switch is
 a config change. The prompt wording from 1.1 is already deployed by then.
 **[REVISED - 2026-11-21]** After S10 `site.ini` is tracked, so the switch is a commit
 and a `git pull`.
+
+**[REVISED - 2026-11-22]** The commit is `1e72014` on `wip/annual-refresh` in
+`site_2024`, pushed and not merged. It is not deployed alone: it goes out with the UI
+changes (D38). Its code review is waived (D37); the UI changes are reviewed. Until that
+deploy the server uses `gpt-4o-mini` and `gpt-4.1`, which stop on January 14.
 
 ---
 
@@ -775,7 +832,7 @@ S12 handler never sees the failure.
 
   | `error_reason` | Recognised by | Shown to the visitor as |
   |---|---|---|
-  | `openai_budget` | `openai.RateLimitError` whose `code` is `insufficient_quota` | OpenAI budget used up |
+  | `openai_budget` | **[REVISED - 2026-11-22]** `openai.RateLimitError` whose `code` is `credit_balance_exhausted`, `organization_spend_limit_exceeded`, `project_spend_limit_exceeded` or `organization_usage_limit_exceeded`, or whose `code` or `type` is `insufficient_quota` | OpenAI budget used up |
   | `openai_access` | `openai.AuthenticationError`, `openai.PermissionDeniedError` | OpenAI key rejected |
   | `openai_model` | `openai.NotFoundError` | OpenAI model not available |
 
@@ -792,10 +849,14 @@ S12 handler never sees the failure.
 - Never shown to a visitor or saved in the job file: the exception's own text. It can
   carry account details.
 - No contact address is shown (D33). The visitors Tom cares about know how to reach him.
-- **Not verified:** that a used-up budget arrives with the code `insufficient_quota`. The
-  reviewer reproduced the case as a 429; the Programmer confirms the code from OpenAI's
-  documentation of its error codes before relying on it, and reports to Architect if it
-  differs.
+- **[REVISED - 2026-11-22]** The budget rule is from OpenAI's page of error codes
+  (https://developers.openai.com/api/docs/guides/error-codes, read 2026-11-22), which
+  does not give `insufficient_quota` as a `code`; Tom approved the rule. A real response
+  of a used-up budget has not been seen: the account was not used up to get one.
+- **[REVISED - 2026-11-22]** Known and left as they are (Architect). That page documents
+  no 404 for a model that is gone, so `openai_model` is unconfirmed. A model the project
+  has no access to answers 403 (0.7) and is shown as "OpenAI key rejected". In both
+  cases the container log has OpenAI's own message.
 - Tests: each row of the table and one failure without a reason, from the exception to
   the `status_text`; a failed revise keeps its draft and ends in `error`; a failure
   without a reason clears an earlier one. The failures are raised by the real SDK
@@ -908,7 +969,7 @@ this is a lookup. Design after Phase 1.
 
 | Risk | Mitigation |
 |---|---|
-| Shutdown date reached before the model switch | Tom expects a few days of effort (D15). Fallback is setting both tiers to OpenAI's recommended `gpt-6-luna` in `site.ini` without evaluation; 0.7 showed it can be called. |
+| Shutdown date reached before the model switch | **[REVISED - 2026-11-22]** The switch is committed (`1e72014`) and waits for the UI changes (D38). If those are not ready in time, it can be merged and deployed alone. |
 | New models reject the current API call | Closed: all four candidates answer the current call on the upgraded SDK (0.7). |
 | Chroma upgrade damages or cannot read the collection | Rehearsed on a local copy with before and after checks (0.6, passed); server data tarred before the deploy (0.8). A re-embed takes hours if both fail. |
 | One deploy carries many changes | The full stack runs locally first; without Docker locally, Chroma is split out (Phase 0 assumptions). |

@@ -8,121 +8,49 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-22 (ninth revision: D33, D34, from the code review of the follow-on
-deploy). Phase 0 and the Phase 1 code change are deployed (`3278e9e`). Next for the Programmer
-is the rest of the follow-on deploy (D33, the open review findings R1 to R3, then the deploy),
-then the evaluation (1.3 to 1.6), with Phase 2 overlapping. Nothing is waiting on Architect,
-unless the Programmer finds that a used-up budget does not arrive as `insufficient_quota`
-(D33).
+Plan revised on 2026-11-22 (tenth revision: D35 to D38, the evaluation as it ran, the D33
+budget rule). Everything through the follow-on fixes is deployed (`c311cda`). The models are
+chosen and committed (`1e72014` in `site_2024`, not merged); their deploy waits for the UI
+changes (D38). Next for Architect: design those UI changes with Tom. Phase 2 is free for the
+Programmer to start.
 
 ## Open
 
-- [ ] If the evaluation shows a candidate failing or too slow at its default reasoning
-      effort: read OpenAI's documentation for the reasoning setting and take the question
-      of a `site.ini` setting to Tom (plan 1.3).
+- [~] Design the UI changes that deploy with the model change (D38), with Tom. To decide:
+      how answers with tables and lists without a blank line are displayed, what S3's
+      allow-list permits, and whether reference links (4.1) and the image gallery (4.2) are
+      part of this deploy. Inputs are in "For the UI design" below.
 - [ ] Have `ml/requirements.txt` created when Phase 2 adds tests to `embedder/` (the
       role files tell every session to read it; it does not exist).
-- [ ] Design reference links (plan 4.1) and image gallery (4.2) once the model choice is known.
+- [ ] Design whichever of reference links (plan 4.1) and image gallery (4.2) the UI deploy
+      does not cover.
+
+## For the UI design
+
+From the Programmer's notes of 2026-11-22; the notes themselves are in the git history of
+this file.
+
+- 4 of the 90 evaluation answers hold a Markdown table (`gpt-6-luna` Q32, Q34;
+  `gpt-6.1-terra` Q03, Q32). The site's `markdown.Markdown()` has no table extension, so a
+  visitor sees raw `|` lines. Tried by the Programmer, not built: with Python-Markdown's
+  `tables` extension all four become tables: 2 to 3 columns, up to 7 rows, longest cell 357
+  characters, so a narrow screen needs checking.
+- A list that follows a text line with no blank line is shown as run-on text (`gpt-6-luna`
+  Q09; `gpt-4o-mini` Q32, all 14 list lines, and part of Q09). No other answer has an
+  unrendered list.
+- No answer has code, quotes, HTML, math or strikethrough.
+- Samples: all 30 answers of each model in `docs/archive/gpt6_luna_candidate_answers`,
+  `gpt6_1_terra_candidate_answers` and `gpt4o_mini_baseline_answers`.
+- There are no samples of the dig-deeper model, `gpt-6.2-sol`: Tom declined them. Dig-deeper
+  and follow-up answers are designed for without samples. One local dig-deeper answer was
+  read in part (no table).
+- `README.md` of `site_2024` still recommends `gpt-4o-mini`, `gpt-4o` and `gpt-5`.
 
 ## Notes from Programmer
 
-Earlier notes are answered in the plan; they are in the git history of this file.
-
-**NOTE FROM PROGRAMMER (2026-11-22): D32b, certbot with a changed list of names.** The
-documentation only says the default is to ask. From the source of certbot 5.10.0 (the version
-pip gives; the server's `certbot/certbot:latest` may be another):
-
-- With a certificate whose names are a subset of the new list, `certonly` asks "Do you want to
-  expand and replace this existing certificate", in the dry run as well. Cancel ends it with
-  an error, so the script stops. Expand adds the next numbered files to the archive directory
-  of that certificate. No new directory is made.
-- Among several such certificates of equal size it takes the first by name, so the lowest
-  `-NNNN`. The script takes the highest, so with more than one usable certificate on the server
-  it would install an older one, as the plan feared; the check in D32c would stop it, at every
-  run. With one usable certificate that is also the highest `-NNNN`, the two agree.
-- A certificate whose `live/` files are not all symlinks is skipped as broken. The script
-  replaces them in `live/m24tom.com`, so that one is skipped, which explains the `-NNNN`
-  directories. With no usable one, a new `-NNNN` certificate is made under the first free name
-  in `renewal/`; it fails if that name's archive or live directory already holds files.
-- `--cert-name` of a usable certificate names the one that is updated, and asks to confirm the
-  changed names. That would remove the guess, if the choice of directory is redesigned.
-
-Tom's output (2026-11-22): no redesign needed. `m24tom.com-0010` is the only usable certificate
-(names: `m24tom.com`; files numbered to 3) and the highest directory. `-0001` to `-0009` and
-`m24tom.com` are reported as broken. D32c is done as planned.
-
-**NOTE FROM PROGRAMMER (2026-11-22): D33, the code of a used-up budget differs from the plan.**
-Read: https://developers.openai.com/api/docs/guides/error-codes, through a page-reading agent.
-Not read: the spend-limits guide and the help center article. All of these are HTTP 429:
-
-- `credit_balance_exhausted`: no prepaid credits left.
-- `organization_spend_limit_exceeded`, `project_spend_limit_exceeded`: the enforced monthly
-  spend limit of the organization or the project.
-- `organization_usage_limit_exceeded`: the usage limit OpenAI assigns; a higher one is requested
-  from OpenAI.
-- `insufficient_quota` is not given as a `code`. The page says to look at `error.code` for
-  billing errors and that the broader `error.type` "can still be" `insufficient_quota`.
-
-With the rule in the plan a used-up budget would show the general text. Tom approved another
-rule (2026-11-22): a `RateLimitError` whose `code` is one of the four, or whose `code` or `type`
-is `insufficient_quota`. It is built (`d95f42e` in `site_2024`), with the rest of D33
-(`6ea9ece`). **For Architect: put the rule in the plan's D33 table, which still has the old one,
-and drop its "Not verified" point.** No response of a used-up budget was seen, and the account
-was not used up to get one.
-
-Two smaller points, not decided and nothing built for them. The page documents no 404 for a model that is gone, so
-`openai_model` is as the plan says and unconfirmed. And in 0.7 a model the project had no access
-to answered 403, which D33 shows as "OpenAI key rejected"; the log has OpenAI's message.
-
-**NOTE FROM PROGRAMMER (2026-11-22): the follow-on deploy is done** (`c311cda`; Tom waived the rest
-of the review). The resume point and these facts below are out of date: the server runs
-`c311cda`; the containers come back after a reboot (proven); `www` redirects and the certificate
-covers both names, to 2027-02-20. Architect should verify and update.
-
-**NOTE FROM PROGRAMMER (2026-11-22): Tom decided what the evaluation covers.** The Programmer
-asked whose draft the dig-deeper models are to revise, which the plan does not say. Tom's
-decision: evaluate the first answer only; the dig-deeper model is assumed to be the model one
-above the one chosen. **For Architect: give it a decision number and put it in the plan (1.2 to
-1.6), which still has the dig-deeper tier, with its review file, its decision rule and the
-`gpt-4.1` baseline.** From the order of the plan's table, "one above" is `gpt-6.1-terra` for
-`gpt-6-luna` and `gpt-6.2-sol` for `gpt-6.1-terra`. That reading is the Programmer's. Consequence:
-no `gpt-4.1` answers are captured, and they cannot be after 2027-01-14.
-Result: Tom chose `gpt-6-luna` for the first answer (14 `perfect`, 3 `not_good`, 2 factual errors
-of 30; baseline 17, 5, 2) and `gpt-6.2-sol` for dig deeper, which is two above, not one.
-
-**NOTE FROM PROGRAMMER (2026-11-22): answers with tables.** 4 of the 90 evaluation answers (Q03,
-Q32, Q34) hold a Markdown table. The site's `markdown.Markdown()` has no table extension, so a
-visitor sees raw `|` lines; read from the code, seen on the review page, which renders the same
-way. Nothing is changed. **For Architect: decide whether to turn the extension on; S3's
-allow-list then has to permit the table tags.**
-Tom wants answers with tables displayed usefully (2026-11-22). Samples, all 30 answers of each
-candidate, are in `docs/archive/gpt6_luna_candidate_answers` (tables in Q32, Q34) and
-`gpt6_1_terra_candidate_answers` (Q03, Q32). Tried, not built: with Python-Markdown's `tables`
-extension all four become tables with no `|` left over: 2 to 3 columns, up to 7 rows, longest cell
-357 characters, so a narrow screen needs checking too.
-Also found: a list that follows a text line with no blank line is shown as run-on text (`gpt-6-luna`
-Q09; `gpt-4o-mini` Q32, all 14 list lines, and part of Q09). No other answer has an unrendered list.
-**For Architect: decide that fix with the tables.** No answer has code, quotes, HTML, math or
-strikethrough. The survey holds no samples of the dig-deeper model, `gpt-6.2-sol`.
-
-**NOTE FROM PROGRAMMER (2026-11-22): next step is a UI design session with Tom.** Tom designs the
-UI changes with Architect, and they go out in one deploy with the model change (1.6). State:
-
-- Models: set and committed on `wip/annual-refresh` in `site_2024` (`1e72014`), pushed, not merged.
-  Tried on the local site with one question and one dig deeper. Tom waived the code review of this
-  change only; the waiver does not cover the UI changes.
-- Deadline: the server still uses `gpt-4o-mini` and `gpt-4.1`, which shut down 2027-01-14.
-- Decide: tables and unspaced lists (note above), and how they fit S3's allow-list and the
-  reference-links design.
-- Tom declined dig-deeper samples from `gpt-6.2-sol`, so the display of dig-deeper and follow-up
-  answers is designed without samples. One local dig-deeper answer was read in part (no table).
-- Watch after the deploy: `gpt-6-luna` named a seller in Q05 while saying the documents do not
-  mention it (rated a factual error). A wording search found no other such answer, but would miss
-  an unsupported claim made without saying so.
-- `README.md` of `site_2024` still recommends `gpt-4o-mini`, `gpt-4o` and `gpt-5`.
-
-The two S12 gaps the Programmer left as they are (2026-11-22) are in
-`docs/notes/opportunities_for_improvement.md`.
+All notes through 2026-11-22 are answered in the plan (tenth revision) or carried in "For the
+UI design"; they are in the git history of this file. The two S12 gaps the Programmer left as
+they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
 
 ## Notes from Code Reviewer
 
@@ -130,11 +58,12 @@ R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.
 
 ## Completed
 
-Phase 0, the Phase 1 code change and the nine plan revisions through 2026-11-22 are done:
-planning, question set, site review, the designs of both deploys and of the follow-on deploy,
-decisions D1 to D34, the Programmer's notes through the Phase 1 deploy, and the review
-findings R4 and R5. The item list is in
-the git history of this file.
+Phase 0, the Phase 1 code change, the follow-on fixes and the ten plan revisions through
+2026-11-22 are done: planning, question set, site review, the designs of the three deploys,
+decisions D1 to D38, the Programmer's notes through the evaluation, and the review findings
+R4 and R5. The evaluation showed no candidate slow at its default reasoning effort, so no
+reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
+file.
 
 ## Facts worth keeping
 
@@ -142,7 +71,8 @@ the git history of this file.
   `../site_2024/` (retrieval, prompts, LLM calls, pages, deployment). See the plan.
 - Production RAG settings (`site_2024/fwww/site.ini`): `EMBED = nomic-embed-text`,
   `PREFIX = search_query:` (documents are embedded with `search_document:`; the
-  asymmetry is correct, and the missing space after the colon changes nothing: plan 1.1), `LLM_DRAFT = gpt-4o-mini`, `LLM_REVISE = gpt-4.1`,
+  asymmetry is correct, and the missing space after the colon changes nothing: plan 1.1), `LLM_DRAFT = gpt-4o-mini`, `LLM_REVISE = gpt-4.1`
+  (`gpt-6-luna` and `gpt-6.2-sol` once `1e72014` is deployed),
   `MAX_DISTANCE = .35`, `MIN_DOCUMENTS = 5`, `MAX_DOCUMENTS = 60`,
   `MAX_DRAFT_DOCUMENTS = 15`.
 - `site.ini` holds real keys until S10 is done. Read settings from it with a pattern
@@ -152,21 +82,23 @@ the git history of this file.
 - Production job log (2026-11-21): about 850 questions, about 45 rated (roughly 20 of
   those `n/a`; the scale changed over time). Typical first answer: about 4,500 tokens
   in, 300 out, 5 s. A sampled follow-up: about 21,000 tokens in.
-- The server runs `main` at `3278e9e`, delivered by `git pull`. The rollbacks to `bed83f4`
+- The server runs `main` at `c311cda`, delivered by `git pull` (reported by the Programmer;
+  `main` in the repo is at `c311cda`). The rollbacks to `bed83f4`
   and to the state before Phase 0 (`906ffd8` plus a stash) are kept there until the server
   cleanup (`programmer_todo.md`).
 - The server has 1.9 GiB of memory, 2 CPUs, a 2 GB swap file, Docker 29.10.0 and Compose
   5.8.0. gunicorn runs 2 workers. With the model loaded, 771 MiB is available. 36 GB of
   disk was free before the Phase 0 deploy.
-- The site stays down after a server reboot until `docker compose up -d` is run, until
-  the follow-on deploy adds the restart policy (D31).
-- `www.m24tom.com` resolves to the server and nginx answers for it, redirecting HTTP to
-  HTTPS on the same host name (`$host`), not to `m24tom.com`. The certificate covers
-  `m24tom.com` only, so `https://www.m24tom.com` shows a certificate warning. The
-  follow-on deploy changes both (D32).
+- The containers come back after a server reboot with no command run (D31; checked on the
+  server by a reboot).
+- `www.m24tom.com` redirects to `m24tom.com` over HTTP and HTTPS, and the certificate covers
+  both names (D32; checked on the live site). `m24tom.com-0010` is the only usable
+  certificate on the server.
+- A job does not record which model answered it.
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is
   `site_2024/data/chroma_backup_1.1.1`; rehearsal baseline and probe script are in
   `site_2024/data/rehearsal/`. Both old images are kept locally under the tag `old-stack`.
 - The live certificate expires 2027-02-20.
+- `gpt-4o-mini` and `gpt-4.1` shut down on 2027-01-14.
