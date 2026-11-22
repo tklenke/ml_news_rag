@@ -131,19 +131,21 @@ Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waiv
       Done and committed; the server check is left. Checked locally: flask started while
       Chroma was down, kept restarting, and served pages after Chroma came back.
 - [x] D32a nginx: `www` redirects to `m24tom.com` on HTTP and HTTPS (plan "The `www` name").
-- [~] D32b Before changing the script: read certbot's documentation on `certonly` with a
+- [x] D32b Before changing the script: read certbot's documentation on `certonly` with a
       changed `-d` list, and have Tom run `certbot certificates` on the server. Report to
       Architect if the choice of archive directory needs redesign.
-      Documentation and source read; findings are with Architect (`architect_todo.md`).
-      Waiting for the output of `certbot certificates` from Tom.
-- [ ] D32c `sudo_renew_cert.sh` asks for both names and checks the certificate it is about to
+      Documentation and source read, output received (2026-11-22): no redesign needed. The one
+      usable certificate is `m24tom.com-0010`, which is also the highest directory. Certbot
+      will ask to expand it, in the dry run and in the real run: answer Expand. The result
+      should be `fullchain4.pem` in `archive/m24tom.com-0010`.
+- [x] D32c `sudo_renew_cert.sh` asks for both names and checks the certificate it is about to
       install (both names, not older than the one in place) before replacing anything.
 - [ ] Deploy, run the renewal script once, and make the checks in the plan. Add the rollback
       left on the server to "Server cleanup".
 
 Still useful:
 
-- Commits `9c1d14f` to `0d0abce` on `wip/annual-refresh` of `site_2024`, not pushed.
+- Commits `9c1d14f` to `09e3ca4` on `wip/annual-refresh` of `site_2024`, not pushed.
 - Found while doing S12 and fixed, each with a test: setting the status of an unreadable
   job file replaced its content; an unreadable job file made the jobs page answer 500;
   feedback on a missing or unreadable job left a file holding only the rating.
@@ -151,6 +153,9 @@ Still useful:
 - S12: the Chroma and Ollama failures were reproduced with unreachable addresses, and ended
   the loop before the change. The polling page's script was run with node, before and after;
   that check is not in the test suite.
+- The renewal script now needs `openssl` (with `x509 -ext`) and GNU `date` on the server. Check
+  before the deploy: `openssl version` (1.1.1 or later). Without them it stops and replaces
+  nothing. Its tests use real certificates; only the docker command is a stand-in.
 - `tests/test_nginx_redirects.py` runs the nginx image of the compose file with docker.
 
 ## Phase 1 evaluation (repo: `../site_2024/`)

@@ -46,7 +46,9 @@ pip gives; the server's `certbot/certbot:latest` may be another):
 - `--cert-name` of a usable certificate names the one that is updated, and asks to confirm the
   changed names. That would remove the guess, if the choice of directory is redesigned.
 
-Whether a redesign is needed depends on Tom's output of `certbot certificates`.
+Tom's output (2026-11-22): no redesign needed. `m24tom.com-0010` is the only usable certificate
+(names: `m24tom.com`; files numbered to 3) and the highest directory. `-0001` to `-0009` and
+`m24tom.com` are reported as broken. D32c is done as planned.
 
 **NOTE FROM PROGRAMMER (2026-11-22): S12, two gaps left as they are.** Read from the code, not
 tried.
