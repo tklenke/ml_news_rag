@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-21; ready for Programmer on Phase 0
+**Status:** Revised 2026-11-21 (third revision); rehearsal approved, Phase 0 deploy next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-21 (third revision):** Rehearsal (0.6) passed and is approved. Tom's
+  decisions D17 to D21 folded in: the wikis are deleted, not tarred; delivery by
+  `git pull` is confirmed; the draft context is corrected to 15 chunks; keys move out
+  of `site.ini` (S10). Untracked server files decided (0.2). Deploy steps (0.8)
+  rewritten after the Programmer found that `git pull` aborts on untracked files the
+  repo now tracks. Two unused dependencies dropped (0.4). The revise-context defect
+  (1.1) is confirmed, and two more items are added to 1.1.
 - **2026-11-21 (second revision):** Phase 0 (infrastructure refresh) added at Tom's
   request: current Python, Chroma, OpenAI SDK and images, DokuWiki removed, the repo
   made to match production, delivery by `git pull`. Tom is not concerned about the
@@ -57,6 +64,11 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D14 | The two DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed; they are not used. |
 | D15 | The January 14 date is not a constraint. Order the work for the least repeated effort. |
 | D16 | Finished image database sections of the todo files are archived. |
+| D17 | Wiki data is not kept. Everything needed has been pulled; both wiki directories are deleted from the server after the Phase 0 deploy checks pass. |
+| D18 | `fwww/static/test_08_fixture/` was a test upload and is removed from the server. |
+| D19 | Changes reach the server by `git pull`. |
+| D20 | The first answer gets 15 chunks, as `MAX_DRAFT_DOCUMENTS` says. The code that sends 14 is corrected before the baseline (1.1). |
+| D21 | Key handling is tightened where it is weak (S10). |
 
 ## Two repositories
 
@@ -75,7 +87,7 @@ commits yet. Programmer follows the same version-control rules there.
 
 1. **Phase 0, one deploy:** infrastructure refresh. Tests and the evaluation harness
    are then written once, on the stack production runs.
-2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6.
+2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6, S10.
    They touch the same files (`site_app.py`, `llm_functions.py`, `site_functions.py`).
 3. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
 4. **Phase 2,** overlapping step 3: the embedding runs take hours of machine time
@@ -93,16 +105,14 @@ One Programmer session per step. Code review once per deploy.
 All changes are in `site_2024` unless stated. They ship as one deploy, which is only
 safe because the whole stack is first run locally (0.6).
 
-### Assumed, to confirm with Tom
+### Settled assumptions
 
-Architect proposed these on 2026-11-21 and Tom approved the order of work without
-commenting on them. Programmer confirms each at the point of need.
+**[REVISED - 2026-11-21]** All three points this section used to list as assumed are settled.
 
-- Docker's WSL integration can be enabled on Tom's machine. **If it cannot, the
-  Chroma upgrade (0.5) becomes its own deploy after the rest**, because a failure
-  would otherwise first appear on production.
-- Wiki data is tarred and kept on the server; old wiki URLs get a 404, no redirects.
-- Changes reach the server by `git pull`.
+- Docker's WSL integration is enabled on Tom's machine, so the whole stack was
+  rehearsed locally and the Chroma upgrade stays in the one deploy.
+- Wiki data is deleted, not tarred (D17). Old wiki URLs get a 404, no redirects.
+- Changes reach the server by `git pull` (D19).
 
 ### 0.1 Needed from Tom first
 
@@ -125,9 +135,21 @@ Production code already matches the repo's `main`; only two config files differ
   its own commit, before any other change, so it can be checked: on the server,
   `git fetch` then `git diff <that commit> -- server/nginx_all_apps.conf docker-compose.yaml`
   must show nothing.
-- Architect decides which untracked server files are tracked once Tom provides them.
-  Expected: `sudo_renew_cert.sh` and `exclude_from_tar.txt` yes,
-  `old.nginx_all_apps.conf` no.
+- **[REVISED - 2026-11-21]** Untracked server files, decided:
+  - `exclude_from_tar.txt`: already tracked on `main` (since `63cca77`). Remove the
+    two wiki lines (one is misspelt `dokuN667CZ`) and add `fwww/site.ini`, so a
+    project tar never carries the keys.
+  - `sudo_renew_cert.sh`: tracked, **after it is fixed**. As written it deletes the
+    live `fullchain.pem` and `privkey.pem`, then copies from names that do not exist
+    in the archive directory (the files there are numbered), and carries on after the
+    error. The site would then have no certificate. Required behaviour: stop at the
+    first error; take the highest-numbered `fullchainN.pem` and `privkeyN.pem`; put
+    the copies in place before removing anything, so a failure leaves the current
+    certificate working. The live certificate expires 2027-01-26, so this must be
+    deployed and tried before then.
+  - `server/old.nginx_all_apps.conf`: not tracked. It is the production config
+    without `/cgimages/`. It stays on the server untouched; Tom may delete it.
+  - `fwww/static/test_08_fixture/`: removed from the server (D18).
 - An HTTP-only config for local runs is not built. Local rehearsal does not start nginx.
 
 ### 0.3 Compose and nginx changes
@@ -135,8 +157,8 @@ Production code already matches the repo's `main`; only two config files differ
 - **DokuWiki removal (D14, replaces S7):** remove both nginx `location` blocks, the
   `php1` and `php2` services, their `depends_on` entries, the two volume mounts and the
   README mention. Requests to the old paths then reach Flask and get a 404.
-  On the server the two `data/doku*` directories are tarred before the deploy and
-  left on disk; deleting them is a later, separate decision for Tom.
+  **[REVISED - 2026-11-21]** On the server the two `data/doku*` directories are
+  deleted after the deploy checks pass (D17). They are not tarred.
 - **Published ports:** bind flask 8001, chroma 8000 and ollama 11434 to `127.0.0.1`.
   Today only the Lightsail firewall keeps them private.
 - **Pinned images:** `nginx` and `ollama/ollama` (in `ollama.dockerfile`) get a
@@ -147,10 +169,11 @@ Production code already matches the repo's `main`; only two config files differ
 - `flask.dockerfile` moves from `python:3.11-slim` to `python:3.13-slim`. 3.13 is what
   Tom's Debian ships, so a plain local venv matches the image.
 - `requirements.txt` today is a 100-line `pip freeze`. Replace with a short file of
-  direct dependencies (Flask, gunicorn, openai, ollama, Markdown, Flask-Markdown,
-  python-dotenv, chromadb-client), let pip resolve the latest versions, and freeze
-  the result for the image. Test packages go in a separate file that the image does
-  not install.
+  direct dependencies (Flask, gunicorn, openai, ollama, Markdown, chromadb-client),
+  let pip resolve the latest versions, and freeze the result for the image. Test
+  packages go in a separate file that the image does not install.
+  **[REVISED - 2026-11-21]** `Flask-Markdown` and `python-dotenv` are dropped: nothing
+  imports them.
 - Latest versions on 2026-11-21, for reference: openai 3.57.0 (pinned 1.51.2, two
   major versions behind, so expect call-site changes), flask 3.1.3, gunicorn 27.0.1,
   ollama 0.6.3, markdown 3.11.3.
@@ -186,27 +209,51 @@ Production code already matches the repo's `main`; only two config files differ
    the container logs.
 5. Report to Architect. Any failure stops the deploy.
 
+**[REVISED - 2026-11-21]** Result: every criterion passed and Architect approved the
+deploy. The rehearsal ran with `Flask-Markdown` and `python-dotenv` installed; after
+they are dropped, the image is rebuilt and one question answered locally before the
+merge. Memory on the new stack is 882 MiB against 806 MiB; the server has room. The
+backup is `site_2024/data/chroma_backup_1.1.1`.
+
 ### 0.7 Smoke calls
 
 One call to each candidate in 1.3 and to both current models, on the upgraded SDK.
 This shows whether Tom's account has access and what the call looks like now. If the
 call sites need changing for the new SDK, that change is part of Phase 0.
 
+**[REVISED - 2026-11-21]** Result: both current models answer on SDK 3.57.0 with no
+call-site change. All four candidates return 403 (no access for this OpenAI project).
+Tom is arranging access; the candidate calls are repeated then. The Phase 0 deploy
+does not wait for this.
+
 ### 0.8 Deploy
+
+**[REVISED - 2026-11-21]** Steps rewritten. A plain `git pull` aborts on the server
+because untracked files there are tracked in the new `main`; the old images are
+tagged so a rollback needs no rebuild; the wikis are deleted rather than tarred.
 
 Tom runs the server commands; Programmer supplies them and reads the output.
 
 1. Code review of the branch, then merge to `main` with Tom's approval and push.
-2. On the server: stop the stack; tar `data/chroma`, `data/dokucozy` and
-   `data/dokuN657CZ` to a directory outside the checkout.
-3. `git stash` the server's local edits (do not discard), `git pull`, then compare the
-   stash with the new checkout to show nothing was lost. Git-ignored files
-   (`site.ini`, key files) are untouched by this.
-4. Rebuild and start. Check the nginx config with `nginx -t` in the container.
-5. Checks: the site loads over HTTPS; a question is answered; `/cgimages/` serves;
+2. On the server, before stopping anything: tag the two locally built images (flask
+   and ollama) as `old-stack`.
+3. Stop the stack with the old compose file, which also removes the `php1` and `php2`
+   containers. Tar `data/chroma` to a directory outside the checkout.
+   `chmod 600 fwww/site.ini`.
+4. Move `exclude_from_tar.txt` and `sudo_renew_cert.sh` to a directory outside the
+   checkout (both are tracked in the new `main`). `git stash` the edits to tracked
+   files (do not discard), then `git pull`. Compare the stash and the two moved files
+   with the new checkout; the only differences allowed are the ones this plan makes.
+   Git-ignored files (`site.ini`, key files) are untouched by this.
+5. Rebuild and start. Check the nginx config with `nginx -t` in the container.
+6. Checks: the site loads over HTTPS; a question is answered; `/cgimages/` serves;
    `/dokucozy/` returns 404; ports 8000, 8001 and 11434 listen on `127.0.0.1` only.
-6. Rollback: stop, restore the `data/chroma` tar, check out `906ffd8`, `git stash pop`,
-   rebuild, start.
+7. Only after the checks pass: delete `data/dokucozy`, `data/dokuN657CZ` and
+   `fwww/static/test_08_fixture`, and remove the `php:7-fpm` image. Commands are in
+   `programmer_todo.md` 0.8. Tom looks at each directory before removing it.
+8. Rollback: stop, restore the `data/chroma` tar, check out `906ffd8`, `git stash pop`,
+   move the two files back, give the `old-stack` images their original names, start.
+   After step 7 a rollback still starts the old stack, but the wiki paths are empty.
 
 Each evaluation harness lives in the repo whose code it exercises: the model
 evaluation in `site_2024`, the chunk experiment in `ml`.
@@ -246,16 +293,25 @@ The model evaluation uses 30. The chunk experiment reuses those 30 and adds abou
 
 These change what the "dig deeper" tier actually sees, so they come first.
 
-1. **Suspected: prior context is garbled in revise and follow-up.**
+1. **[REVISED - 2026-11-21] Confirmed: prior context is garbled in revise and follow-up.**
    `llm_functions.py` builds `priordocs` with `'\n\n'.join(rPriorDocs['documents'][0])`.
-   Chroma `collection.get()` returns a flat list of documents, so `[0]` would be a
-   single chunk's text and the join would split it into characters. Found by code
-   reading only; **not confirmed**. Programmer writes a failing test first. If the
-   test passes as written, the suspicion is wrong: record that and move on.
+   Chroma `collection.get()` returns a flat list of documents, so `[0]` is a single
+   chunk's text and the join splits it into characters. Programmer saw this on real
+   data during the rehearsal. The failing test is still written first, then the fix.
 2. **Prompts name the model.** `revise_prompt` and `followup_prompt` say "the draft
    response from GPT-4o-mini". Reword so no model is named.
 3. **Stale `__main__` block** in `llm_functions.py` passes a string to
    `process_question`, which expects a dict. Fix or remove with Tom's approval.
+4. **[REVISED - 2026-11-21] The first answer gets 14 chunks, not 15 (D20).**
+   `get_num_draft_docs` returns the index of the last chunk inside the distance
+   cutoff and the caller uses it as a count, so that chunk is dropped. The function
+   returns a count instead: with 60 close matches and `MAX_DRAFT_DOCUMENTS = 15` it
+   returns 15. Fixed before the baseline, so the baseline, the setting and the
+   chunk metrics (2.4) all mean 15. Production answers before this fix used 14.
+5. **[REVISED - 2026-11-21] `[PROMPTS]` `INITIAL` and `SECONDARY` have no effect.**
+   `process_question` uses the module constants, not the values passed to
+   `set_prompts`. The two settings and the code that carries them are removed; the
+   prompts stay in the code, where 1.1 puts them under test. `PREFIX` stays.
 
 To make these testable, prompt construction is separated from the thread and the
 API call: a function that takes the job data and document lists and returns the
@@ -320,6 +376,8 @@ ratings disagree.
 
 Model names are already in `site.ini` (`LLM_DRAFT`, `LLM_REVISE`), so the switch is
 a config change. The prompt wording from 1.1 is already deployed by then.
+**[REVISED - 2026-11-21]** After S10 `site.ini` is tracked, so the switch is a commit
+and a `git pull`.
 
 ---
 
@@ -436,6 +494,7 @@ lookups cannot escape their directories.
 | S6 | Low | Feedback accepts any text as the rating, which is why the log contains values outside the three buttons. | `cozyrag_feedback` | Accept only `perfect`, `ok`, `not_good`. |
 | S7 | Replaced | **[REVISED - 2026-11-21]** Both wikis are removed (D14, Phase 0.3). Original finding: DokuWiki page source is served directly (`/dokucozy/data/pages/start.txt` returns 200), bypassing any wiki access rules. Matters only if a wiki has private pages. PHP 7 is past end of life. | nginx config, `php:7-fpm` | Deny `data/`, `conf/`, `bin/`, `inc/` in nginx. PHP upgrade is outside this refresh. |
 | S8 | Low | Each of the 4 gunicorn workers starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
+| S10 | Low | **[REVISED - 2026-11-21]** Keys share a file with the settings. `site.ini` holds the OpenAI and session keys beside the model names and retrieval limits, so it cannot be tracked: production settings are not in the repo, the template has drifted from what the code reads, and every tool or person reading a setting also reads the keys. The README's project tar includes `site.ini`. The same OpenAI key is used on the server and for local runs. | `site.ini`, `site_app.py`, `exclude_from_tar.txt` | See "S10 design" below (D21). |
 | S9 | Info | `.env_flask` is tracked in git with an `OPENAI_KEY` value that looks like a placeholder (24 characters, no `sk-` prefix). Tom to confirm it was never a real key. The repo's nginx config has HTTPS commented out, so it does not match production. No security headers (HSTS and similar) are sent. | repo root, `server/` | Confirm; no action otherwise. |
 
 ### S1 design (D10)
@@ -462,11 +521,43 @@ Questions and answers remain public on the jobs page. That is accepted.
 - nginx `limit_req` on `/cozyrag/query` and `/cozyrag/followup`. The repo's nginx
   config matches production after Phase 0.2. Programmer proposes the rate to Architect.
 
+### S10 design (D21)
+
+**[REVISED - 2026-11-21]** New.
+
+What is already sound: `site.ini` is git-ignored, is mounted into the container
+rather than built into the image, and is not under any path nginx or Flask serves.
+The key has not leaked by any route found. The changes below remove the ways it
+could, and put the production settings under version control.
+
+- **Keys leave `site.ini`.** A git-ignored `fwww/site_local.ini` holds `[KEYS]`
+  (`SESSION`, `OPENAI`). The app reads `site.ini` and then `site_local.ini`, so a
+  value in the second file wins; a local run can also put machine-specific settings
+  there. The app refuses to start, with a message naming the file, if a key is missing.
+- **`site.ini` is tracked** and holds the production settings with no `[KEYS]`
+  section. The model switch (1.6) is then a commit delivered by `git pull`, and
+  rollback is a revert. `site.ini.template` is replaced by a `site_local.ini.template`.
+  `.env_flask` and the commented `env_file` lines in the compose file are removed:
+  nothing reads them.
+- **File mode and tar:** `site_local.ini` is mode 600 on the server and is listed in
+  `exclude_from_tar.txt`.
+- **Separate keys (Tom):** one OpenAI key for the server and another for local and
+  evaluation runs, ideally in separate OpenAI projects each with its own spend cap.
+  The evaluation harness makes several hundred calls from Tom's machine; a mistake
+  there should not be able to spend the production budget or require rotating the
+  production key.
+- **Deploy step:** on the server the existing `site.ini` is moved aside before the
+  pull (it becomes tracked), `site_local.ini` is created from its `[KEYS]` section,
+  and the rest is compared with the tracked `site.ini` to show no setting changed.
+
+Not done: moving keys to environment variables or Docker secrets. For one container
+on a single-user server that adds parts without removing a real exposure.
+
 ### Scheduling
 
 **[REVISED - 2026-11-21]** (D15)
 
-- With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6.
+- With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6, S10.
 - With Phase 4.1 (reference links): S3.
 - Replaced by the DokuWiki removal in Phase 0.3: S7.
 - Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`).
@@ -501,7 +592,7 @@ this is a lookup. Design after Phase 1.
 |---|---|
 | Shutdown date reached before the model switch | Tom expects a few days of effort (D15). Fallback is setting both tiers to OpenAI's recommended `gpt-6-luna` in `site.ini` without evaluation, once 0.7 shows it can be called. |
 | New models reject the current API call | SDK upgraded and smoke calls made in Phase 0 (0.7). |
-| Chroma upgrade damages or cannot read the collection | Rehearsed on a local copy with before and after checks (0.6); server data tarred before the deploy (0.8). A re-embed takes hours if both fail. |
+| Chroma upgrade damages or cannot read the collection | Rehearsed on a local copy with before and after checks (0.6, passed); server data tarred before the deploy (0.8). A re-embed takes hours if both fail. |
 | One deploy carries many changes | The full stack runs locally first; without Docker locally, Chroma is split out (Phase 0 assumptions). |
 | Tom's rating and labelling time | 30 questions, not 50; pooled candidates capped at top 10 per variant. |
 | Chunk experiment shows no clear winner | That is a valid result; the decision rule says leave it alone. |

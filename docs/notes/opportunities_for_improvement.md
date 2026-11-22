@@ -19,4 +19,7 @@ Works at current volume (about 850 jobs). Revisit if answers stall or pages slow
 ## site_2024: housekeeping (logged 2026-11-21)
 
 - No security headers (HSTS and similar) are sent.
-- `site.ini.template` has `LLM = gpt-4o-mini`; the code reads `LLM_DRAFT` and `LLM_REVISE`.
+- Two warnings appear in the container logs on both the old and the upgraded stack
+  (seen in the Phase 0 rehearsal, 2026-11-21). Ollama: `requested context size too
+  large for model` (8192 requested, `nomic-embed-text` takes 2048). gunicorn 27: the
+  config file should have a `.py` name.

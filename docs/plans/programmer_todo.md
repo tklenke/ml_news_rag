@@ -9,7 +9,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0, then the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6), then
+**Order:** Phase 0, then the code change (Phase 1.0 to 1.1 with S1, S2, S4, S5, S6, S10), then
 the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
@@ -19,35 +19,34 @@ The finished image database tasks are in `docs/archive/programmer_todo_image_dat
 
 ## Phase 0: Infrastructure refresh (repo: `../site_2024/`, one deploy)
 
-Docker works from WSL and Tom has provided the server files (2026-11-21).
+Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.3a to 0.3c
+(DokuWiki removed, ports on `127.0.0.1`, nginx `1.30.7`, ollama `0.40.17`), 0.4a and 0.4b
+(Python 3.13, resolved requirements), 0.5a and 0.5b (Chroma 1.5.9, `chromadb-client`),
+0.6 (rehearsal passed; Architect approved the deploy).
 
-- [x] 0.2a Make `server/nginx_all_apps.conf` and the `cgimages` mount in
-      `docker-compose.yaml` match production (text in
-      `docs/references/site_2024_production_state_2026-11-21.md`). Commit this alone.
-      Both files match production's blob hashes (nginx `382fd3a`, compose `4dfb441`).
-- [ ] 0.2b Add the untracked server files Architect says to track. Waiting on Architect
-      (notes in `architect_todo.md`).
-- [x] 0.3a Remove DokuWiki: both nginx `location` blocks, `php1`, `php2`, their
-      `depends_on` entries, both volume mounts, the README mention.
-- [x] 0.3b Bind the published ports for flask, chroma and ollama to `127.0.0.1`.
-- [x] 0.3c Pin `nginx` and `ollama/ollama` to a current stable version tag.
-      nginx `1.30.7`, ollama `0.40.17`.
-- [x] 0.4a `flask.dockerfile` on `python:3.13-slim`.
-- [x] 0.4b Requirements: a file of direct dependencies only, resolved and frozen into
-      `requirements.txt`; test packages in a separate file not installed in the image.
-- [x] 0.5a Chroma server image to the plan's target version in `site_2024` **and** in
-      `ml/docker-compose.yaml` (same data directory).
-- [x] 0.5b Replace `chromadb` with `chromadb-client` at the same version.
-- [x] 0.6 Local rehearsal per plan 0.6. Copy `data/chroma` first. Report the results to
-      Architect before any deploy. All passed. Report in `architect_todo.md`; Architect's
-      review is still needed before the deploy.
-- [~] 0.7 Smoke call to each candidate model and both current models on the upgraded
-      OpenAI SDK; fix the call sites if the SDK changed them. Report to Architect.
-      Current models work with no call-site change. All four candidates return 403 for this
-      OpenAI project; rerun when Tom has enabled them.
-- [ ] 0.8 Deploy with Tom per plan 0.8. Tom (2026-11-21) wants the wikis deleted, not
-      tarred, and `test_08_fixture` removed. Run in `~/site_2024`, after the deploy checks
-      pass, looking at each directory before removing it:
+- [ ] 0.2b `exclude_from_tar.txt`: remove the `dokucozy` and `dokuN667CZ` lines, add
+      `fwww/site.ini`.
+- [ ] 0.2c `sudo_renew_cert.sh`: ask Tom for the script text again (it is not saved in
+      either repo), then fix it to the behaviour in plan 0.2 and commit it. Test it
+      against a scratch directory laid out like `archive/m24tom.com-NNNN/` with files
+      numbered 1 and 2: the copies in place afterwards are the number 2 files; with the
+      archive files missing, the script stops with an error and the existing
+      `fullchain.pem` and `privkey.pem` are still there. If the script cannot be run
+      against a scratch directory as written, say how you propose to test it before
+      changing it.
+- [ ] 0.4c Remove `Flask-Markdown` and `python-dotenv` from `requirements_direct.txt` and
+      freeze `requirements.txt` again.
+- [ ] 0.6b Rebuild the flask image after 0.4c and answer one question locally through
+      the app; `pip check` clean; no errors in the logs.
+- [ ] Remove the empty stray directory `site_2024/home/` if nothing uses it (it appeared
+      locally; check what created it first).
+- [~] 0.7 Smoke calls. Current models work with no call-site change. All four candidates
+      return 403; rerun when Tom says access is enabled, and report to Architect.
+      The deploy does not wait for this.
+- [ ] 0.8 Deploy with Tom, following plan 0.8 step by step (rewritten 2026-11-21: tag the
+      old images first, move the two untracked files aside before the pull). Read
+      `docker images` on the server to get the image names to tag. After the deploy
+      checks pass, in `~/site_2024`, looking at each directory before removing it:
 
           ls -la data/dokucozy data/dokuN657CZ fwww/static/test_08_fixture
           sudo rm -r data/dokucozy
@@ -57,23 +56,29 @@ Docker works from WSL and Tom has provided the server files (2026-11-21).
           docker image rm php:7-fpm
 
       Then `/dokucozy/`, `/dokuN657CZ/` and `/static/test_08_fixture/index.html` return 404,
-      and no `php1` or `php2` container is listed (the stack is stopped with the old compose
-      file, which removes them).
+      and no `php1` or `php2` container is listed.
+- [ ] 0.9 After the deploy, with Tom: run the fixed `sudo_renew_cert.sh` on the server
+      once and confirm the site still serves HTTPS. The certificate expires 2027-01-26.
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
 - [ ] 1.0 Set up pytest in `site_2024` (it has no tests today)
 - [ ] 1.1a Separate prompt construction from `process_question` into a function that takes
       job data and document lists and returns the prompt string. Behaviour unchanged.
-- [ ] 1.1b Write a failing test for the suspected defect: revise and follow-up prompts must
+- [ ] 1.1b Write a failing test for the confirmed defect: revise and follow-up prompts must
       contain the full text of every prior document. Use a real `collection.get()` result
-      from the local Chroma service, not a hand-built dict. If the test passes without a
-      code change, the suspicion is wrong: note it in `architect_todo.md` and skip the fix.
-- [ ] 1.1c Fix the prior-context join if 1.1b failed
+      from the local Chroma service, not a hand-built dict.
+- [ ] 1.1c Fix the prior-context join
 - [ ] 1.1d Reword `revise_prompt` and `followup_prompt` so they name no model
 - [ ] 1.1e Ask Tom before fixing or removing the stale `__main__` block in
       `llm_functions.py` (it passes a string to `process_question` and calls
       `set_docs_params` with three arguments)
+- [ ] 1.1f Failing test, then fix: `get_num_draft_docs` returns a count, not an index
+      (plan 1.1 item 4). 60 matches inside the cutoff with a maximum of 15 gives 15; one
+      match fewer than the maximum inside the cutoff gives that number; none inside the
+      cutoff gives the minimum. Check every caller treats the value as a count.
+- [ ] 1.1g Remove the `INITIAL` and `SECONDARY` settings and the code that carries them
+      (plan 1.1 item 5). `PREFIX` stays and keeps working.
 - [ ] S1a Function that shortens an email address for display: first 5 characters plus
       `...`; empty string for none. Replaces the `safe_truncate(job['email'],5)` calls.
 - [ ] S1b `/cozyrag/<id>/status` returns only `status`, `status_text`, `result_html`.
@@ -93,7 +98,19 @@ Docker works from WSL and Tom has provided the server files (2026-11-21).
       question form instead of returning 500.
 - [ ] S6 Feedback accepts only `perfect`, `ok`, `not_good`; anything else is ignored with
       a redirect to the question form.
-- [ ] Deploy: `git pull` on the server, rebuild if requirements changed, restart.
+- [ ] S10a The app reads `site.ini` then `site_local.ini`; a value in the second wins.
+      Missing `SESSION` or `OPENAI` key stops startup with a message naming
+      `site_local.ini`. Tests use files in a temporary directory, never the real ones.
+- [ ] S10b Track `site.ini` with the production settings and no `[KEYS]` section. Take
+      the values from the local `site.ini` by naming each setting; do not print the file.
+      Add `site_local.ini` to `.gitignore` and to `exclude_from_tar.txt`; add
+      `site_local.ini.template`; remove `site.ini.template`, `.env_flask` and the
+      commented `env_file` lines in `docker-compose.yaml`. The `__main__` block in
+      `llm_functions.py` also reads `site.ini` (see 1.1e).
+- [ ] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
+      create the local `site_local.ini` with Tom.
+- [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements
+      changed, restart.
 
 Flask's test client is enough for the S tasks; only 1.1b needs a live service.
 

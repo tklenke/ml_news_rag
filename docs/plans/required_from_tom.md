@@ -27,7 +27,10 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] Wiki data is not kept: everything needed has been pulled, so both wikis are deleted from
       the server (2026-11-21). Replaces the plan's tar step; steps in `programmer_todo.md` 0.8
 - [x] `fwww/static/test_08_fixture/` was a test upload; remove it from the server (2026-11-21)
-- [ ] Confirm: changes are delivered by `git pull` on the server (plan Phase 0, assumed)
+- [x] Changes are delivered by `git pull` on the server (2026-11-21)
+- [x] The first answer gets 15 chunks; the code that sends 14 is fixed before the
+      baseline (2026-11-21)
+- [x] Tighten key handling if it is weak: keys move out of `site.ini` (plan S10) (2026-11-21)
 - [x] DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed in this refresh; they
       are not used (2026-11-21)
 
@@ -45,7 +48,13 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 - [x] Provide an OpenAI key for a local `site.ini` (rehearsal 0.6, smoke calls 0.7).
       Tom approved using the key already there (2026-11-21)
-- [ ] Run the deploy commands on the server with the Programmer (plan 0.8).
+- [ ] Paste `sudo_renew_cert.sh` to the Programmer again (`cat sudo_renew_cert.sh` on the
+      server); the text was not saved and the script is to be fixed and tracked.
+- [ ] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
+      fixed `sudo_renew_cert.sh` once. The certificate expires 2027-01-26.
+- [ ] Create a second OpenAI key for local and evaluation runs, ideally in its own
+      OpenAI project with its own spend cap, so the server key is used only on the
+      server (plan S10). Needed before the evaluation harness runs (1.3).
 - [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
 - [x] Give the production nginx config to the Programmer at the start of their first session (2026-11-21)
 - [ ] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
