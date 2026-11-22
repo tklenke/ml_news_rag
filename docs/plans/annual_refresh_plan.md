@@ -147,6 +147,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D42 | (2026-11-22) The new Google Groups threads are embedded and go out in the same deploy as the model change and the answer display (extends D38 and D39). Only the Google Groups messages are updated; the other sources have not changed materially. |
 | D43 | (2026-11-22) Both faults found in the collection (F1 and F2, "Corpus update") are repaired in the same pass. |
 | D44 | (2026-11-22) Tom fetches again, on Windows, the 10 threads of the new id list that were already in the corpus. |
+| D45 | (2026-11-22) Old jobs need no compatibility: nobody digs deeper on a job that is days or months old. Chunk ids and the job format may change. |
 
 ## Two repositories
 
@@ -1103,9 +1104,8 @@ against the files):
 
 **Design.**
 
-- The existing collection is extended, not rebuilt. Phase 2 may embed everything again,
-  and a job record holds chunk ids: a rebuild would change them, and a dig deeper on an
-  old job would lose its chunks.
+- The existing collection is extended, not rebuilt. **[REVISED - 2026-11-22]** Phase 2 embeds
+  everything again, so a rebuild now would be done twice. Old jobs are no reason (D45).
 - Chunk ids made from now on are `<source>#<number>`. No source contains `#`. Stored ids
   are not changed. The site uses an id only to fetch the chunk.
 - F1: the missing chunks of the 10 Canard Pushers are added under ids of that form. No
@@ -1114,10 +1114,11 @@ against the files):
   over 512 tokens) is embedded again, one at a time, and its vector is updated in place
   under the same id where the cosine with the stored one is below 0.999. Documents and
   metadata are not touched. About 5 hours unattended at the 0.47 s per chunk measured on
-  CPU; it can be stopped and continued.
+  CPU; it can be stopped and continued. **[REVISED - 2026-11-22]** Stopped on 2026-11-22 after
+  about 3,360 chunks (3 vectors replaced), because Tom needed the GPU. Whether it is
+  finished or left to the rebuild in Phase 2 waits for Tom.
 - A refetched thread: its stored chunks (`source` equal to its id) are deleted and the
-  file is embedded again. A dig deeper on an old job that used one of these 10 threads
-  no longer finds those chunks; the site leaves out ids it does not find.
+  file is embedded again.
 - The filter gains a pattern for the button text. The text files of the new and
   refetched threads are made again from the markdown, in WSL, without Chrome. First, the
   unchanged filter must reproduce the present `.txt` of the 227 word for word; if not, stop and
@@ -1126,7 +1127,8 @@ against the files):
 - The embedder and the filter run in the `ml` venv with `chromadb-client` 1.5.9, against
   the Chroma and Ollama containers of `site_2024`. `ml/ollama.dockerfile` does not pull
   `nomic-embed-text`. `ml/requirements.txt` is created.
-- Tests use a real Chroma collection with a name of its own, removed afterwards.
+- **[REVISED - 2026-11-22]** Tests use a throwaway Chroma container, so that nothing of them is
+  left in the directory that is copied to the server.
 
 **Checks before the deploy** (local):
 
