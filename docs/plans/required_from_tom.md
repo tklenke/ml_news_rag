@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D46 in the plan's table. The dated list of what Tom decided and the
+All decided: D1 to D47 in the plan's table. The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
 ## Work items
@@ -30,7 +30,7 @@ finished work items are in the git history of this file.
 
 - Tom waived the code review of the Phase 1 deploy (2026-11-21), the rest of that of the
   follow-on deploy (2026-11-22) and that of the model change (2026-11-22, D37). The UI
-  changes are not covered by a waiver.
+  changes and the corpus update were waived on 2026-11-22 (D47).
 - The OpenAI account has a budget limit with no auto reload (S2).
 - The account can call `gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol` and `gpt-6.2-astra`.
 - One OpenAI key serves the server and local runs.

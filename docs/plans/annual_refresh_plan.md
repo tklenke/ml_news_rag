@@ -149,6 +149,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D44 | (2026-11-22) Tom fetches again, on Windows, the 10 threads of the new id list that were already in the corpus. |
 | D45 | (2026-11-22) Old jobs need no compatibility: nobody digs deeper on a job that is days or months old. Chunk ids and the job format may change. |
 | D46 | (2026-11-22) F2 is not finished before the deploy; Phase 2 embeds everything on the current Ollama. Amends D43. |
+| D47 | (2026-11-22) Code review of the deploy with the answer display, the corpus update and the model change is waived (all of it). |
 
 ## Two repositories
 

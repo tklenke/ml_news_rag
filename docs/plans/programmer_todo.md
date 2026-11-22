@@ -181,16 +181,16 @@ Plan: "Answer display (D39, D40)". Read it whole; the tests are listed there. Th
 answers named there are in `ml/docs/archive/`; copy the text a test needs into the test's own
 data, since the tests of `site_2024` do not read `ml/`.
 
-- [ ] AD1 Add `markdown-it-py` to `requirements_direct.txt` and freeze. Record the version.
-- [ ] AD2 The function that gives the HTML of an answer, with the settings of the plan. Tests
+- [x] AD1 Add `markdown-it-py` to `requirements_direct.txt` and freeze. Record the version.
+- [x] AD2 The function that gives the HTML of an answer, with the settings of the plan. Tests
       first: table, list after a text line, nested bullets, hostile text.
-- [ ] AD3 The results page uses it, with the answer in the `overflow-x` container. The site's own
+- [x] AD3 The results page uses it, with the answer in the `overflow-x` container. The site's own
       pages keep `markdown_to_html`; test that one with raw HTML still shows it.
-- [ ] AD4 `evaluation/review_answers.py` uses the same function.
-- [ ] AD5 `README.md`: the models now used.
-- [ ] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
+- [x] AD4 `evaluation/review_answers.py` uses the same function.
+- [x] AD5 `README.md`: the models now used.
+- [~] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
       If it reads badly, stop and report to Architect; do not restyle on your own.
-- [ ] AD7 Code review (not waived for this part; it covers CU1 to CU6 too), then merge and deploy
+- [ ] AD7 Merge and deploy (Tom waived the code review of all of it, D47)
       with 1.6 and the corpus update (CU8) by the plan's deploy steps and checks. Add what the deploy leaves on the server to "Server cleanup".
 
 ## Corpus update (repo: `ml/`; data in `../site_2024/data/chroma`)
@@ -227,12 +227,13 @@ do not start those of `ml/docker-compose.yaml`.
       Done. a: 227 new and 8 refetched; `IO1b3H0WdYI` and `UklKWGIn43Q` came back with the same
       posts and are not used. b: no difference. c: 24 files changed. d: 57 chunks deleted.
       e: 727 chunks of new threads, 99 of the 8 refetched. 42,276 in the collection.
-- [~] CU7 The plan's "Checks before the deploy". Report 1 to 3 to Architect.
+- [x] CU7 The plan's "Checks before the deploy". Report 1 to 3 to Architect.
       1 passed: 42,276 unique ids, 11,388 sources, every source whole, nothing extra but the 42
       prefix-only chunks. 3: 17 of 52 questions changed; 27 of 780 places are new chunks (21 from
       new threads, 4 from refetched ones, 2 from the Canard Pushers added by F1). Results in
-      `data/corpus_update/after.json` (id hash `92d43eed...`). Left: 2
-      (short chunks only, D46) and 4.
+      `data/corpus_update/after.json` (id hash `92d43eed...`). 2: 99 short chunks, smallest
+      cosine 0.99998. 4: passed on the local site (`gpt-6-luna`, new thread among the sources).
+      Tar, SHA-256 and check script for the server: `~/chroma_deploy` (local).
 - [ ] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
       the tar to "Server cleanup".
 
