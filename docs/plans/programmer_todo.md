@@ -9,9 +9,10 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0 is done. The Phase 1 code change is written; next are the local paid check and
-the code review, then its deploy, then the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per group;
-start each session fresh. Code review happens once per deploy, not per commit.
+**Order:** Phase 0 is done. The Phase 1 code change is written and checked with paid calls; next are
+its deploy and the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per
+group; start each session fresh. Code review happens once per deploy, not per commit; Tom
+waived it for this deploy (2026-11-21).
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
@@ -95,9 +96,23 @@ Still useful:
       `get_num_draft_docs`; the record's `provided_docs` is previous then additional with
       no id twice, and there is no `related_docs`. A second follow-up on that record
       carries no more than `MAX_DRAFT_DOCUMENTS` further chunks.
-- [ ] Before the deploy: one question, one revise, one follow-up and a follow-up on that
-      follow-up answered locally (paid calls), noting the prompt tokens of each; code review.
-- [ ] Deploy: the server steps below, with Tom. Rebuild if requirements changed.
+- [x] Before the deploy: one question, one revise, one follow-up and a follow-up on that
+      follow-up answered locally (paid calls), noting the prompt tokens of each. Tom waived
+      the code review (2026-11-21). Question Q44, through the site's routes:
+
+      | Job | Model | Chunks | Prompt tokens | Completion tokens | Model and retrieval time |
+      |---|---|---|---|---|---|
+      | question | `gpt-4o-mini` | 15 | 4,504 | 231 | 5.1 s |
+      | revise | `gpt-4.1` | 60 | 17,438 | 1,127 | 7.3 s |
+      | follow-up on the revise | `gpt-4.1` | 69 | 22,652 | 1,441 | 9.1 s |
+      | follow-up on that | `gpt-4.1` | 79 | 24,780 | 826 | 6.8 s |
+
+      The revise listed the question's provided then related chunks exactly in order. The two
+      follow-ups cut their retrieval to 15; 6 and 5 of those were already in the previous content
+      (8,136 and 6,811 characters sent twice).
+- [ ] Merge `site_2024` `wip/annual-refresh` to `main` (fast-forward) and push, with Tom's approval.
+- [ ] Deploy: the server steps below, with Tom. Requirements are unchanged since `bed83f4`, so
+      nothing is rebuilt.
 
 ### Server steps for the deploy
 
@@ -120,6 +135,20 @@ Rehearsed on throwaway repositories with fake keys.
 - flask is stopped first because the templates are live: the jobs template shows
   `job['email']` as given, which the code before this deploy does not shorten.
 - Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
+- Checks after `up -d`: `docker compose ps` lists four containers and the flask log has no error;
+  the site loads over HTTPS; a question is answered and one revise of it; the new job's
+  `/status` in a browser shows no email address; `/cozyrag/jobs` loads. If the site gives 502,
+  flask has a new address: `docker compose restart nginx`. (In a local stop and start flask kept
+  its address.)
+- Rollback (rehearsed):
+
+      docker compose stop flask
+      git checkout bed83f4
+      cp -p ~/site_ini_before_s10/site.ini fwww/site.ini
+      docker compose up -d
+
+  `site_local.ini` is then untracked and not ignored; leave it. Forward again:
+  `rm fwww/site.ini`, `git checkout main`.
 - `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
 
 Running the tests: `site_2024/README.md`. Use `site_2024/.venv`; `site_2024/venv` still holds

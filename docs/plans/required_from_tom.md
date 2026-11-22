@@ -17,6 +17,7 @@ finished work items are in the git history of this file.
 - [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
       (commands in `programmer_todo.md`, "Server cleanup").
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
+- [ ] Approve the merge of `site_2024` `wip/annual-refresh` to `main` and the push (Phase 1 deploy).
 - [ ] Run the Phase 1 deploy commands on the server with the Programmer (`programmer_todo.md`,
       "Server steps for the deploy").
 - [ ] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
@@ -26,6 +27,7 @@ finished work items are in the git history of this file.
 
 ## Still true
 
+- Tom waived the code review of the Phase 1 deploy (2026-11-21).
 - The OpenAI account has a budget limit with no auto reload (S2).
 - The account can call `gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol` and `gpt-6.2-astra`.
 - One OpenAI key serves the server and local runs.

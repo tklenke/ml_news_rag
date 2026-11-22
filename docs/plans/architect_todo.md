@@ -24,8 +24,20 @@ the deploy. Nothing is waiting on Architect.
 
 ## Notes from Programmer
 
-None outstanding. The notes of 2026-11-21 on the prior context and the `PREFIX` space are
-answered in plan 1.1 (items 6 to 8, and "Checked and left alone").
+The notes of 2026-11-21 on the prior context and the `PREFIX` space are answered in plan 1.1
+(items 6 to 8, and "Checked and left alone").
+
+**NOTE FROM PROGRAMMER (2026-11-21):**
+
+- 1.1h to 1.1j are done, and the paid run passed (token counts in `programmer_todo.md`). Tom
+  waived the code review of the Phase 1 deploy; it is not yet in the plan's decision table.
+- Plan 1.1 item 8 does not say whether the additional content of a follow-up leaves out chunks
+  that are already in the previous content. Built as written: they are sent in both places and
+  recorded once. In the paid run 6 and 5 of the 15 were sent twice.
+- Any exception in the job thread ends it (no handler in `run()`), and that worker then answers
+  nothing until a restart. One cause was found and fixed (a revise or follow-up of a job without
+  an answer). Chroma or Ollama being unreachable would do the same, from reading the code; not
+  tried. Related to S8.
 
 ## Completed
 
