@@ -10,9 +10,10 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0, the Phase 1 code change with the site fixes, and the follow-on fixes are
-deployed. The evaluation is done. Next is the answer display, which deploys with the model change
-(1.6). Phase 2 can overlap it. One session per group; start each session fresh. Code review happens once per deploy, not
-per commit.
+deployed. The evaluation is done. Next are the corpus update and the answer display, which deploy
+with the model change (1.6). They are independent: either first, or CU5 running unattended during
+the answer display. Then Phase 4, then Phase 2 (D41). One session per group; start each session
+fresh. Code review happens once per deploy, not per commit.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
@@ -155,7 +156,7 @@ Result, 30 answers per model, rated blind by Tom:
 - [ ] 1.6 Deploy Tom's choice of 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` =
       `gpt-6.2-sol` (not evaluated). Set in the tracked `site.ini` (`1e72014`) and tried on the
       local site with one question and one dig deeper. Tom waived the code review of this change.
-      **Do not merge or deploy alone:** it goes out with "Answer display" below (D38). The
+      **Do not merge or deploy alone:** it goes out with "Answer display" and "Corpus update" below (D38, D42). The
       server still uses `gpt-4o-mini` and `gpt-4.1`, which shut down 2027-01-14.
 
 Still useful:
@@ -189,21 +190,47 @@ data, since the tests of `site_2024` do not read `ml/`.
 - [ ] AD5 `README.md`: the models now used.
 - [ ] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
       If it reads badly, stop and report to Architect; do not restyle on your own.
-- [ ] AD7 Code review (not waived for this part), then merge and deploy with 1.6 by the plan's
-      deploy steps and checks. Add what the deploy leaves on the server to "Server cleanup".
+- [ ] AD7 Code review (not waived for this part; it covers CU1 to CU6 too), then merge and deploy
+      with 1.6 and the corpus update (CU8) by the plan's deploy steps and checks. Add what the deploy leaves on the server to "Server cleanup".
+
+## Corpus update (repo: `ml/`; data in `../site_2024/data/chroma`)
+
+Plan: "Corpus update (D42 to D44)". Read it whole. Only the containers of `site_2024` are used;
+do not start those of `ml/docker-compose.yaml`.
+
+- [ ] CU0 Delivery step 1: copy of the local Chroma directory, count and id hash saved, top 15 of
+      the 52 questions saved. Before anything below writes to the collection.
+- [ ] CU1 `ml/requirements.txt` (`chromadb-client` 1.5.9, `ollama`, `markdownify`, `pytest`, and
+      what the tests need) and the venv brought to it. The client works with the local server.
+- [ ] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
+- [ ] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
+      the chunk size, or for an empty file (was 2.1b).
+- [ ] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
+      are both stored whole.
+- [ ] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
+      continued. Report how many vectors were updated and how many chunks were added (80 expected).
+- [ ] CU6 The messages:
+      a. Copy the 227 markdown files, and the 10 refetched ones once Tom reports them done, from
+         the Windows copy to `data/msgs_md`. A refetched file shorter than the one it replaces
+         is not used; report it.
+      b. The unchanged filter reproduces the present `.txt` of the 227. If not, stop and report.
+      c. Failing test, then the filter pattern for the button text. Make the `.txt` files again.
+      d. For the refetched threads: delete their stored chunks and their lines in
+         `embedstatus.txt`.
+      e. Run the embedder. Report the files and chunks added.
+- [ ] CU7 The plan's "Checks before the deploy". Report 1 to 3 to Architect.
+- [ ] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
+      the tar to "Server cleanup".
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
-Start after Phase 0 is deployed, so the variant collections are built on the upgraded
-Chroma. Check that the `chromadb` client in the `ml` venv works with that server first.
+Start after Phase 4 (D41). 2.1a and 2.1b are done as CU2 and CU3.
 
-- [ ] 2.1a Tests for `chunksplitter` covering current behaviour
-- [ ] 2.1b Failing test, then fix: no prefix-only chunk when the word count is an exact
-      multiple of the chunk size, or for an empty file
 - [ ] 2.1c Add overlap to `chunksplitter` (default 0 reproduces current chunks)
 - [ ] 2.1d `embedder.py` takes chunk size, overlap and collection name as parameters,
       with a progress file per collection
-- [ ] 2.2 Embed variant B on the full corpus and report the time taken before running C, D, E
+- [ ] 2.2 Embed variant B on the full corpus and report the time taken before running A (rebuilt,
+      plan 2.2), C, D, E
 - [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom, one batch of 10 questions at a time (plan 2.3)
 - [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
       each batch (plan 2.4)
@@ -213,4 +240,4 @@ Chroma. Check that the `chromadb` client in the `ml` venv works with that server
 
 ## Phase 4 (not yet designed)
 
-Reference links (plan 4.1) and the image gallery (4.2). S3 is done by "Answer display".
+The image gallery (plan 4.2) first, then reference links (4.1) (D41). S3 is done by "Answer display".

@@ -8,20 +8,21 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-22 (eleventh revision: D39, D40, "Answer display"). Everything through
-the follow-on fixes is deployed (`c311cda`). Next for the Programmer: the answer display (AD1 to
-AD7 in `programmer_todo.md`), which deploys with the model change (`1e72014` in `site_2024`).
-Phase 2 can overlap. Waiting on Architect: nothing, unless AD6 shows that a table reads badly
-in a narrow window.
+Plan revised on 2026-11-22 (twelfth revision: D41 to D44, "Corpus update"). Everything through
+the follow-on fixes is deployed (`c311cda`). Next for the Programmer: the corpus update (CU0 to
+CU8) and the answer display (AD1 to AD7), which deploy together with the model change (`1e72014`
+in `site_2024`). Waiting on Architect: the reports of CU7, and AD6 if a table reads badly in a
+narrow window. Next design: the image gallery (4.2).
 
 ## Open
 
 - [ ] If the Programmer reports from AD6 that a table reads badly in a narrow window: design
       its styling.
-- [ ] Have `ml/requirements.txt` created when Phase 2 adds tests to `embedder/` (the
-      role files tell every session to read it; it does not exist).
-- [ ] Design reference links (plan 4.1) and image gallery (4.2). The links are made by the site
-      from ids, since answers are rendered with raw HTML off (D40).
+- [ ] `ml/requirements.txt` is created by CU1 (the role files tell every session to read it;
+      it does not exist yet). Close this when CU1 is done.
+- [ ] Read the reports of CU7 before the deploy.
+- [ ] Design the image gallery (plan 4.2), then reference links (4.1) (D41). The links are made
+      by the site from ids, since answers are rendered with raw HTML off (D40).
 
 ## Notes from Programmer
 
@@ -35,9 +36,9 @@ R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.
 
 ## Completed
 
-Phase 0, the Phase 1 code change, the follow-on fixes and the eleven plan revisions through
-2026-11-22 are done: planning, question set, site review, the designs of the three deploys and
-of the answer display, decisions D1 to D40, the Programmer's notes through the evaluation, and the review findings
+Phase 0, the Phase 1 code change, the follow-on fixes and the twelve plan revisions through
+2026-11-22 are done: planning, question set, site review, the designs of the three deploys, of
+the answer display and of the corpus update, decisions D1 to D44, the Programmer's notes through the evaluation, and the review findings
 R4 and R5. The evaluation showed no candidate slow at its default reasoning effort, so no
 reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
 file.
@@ -74,6 +75,10 @@ file.
 - A job's `result` holds the model name OpenAI returned, and the results page shows it.
 - The renderer trial of 2026-11-22 was run in a session scratchpad and is not kept; its
   results are in the plan ("Answer display").
+- The Windows copy of the project (`/mnt/c/Users/tom/Documents/projects/ml`) is an older clone
+  with uncommitted edits. On 2026-11-22 its `f_filter.py` and `process_message.py` were the
+  same as in `ml`. Its `data/` is where Tom's fetches arrive.
+- The collection holds 41,427 chunks of 11,161 sources (2026-11-22, before the corpus update).
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is

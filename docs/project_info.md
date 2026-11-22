@@ -58,7 +58,7 @@ Provide expert-level answers to aircraft builders by querying a comprehensive kn
 
 - **ChromaDB**: Vector database for document embeddings (port 8000)
   - Persistent storage at `../site_2024/data/chroma`
-  - Version: 1.1.1
+  - Version: 1.5.9
 
 - **Ollama**: Local LLM and embedding model server (port 11434)
   - Requires NVIDIA GPU support

@@ -34,3 +34,10 @@ Works at current volume (about 850 jobs). Revisit if answers stall or pages slow
   (seen in the Phase 0 rehearsal, 2026-11-21). Ollama: `requested context size too
   large for model` (8192 requested, `nomic-embed-text` takes 2048). gunicorn 27: the
   config file should have a `.py` name.
+
+## ml: corpus (logged 2026-11-22)
+
+- The collection holds 42 chunks with only the prefix. None reached the top 60 of the 52
+  questions, so they are left. A full re-embed removes them.
+- `process_message.py` skips a thread that has a `.txt`, so replies to a known thread are
+  not fetched at the next update unless its `.txt` and `.md` are moved aside first.

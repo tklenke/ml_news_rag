@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (eleventh revision); Phase 0, the Phase 1 code change and the follow-on fixes deployed (`c311cda`); models chosen; the answer display is designed and deploys with them
+**Status:** Revised 2026-11-22 (twelfth revision); Phase 0, the Phase 1 code change and the follow-on fixes deployed (`c311cda`); models chosen; the answer display and the corpus update are designed and deploy with them
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-22 (twelfth revision):** A year of new Google Groups threads is embedded and
+  deployed with the model change and the answer display ("Corpus update", D42). Comparing
+  the collection with the files showed two faults, repaired in the same pass (D43): chunk
+  ids of different sources collide and 80 chunks were never stored; chunks over 512 tokens
+  carry vectors that the current Ollama does not reproduce. Phase 2 therefore rebuilds
+  variant A (2.2). Tom set the order after the deploy: images, reference links, chunk
+  experiment (D41).
 - **2026-11-22 (eleventh revision):** The UI changes that deploy with the model change
   are designed ("Answer display"). They are the display of answers only (D39): tables,
   lists that follow a text line directly, and S3. Answers are rendered by
@@ -136,6 +143,10 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D38 | (2026-11-22) The model change is deployed in one deploy with the UI changes Tom designs with Architect. Answers that hold a table are to be displayed usefully. |
 | D39 | (2026-11-22) The UI changes of that deploy are the display of answers only: tables, lists and S3. Reference links (4.1) and the image gallery (4.2) are not part of it, and the prompts do not change. |
 | D40 | (2026-11-22) Answers are rendered by `markdown-it-py` with raw HTML off. The site's own pages keep Python-Markdown. |
+| D41 | (2026-11-22) Order after the deploy with the model change: image gallery (4.2), then reference links (4.1), then the chunk experiment (Phase 2) if tokens permit. Replaces the order in D4. |
+| D42 | (2026-11-22) The new Google Groups threads are embedded and go out in the same deploy as the model change and the answer display (extends D38 and D39). Only the Google Groups messages are updated; the other sources have not changed materially. |
+| D43 | (2026-11-22) Both faults found in the collection (F1 and F2, "Corpus update") are repaired in the same pass. |
+| D44 | (2026-11-22) Tom fetches again, on Windows, the 10 threads of the new id list that were already in the corpus. |
 
 ## Two repositories
 
@@ -167,11 +178,11 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    (`c311cda`).
 4. **[REVISED - 2026-11-22] Phase 1 evaluation:** harness, baseline, blind rating by
    Tom. Done 2026-11-22 (1.5).
-5. **Phase 2,** overlapping step 4: the embedding runs take hours of machine time
-   while Tom rates.
-6. **[REVISED - 2026-11-22] Answer display with the model change, one deploy (D38,
-   D39):** see "Answer display". It carries S3.
-7. **Phase 4:** reference links and image gallery, not yet designed.
+5. **[REVISED - 2026-11-22] Answer display, corpus update and model change, one deploy
+   (D38, D39, D42):** see "Answer display" and "Corpus update". It carries S3.
+6. **[REVISED - 2026-11-22] Phase 4:** image gallery (4.2), then reference links (4.1)
+   (D41). Not yet designed.
+7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 if tokens permit (D41).
 
 One Programmer session per step. Code review once per deploy.
 
@@ -601,10 +612,12 @@ Independent of Phase 1: it measures retrieval only and calls no LLM.
 - **Defect:** `chunksplitter` appends a chunk that contains only the prefix when a
   document's word count is an exact multiple of the chunk size, and for empty
   files (the `if current_chunk:` test is always true). Fix under TDD.
+  **[REVISED - 2026-11-22]** Done earlier, with the corpus update (CU3).
 - Add overlap to `chunksplitter` (default 0, which reproduces current behaviour).
 - `embedder.py` takes chunk size, overlap and collection name as parameters
   instead of edited constants, with a separate progress file per collection.
-- `embedder/` has no tests today; these changes add them.
+- `embedder/` has no tests today; these changes add them. **[REVISED - 2026-11-22]** The
+  first ones come with the corpus update.
 
 ### 2.2 Variants
 
@@ -618,6 +631,12 @@ Each variant goes in its own Chroma collection. The production collection
 | C | 400 | 0 |
 | D | 250 | 50 |
 | E | 400 | 80 |
+
+**[REVISED - 2026-11-22]** Variant A is rebuilt in a collection of its own from the same
+files, with the same embedder code and Ollama as B to E, and is not the production
+collection. Vectors of chunks over 512 tokens differ between Ollama 0.12.3 and 0.40.17
+(F2), and many 400-word chunks are over 512 tokens, so a comparison across versions would
+measure Ollama and not the chunk size.
 
 Embedding model (`nomic-embed-text`) and prefixes stay fixed.
 
@@ -1029,8 +1048,9 @@ subject, and with real archived answers as the text:
 **Also in this deploy.** `README.md` of `site_2024` names the models now used; it still
 recommends `gpt-4o-mini`, `gpt-4o` and `gpt-5`.
 
-**Deploy.** Code review of everything after `c311cda` except the model commit `1e72014`
-(D37). Merge with Tom's approval, `git pull` on the server, rebuild the flask image,
+**Deploy.** **[REVISED - 2026-11-22]** The corpus update is part of it (D42): its steps
+are in "Corpus update". Code review of everything after `c311cda` except the model commit
+`1e72014` (D37), and of the `ml` commits of the corpus update. Merge with Tom's approval, `git pull` on the server, rebuild the flask image,
 start. Checks:
 
 - A question is answered, and its statistics name `gpt-6-luna`.
@@ -1048,9 +1068,108 @@ those; how they look with the site's stylesheet was not seen.
 
 ---
 
+## Corpus update (D42 to D44)
+
+**[REVISED - 2026-11-22]** New. One deploy with the answer display and the model change.
+
+**What was measured** (Architect, 2026-11-22, read-only, local collection of 41,427 chunks
+against the files):
+
+- 227 threads in `data/msgs` are not embedded: 729 chunks at 250 words. No other file in
+  the four source directories is missing from `embedstatus.txt`.
+- Their markdown is only in the Windows copy
+  (`/mnt/c/Users/tom/Documents/projects/ml/data/msgs_md`, 227 files). The image work reads
+  `data/msgs_md`.
+- 24 of the 227 hold button text of Tom's own posts ("Reply to authorYou cannot reply
+  privately to your own message ..."). No embedded message holds that text.
+- An id is a thread, and `process_message.py` skips an id that has a `.txt`. 10 ids of
+  the new list were already in the corpus, so replies since then were not fetched. Six of
+  the stored copies end well before October 2025; the other four may only be the date
+  boundary.
+- **F1.** A chunk id is the source followed by the chunk number with no separator, so
+  `cp__no2` chunk 10 and `cp__no21` chunk 0 are both `cp__no210`. Chroma's `add` ignores
+  an id it has. 80 chunks of 10 Canard Pushers were never stored (`cp__no2`, `3`, `4`,
+  `7`, `8`, `22`, `42`, `61`, `62`, `72`); `cp__no8` has 10 of its 23. The numbers account
+  for the whole difference between files and collection. Google Groups ids have one
+  length and do not collide.
+- **F2.** Of 300 random chunks embedded again with Ollama 0.40.17, 295 give the stored
+  vector (cosine above 0.9999). The other 5 do not (0.48 to 0.92), and they are exactly
+  the 5 over 512 tokens. Ollama 0.12.3 (the `old-stack` image) reproduces the stored
+  vectors of those 5. Roughly 700 chunks of the collection, estimated from a small
+  sample. Not proved: which version is right. Architect takes the current one, because
+  it is the one production runs and the one every later embedding uses.
+- 42 chunks hold only the prefix. None is in the top 60 of any of the 52 questions. They
+  are left where they are; the chunker no longer makes them (CU3).
+
+**Design.**
+
+- The existing collection is extended, not rebuilt. Phase 2 may embed everything again,
+  and a job record holds chunk ids: a rebuild would change them, and a dig deeper on an
+  old job would lose its chunks.
+- Chunk ids made from now on are `<source>#<number>`. No source contains `#`. Stored ids
+  are not changed. The site uses an id only to fetch the chunk.
+- F1: the missing chunks of the 10 Canard Pushers are added under ids of that form. No
+  stored chunk is deleted.
+- F2: every stored chunk of 513 characters or more (36,471; a shorter one cannot have
+  over 512 tokens) is embedded again, one at a time, and its vector is updated in place
+  under the same id where the cosine with the stored one is below 0.999. Documents and
+  metadata are not touched. About 5 hours unattended at the 0.47 s per chunk measured on
+  CPU; it can be stopped and continued.
+- A refetched thread: its stored chunks (`source` equal to its id) are deleted and the
+  file is embedded again. A dig deeper on an old job that used one of these 10 threads
+  no longer finds those chunks; the site leaves out ids it does not find.
+- The filter gains a pattern for the button text. The text files of the new and
+  refetched threads are made again from the markdown, in WSL, without Chrome. First, the
+  unchanged filter must reproduce the present `.txt` of the 227 word for word; if not, stop and
+  report.
+- A refetched markdown file that is shorter than the copy it replaces is not used.
+- The embedder and the filter run in the `ml` venv with `chromadb-client` 1.5.9, against
+  the Chroma and Ollama containers of `site_2024`. `ml/ollama.dockerfile` does not pull
+  `nomic-embed-text`. `ml/requirements.txt` is created.
+- Tests use a real Chroma collection with a name of its own, removed afterwards.
+
+**Checks before the deploy** (local):
+
+1. For every source, the stored chunks hold all the words of its file in order, in chunks
+   of 250. An old source may have one prefix-only chunk more.
+2. 100 random stored chunks, 20 of them over 512 tokens, embedded again: every cosine is
+   above 0.999.
+3. Top 15 for the 52 questions, before and after: how many questions changed, how many
+   chunks entered, and from which kind of source. Reported to Architect; no pass mark.
+4. A question about one of the new threads returns it, on the local site.
+
+**Delivery.** The local Chroma directory is copied to the server, so production gets
+exactly what was checked. Nothing is embedded on the server.
+
+1. Before any change: stop the local Chroma, copy `site_2024/data/chroma` to
+   `site_2024/data/chroma_before_corpus_update`, start it. Save the count and a hash of
+   the sorted ids.
+2. On the server: the same count and hash, read through the flask container. They must be
+   equal to the saved ones. If not, stop and report to Architect: the directory would
+   then replace something other than what was changed.
+3. After the checks: stop the local Chroma, tar `data/chroma`, take its SHA-256, start it.
+   Tom uploads the tar to the server's home directory (36 GB was free before Phase 0);
+   the SHA-256 must match.
+4. With the rest of the deploy, while flask and Chroma are stopped: move the server's
+   `data/chroma` to `~/chroma_before_corpus_update`, outside the checkout, and unpack the
+   tar in its place.
+5. Checks on the server: the count and hash of the ids equal the local ones after the
+   change; the three rehearsal questions give the same top 10 as locally; a question
+   about a new thread lists that thread as a source.
+
+Rollback of the data alone: stop flask and Chroma, move the two directories back, start.
+It does not depend on the rollback of the code ("Answer display"); either can be done
+alone. `chroma_before_corpus_update` and the tar go on the "Server cleanup" list.
+
+**Accepted.** Model, display and data change in one deploy. If answers get worse, the
+deploy alone does not show which caused it; rolling back one of them does.
+
+---
+
 ## Phase 4: Website refresh: reference links and images
 
 **[REVISED - 2026-11-21]** Per D8 these two items are the website refresh.
+**[REVISED - 2026-11-22]** 4.2 first, then 4.1 (D41).
 
 ### 4.1 Reference links inside answers (D5)
 
@@ -1084,5 +1203,6 @@ this is a lookup. Design after Phase 1.
 | Chroma upgrade damages or cannot read the collection | Rehearsed on a local copy with before and after checks (0.6, passed); server data tarred before the deploy (0.8). A re-embed takes hours if both fail. |
 | One deploy carries many changes | The full stack runs locally first; without Docker locally, Chroma is split out (Phase 0 assumptions). |
 | Tom's rating and labelling time | 30 questions, not 50; pooled candidates capped at top 10 per variant. |
+| The server's collection is not the one changed locally | **[REVISED - 2026-11-22]** Count and id hash compared before the copy; the server's directory is kept ("Corpus update"). |
 | Chunk experiment shows no clear winner | That is a valid result; the decision rule says leave it alone. |
 | `site_2024` application code has no tests | Phase 1.1 introduces the first ones around prompt construction. Phase 0 was verified by the rehearsal checks instead. |
