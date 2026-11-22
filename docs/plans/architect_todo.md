@@ -25,7 +25,37 @@ directory back.
 
 ## Notes from Programmer
 
-None open. Earlier notes are answered in the plan; they are in the git history of this file.
+Earlier notes are answered in the plan; they are in the git history of this file.
+
+**NOTE FROM PROGRAMMER (2026-11-22): D32b, certbot with a changed list of names.** The
+documentation only says the default is to ask. From the source of certbot 5.10.0 (the version
+pip gives; the server's `certbot/certbot:latest` may be another):
+
+- With a certificate whose names are a subset of the new list, `certonly` asks "Do you want to
+  expand and replace this existing certificate", in the dry run as well. Cancel ends it with
+  an error, so the script stops. Expand adds the next numbered files to the archive directory
+  of that certificate. No new directory is made.
+- Among several such certificates of equal size it takes the first it reads. Not determined:
+  the order in which it reads them. If that is not the highest `-NNNN`, the script would
+  install an older certificate, as the plan feared; the check in D32c would stop it.
+- A certificate whose `live/` files are not all symlinks is skipped as broken. The script
+  replaces them in `live/m24tom.com`, so that one is skipped, which explains the `-NNNN`
+  directories. With no usable one, a new `-NNNN` certificate is made under the first free name
+  in `renewal/`; it fails if that name's archive or live directory already holds files.
+- `--cert-name` of a usable certificate names the one that is updated, and asks to confirm the
+  changed names. That would remove the guess, if the choice of directory is redesigned.
+
+Whether a redesign is needed depends on Tom's output of `certbot certificates`.
+
+**NOTE FROM PROGRAMMER (2026-11-22): S12, two gaps left as they are.** Read from the code, not
+tried.
+
+- `update_process_info` prints an `IOError` and returns, so a result that cannot be saved raises
+  nothing: the job stays in `start`.
+- A job file is empty for a moment between its creation and the lock. A scan that reads it then
+  treats it as unreadable and, as designed, does not look at it again: that worker would
+  never answer it. Before S12 the same read ended the thread. The scan reads only jobs it has
+  not seen, so the chance is very small.
 
 ## Completed
 
