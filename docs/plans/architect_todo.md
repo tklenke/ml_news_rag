@@ -29,23 +29,9 @@ None outstanding.
 
 ## Completed
 
-- [x] Plan, question set (52 in `refresh_questions.csv`), site review (S1 to S9) and
-      task breakdown (2026-11-21).
-- [x] Phase 0 designed: dependency refresh, DokuWiki removal, config delivery, published
-      ports; Chroma release notes 1.2.2 to 1.5.9 scanned (2026-11-21).
-- [x] Rehearsal report reviewed and the Phase 0 deploy approved (2026-11-21).
-- [x] Untracked server files decided (plan 0.2); deploy steps rewritten (plan 0.8).
-- [x] Programmer's findings decided: draft context fixed to 15 (D20), dead `[PROMPTS]`
-      settings removed (1.1), unused dependencies dropped (0.4), revise-context defect
-      confirmed (1.1).
-- [x] Key handling reviewed at Tom's request; design S10 (D21).
-- [x] Tom's decisions D17 to D21 recorded in the plan and `required_from_tom.md`.
-- [x] Programmer's five notes after the Phase 0 deploy decided and folded into the plan
-      (fourth revision, 2026-11-21; default reasoning effort approved by Tom, D24): the restart exception in `sudo_renew_cert.sh`
-      confirmed (0.2); smoke-call report reviewed, models evaluated at their default
-      reasoning effort with reasoning tokens recorded (0.7, 1.3, 1.4); deploy facts and
-      memory measurements recorded (0.6, 0.8, D22, D23,
-      `docs/notes/refresh_phase0_memory.md`); the empty job file read designed as S11.
+Phase 0 and the four plan revisions of 2026-11-21 are done: planning, question set, site
+review, Phase 0 design and deploy approval, decisions D1 to D24, and the Programmer's notes
+through the deploy. The item list is in the git history of this file.
 
 ## Facts worth keeping
 
@@ -76,6 +62,4 @@ None outstanding.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is
   `site_2024/data/chroma_backup_1.1.1`; rehearsal baseline and probe script are in
   `site_2024/data/rehearsal/`. Both old images are kept locally under the tag `old-stack`.
-- The copy of `server/nginx_all_apps.conf` in the reference file lost trailing spaces in
-  pasting. The committed file is the exact one.
 - The live certificate expires 2027-02-20.
