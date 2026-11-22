@@ -158,20 +158,26 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       Ollama; paid), from `site_2024`:
 
           PYTHONPATH=fwww .venv/bin/python evaluation/answer_models.py batch1 --models gpt-4o-mini
-- [ ] 1.4 Capture the baseline with the current first-answer model, `gpt-4o-mini` (it shuts
-      down 2027-01-14). Ask Tom before the first paid run.
+- [x] 1.4 Capture the baseline with the current first-answer model, `gpt-4o-mini` (it shuts
+      down 2027-01-14). Done 2026-11-22 with Tom's approval: all 30 answered, $0.026, median
+      5.3 s, no reasoning tokens. The answers are in `docs/archive/gpt4o_mini_baseline_answers`
+      (exporter: `72ca581` in `site_2024`, not pushed), without the text sent to the model,
+      which can hold email addresses; that text is only in `evaluation/output/`. The files name
+      the model: Tom does not open them before rating. The candidates have not been run; ask
+      Tom before that.
 - [~] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
       of 10 questions at a time, with a tally after each batch (plan 1.5). The
       tally shows median latency, median reasoning tokens and cost per answer per model.
       The review page is built (`f008b10`, not pushed) in place of a review file:
       `evaluation/review_answers.py`, on this machine only. It saves ratings in
-      `ratings.json` and the hidden order in `key.json`. Tom is trying it on five `gpt-4o-mini`
-      answers (`evaluation/output/trial`, `chunk_only` questions Q12, Q17, Q24, Q50, Q52, so
-      that no question of the 30 is seen with its model known; paid, $0.004). The tally is
-      still to be built. To serve the trial, from `site_2024`:
+      `ratings.json` and the hidden order in `key.json`. Tom found the
+      design good (2026-11-22) and tried it on five `chunk_only` answers, kept in
+      `evaluation/output/trial`: random clicks, not scores, but every one was saved. The tally
+      is still to be built. To serve batch 1, from `site_2024`, once all its models are
+      answered (the key refuses models added later):
 
-          PYTHONPATH=fwww .venv/bin/python evaluation/review_answers.py chunk_only \
-              --ids Q12 Q17 Q24 Q50 Q52 --output evaluation/output/trial
+          PYTHONPATH=fwww .venv/bin/python evaluation/review_answers.py batch1
+
 - [ ] 1.6 After Tom's decision: update the tracked `site.ini`, `LLM_DRAFT` to the model chosen
       and `LLM_REVISE` to the one above it
 
