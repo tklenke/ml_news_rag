@@ -140,20 +140,20 @@ Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waiv
       should be `fullchain4.pem` in `archive/m24tom.com-0010`.
 - [x] D32c `sudo_renew_cert.sh` asks for both names and checks the certificate it is about to
       install (both names, not older than the one in place) before replacing anything.
-- [~] D33 A failed OpenAI call ends the job in `error`; a cause Tom has to fix is saved
+- [x] D33 A failed OpenAI call ends the job in `error`; a cause Tom has to fix is saved
       as `error_reason` and shown to the visitor (plan "OpenAI failures and the reason
       shown"; review finding R4). First confirm the `insufficient_quota` code from OpenAI's
       documentation. These commits join the commit range of the code review of this deploy.
-      Done except the `openai_budget` row (`6ea9ece`): OpenAI documents other codes than
-      `insufficient_quota` for a used-up budget. Reported to Architect (note of 2026-11-22 in
-      `architect_todo.md`); not started until decided. Until then a used-up budget ends the
-      job in `error` with the general text.
+      Done in `6ea9ece` and `d95f42e`. OpenAI documents other codes than `insufficient_quota`
+      for a used-up budget; Tom approved the rule now in the code (2026-11-22). The plan's table
+      still gives the old rule (note of 2026-11-22 in `architect_todo.md`). Not seen: a real
+      response of a used-up budget.
 - [ ] Deploy, run the renewal script once, and make the checks in the plan. Add the rollback
       left on the server to "Server cleanup".
 
 Still useful:
 
-- Commits `9c1d14f` to `6ea9ece` on `wip/annual-refresh` of `site_2024`, not pushed.
+- Commits `9c1d14f` to `c311cda` on `wip/annual-refresh` of `site_2024`, not pushed.
 - Found while doing S12 and fixed, each with a test: setting the status of an unreadable
   job file replaced its content; an unreadable job file made the jobs page answer 500;
   feedback on a missing or unreadable job left a file holding only the rating.

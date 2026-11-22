@@ -63,12 +63,14 @@ Not read: the spend-limits guide and the help center article. All of these are H
 - `insufficient_quota` is not given as a `code`. The page says to look at `error.code` for
   billing errors and that the broader `error.type` "can still be" `insufficient_quota`.
 
-With the rule in the plan a used-up budget would show the general text. Suggested: a
-`RateLimitError` whose `code` is one of the four, or whose `code` or `type` is
-`insufficient_quota`. No response of a used-up budget was seen, and the account was not used up
-to get one. Everything else of D33 is built (`6ea9ece` in `site_2024`).
+With the rule in the plan a used-up budget would show the general text. Tom approved another
+rule (2026-11-22): a `RateLimitError` whose `code` is one of the four, or whose `code` or `type`
+is `insufficient_quota`. It is built (`d95f42e` in `site_2024`), with the rest of D33
+(`6ea9ece`). **For Architect: put the rule in the plan's D33 table, which still has the old one,
+and drop its "Not verified" point.** No response of a used-up budget was seen, and the account
+was not used up to get one.
 
-Two smaller points for the same decision. The page documents no 404 for a model that is gone, so
+Two smaller points, not decided and nothing built for them. The page documents no 404 for a model that is gone, so
 `openai_model` is as the plan says and unconfirmed. And in 0.7 a model the project had no access
 to answered 403, which D33 shows as "OpenAI key rejected"; the log has OpenAI's message.
 
