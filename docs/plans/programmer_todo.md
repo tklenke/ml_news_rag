@@ -119,10 +119,10 @@ page tests use Flask's test client.
 
 Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waives it.
 
-- [ ] 1.1k A follow-up's additional content leaves out chunks already in its previous
+- [x] 1.1k A follow-up's additional content leaves out chunks already in its previous
       content; cut first, then remove, no filling (plan 1.1 item 8, the paragraph on D29).
       The prompt reads sensibly with no additional content.
-- [ ] S12 An exception while processing a job marks it `error` and the thread carries on;
+- [~] S12 An exception while processing a job marks it `error` and the thread carries on;
       the status response and the polling page tell the visitor and stop polling (plan
       "S12 design").
 - [ ] D31 `restart: unless-stopped` on the four services (plan "Restart after a reboot").
