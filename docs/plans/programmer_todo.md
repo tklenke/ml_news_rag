@@ -38,12 +38,27 @@ Docker works from WSL and Tom has provided the server files (2026-11-21).
 - [x] 0.5a Chroma server image to the plan's target version in `site_2024` **and** in
       `ml/docker-compose.yaml` (same data directory).
 - [x] 0.5b Replace `chromadb` with `chromadb-client` at the same version.
-- [~] 0.6 Local rehearsal per plan 0.6. Copy `data/chroma` first. Report the results to
-      Architect before any deploy. All passed except a real OpenAI answer, which needs a
-      key from Tom. Report in `architect_todo.md`.
-- [ ] 0.7 Smoke call to each candidate model and both current models on the upgraded
+- [x] 0.6 Local rehearsal per plan 0.6. Copy `data/chroma` first. Report the results to
+      Architect before any deploy. All passed. Report in `architect_todo.md`; Architect's
+      review is still needed before the deploy.
+- [~] 0.7 Smoke call to each candidate model and both current models on the upgraded
       OpenAI SDK; fix the call sites if the SDK changed them. Report to Architect.
-- [ ] 0.8 Deploy with Tom per plan 0.8.
+      Current models work with no call-site change. All four candidates return 403 for this
+      OpenAI project; rerun when Tom has enabled them.
+- [ ] 0.8 Deploy with Tom per plan 0.8. Tom (2026-11-21) wants the wikis deleted, not
+      tarred, and `test_08_fixture` removed. Run in `~/site_2024`, after the deploy checks
+      pass, looking at each directory before removing it:
+
+          ls -la data/dokucozy data/dokuN657CZ fwww/static/test_08_fixture
+          sudo rm -r data/dokucozy
+          sudo rm -r data/dokuN657CZ
+          sudo rm -r fwww/static/test_08_fixture
+          docker ps -a --filter name=php
+          docker image rm php:7-fpm
+
+      Then `/dokucozy/`, `/dokuN657CZ/` and `/static/test_08_fixture/index.html` return 404,
+      and no `php1` or `php2` container is listed (the stack is stopped with the old compose
+      file, which removes them).
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 

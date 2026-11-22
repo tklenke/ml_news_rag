@@ -41,8 +41,7 @@ is not edited; these need Architect decisions.
   must any other untracked server file the repo starts tracking.
 - **Plan 0.2, untracked files.** `old.nginx_all_apps.conf` is the production config
   without `/cgimages/`; suggest not tracking. `test_08_fixture/` is 41 generated
-  wiring-diagram files (SVG, BOM, HTML), unrelated to CozyRAG; suggest not tracking, and
-  asking Tom whether it should be publicly served. `exclude_from_tar.txt` has a typo:
+  wiring-diagram files (SVG, BOM, HTML), unrelated to CozyRAG; Tom wants it removed. `exclude_from_tar.txt` has a typo:
   `dokuN667CZ` should be `dokuN657CZ`.
 - **`sudo_renew_cert.sh` fails at step 5.** It copies `fullchain.pem` and `privkey.pem` from
   `archive/m24tom.com-NNNN/`, where every file is numbered (`fullchain1.pem`,
@@ -66,17 +65,27 @@ committed on `wip/annual-refresh` in `site_2024`; nothing is deployed or pushed.
   new question and revise complete through the app on 3.13; `/dokucozy/` 404; ports on
   `127.0.0.1` only; `pip check` clean; `nginx -t` passes on 1.30.7 with a throwaway
   certificate; no errors in the logs.
-- **Not yet tested:** a real OpenAI answer on SDK 3.57.0. The app ran with `USE_GPT = False`.
+- **Real OpenAI answer passed** on SDK 3.57.0 with no call-site change: new question on
+  `gpt-4o-mini-2024-07-18`, revise on `gpt-4.1-2025-04-14`.
+- **Smoke calls (plan 0.7):** both current models answer. `gpt-6-luna`, `gpt-6.1-terra`,
+  `gpt-6.2-sol` and `gpt-6.2-astra` return 403, no access for this OpenAI project, so
+  whether they accept the same call is still unknown.
+- **Memory:** new stack 882 MiB in use against 806 MiB for the old one locally (Ollama
+  +92, Flask -13, Chroma -3). The server has 1.9 GiB, no swap, 789 MiB available with the
+  old stack running, so this fits.
 - **Log warnings, not errors:** ollama 0.40.17 `requested context size too large for model`
-  (8192 against 2048; not compared with the old image); gunicorn 27 wants a `.py` config name.
+  (8192 against 2048); gunicorn 27 wants a `.py` config name. The old stack logs both too.
 - **Backup:** `site_2024/data/chroma_backup_1.1.1`, checksums verified. The working copy has
   been opened by 1.5.9. Baseline results and probe script: `site_2024/data/rehearsal/`.
-- **Old stack:** Programmer overwrote the local old `site_2024-ollama-rag` image after the
-  baseline was recorded; it can be rebuilt from `ollama/ollama:0.12.3`. The old Flask image
-  is kept as `site_2024-flask:old-stack`. The server's old images should be tagged before
+- **Old stack:** both old images are kept locally under the tag `old-stack`. Programmer
+  overwrote the original Ollama one and rebuilt it from `ollama/ollama:0.12.3`; the rebuilt
+  old stack reproduces the baseline exactly. The server's old images should be tagged before
   the deploy rebuild so plan 0.8 step 6 does not need a rebuild.
 - **Server disk:** the new Ollama image is larger than the old one locally (9.05 GB against
-  5.45 GB). Check free disk on the server before deploying.
+  5.45 GB). The server has 36 GB free, so this fits.
+- **Tom's decisions (2026-11-21) to fold into the plan:** the wikis are deleted, not tarred
+  (0.3, 0.8 and the assumptions list); `test_08_fixture` is removed from the server (0.2).
+  Server steps are in `programmer_todo.md` 0.8.
 - **`Flask-Markdown` and `python-dotenv` are never imported.** Kept because plan 0.4 lists
   them; suggest dropping both.
 - **Plan 1.1 suspicion confirmed on real data:** `collection.get()` returns a flat list of

@@ -24,8 +24,9 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
       (plan Phase 0) (2026-11-21)
 - [x] The January 14 date is not a constraint; order work for least repeated effort (2026-11-21)
 - [x] Archive the finished image database sections of the todo files (2026-11-21)
-- [ ] Confirm: wiki data is tarred and kept on the server, old wiki URLs return 404 with
-      no redirects (plan Phase 0, assumed)
+- [x] Wiki data is not kept: everything needed has been pulled, so both wikis are deleted from
+      the server (2026-11-21). Replaces the plan's tar step; steps in `programmer_todo.md` 0.8
+- [x] `fwww/static/test_08_fixture/` was a test upload; remove it from the server (2026-11-21)
 - [ ] Confirm: changes are delivered by `git pull` on the server (plan Phase 0, assumed)
 - [x] DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed in this refresh; they
       are not used (2026-11-21)
@@ -42,7 +43,8 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 **Later:**
 
-- [ ] Provide an OpenAI key for a local `site.ini` (rehearsal 0.6, smoke calls 0.7).
+- [x] Provide an OpenAI key for a local `site.ini` (rehearsal 0.6, smoke calls 0.7).
+      Tom approved using the key already there (2026-11-21)
 - [ ] Run the deploy commands on the server with the Programmer (plan 0.8).
 - [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
 - [x] Give the production nginx config to the Programmer at the start of their first session (2026-11-21)
@@ -51,7 +53,8 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 - [~] Confirm OpenAI account has access to `gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol`.
-      Tom (2026-11-21): probably not yet; find out with the smoke calls in plan 0.7,
+      Smoke calls (2026-11-21): all three, and `gpt-6.2-astra`, return 403 for the
+      project `site.ini` uses. Tom (2026-11-21): probably not yet; find out with the smoke calls in plan 0.7,
       and Tom changes account access as needed.
 - [x] Set a monthly spend cap on the OpenAI account (S2). Tom confirmed it is on (2026-11-21)
 - [x] Confirm the `OPENAI_KEY` value in the tracked `.env_flask` was never a real key (S9).
