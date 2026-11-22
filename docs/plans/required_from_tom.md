@@ -35,6 +35,8 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [x] The stale `__main__` block in `llm_functions.py` is removed (plan 1.1) (2026-11-21)
 - [x] Code review of the Phase 0 branch is waived (2026-11-21)
 - [x] Two gunicorn workers, and a 2 GB swap file on the server (2026-11-21)
+- [x] The model evaluation runs every model at its default reasoning effort (plan 1.3)
+      (2026-11-21)
 - [x] DokuWiki sites (`/dokucozy/`, `/dokuN657CZ/`) are removed in this refresh; they
       are not used (2026-11-21)
 

@@ -41,7 +41,7 @@ None outstanding.
 - [x] Key handling reviewed at Tom's request; design S10 (D21).
 - [x] Tom's decisions D17 to D21 recorded in the plan and `required_from_tom.md`.
 - [x] Programmer's five notes after the Phase 0 deploy decided and folded into the plan
-      (fourth revision, 2026-11-21): the restart exception in `sudo_renew_cert.sh`
+      (fourth revision, 2026-11-21; default reasoning effort approved by Tom, D24): the restart exception in `sudo_renew_cert.sh`
       confirmed (0.2); smoke-call report reviewed, models evaluated at their default
       reasoning effort with reasoning tokens recorded (0.7, 1.3, 1.4); deploy facts and
       memory measurements recorded (0.6, 0.8, D22, D23,

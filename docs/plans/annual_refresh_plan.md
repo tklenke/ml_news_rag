@@ -79,6 +79,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D21 | Keys move out of `site.ini` into a git-ignored `site_local.ini` (S10). One OpenAI key serves the server and local runs. |
 | D22 | Code review of the Phase 0 branch is waived. |
 | D23 | gunicorn runs 2 workers, and the server has a 2 GB swap file. |
+| D24 | The model evaluation runs every model at its default reasoning effort; no reasoning setting is sent (1.3). |
 
 ## Two repositories
 
@@ -382,7 +383,7 @@ completion tokens on hidden reasoning and `gpt-6.1-terra` 34 of 72; `gpt-6.2-sol
 4,500-token question is unknown. Reasoning tokens are billed as output and add to the
 response time.
 
-Decision (Architect): the evaluation calls every model exactly as production does,
+Decision (Architect, approved by Tom, D24): the evaluation calls every model exactly as production does,
 with no reasoning setting, so each runs at its own default. That measures what the
 `site.ini` switch (1.6) would deliver, and it needs no code beyond the harness. A
 reasoning setting in `site.ini` is built only if the results call for it: a candidate
