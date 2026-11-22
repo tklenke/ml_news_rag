@@ -27,14 +27,13 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
 - [x] 0.2b `exclude_from_tar.txt`: remove the `dokucozy` and `dokuN667CZ` lines, add
       `fwww/site.ini`. Checked with a tar listing: `site.ini` was in the tar before the
       edit and is not after it; `site.ini.template` still is.
-- [ ] 0.2c `sudo_renew_cert.sh`: ask Tom for the script text again (it is not saved in
-      either repo), then fix it to the behaviour in plan 0.2 and commit it. Test it
-      against a scratch directory laid out like `archive/m24tom.com-NNNN/` with files
-      numbered 1 and 2: the copies in place afterwards are the number 2 files; with the
-      archive files missing, the script stops with an error and the existing
-      `fullchain.pem` and `privkey.pem` are still there. If the script cannot be run
-      against a scratch directory as written, say how you propose to test it before
-      changing it.
+- [x] 0.2c `sudo_renew_cert.sh` fixed to the behaviour in plan 0.2 and tracked.
+      `tests/test_sudo_renew_cert.py` (15 tests) runs it in a scratch directory laid out
+      like the server; docker is a stand-in command, the file operations are real. 11
+      of the 15 failed on the script as it is on the server. Two things beyond plan 0.2:
+      it also used a relative archive path after changing directory, so the copy failed
+      whatever the file names; and a failed `docker compose restart` does not stop the
+      script, because stopping there would skip the question that offers the rollback.
 - [x] 0.4c Remove `Flask-Markdown` and `python-dotenv` from `requirements_direct.txt` and
       freeze `requirements.txt` again. Frozen in a clean Python 3.13 venv: the only change is
       that `Flask-Markdown` is gone. `python-dotenv` stays in `requirements.txt` because
@@ -68,10 +67,14 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       and no `php1` or `php2` container is listed.
 - [ ] 0.9 After the deploy, with Tom: run the fixed `sudo_renew_cert.sh` on the server
       once and confirm the site still serves HTTPS. The certificate expires 2027-01-26.
+      Compare the expiry date before and after, since the site also loads with the old
+      certificate: `echo | openssl s_client -connect m24tom.com:443 -servername m24tom.com
+      2>/dev/null | openssl x509 -noout -enddate`
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
-- [ ] 1.0 Set up pytest in `site_2024` (it has no tests today)
+- [ ] 1.0 Set up pytest in `site_2024` (its only tests are those of 0.2c, which need
+      nothing but pytest)
 - [ ] 1.1a Separate prompt construction from `process_question` into a function that takes
       job data and document lists and returns the prompt string. Behaviour unchanged.
 - [ ] 1.1b Write a failing test for the confirmed defect: revise and follow-up prompts must

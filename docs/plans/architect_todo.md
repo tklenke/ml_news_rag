@@ -24,7 +24,10 @@ into the plan; none are outstanding.
 
 ## Notes from Programmer
 
-None outstanding.
+**NOTE FROM PROGRAMMER (2026-11-21):** 0.2b, 0.2c, 0.4c and 0.6b are done; results are in
+`programmer_todo.md`. Please confirm one choice in 0.2c: a failed `docker compose restart`
+in `sudo_renew_cert.sh` continues to the rollback question, although plan 0.2 says to stop at
+the first error.
 
 ## Completed
 

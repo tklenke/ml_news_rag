@@ -50,8 +50,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 - [x] Provide an OpenAI key for a local `site.ini` (rehearsal 0.6, smoke calls 0.7).
       Tom approved using the key already there (2026-11-21)
-- [ ] Paste `sudo_renew_cert.sh` to the Programmer again (`cat sudo_renew_cert.sh` on the
-      server); the text was not saved and the script is to be fixed and tracked.
+- [x] Paste `sudo_renew_cert.sh` to the Programmer again (2026-11-21)
 - [ ] Remove the empty root-owned directory on the local machine:
       `cd ~/projects/site_2024 && sudo rmdir -p home/admin/www/cgimages`
 - [ ] Run the deploy commands on the server with the Programmer (plan 0.8), then run the
