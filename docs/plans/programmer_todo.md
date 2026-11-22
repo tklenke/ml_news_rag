@@ -70,9 +70,8 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       from the local Chroma service, not a hand-built dict.
 - [ ] 1.1c Fix the prior-context join
 - [ ] 1.1d Reword `revise_prompt` and `followup_prompt` so they name no model
-- [ ] 1.1e Ask Tom before fixing or removing the stale `__main__` block in
-      `llm_functions.py` (it passes a string to `process_question` and calls
-      `set_docs_params` with three arguments)
+- [ ] 1.1e Remove the stale `__main__` block in `llm_functions.py`. Tom approved the
+      removal (2026-11-21).
 - [ ] 1.1f Failing test, then fix: `get_num_draft_docs` returns a count, not an index
       (plan 1.1 item 4). 60 matches inside the cutoff with a maximum of 15 gives 15; one
       match fewer than the maximum inside the cutoff gives that number; none inside the
@@ -105,8 +104,7 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       the values from the local `site.ini` by naming each setting; do not print the file.
       Add `site_local.ini` to `.gitignore` and to `exclude_from_tar.txt`; add
       `site_local.ini.template`; remove `site.ini.template`, `.env_flask` and the
-      commented `env_file` lines in `docker-compose.yaml`. The `__main__` block in
-      `llm_functions.py` also reads `site.ini` (see 1.1e).
+      commented `env_file` lines in `docker-compose.yaml`.
 - [ ] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
       create the local `site_local.ini` with Tom.
 - [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements

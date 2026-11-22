@@ -301,7 +301,8 @@ These change what the "dig deeper" tier actually sees, so they come first.
 2. **Prompts name the model.** `revise_prompt` and `followup_prompt` say "the draft
    response from GPT-4o-mini". Reword so no model is named.
 3. **Stale `__main__` block** in `llm_functions.py` passes a string to
-   `process_question`, which expects a dict. Fix or remove with Tom's approval.
+   `process_question`, which expects a dict. **[REVISED - 2026-11-21]** It is removed;
+   Tom approved.
 4. **[REVISED - 2026-11-21] The first answer gets 14 chunks, not 15 (D20).**
    `get_num_draft_docs` returns the index of the last chunk inside the distance
    cutoff and the caller uses it as a count, so that chunk is dropped. The function
