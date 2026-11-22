@@ -198,11 +198,11 @@ data, since the tests of `site_2024` do not read `ml/`.
 Plan: "Corpus update (D42 to D44)". Read it whole. Only the containers of `site_2024` are used;
 do not start those of `ml/docker-compose.yaml`.
 
-- [ ] CU0 Delivery step 1: copy of the local Chroma directory, count and id hash saved, top 15 of
+- [~] CU0 Delivery step 1: copy of the local Chroma directory, count and id hash saved, top 15 of
       the 52 questions saved. Before anything below writes to the collection.
-- [ ] CU1 `ml/requirements.txt` (`chromadb-client` 1.5.9, `ollama`, `markdownify`, `pytest`, and
+- [x] CU1 `ml/requirements.txt` (`chromadb-client` 1.5.9, `ollama`, `markdownify`, `pytest`, and
       what the tests need) and the venv brought to it. The client works with the local server.
-- [ ] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
+- [~] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
 - [ ] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
       the chunk size, or for an empty file (was 2.1b).
 - [ ] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`

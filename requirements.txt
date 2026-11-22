@@ -1,0 +1,16 @@
+# Embedding and vector database
+chromadb-client==1.5.9
+ollama
+numpy
+
+# Message filtering
+markdownify
+
+# Image database
+Pillow>=10.0.0
+requests>=2.31.0
+selenium>=4.0.0
+tqdm>=4.65.0
+
+# Tests
+pytest>=8.4.2
