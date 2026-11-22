@@ -1,11 +1,17 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-21 (sixth revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), evaluation next
+**Status:** Revised 2026-11-22 (seventh revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), a small follow-on deploy and the evaluation next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-22 (seventh revision):** Three decisions by Tom after the Phase 1 deploy,
+  shipped together as one small deploy (see "Order of work", step 3). A follow-up no
+  longer sends a chunk twice (D29; 1.1 item 8): the plan had not said, and the paid run
+  sent 6 and 5 of 15 chunks in both places. An exception in the job thread no longer
+  silences the worker (D30; S12): the Programmer found that any exception ends the
+  thread until a restart. The containers start again after a server reboot (D31).
 - **2026-11-21 (sixth revision):** Tom decided what revise and follow-up receive (D26,
   D27; 1.1 items 6 to 8). Correcting the garbled prior context (1.1 item 1) showed what
   the code had always meant to send: up to 60 chunks to a revise, and those plus 60 new
@@ -95,6 +101,9 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D26 | A revise is given every chunk retrieved for the question (provided and related, up to `MAX_DOCUMENTS`), and the job record keeps every chunk id, not one per source (1.1). |
 | D27 | A follow-up is given only the chunks the previous answer was given, plus new chunks cut by the same rule as a first answer (1.1). |
 | D28 | Code review of the Phase 1 deploy (`3278e9e`) is waived. |
+| D29 | (2026-11-22) A follow-up's additional content leaves out chunks already in its previous content. The gap is not filled with further chunks (1.1 item 8). |
+| D30 | (2026-11-22) An exception in the job thread is fixed now, not left with S8: the job is marked failed and the thread carries on (S12). |
+| D31 | (2026-11-22) The site containers start again after a server reboot (`restart: unless-stopped`). |
 
 ## Two repositories
 
@@ -117,11 +126,15 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    are then written once, on the stack production runs.
 2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6, S10, S11.
    They touch the same files (`site_app.py`, `llm_functions.py`, `site_functions.py`,
-   `open_with_lock.py`).
-3. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
-4. **Phase 2,** overlapping step 3: the embedding runs take hours of machine time
+   `open_with_lock.py`). Deployed 2026-11-21 (`3278e9e`).
+3. **[REVISED - 2026-11-22] Follow-on fixes, one small deploy:** D29 (1.1 item 8), S12 and
+   the restart policy (D31). Before the harness, so the harness is written against the
+   prompt code production then runs. None of the three changes a first answer or a
+   revise, which is all the evaluation measures.
+4. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
+5. **Phase 2,** overlapping step 4: the embedding runs take hours of machine time
    while Tom rates.
-5. **Phase 4** with S3, designed once the model choice is known.
+6. **Phase 4** with S3, designed once the model choice is known.
 
 One Programmer session per step. Code review once per deploy.
 
@@ -388,6 +401,14 @@ These change what the "dig deeper" tier actually sees, so they come first.
    to 60 prior chunks plus 60 new ones and saved all of them as the next one's prior
    context.
 
+   **[REVISED - 2026-11-22] No chunk is sent twice (D29).** A chunk of the new retrieval
+   that is already in the previous content is left out of the additional content. The
+   cut by `get_num_draft_docs` is made first and the duplicates are removed afterwards;
+   the gap is not filled from further down the ranking. The additional content can
+   therefore hold fewer than `MIN_DOCUMENTS` chunks, or none: the prompt must read
+   sensibly when it is empty. The record is unchanged by this, since it already listed
+   each id once. As deployed at `3278e9e` the duplicates were sent in both places.
+
 Size of a revise prompt with items 1, 6 and 7 (Programmer's measurement on 16 local
 jobs, before item 6 adds the dropped chunks): 33,000 to 68,000 characters where 60
 chunks were retrieved, against about 5,000 with the defect. The evaluation (1.4)
@@ -604,6 +625,7 @@ lookups cannot escape their directories.
 | S8 | Low | Each gunicorn worker (4 at the review, 2 since D23) starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
 | S10 | Low | **[REVISED - 2026-11-21]** Keys share a file with the settings. `site.ini` holds the OpenAI and session keys beside the model names and retrieval limits, so it cannot be tracked: production settings are not in the repo, the template has drifted from what the code reads, and every tool or person reading a setting also reads the keys. The README's project tar includes `site.ini`. | `site.ini`, `site_app.py`, `exclude_from_tar.txt` | See "S10 design" below (D21). |
 | S11 | Medium | **[REVISED - 2026-11-21]** A job file can be read as empty while it is being rewritten. `open_with_lock` opens an existing file for writing with `O_TRUNC`, which empties it before the lock is held; if a reader holds the lock, the writer waits and retries with the file left empty. A read in that window returns `{}`: `/status` then raises `KeyError: 'created'` (500) and the polling page stops, so the visitor keeps seeing "Running Query"; the jobs page fails the same way; and `update_process_status` would save the job back without its question. Seen once as a 500 in the Phase 0 memory runs. Each retry also leaves a file descriptor open. | `open_with_lock.py`, `site_functions.py` | See "S11 design" below. |
+| S12 | Medium | **[REVISED - 2026-11-22]** Any exception in the job thread ends it. `FileProcessorThread.run()` has no handler, so one failed job (Chroma, Ollama or OpenAI unreachable, a malformed job file) stops that worker's thread; the worker goes on serving pages and answers nothing until the container restarts. With 2 workers, two such failures leave the site accepting questions and answering none. Found by the Programmer; the Chroma and Ollama cases are read from the code, not tried. A job in `error` status also leaves the visitor's page polling without end. | `llm_functions.py`, `site_app.py`, `cozyrag_answer.html` | See "S12 design" below (D30). |
 | S9 | Info | `.env_flask` is tracked in git with an `OPENAI_KEY` value that looks like a placeholder (24 characters, no `sk-` prefix). Tom to confirm it was never a real key. The repo's nginx config has HTTPS commented out, so it does not match production. No security headers (HSTS and similar) are sent. | repo root, `server/` | Confirm; no action otherwise. |
 
 ### S1 design (D10)
@@ -688,11 +710,57 @@ from the code.
   removed and S5a returning 404 for an unknown job, a page that retried would poll a
   missing job without end.
 
+### S12 design (D30)
+
+**[REVISED - 2026-11-22]** New.
+
+- In `run()`, everything done for one job (from reading its file to saving the result)
+  is inside one handler. On any exception the traceback is written to the container
+  log with the job's file name, the job's status is set to `error`, and the loop goes
+  on to the next job. A job is never retried: a retry of a failing paid call would pay
+  again each time.
+- If saving the `error` status itself fails (the job file is unreadable), that is
+  logged and the job is not looked at again by this thread until a restart. The
+  thread still carries on.
+- The existing `error` path for a job without a `query` stays as it is.
+- A failed revise or follow-up changes only the status: the `result` already in the
+  job file is left as it was.
+- The visitor is told. `/cozyrag/<id>/status` for a job in `error` returns a
+  `status_text` saying the question could not be answered and to try again, and the
+  polling page stops polling when the status is `error`. Today it would show
+  `Status: error` and poll without end.
+- Tests: a job whose processing raises is left in `error`, and a second job queued
+  behind it is answered by the same thread; the status response for an `error` job.
+  The logged traceback is captured and asserted, so test output stays clean. The
+  failure is produced by a real unreachable Chroma address or a malformed job file,
+  not by a mocked exception inside the code under test, where that is practical.
+- Not addressed, still with S8: a worker killed mid-job leaves the job in `start`; the
+  OpenAI call has no timeout.
+
+### Restart after a reboot (D31)
+
+**[REVISED - 2026-11-22]** New.
+
+- `restart: unless-stopped` on the four services of `site_2024/docker-compose.yaml`
+  (`nginx`, `flask`, `chroma-rag`, `ollama-rag`). The line is already there, commented
+  out, with a comment calling it optional; that comment goes.
+- It relies on the Docker service itself starting at boot. On the server
+  `systemctl is-enabled docker` must say `enabled`; if it does not, enabling it is
+  part of the deploy.
+- A container stopped with `docker compose stop` stays stopped across a reboot, so the
+  rollback steps in `programmer_todo.md` are unaffected.
+- The same file runs on Tom's machine, where the containers will now also come back
+  when Docker Desktop starts, until `docker compose down`. A server-only override file
+  would avoid that and was not chosen: it is one more file that must match on deploy.
+- The real check is a server reboot followed by a question answered with no command
+  run. Tom decides at the deploy whether to reboot for it.
+
 ### Scheduling
 
 **[REVISED - 2026-11-21]** (D15)
 
 - With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6, S10, S11.
+- **[REVISED - 2026-11-22]** In the follow-on deploy: S12, with D29 and D31.
 - With Phase 4.1 (reference links): S3.
 - Replaced by the DokuWiki removal in Phase 0.3: S7.
 - Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`).

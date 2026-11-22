@@ -1,6 +1,6 @@
 # Programmer Todo
 
-**Last Updated:** 2026-11-21
+**Last Updated:** 2026-11-22
 
 # ACTIVE: Annual RAG / Website Refresh
 
@@ -10,7 +10,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0 is done. The Phase 1 code change and the site fixes are deployed; next is the
-evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per
+follow-on deploy below, then the evaluation (1.3 to 1.6). Phase 2 can overlap the evaluation. One session per
 group; start each session fresh. Code review happens once per deploy, not per commit; Tom
 waived it for this deploy (2026-11-21).
 
@@ -114,6 +114,21 @@ the old stack.
 
 The tests that read the collection need the local Chroma (`docker compose up -d chroma-rag`); the
 page tests use Flask's test client.
+
+## Follow-on fixes (repo: `../site_2024/`, one deploy, before the evaluation)
+
+Added 2026-11-22 (D29 to D31). Code review once for this deploy, unless Tom waives it.
+
+- [ ] 1.1k A follow-up's additional content leaves out chunks already in its previous
+      content; cut first, then remove, no filling (plan 1.1 item 8, the paragraph on D29).
+      The prompt reads sensibly with no additional content.
+- [ ] S12 An exception while processing a job marks it `error` and the thread carries on;
+      the status response and the polling page tell the visitor and stop polling (plan
+      "S12 design").
+- [ ] D31 `restart: unless-stopped` on the four services (plan "Restart after a reboot").
+      Deploy check on the server: `systemctl is-enabled docker`. Ask Tom whether to reboot
+      the server to prove it.
+- [ ] Deploy, with the rollback left on the server added to "Server cleanup".
 
 ## Phase 1 evaluation (repo: `../site_2024/`)
 

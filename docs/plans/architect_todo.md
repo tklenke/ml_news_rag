@@ -8,19 +8,13 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-21 (sixth revision: D25 to D27; D28 added 2026-11-22). Phase 0 and
-the Phase 1 code change are deployed (`3278e9e`). Next for the Programmer is the evaluation
-(1.3 to 1.6), with Phase 2 overlapping. Waiting on Architect: the two questions from the
-Programmer under "Open", each of which needs Tom's decision.
+Plan revised on 2026-11-22 (seventh revision: D28 to D31). Phase 0 and the Phase 1 code
+change are deployed (`3278e9e`). Next for the Programmer is the follow-on deploy (D29, S12,
+D31), then the evaluation (1.3 to 1.6), with Phase 2 overlapping. Nothing is waiting on
+Architect; the `www` certificate question is open with Tom (`required_from_tom.md`).
 
 ## Open
 
-- [ ] Follow-up, additional content (plan 1.1 item 8): the plan does not say whether a chunk
-      already in the previous content is left out. Built as written: sent in both places,
-      recorded once (6 and 5 of 15 in the paid run). Take to Tom, then state it in the plan.
-- [ ] Job thread: any exception in `run()` ends it, and that worker answers nothing until a
-      restart. One cause is fixed; Chroma or Ollama being unreachable would do the same (read
-      from the code, not tried). Take to Tom: fix now or leave with S8.
 - [ ] If the evaluation shows a candidate failing or too slow at its default reasoning
       effort: read OpenAI's documentation for the reasoning setting and take the question
       of a `site.ini` setting to Tom (plan 1.3).
@@ -34,7 +28,8 @@ The notes of 2026-11-21 on the prior context and the `PREFIX` space are answered
 (items 6 to 8, and "Checked and left alone").
 
 The note of 2026-11-21 on the Phase 1 deploy is taken up: the deploy and the waived review are
-in the plan (status line, D28), and its two questions are under "Open".
+in the plan (status line, D28), and its two questions are decided (D29, D30; plan 1.1 item 8
+and S12).
 
 ## Completed
 
@@ -64,8 +59,11 @@ through the deploy. The item list is in the git history of this file.
 - The server has 1.9 GiB of memory, 2 CPUs, a 2 GB swap file, Docker 29.10.0 and Compose
   5.8.0. gunicorn runs 2 workers. With the model loaded, 771 MiB is available. 36 GB of
   disk was free before the Phase 0 deploy.
-- The site stays down after a server reboot until `docker compose up -d` is run (open
-  with Tom in `required_from_tom.md`).
+- The site stays down after a server reboot until `docker compose up -d` is run, until
+  the follow-on deploy adds the restart policy (D31).
+- `www.m24tom.com` resolves to the server and nginx answers for it, redirecting HTTP to
+  HTTPS on the same host name (`$host`), not to `m24tom.com`. The certificate covers
+  `m24tom.com` only, so `https://www.m24tom.com` shows a certificate warning.
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is
