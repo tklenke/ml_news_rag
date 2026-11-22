@@ -164,7 +164,8 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       (exporter: `72ca581` in `site_2024`), without the text sent to the model,
       which can hold email addresses; that text is only in `evaluation/output/`. The files name
       the model: Tom does not open them before rating. The candidates `gpt-6-luna` and
-      `gpt-6.1-terra` were started on all 30 on 2026-11-22 with Tom's approval.
+      `gpt-6.1-terra` answered all 30 on 2026-11-22 with Tom's approval, no failures ($0.022 and
+      $0.172). Batch 1 is with Tom to rate.
 - [~] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
       of 10 questions at a time, with a tally after each batch (plan 1.5). The
       tally shows median latency, median reasoning tokens and cost per answer per model.
