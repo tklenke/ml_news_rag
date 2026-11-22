@@ -88,6 +88,12 @@ above the one chosen. **For Architect: give it a decision number and put it in t
 `gpt-6-luna` and `gpt-6.2-sol` for `gpt-6.1-terra`. That reading is the Programmer's. Consequence:
 no `gpt-4.1` answers are captured, and they cannot be after 2027-01-14.
 
+**NOTE FROM PROGRAMMER (2026-11-22): answers with tables.** 4 of the 90 evaluation answers (Q03,
+Q32, Q34) hold a Markdown table. The site's `markdown.Markdown()` has no table extension, so a
+visitor sees raw `|` lines; read from the code, seen on the review page, which renders the same
+way. Nothing is changed. **For Architect: decide whether to turn the extension on; S3's
+allow-list then has to permit the table tags.**
+
 The two S12 gaps the Programmer left as they are (2026-11-22) are in
 `docs/notes/opportunities_for_improvement.md`.
 
