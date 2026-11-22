@@ -198,8 +198,10 @@ data, since the tests of `site_2024` do not read `ml/`.
 Plan: "Corpus update (D42 to D44)". Read it whole. Only the containers of `site_2024` are used;
 do not start those of `ml/docker-compose.yaml`.
 
-- [~] CU0 Delivery step 1: copy of the local Chroma directory, count and id hash saved, top 15 of
+- [x] CU0 Delivery step 1: copy of the local Chroma directory, count and id hash saved, top 15 of
       the 52 questions saved. Before anything below writes to the collection.
+      Done: `data/corpus_update/before.json` (41,427 ids, hash `bb73f996...`), made by `snapshot.py`
+      there; `embedstatus_before.txt` beside it. The directory copy is identical by checksum.
 - [x] CU1 `ml/requirements.txt` (`chromadb-client` 1.5.9, `ollama`, `markdownify`, `pytest`, and
       what the tests need) and the venv brought to it. The client works with the local server.
 - [x] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).

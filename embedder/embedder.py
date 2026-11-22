@@ -1,20 +1,17 @@
+# ABOUTME: Embeds the files of the corpus that are not yet in the collection
+# ABOUTME: Keeps a list of embedded files, so that it can be stopped and continued
 import chromadb, ollama
 import time, os, random
+from embedder_settings import SOURCEDOCPATHS, COMPLETEDEMBEDFILE, CHUNKSIZE, EMBEDMODEL, EMBED_PREFIX
 from f_embed import Embedder
 from f_misc import get_filepaths_list, get_ids_list_from_file, get_id_from_path
 
 #--------- CONSTANTs -------------
-SOURCEDOCPATHS = ["../data/msgs","../data/news","../data/aeroelectric","../data/cozybuilders"]
-#SOURCEDOCPATHS = ["../data/test",]
-COMPLETEDEMBEDFILE = "embedstatus.txt"
 NMAXFILE = 20_000 
 NMAXFILE = 20_000
 
 
-CHUNKSIZE = 250 #initial 75
 INITEMBED = False
-EMBEDMODEL = "nomic-embed-text"
-EMBED_PREFIX = "search_document:"  #search_query:
 #use default localhose for chroma and ollam
 #use default ports for chroma and ollama
 
