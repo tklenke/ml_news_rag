@@ -81,6 +81,39 @@ Done and committed on `wip/annual-refresh`: 0.2a (config matches production), 0.
       script put `fullchain3`/`privkey3` in place. The live certificate changed from expiry
       2027-01-26 to 2027-02-20 and verifies. The rollback path was not exercised there.
 
+## Server cleanup (with Tom)
+
+Leftovers kept on the server as the rollback for each deploy. Add to this list whenever a deploy
+leaves something behind. Until an entry is done, no `docker system prune` on the server.
+
+- [ ] **From the Phase 0 deploy (2026-11-21).** Not before 2026-11-28, and only if Tom says the
+      site has run well. Ends the rollback to the stack before Phase 0. Check first:
+
+          cd ~/site_2024
+          git stash list
+          docker ps -a
+          docker images
+          ls -la ~/site_backup_2026-11-21
+
+      Expect one stash, `WIP on main: 906ffd8`, and no container using the images below. If
+      a later deploy added a stash, use the number of the `906ffd8` one in the first command.
+
+          git stash drop 'stash@{0}'
+          docker image rm site_2024-flask:old-stack
+          docker image rm site_2024-ollama-rag:old-stack
+          docker image rm chromadb/chroma:1.1.1
+          docker image rm nginx:latest
+          sudo rm -r ~/site_backup_2026-11-21
+          rm ~/deploy_logs.txt
+
+      The backup directory holds the Chroma data from before the upgrade, the certbot
+      directory with the private key, and the server's earlier `exclude_from_tar.txt` and
+      `sudo_renew_cert.sh`. Afterwards `docker compose ps` lists the same four containers and a
+      question is answered.
+
+      Tom's choice, not part of the rollback: the untracked `server/old.nginx_all_apps.conf`,
+      `server/certbot/conf/live/m24tom.old`, and the two untagged images from before Phase 0.
+
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
 - [ ] 1.0 Set up pytest in `site_2024` (its only tests are those of 0.2c, which need

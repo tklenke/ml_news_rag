@@ -60,8 +60,8 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 - [ ] Decide whether the site containers restart after a reboot (`restart: unless-stopped`).
       Today the site stays down until started by hand.
 - [ ] Decide whether the certificate should also cover `www.m24tom.com`.
-- [ ] Around 2026-11-28, if the site has run well: drop the git stash, the `old-stack` images
-      and `~/site_backup_2026-11-21` on the server. The backup holds the private key.
+- [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
+      (commands in `programmer_todo.md`, "Server cleanup").
 - [x] Evaluation questions: all 52 candidates approved; Architect ordered them (2026-11-21)
 - [x] Give the production nginx config to the Programmer at the start of their first session (2026-11-21)
 - [ ] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
