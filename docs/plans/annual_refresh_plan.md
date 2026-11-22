@@ -68,7 +68,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D18 | `fwww/static/test_08_fixture/` was a test upload and is removed from the server. |
 | D19 | Changes reach the server by `git pull`. |
 | D20 | The first answer gets 15 chunks, as `MAX_DRAFT_DOCUMENTS` says. The code that sends 14 is corrected before the baseline (1.1). |
-| D21 | Key handling is tightened where it is weak (S10). |
+| D21 | Keys move out of `site.ini` into a git-ignored `site_local.ini` (S10). One OpenAI key serves the server and local runs. |
 
 ## Two repositories
 
@@ -494,7 +494,7 @@ lookups cannot escape their directories.
 | S6 | Low | Feedback accepts any text as the rating, which is why the log contains values outside the three buttons. | `cozyrag_feedback` | Accept only `perfect`, `ok`, `not_good`. |
 | S7 | Replaced | **[REVISED - 2026-11-21]** Both wikis are removed (D14, Phase 0.3). Original finding: DokuWiki page source is served directly (`/dokucozy/data/pages/start.txt` returns 200), bypassing any wiki access rules. Matters only if a wiki has private pages. PHP 7 is past end of life. | nginx config, `php:7-fpm` | Deny `data/`, `conf/`, `bin/`, `inc/` in nginx. PHP upgrade is outside this refresh. |
 | S8 | Low | Each of the 4 gunicorn workers starts its own job thread and scans every job file; `super().__init__()` is called after `daemon = True`, which resets it; a job whose worker dies stays in `start` forever. The jobs page reads every job file on each view. Works at current volume. | `llm_functions.py`, `site_functions.py` | Leave unless symptoms appear; log as an opportunity for improvement. |
-| S10 | Low | **[REVISED - 2026-11-21]** Keys share a file with the settings. `site.ini` holds the OpenAI and session keys beside the model names and retrieval limits, so it cannot be tracked: production settings are not in the repo, the template has drifted from what the code reads, and every tool or person reading a setting also reads the keys. The README's project tar includes `site.ini`. The same OpenAI key is used on the server and for local runs. | `site.ini`, `site_app.py`, `exclude_from_tar.txt` | See "S10 design" below (D21). |
+| S10 | Low | **[REVISED - 2026-11-21]** Keys share a file with the settings. `site.ini` holds the OpenAI and session keys beside the model names and retrieval limits, so it cannot be tracked: production settings are not in the repo, the template has drifted from what the code reads, and every tool or person reading a setting also reads the keys. The README's project tar includes `site.ini`. | `site.ini`, `site_app.py`, `exclude_from_tar.txt` | See "S10 design" below (D21). |
 | S9 | Info | `.env_flask` is tracked in git with an `OPENAI_KEY` value that looks like a placeholder (24 characters, no `sk-` prefix). Tom to confirm it was never a real key. The repo's nginx config has HTTPS commented out, so it does not match production. No security headers (HSTS and similar) are sent. | repo root, `server/` | Confirm; no action otherwise. |
 
 ### S1 design (D10)
@@ -541,11 +541,9 @@ could, and put the production settings under version control.
   nothing reads them.
 - **File mode and tar:** `site_local.ini` is mode 600 on the server and is listed in
   `exclude_from_tar.txt`.
-- **Separate keys (Tom):** one OpenAI key for the server and another for local and
-  evaluation runs, ideally in separate OpenAI projects each with its own spend cap.
-  The evaluation harness makes several hundred calls from Tom's machine; a mistake
-  there should not be able to spend the production budget or require rotating the
-  production key.
+- **One OpenAI key (Tom, 2026-11-21):** the same key is used on the server and for
+  local and evaluation runs. Architect suggested a second key; Tom decided one is
+  enough. The account's monthly spend cap (S2) is the limit on a harness mistake.
 - **Deploy step:** on the server the existing `site.ini` is moved aside before the
   pull (it becomes tracked), `site_local.ini` is created from its `[KEYS]` section,
   and the rest is compared with the tracked `site.ini` to show no setting changed.
