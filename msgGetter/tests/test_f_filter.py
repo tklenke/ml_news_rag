@@ -5,14 +5,14 @@ from f_filter import filter_markdown
 
 OWN_POST = ("[Original Message ID:FRHklv4VJU0](https://groups.google.com/g/cozy_builders/c/x)\n"
             "# CozyRAG\n\n### tklenke\n\n"
-            "<tkle@gmail.com> Nov 2, 2026, 2:08:54 PM Nov 2 Reply to authorYou cannot reply "
+            "<author@example.com> Nov 2, 2026, 2:08:54 PM Nov 2 Reply to authorYou cannot reply "
             "privately to your own messageForward Delete Copy link Report messageYou cannot "
             "report your own messageShow original message to COZY Builders Mailing List"
             "A couple responses you might want to look at")
 
 OTHER_POST = ("[Original Message ID:IO1b3H0WdYI](https://groups.google.com/g/cozy_builders/c/x)\n"
               "# Nose gear\n\n### Mike\n\n"
-              "<mike@gmail.com> Sep 29, 2025, 8:22:26 AM 9/29/25 Reply to author Forward "
+              "<author@example.com> Sep 29, 2025, 8:22:26 AM 9/29/25 Reply to author Forward "
               "DeleteYou do not have permission to delete messages in this groupCopy link "
               "Report messageShow original message to COZY Builders Mailing List"
               "The nose gear shimmies")

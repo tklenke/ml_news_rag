@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D45 in the plan's table. The dated list of what Tom decided and the
+All decided: D1 to D46 in the plan's table. The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
 ## Work items
@@ -19,7 +19,6 @@ finished work items are in the git history of this file.
       table in a narrow browser window on the local site (AD6).
 - [x] Fetch again the 10 threads that were already in the corpus (D44). Done 2026-11-22; 8 had new
       posts.
-- [ ] Decide whether F2 is finished before the deploy or left to the rebuild in Phase 2.
 - [ ] With the Programmer, at the deploy: upload the Chroma tar to the server (CU8).
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
 - [x] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus

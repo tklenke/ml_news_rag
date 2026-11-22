@@ -209,12 +209,12 @@ do not start those of `ml/docker-compose.yaml`.
       the chunk size, or for an empty file (was 2.1b).
 - [x] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
       are both stored whole.
-- [~] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
+- [x] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
       continued. Report how many vectors were updated and how many chunks were added (80 expected).
       F1 done: 80 chunks added. F2 stopped after about 3,360 of 36,500 chunks (3 replaced): Tom
       needed the GPU. It ran in a container of the site's Ollama image with `--gpus all` on port
       11998 (same vectors as the CPU); it continues from `embedder/` with
-      `../venv/bin/python repair_collection.py 11998`. Waits for Tom: finish, or leave it to Phase 2.
+      `../venv/bin/python repair_collection.py 11998`. Not finished before the deploy (D46).
 - [x] CU6 The messages:
       a. Copy the 227 markdown files, and the 10 refetched ones once Tom reports them done, from
          the Windows copy to `data/msgs_md`. A refetched file shorter than the one it replaces
@@ -231,8 +231,8 @@ do not start those of `ml/docker-compose.yaml`.
       1 passed: 42,276 unique ids, 11,388 sources, every source whole, nothing extra but the 42
       prefix-only chunks. 3: 17 of 52 questions changed; 27 of 780 places are new chunks (21 from
       new threads, 4 from refetched ones, 2 from the Canard Pushers added by F1). Results in
-      `data/corpus_update/after.json` (id hash `92d43eed...`). Left: 2 (its long chunks need F2)
-      and 4.
+      `data/corpus_update/after.json` (id hash `92d43eed...`). Left: 2
+      (short chunks only, D46) and 4.
 - [ ] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
       the tar to "Server cleanup".
 

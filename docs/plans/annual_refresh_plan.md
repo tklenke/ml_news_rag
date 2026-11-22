@@ -148,6 +148,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D43 | (2026-11-22) Both faults found in the collection (F1 and F2, "Corpus update") are repaired in the same pass. |
 | D44 | (2026-11-22) Tom fetches again, on Windows, the 10 threads of the new id list that were already in the corpus. |
 | D45 | (2026-11-22) Old jobs need no compatibility: nobody digs deeper on a job that is days or months old. Chunk ids and the job format may change. |
+| D46 | (2026-11-22) F2 is not finished before the deploy; Phase 2 embeds everything on the current Ollama. Amends D43. |
 
 ## Two repositories
 
@@ -1115,8 +1116,8 @@ against the files):
   under the same id where the cosine with the stored one is below 0.999. Documents and
   metadata are not touched. About 5 hours unattended at the 0.47 s per chunk measured on
   CPU; it can be stopped and continued. **[REVISED - 2026-11-22]** Stopped on 2026-11-22 after
-  about 3,360 chunks (3 vectors replaced), because Tom needed the GPU. Whether it is
-  finished or left to the rebuild in Phase 2 waits for Tom.
+  about 3,360 chunks (3 vectors replaced), because Tom needed the GPU. It is left
+  as it is; the rebuild in Phase 2 settles it (D46).
 - A refetched thread: its stored chunks (`source` equal to its id) are deleted and the
   file is embedded again.
 - The filter gains a pattern for the button text. The text files of the new and
@@ -1134,8 +1135,8 @@ against the files):
 
 1. For every source, the stored chunks hold all the words of its file in order, in chunks
    of 250. An old source may have one prefix-only chunk more.
-2. 100 random stored chunks, 20 of them over 512 tokens, embedded again: every cosine is
-   above 0.999.
+2. **[REVISED - 2026-11-22]** 100 random stored chunks of at most 512 tokens, embedded again:
+   every cosine is above 0.999 (D46).
 3. Top 15 for the 52 questions, before and after: how many questions changed, how many
    chunks entered, and from which kind of source. Reported to Architect; no pass mark.
 4. A question about one of the new threads returns it, on the local site.
