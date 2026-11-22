@@ -1,11 +1,14 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (seventh revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), a small follow-on deploy and the evaluation next
+**Status:** Revised 2026-11-22 (eighth revision); Phase 0 and the Phase 1 code change deployed (`3278e9e`), a small follow-on deploy and the evaluation next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-22 (eighth revision):** The certificate also covers `www.m24tom.com`, and
+  nginx sends `www` to `m24tom.com` (D32; "The `www` name"). Until now `www` resolved to
+  the server and showed a certificate warning over HTTPS. Joins the follow-on deploy.
 - **2026-11-22 (seventh revision):** Three decisions by Tom after the Phase 1 deploy,
   shipped together as one small deploy (see "Order of work", step 3). A follow-up no
   longer sends a chunk twice (D29; 1.1 item 8): the plan had not said, and the paid run
@@ -104,6 +107,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D29 | (2026-11-22) A follow-up's additional content leaves out chunks already in its previous content. The gap is not filled with further chunks (1.1 item 8). |
 | D30 | (2026-11-22) An exception in the job thread is fixed now, not left with S8: the job is marked failed and the thread carries on (S12). |
 | D31 | (2026-11-22) The site containers start again after a server reboot (`restart: unless-stopped`). |
+| D32 | (2026-11-22) The certificate covers `www.m24tom.com` as well, and nginx redirects `www` to `m24tom.com`. |
 
 ## Two repositories
 
@@ -127,8 +131,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
 2. **Phase 1 code change with the site fixes, one deploy:** 1.1 plus S1, S2, S4, S5, S6, S10, S11.
    They touch the same files (`site_app.py`, `llm_functions.py`, `site_functions.py`,
    `open_with_lock.py`). Deployed 2026-11-21 (`3278e9e`).
-3. **[REVISED - 2026-11-22] Follow-on fixes, one small deploy:** D29 (1.1 item 8), S12 and
-   the restart policy (D31). Before the harness, so the harness is written against the
+3. **[REVISED - 2026-11-22] Follow-on fixes, one small deploy:** D29 (1.1 item 8), S12,
+   the restart policy (D31) and the `www` name (D32). Before the harness, so the harness is written against the
    prompt code production then runs. None of the three changes a first answer or a
    revise, which is all the evaluation measures.
 4. **Phase 1 evaluation:** harness, baseline, blind review files, Tom rates, `site.ini` change.
@@ -755,12 +759,58 @@ from the code.
 - The real check is a server reboot followed by a question answered with no command
   run. Tom decides at the deploy whether to reboot for it.
 
+### The `www` name (D32)
+
+**[REVISED - 2026-11-22]** New.
+
+Today: `www.m24tom.com` resolves to the server and both nginx server blocks answer for
+it. The HTTP block redirects to `https://$host`, so `www` stays `www`; the certificate
+names `m24tom.com` only, so `https://www.m24tom.com` shows a certificate warning. Read
+from the config and DNS on 2026-11-22; the live URL was not requested.
+
+**nginx** (`server/nginx_all_apps.conf`):
+
+- The HTTP block redirects to `https://m24tom.com$request_uri`, so `http://www...`
+  reaches the site in one hop. The ACME challenge location keeps answering for both
+  names: the certificate authority checks each name over HTTP.
+- A separate HTTPS server block for `www.m24tom.com`, with the same certificate files,
+  does nothing but `return 301 https://m24tom.com$request_uri`. The main HTTPS block
+  no longer lists `www`.
+- This can ship before the certificate covers `www`: until then `https://www` shows the
+  same warning as today, and nothing else changes.
+
+**Certificate** (`sudo_renew_cert.sh`):
+
+- Both certbot calls (dry run and real) ask for `m24tom.com` and `www.m24tom.com`,
+  with `m24tom.com` first.
+- **Not known:** what certbot does on the server when the list of names changes. The
+  script assumes each run leaves a new `m24tom.com-NNNN` directory in `archive/` and
+  takes the highest. With a changed list certbot may instead ask to expand an existing
+  certificate, or name the directory differently; the script would then install an
+  older certificate and report success. Programmer reads certbot's documentation for
+  `certonly` with a changed `-d` list, and Tom runs `certbot certificates` (through the
+  compose file) on the server so the existing names are known, before the script is
+  changed. If that shows the directory choice needs redesign, it comes back to Architect.
+- Whatever certbot does, the script checks the files it is about to install, before
+  replacing anything: the certificate names both `m24tom.com` and `www.m24tom.com`, and
+  it is not older than the one in place. If not, it stops and the current certificate
+  stays. This closes the case above whichever way certbot behaves.
+- The closing question asks Tom to check both `https://m24tom.com` and
+  `https://www.m24tom.com`.
+- Script changes under TDD in `tests/test_sudo_renew_cert.py`, as before.
+
+**Deploy:** after the pull and restart, run the script once. Checks:
+`curl -sI http://www.m24tom.com/x`, `curl -sI https://www.m24tom.com/x` and
+`curl -sI http://m24tom.com/x` each answer 301 with `Location: https://m24tom.com/x`;
+`https://www.m24tom.com` gives no certificate warning; the site answers a question.
+The script's rollback branch has still not been exercised on the server (0.2).
+
 ### Scheduling
 
 **[REVISED - 2026-11-21]** (D15)
 
 - With the Phase 1 code change, in one deploy: S1, S2, S4, S5, S6, S10, S11.
-- **[REVISED - 2026-11-22]** In the follow-on deploy: S12, with D29 and D31.
+- **[REVISED - 2026-11-22]** In the follow-on deploy: S12, with D29, D31 and D32.
 - With Phase 4.1 (reference links): S3.
 - Replaced by the DokuWiki removal in Phase 0.3: S7.
 - Not scheduled: S8 (in `docs/notes/opportunities_for_improvement.md`).

@@ -8,10 +8,11 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-22 (seventh revision: D28 to D31). Phase 0 and the Phase 1 code
+Plan revised on 2026-11-22 (eighth revision: D28 to D32). Phase 0 and the Phase 1 code
 change are deployed (`3278e9e`). Next for the Programmer is the follow-on deploy (D29, S12,
-D31), then the evaluation (1.3 to 1.6), with Phase 2 overlapping. Nothing is waiting on
-Architect; the `www` certificate question is open with Tom (`required_from_tom.md`).
+D31, D32), then the evaluation (1.3 to 1.6), with Phase 2 overlapping. Nothing is waiting on
+Architect, unless the Programmer's reading of certbot (task D32b) sends the choice of archive
+directory back.
 
 ## Open
 
@@ -63,7 +64,8 @@ through the deploy. The item list is in the git history of this file.
   the follow-on deploy adds the restart policy (D31).
 - `www.m24tom.com` resolves to the server and nginx answers for it, redirecting HTTP to
   HTTPS on the same host name (`$host`), not to `m24tom.com`. The certificate covers
-  `m24tom.com` only, so `https://www.m24tom.com` shows a certificate warning.
+  `m24tom.com` only, so `https://www.m24tom.com` shows a certificate warning. The
+  follow-on deploy changes both (D32).
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is

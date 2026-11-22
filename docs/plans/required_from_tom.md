@@ -6,17 +6,16 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D31 in the plan's table. The dated list of what Tom decided and the
+All decided: D1 to D32 in the plan's table. The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
 ## Work items
 
 - [x] Containers restart after a reboot: yes (D31, 2026-11-22).
 - [ ] At the follow-on deploy: decide whether to reboot the server to prove the restart policy.
-- [ ] Decide what happens to `www.m24tom.com`. Today nginx does not redirect it to
-      `m24tom.com`; `https://www.m24tom.com` shows a certificate warning. Options: remove
-      the `www` DNS record (Architect's recommendation), cover it in the certificate, or
-      leave it.
+- [x] `www.m24tom.com`: covered by the certificate and redirected to `m24tom.com` (D32, 2026-11-22).
+- [ ] For the Programmer, before the renewal script is changed: run `certbot certificates`
+      on the server (the Programmer supplies the command).
 - [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
       (commands in `programmer_todo.md`, "Server cleanup").
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
