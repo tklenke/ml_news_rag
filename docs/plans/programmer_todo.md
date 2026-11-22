@@ -221,7 +221,8 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       (two above `gpt-6-luna` in the plan's table; not evaluated). Set in the tracked `site.ini`
       (`1e72014` in `site_2024`). Tried on the local site with Q44, one question (7.2 s) and one dig
       deeper (6.1 s): both answered, no error in the log. A job does not record its model; the
-      container was started after the change. Left: merge and deploy, with Tom's approval.
+      container was started after the change. Tom waived the code review (2026-11-22). Left: merge
+      and deploy, with Tom's approval.
 
 Questions: `docs/plans/refresh_questions.csv`, rows whose `use` is `batch1`, `batch2`,
 `batch3`, in that order.
