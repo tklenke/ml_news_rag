@@ -122,14 +122,14 @@ Added 2026-11-22 (D29 to D32). Code review once for this deploy, unless Tom waiv
 - [x] 1.1k A follow-up's additional content leaves out chunks already in its previous
       content; cut first, then remove, no filling (plan 1.1 item 8, the paragraph on D29).
       The prompt reads sensibly with no additional content.
-- [~] S12 An exception while processing a job marks it `error` and the thread carries on;
+- [x] S12 An exception while processing a job marks it `error` and the thread carries on;
       the status response and the polling page tell the visitor and stop polling (plan
       "S12 design").
 - [ ] D31 `restart: unless-stopped` on the four services (plan "Restart after a reboot").
       Deploy check on the server: `systemctl is-enabled docker`. Ask Tom whether to reboot
       the server to prove it.
-- [ ] D32a nginx: `www` redirects to `m24tom.com` on HTTP and HTTPS (plan "The `www` name").
-- [ ] D32b Before changing the script: read certbot's documentation on `certonly` with a
+- [~] D32a nginx: `www` redirects to `m24tom.com` on HTTP and HTTPS (plan "The `www` name").
+- [~] D32b Before changing the script: read certbot's documentation on `certonly` with a
       changed `-d` list, and have Tom run `certbot certificates` on the server. Report to
       Architect if the choice of archive directory needs redesign.
 - [ ] D32c `sudo_renew_cert.sh` asks for both names and checks the certificate it is about to
