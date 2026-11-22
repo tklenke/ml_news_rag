@@ -8,14 +8,17 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-21 (fourth revision). Phase 0 is deployed. The Programmer's notes
-of 2026-11-21 are all decided and folded into the plan; none are outstanding. Next is the
-Programmer's Phase 1 code change (1.0, 1.1, S1, S2, S4, S5, S6, S10, S11), one deploy, with
-a code review before it.
+Plan revised on 2026-11-21 (fifth revision: S2 without the nginx rate limit, D25). Phase 0
+is deployed. The Phase 1 code change is written and not deployed. Its deploy waits for the
+two open questions below, the paid local run and the code review (`programmer_todo.md`).
 
 ## Open
 
-- [ ] Approve the nginx rate Programmer proposes for S2b.
+- [ ] Prior context for revise and follow-up (Programmer's note below): do the related
+      documents belong in it, and does the job record keep every chunk the draft saw?
+      Architect's recommendation is with Tom. The answer sets the revise baseline (1.2).
+- [ ] The missing space after `search_query:` (Programmer's note below): leave, fix, or
+      measure in Phase 2. With Tom.
 - [ ] If the evaluation shows a candidate failing or too slow at its default reasoning
       effort: read OpenAI's documentation for the reasoning setting and take the question
       of a `site.ini` setting to Tom (plan 1.3).
@@ -39,12 +42,6 @@ on the 16 local job files with a first answer:
 
 Question for Architect: should the revise and follow-up context include the related documents, and
 should it hold every chunk the draft saw? Either answer changes the revise baseline (1.2).
-
-**NOTE FROM PROGRAMMER (2026-11-21), S2b:** Plan S2 needs updating. Tom decided to drop the nginx
-rate limit: the OpenAI budget limit has no auto reload, so abuse can exhaust the budget (the site
-then answers with errors until he tops it up) but cost no more. `/cozyrag/answer` started the job
-on a GET, so repeating GET `query` and GET `answer` paid for a question again each time; the
-job now starts in the `query` POST. The open item "Approve the nginx rate" appears void.
 
 **NOTE FROM PROGRAMMER (2026-11-21):** `PREFIX = search_query:` reaches the embedder without a space
 before the question ("search_query:how many"), while documents are stored with one

@@ -1,11 +1,15 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-21 (fourth revision); Phase 0 deployed, Phase 1 code change next
+**Status:** Revised 2026-11-21 (fifth revision); Phase 0 deployed, Phase 1 code change written, deploy next
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-21 (fifth revision):** S2 has no nginx rate limit (D25). The OpenAI budget
+  has no auto reload, so abuse can use up the budget and no more; a limit in nginx
+  would add a part without lowering that ceiling. In its place a question's job starts
+  when the question is submitted, so reading a page never pays for an answer.
 - **2026-11-21 (fourth revision):** Phase 0 is deployed (`bed83f4`) and the certificate
   is renewed to 2027-02-20. Memory was measured again; gunicorn runs 2 workers and the
   server has a swap file (D23). All four candidate models answer the production call
@@ -80,6 +84,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D22 | Code review of the Phase 0 branch is waived. |
 | D23 | gunicorn runs 2 workers, and the server has a 2 GB swap file. |
 | D24 | The model evaluation runs every model at its default reasoning effort; no reasoning setting is sent (1.3). |
+| D25 | No nginx rate limit. The OpenAI budget limit, which has no auto reload, is the limit on abuse (S2). |
 
 ## Two repositories
 
@@ -544,7 +549,7 @@ lookups cannot escape their directories.
 | # | Severity | Finding | Where | Suggested fix |
 |---|---|---|---|---|
 | S1 | High (privacy) | Full submitter email addresses are public. `/cozyrag/<id>/status` returns the whole job record as JSON and the results page prints `Submitted By: <email>`. Every job id is listed on the public jobs page. | `site_app.py` `cozyrag_status`, `cozyrag_results.html` | See "S1 design" below (D10). |
-| S2 | Medium (cost) | No rate limit on questions. Anyone can script submissions; each follow-up sends about 20,000 tokens to the better model. `/cozyrag/revise` also runs on a plain GET. | `site_app.py`, nginx | Set a monthly spend cap on the OpenAI account (Tom). Add nginx `limit_req` on `/cozyrag/`. Make revise POST-only. |
+| S2 | Medium (cost) | No rate limit on questions. Anyone can script submissions; each follow-up sends about 20,000 tokens to the better model. `/cozyrag/revise` also runs on a plain GET. | `site_app.py`, nginx | **[REVISED - 2026-11-21]** See "S2 design" below (D25). |
 | S3 | Medium | Model output is rendered as raw HTML: the answer goes through Markdown, which passes HTML through, and is marked `safe`. A question can instruct the model to emit a script tag, and the result is stored and linked from the jobs page. | `cozyrag_results.html` line 11 | Sanitise the rendered HTML with an allow-list (for example `nh3`) before marking it safe. |
 | S4 | Low | `sanitize()` does the opposite of its name: it wraps input in `Markup`, declaring it safe. Not exploitable today because values pass through JSON before display, but one template change away from being so. | `site_functions.py` | Remove the `Markup` wrap. |
 | S5 | Low | Unknown job ids and several routes return HTTP 500: `processid` and `status` with a bad id, `jobs/<bad column>` (`abort` is never imported), and `revise` / `feedback` / `answer` without a session. | `site_app.py` | Return 404 or redirect to the question form. |
@@ -574,10 +579,15 @@ Questions and answers remain public on the jobs page. That is accepted.
 
 ### S2 design
 
-- Tom sets a monthly spend cap on the OpenAI account. This is the real backstop.
-- `/cozyrag/revise` accepts POST only (the button already posts).
-- nginx `limit_req` on `/cozyrag/query` and `/cozyrag/followup`. The repo's nginx
-  config matches production after Phase 0.2. Programmer proposes the rate to Architect.
+**[REVISED - 2026-11-21]** The nginx rate limit is dropped (D25).
+
+- The OpenAI account has a budget limit with no auto reload (Tom confirmed it is on).
+  A script can use up the budget; the site then answers with errors until Tom tops it
+  up. It cannot cost more than the budget. This is the limit on abuse.
+- No nginx `limit_req`. It would slow a script down without lowering that ceiling.
+- Only a POST starts paid work. `/cozyrag/revise` accepts POST only (the button already
+  posts). A question's job starts in the `/cozyrag/query` POST; `/cozyrag/answer`
+  starts none, so repeating a GET does not pay for the question again.
 
 ### S10 design (D21)
 

@@ -95,7 +95,7 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
 - [x] S2a `/cozyrag/revise` accepts POST only; a GET gets 405.
 - [x] S2b Tom decided (2026-11-21): no nginx rate limit. The OpenAI budget limit has no auto
       reload, so a script can use up the budget but not more. Instead the job starts when
-      the question is submitted; reading pages starts none. Architect to update plan S2.
+      the question is submitted; reading pages starts none. Plan S2 is updated (D25).
 - [x] S4 `sanitize()` no longer wraps input in `Markup`. Rename it to say what it does, or
       remove it if nothing remains; ask Architect if unsure.
 - [x] S5a Unknown job id on `processid` and `status` returns 404, not 500.
