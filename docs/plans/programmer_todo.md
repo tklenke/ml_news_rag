@@ -165,7 +165,7 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       which can hold email addresses; that text is only in `evaluation/output/`. The files name
       the model: Tom does not open them before rating. The candidates `gpt-6-luna` and
       `gpt-6.1-terra` answered all 30 on 2026-11-22 with Tom's approval, no failures ($0.022 and
-      $0.172). Batch 1 is with Tom to rate.
+      $0.172).
 - [~] 1.5 Produce the blind review files and key file (plan 1.4) for Tom to rate, one batch
       of 10 questions at a time, with a tally after each batch (plan 1.5). The
       tally shows median latency, median reasoning tokens and cost per answer per model.
@@ -179,6 +179,17 @@ in 1.2 to 1.5 (note in `architect_todo.md`); where they differ, this section hol
       answered (the key refuses models added later):
 
           PYTHONPATH=fwww .venv/bin/python evaluation/review_answers.py batch1
+
+      Batch 1 rated by Tom 2026-11-22 (10 answers per model; the counts were checked by hand
+      against the ratings and the key):
+
+          model             perfect        ok  not_good    errors  median_s reasoning  $/answer
+          gpt-4o-mini             8         1         1         1       5.7         0   0.00082
+          gpt-6-luna              6         3         1         0       3.2       134   0.00064
+          gpt-6.1-terra           6         4         0         0       2.7         0   0.00530
+
+      Rule 1.5: no early adoption (`gpt-6-luna` has a `not_good`; both candidates have fewer
+      `perfect` than the baseline), no candidate dropped, so batch 2 is rated next.
 
 - [ ] 1.6 After Tom's decision: update the tracked `site.ini`, `LLM_DRAFT` to the model chosen
       and `LLM_REVISE` to the one above it
