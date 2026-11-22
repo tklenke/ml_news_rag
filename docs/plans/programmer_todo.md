@@ -158,6 +158,48 @@ Still useful:
   nothing. Its tests use real certificates; only the docker command is a stand-in.
 - `tests/test_nginx_redirects.py` runs the nginx image of the compose file with docker.
 
+### Code review results (2026-11-22)
+
+Reviewed: `site_2024` `3278e9e..09e3ca4` (9 commits). **Not approved: R1 is open.** No bug
+introduced by these commits was found. 188 tests pass with clean output; 36 of them fail
+against the code at `3278e9e`. `programmer_todo.md` matches the code.
+
+For Programmer:
+
+- [ ] R1 **MUST FIX** `fwww/templates/cozyrag_answer.html:23`: no test covers the polling page's
+      handling of `error` (stop polling, show `status_text`). With the branch disabled
+      (`data.status === 'never'`) all 188 tests pass; CLAUDE.md requires tests for all
+      functionality. Suggested: run the page's script in node from a test. Done when that
+      change to the branch makes a test fail. Tom may grant an exception instead; not decided.
+- [ ] R2 **SHOULD FIX** `fwww/src/site_functions.py:131`: `get_process_info` catches only
+      `JSONDecodeError`. A job file holding `b"\xff"` or `[1]` gives 500 on `/cozyrag/jobs`,
+      `/cozyrag/<id>/status`, `/cozyrag/<id>/processid` and the feedback POST (reproduced with
+      the test client); `not json` gives 200, 404, 404 and a redirect. The job thread survives
+      `b"\xff"` already. Suggested: catch `ValueError` and return `{}` for content that is not
+      a dict. Unlikely outside disk corruption.
+- [ ] R3 **SHOULD FIX** `docker-certbot.yaml:8`, and `README.md` "Renew ssl certificate", which
+      sends the reader to it: the command asks for `m24tom.com` only. From the notes of D32b
+      (not tried), a real run of it would make `m24tom.com-0011` without `www`, which the
+      renewal script would then choose and refuse at every run. Suggested: both point to
+      `sudo_renew_cert.sh`.
+
+For Architect (no Programmer work until decided):
+
+- [ ] R4 `fwww/src/llm_functions.py:246`, there since `4e2f8d5`: OpenAI failures do not reach
+      S12. `process_question` catches `openai.APIError` and returns the error text as the
+      answer, so the job ends `complete`. Reproduced on a revise with OpenAI unreachable and
+      with a 429 for quota: the draft answer was replaced by the error text. The plan lists
+      OpenAI among the causes in S12 and says a failed revise keeps its `result`. A used-up
+      budget (D25) is a likely way to reach it. Preferably decided before the harness (1.3).
+- [ ] R5 **CONSIDER**, adds to the Programmer's S12 note in `architect_todo.md`: a job file read
+      while still empty can also end as `error`, if it becomes readable before
+      `mark_job_failed` reads it again. Seen by forcing the timing; 0 times in 12,000 jobs
+      unforced.
+
+Checked: 9 of 10 deliberate breakages of the code were caught by the tests (the tenth is R1).
+D31: with stand-in containers, nginx reached flask in 5 of 5 simulated boots in which flask
+stopped twice; this does not replace the reboot of the server.
+
 ## Phase 1 evaluation (repo: `../site_2024/`)
 
 - [ ] 1.3 Evaluation harness: reads `refresh_questions.csv`, retrieves once per question,
