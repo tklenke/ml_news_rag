@@ -116,18 +116,16 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       `site_local.ini`. Tests use files in a temporary directory, never the real ones.
 - [x] Found while testing S1: the jobs page returned 500 while any job was unfinished. Fixed.
       With it, `processid` of an unfinished job gives 404.
-- [~] S10b Track `site.ini` with the production settings and no `[KEYS]` section. Take
+- [x] S10b Track `site.ini` with the production settings and no `[KEYS]` section. Take
       the values from the local `site.ini` by naming each setting; do not print the file.
       Add `site_local.ini` to `.gitignore` and to `exclude_from_tar.txt`; add
       `site_local.ini.template`; remove `site.ini.template`, `.env_flask` and the
       commented `env_file` lines in `docker-compose.yaml`.
-      Done: local `site_local.ini` (keys copied, verified equal, mode 600), its template,
-      ignore and tar entries, `.env_flask` and the `env_file` lines removed.
-      Left: replace the local `site.ini` with the production settings (Tom gave them
-      2026-11-21; `MAX_QUERY_LEN` is 512 there, 1024 locally), then in one commit remove both
-      `.gitignore` lines (`site.ini`, `fwww/site.ini`), the `fwww/site.ini` tar entry and
-      `site.ini.template`, and add `site.ini`. Check that no key is in the commit.
-- [~] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
+      Values are the server's (Tom, 2026-11-21). The local file differed in `MAX_QUERY_LEN` (1024,
+      512 on the server). Checked: no key in the commits; the local stack starts on the two
+      files and its pages answer, with no question asked. Tom's backup with the keys is
+      `~/site.ini.before_s10` on the local machine; he deletes it.
+- [x] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
       create the local `site_local.ini` with Tom.
       Local file created. Server steps, rehearsed on throwaway repositories with fake keys:
 
@@ -149,6 +147,8 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
         `job['email']` as given, which the code before this deploy does not shorten.
       - Expected: mode `-rw-------`, the count 2, and `same`. Stop if not.
       - `~/site_ini_before_s10` holds the keys; add it to "Server cleanup" after the deploy.
+- [ ] Before the deploy: one question, one revise and one follow-up answered locally (paid calls);
+      code review; Architect's answers on the prior context (`architect_todo.md`).
 - [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements
       changed, restart.
 
