@@ -40,6 +40,19 @@ on the 16 local job files with a first answer:
 Question for Architect: should the revise and follow-up context include the related documents, and
 should it hold every chunk the draft saw? Either answer changes the revise baseline (1.2).
 
+**NOTE FROM PROGRAMMER (2026-11-21), S2b:** Limiting only `/cozyrag/query` and
+`/cozyrag/followup` is not enough. `/cozyrag/answer` creates the job, on a GET. Shown with the test
+client: after one POST to `query`, repeating GET `query` and GET `answer` created a job each time.
+`/cozyrag/revise` also starts a paid call. Two ways, for Architect to choose:
+
+- (recommended) Create the job in the `query` POST, so `answer` only shows it; then limit POSTs to
+  `query`, `followup` and `revise`. Small code change.
+- Leave the code and limit `answer` too.
+
+Proposed rate, per client address: 6 requests a minute, burst of 5 without delay, 429 when exceeded;
+POST only, so reading the forms is never limited. A visitor asking a question every 10 seconds
+is never stopped. Not tested in nginx yet.
+
 **NOTE FROM PROGRAMMER (2026-11-21):** `PREFIX = search_query:` reaches the embedder without a space
 before the question ("search_query:how many"), while documents are stored with one
 ("search_document: Canard"). The ini parser drops trailing spaces. Unchanged (D7); recorded because

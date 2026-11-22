@@ -84,44 +84,54 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       cutoff gives the minimum. Check every caller treats the value as a count.
 - [x] 1.1g Remove the `INITIAL` and `SECONDARY` settings and the code that carries them
       (plan 1.1 item 5). `PREFIX` stays and keeps working.
-- [ ] S1a Function that shortens an email address for display: first 5 characters plus
+- [x] S1a Function that shortens an email address for display: first 5 characters plus
       `...`; empty string for none. Replaces the `safe_truncate(job['email'],5)` calls.
-- [ ] S1b `/cozyrag/<id>/status` returns only `status`, `status_text`, `result_html`.
+- [x] S1b `/cozyrag/<id>/status` returns only `status`, `status_text`, `result_html`.
       Check `cozyrag_answer.html` still works; it reads only those three.
-- [ ] S1c Results page and jobs page (including `/cozyrag/jobs/email`) show the shortened
+- [x] S1c Results page and jobs page (including `/cozyrag/jobs/email`) show the shortened
       address only, applied where the job record is prepared for display.
-- [ ] S1d Tests: with a job file containing a known full address, that address appears in
+- [x] S1d Tests: with a job file containing a known full address, that address appears in
       none of the responses from `status`, `processid`, `jobs`, `jobs/email`.
-- [ ] S2a `/cozyrag/revise` accepts POST only; a GET gets 405.
-- [ ] S2b nginx `limit_req` for `/cozyrag/query` and `/cozyrag/followup`. Propose the rate
+- [x] S2a `/cozyrag/revise` accepts POST only; a GET gets 405.
+- [~] S2b nginx `limit_req` for `/cozyrag/query` and `/cozyrag/followup`. Propose the rate
       to Architect before deploying.
-- [ ] S4 `sanitize()` no longer wraps input in `Markup`. Rename it to say what it does, or
+      Proposed 2026-11-21 in `architect_todo.md`; waiting for Architect.
+- [x] S4 `sanitize()` no longer wraps input in `Markup`. Rename it to say what it does, or
       remove it if nothing remains; ask Architect if unsure.
-- [ ] S5a Unknown job id on `processid` and `status` returns 404, not 500.
-- [ ] S5b `/cozyrag/jobs/<unknown column>` returns 404 (`abort` is not imported today).
-- [ ] S5c `revise`, `followup`, `feedback` and `answer` without a session redirect to the
+- [x] S5a Unknown job id on `processid` and `status` returns 404, not 500.
+- [x] S5b `/cozyrag/jobs/<unknown column>` returns 404 (`abort` is not imported today).
+- [x] S5c `revise`, `followup`, `feedback` and `answer` without a session redirect to the
       question form instead of returning 500.
-- [ ] S6 Feedback accepts only `perfect`, `ok`, `not_good`; anything else is ignored with
+- [x] S6 Feedback accepts only `perfect`, `ok`, `not_good`; anything else is ignored with
       a redirect to the question form.
-- [ ] S11a Failing test for the empty job file read (plan "S11 design"): hold a shared lock
+- [x] S11a Failing test for the empty job file read (plan "S11 design"): hold a shared lock
       on a job file that has content, start a write in a second thread, and while the
       writer waits read the file directly; it must still hold the previous content. After
       the lock is released the write completes with the replacement.
-- [ ] S11b Fix `open_with_lock`: an existing file opened for writing is emptied only after
+- [x] S11b Fix `open_with_lock`: an existing file opened for writing is emptied only after
       the exclusive lock is held, and the descriptor is closed before each retry. The
       locking scheme stays; no change to the callers.
-- [ ] S10a The app reads `site.ini` then `site_local.ini`; a value in the second wins.
+- [x] S10a The app reads `site.ini` then `site_local.ini`; a value in the second wins.
       Missing `SESSION` or `OPENAI` key stops startup with a message naming
       `site_local.ini`. Tests use files in a temporary directory, never the real ones.
+- [x] Found while testing S1: the jobs page returned 500 while any job was unfinished. Fixed.
+      With it, `processid` of an unfinished job gives 404.
 - [ ] S10b Track `site.ini` with the production settings and no `[KEYS]` section. Take
       the values from the local `site.ini` by naming each setting; do not print the file.
       Add `site_local.ini` to `.gitignore` and to `exclude_from_tar.txt`; add
       `site_local.ini.template`; remove `site.ini.template`, `.env_flask` and the
       commented `env_file` lines in `docker-compose.yaml`.
+      Waiting for Tom: the server's non-key settings (the local file has `DEBUG = True`), and
+      his agreement to move the keys of the local `site.ini` into `site_local.ini`.
+      Remove both `.gitignore` lines (`site.ini` and `fwww/site.ini`) only after the keys have
+      left the file.
 - [ ] S10c Write the server steps for the deploy (plan "S10 design", deploy step) and
       create the local `site_local.ini` with Tom.
 - [ ] Deploy: `git pull` on the server (after the S10c steps), rebuild if requirements
       changed, restart.
+
+Running the tests: `site_2024/README.md`. Use `site_2024/.venv`; `site_2024/venv` still holds
+the old stack.
 
 Flask's test client is enough for the S tasks; only 1.1b needs a live service.
 
