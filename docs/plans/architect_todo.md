@@ -8,22 +8,23 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-23 (fifteenth revision: the image update, plan 4.0, is done and recorded
-as run, with Tom's changes to D50 and D51). Everything through the answer
+Plan revised on 2026-11-23 (sixteenth revision: the pictures of an answer, plan 4.2, designed
+with three points open for Tom; the fifteenth recorded the image update, 4.0, as run). Everything through the answer
 display, the corpus update and the model change is deployed (`775692d`) and every check passed.
 The embedding of the Phase 2 variants runs at night from 2026-11-22, stopped each morning and
 continued each evening (plan 2.2a): A, C, B and D are done, E was not finished on 2026-11-23, and
-the Programmer's report of the five checks (2.2d) is not written yet. Next design: how the image
-database is used (4.2), starting with a discussion with Tom.
+the Programmer's report of the five checks (2.2d) is not written yet. Next: Tom's answers on 4.2,
+then the Programmer's tasks for it.
 
 ## Open
 
 - [x] Read the Programmer's report of the image update (IU9) and fold it and the three notes
       of 2026-11-23 into the plan (fifteenth revision, 4.0 "Result").
-- [ ] Design the image gallery (plan 4.2), then reference links (4.1) (D41). Discuss with Tom
-      first how the image database is to be used. The keyword scores match inside words
-      (`king` in `making`); settle that there. A chunk names its thread, not its post, so a
-      result can show the images of its threads but not of the posts the model read. The links are made
+- [~] The pictures of an answer (plan 4.2): designed on 2026-11-23 (sixteenth revision, D52 to
+      D54). Open with Tom, marked `@@TOM` in 4.2: where on the results page, the limit of 12,
+      a dig deeper; and his confirmation that the full pictures become public. When he has
+      answered: remove the flag, record the decisions, write the Programmer's tasks.
+- [ ] Design the reference links (4.1) (D41). The links are made
       by the site from ids, since answers are rendered with raw HTML off (D40).
 - [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
       whether the five collections are fit for the labelling (2.3).

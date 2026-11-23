@@ -6,7 +6,17 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D51 in the plan's table, D50 and D51 as amended on 2026-11-23.
+Decided: D1 to D54 in the plan's table, D50 and D51 as amended on 2026-11-23.
+
+Open (2026-11-23), marked `@@TOM` in plan 4.2, "Pictures of an answer":
+
+- [ ] Where the thumbnails go on the results page: directly under the answer, or below the
+      document lists.
+- [ ] The limit of 12 thumbnails under the answer.
+- [ ] A dig deeper or follow-up: no special rule (its thumbnails follow its provided documents,
+      and its pictures page has one section).
+- [ ] Confirm that the full pictures may be public at our address; at Google Groups they need a
+      sign-in.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -35,6 +45,9 @@ finished work items are in the git history of this file.
       and the new pictures in the tool. Done 2026-11-23; nothing is undecided.
 - [ ] Yearly update instructions: follow the Programmer's draft from the page alone and say
       where it leaves you guessing (`programmer_todo.md`, YU4).
+- [ ] Pictures of an answer (plan 4.2), at the deploy: read the free space on the server, then
+      upload the pictures, the thumbnails and the index (3.6 GB; the Programmer supplies the
+      commands).
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 

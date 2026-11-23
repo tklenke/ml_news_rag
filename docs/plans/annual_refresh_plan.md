@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-23 (fifteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is done; next is the design of the image gallery (4.2)
+**Status:** Revised 2026-11-23 (sixteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is done; the pictures of an answer (4.2) are designed, with three points open for Tom
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-23 (sixteenth revision):** The pictures of an answer are designed (4.2). Tom
+  decided what a visitor gets: thumbnails under the answer from the threads the answer was
+  given, and a page with the pictures of every thread found (D52); a click opens the full
+  picture from our own server (D53). This is meant to replace the keyword pages of 2025,
+  which stay for now (D54). Architect measured the 52 questions first: a first answer
+  brings a median of 7 pictures, and all threads found a median of 31. Three points are
+  open for Tom and marked in 4.2.
 - **2026-11-23 (fifteenth revision):** The image update (4.0) is done and recorded as it
   was run. Three decisions Tom made while the Programmer built it are folded in. No file
   is dropped for its size: Tom reviews the files under 1,000 bytes like any other, and a
@@ -178,6 +185,9 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D49 | (2026-11-23) Before the image gallery is designed, the image database gets the current images and the image getter is repaired (4.0). How the database is used (4.2) is discussed after that. |
 | D50 | (2026-11-23) Signature pictures and other clutter: every picture is Tom's decision, made by clicking in a local review tool; name, size and number of occurrences only choose what the tool shows him first. Amended the same day, during the work: a file under 1,000 bytes is no longer dropped without review; it is shown on the Suggested list and leaves the gallery only by its decision. |
 | D51 | (2026-11-23) The local file name of an image gains the attachment id, and the files on disk are renamed once (4.0). Added the same day, during the work: each character of the sender's file name that Windows does not allow becomes `_` (the list is in 4.0), and a local name is at most 180 bytes, the sender's file name shortened with its extension kept. |
+| D52 | (2026-11-23) The results page shows thumbnails of the pictures from the threads the answer was given, and links to a page with the pictures of every thread found for the question: those the answer was given first, then the others (4.2). |
+| D53 | (2026-11-23) A click on a thumbnail opens the full picture from our own server. If the server runs short of space, it opens the picture at Google Groups instead. |
+| D54 | (2026-11-23) The pictures of an answer are meant to replace the keyword pages and the gallery of 2025 under `/cgimages/` entirely. Those are not deleted yet. |
 
 ## Two repositories
 
@@ -213,8 +223,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    (D38, D39, D42):** see "Answer display" and "Corpus update". It carries S3. Deployed
    2026-11-22 (`775692d`); every check passed.
 6. **[REVISED - 2026-11-23] Phase 4:** the image update (4.0, D49), then the image gallery
-   (4.2), then reference links (4.1) (D41). 4.0 is done (2026-11-23); 4.2 and 4.1 are not
-   designed.
+   (4.2), then reference links (4.1) (D41). 4.0 is done (2026-11-23); 4.2 is designed
+   with three points open for Tom; 4.1 is not designed.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
@@ -1485,12 +1495,155 @@ the prompt, so its answers are not the ones Tom rated, and citation accuracy nee
 own check. S3 is closed by the answer renderer ("Answer display"); the links of this
 feature are to be made by the site from ids, not taken as HTML from the model.
 
-### 4.2 Image gallery for a result
+### 4.2 Pictures of an answer (D52 to D54)
 
-A link on the results page to a page showing images from the messages that were
-given to the model. The results page already carries each document's `source`
-(Google Groups message id) and `imageGetter`'s index is keyed by the same ids, so
-this is a lookup. Design after Phase 1.
+**[REVISED - 2026-11-23] (sixteenth revision)** Designed. It replaces the two sentences
+that stood here: a link on the results page to a page of pictures.
+
+**What was measured** (Architect, 2026-11-23, read-only: the 52 questions of
+`refresh_questions.csv` against the local collection and `gallery261123.idx`):
+
+| Pictures from | Median | Middle half | Most | Questions with none |
+|---|---|---|---|---|
+| the threads a first answer is given | 7 | 4 to 13 | 47 | 4 of 52 |
+| the other threads found (up to 60 chunks) | 20 | 12 to 36 | 64 | 0 |
+| both | 31 | 17 to 46 | 80 | 0 |
+
+- A first answer is given chunks of a median of 3 threads that have pictures. A thread of
+  the gallery index has a median of 2 pictures; 2 threads have over 20, the most is 27.
+- The 5,661 pictures of the gallery index are 3.46 GB (median 210 KB, largest 8.1 MB, 31
+  over 5 MB); all thumbnails together are 78 MB. The server had 36 GB free before Phase 0;
+  what is free now was not read.
+- 4,014 are `.jpg`, 1,041 `.jpeg`, 615 `.png`, 25 `.gif`, 7 `.bmp`.
+- The gallery index is a 3.3 MB JSON file.
+
+**What the visitor sees.**
+
+- **Under the answer** (D52): the heading "Pictures from the threads this answer drew on",
+  then the threads in the order of the provided documents. For each thread its subject,
+  which links to the thread at Google Groups, its date, and its thumbnails. A thumbnail
+  links to the full picture (D53), opened in a new tab.
+- At most 12 thumbnails are shown there, counted in that order; a thread may be cut. Below
+  them one link, "All pictures for this answer (N)", N being the number on the page below.
+  The link is there whenever N is over 0, also when no thumbnail is shown above it.
+- **The pictures page,** `/cozyrag/<job id>/pictures`: the question, a link back to the
+  answer, then the same threads with all their pictures, then, if the job has related
+  documents, a second heading "Pictures from other threads found" with those threads in
+  the order retrieved. No paging: the most seen is 80 pictures, and the browser loads a
+  thumbnail only when it comes into view (`loading="lazy"`).
+- A thread appears once. A thread among both the provided and the related documents is
+  shown with the provided ones.
+- No picture, no section: the results page of such an answer looks as it does today.
+- The wording says threads on purpose. A chunk names its thread and not its post, so the
+  pictures are those of the whole thread, also of posts the model never read.
+
+**@@TOM: three points to decide.**
+
+1. Where on the results page. Architect's proposal: directly under the answer and its
+   short disclaimer, above the feedback buttons, since the pictures belong to the answer.
+   The other reading of "at the bottom" is below the document lists.
+2. The limit of 12 under the answer. It shows everything for about three answers in four.
+3. A dig deeper or a follow-up. Its record holds no related documents: a revise is given
+   every chunk found (D26). Architect's proposal, which replaces what Architect first
+   suggested to Tom: no special rule. The thumbnails follow the provided documents, which
+   are in the order retrieved, so the first 12 are those of the best matches, and the
+   pictures page has one section. Keeping the first answer's split would mean storing it
+   in the record of the revise, for a difference few visitors would see.
+
+**Also for Tom to confirm.** The full pictures become public at our address. At Google
+Groups an attachment needs a sign-in; the thumbnails of 2025 are public already, the full
+pictures are not. The pictures are builders' own photos posted to the group.
+
+**Where the data comes from.**
+
+- **The index.** The site reads the gallery index of 4.0 as it is; no second format. It is
+  loaded once in each worker, at the first use. Its key is the thread id, which is the
+  `source` of a document of a Google Groups message, so the pictures of a document are one
+  lookup; a document of another kind (newsletter, Canard Pusher, AeroElectric) is not in
+  it. The site shows the subject and the date of a thread and never its author.
+- **The thumbnail name.** The step that makes the gallery index (`gallery_index.py` in
+  `ml`) writes the file name of the thumbnail into each picture entry, so that the site
+  holds no naming rule of its own. The gallery index is made again once for this.
+- **Settings** in the tracked `site.ini`: the path of the index and the base address of
+  the pictures (`/cgimages/pictures`). With no index setting, or with a file that cannot
+  be read, the site shows no pictures, says so once in the log and works as today.
+- **On the server** the index is `data/gallery/gallery.idx` in the checkout, a directory
+  mounted read-only into the flask container; one line in `docker-compose.yaml`. It is not
+  under an address nginx serves. `data/` must be git-ignored there; Programmer checks.
+- **The pictures** are served by nginx as static files, from the directory it serves
+  today: `/home/admin/www/cgimages/pictures/full` and `.../pictures/thumbs`. No change to
+  the nginx configuration. They get a directory of their own so that the pages of 2025,
+  which stay (D54), are not touched: their thumbnails have the names from before the
+  rename (D51). Removing the gallery of 2025 later is then deleting everything in
+  `cgimages` but `pictures`.
+- **Addresses.** A file name is the sender's, with spaces and other characters. The site
+  makes each address by percent-encoding the name, and the template escapes it like any
+  other text. A subject is text from a message and is escaped the same way.
+- **Stored answers.** Pictures are looked up when a page is viewed, so the answers
+  already on the server get them too, and a later index changes what an old answer shows.
+
+**One function** takes the documents of a job and the index and returns the threads with
+their pictures, in order, each thread once. The results page, the status response that
+carries the same page, and the pictures page all use it. The limit of 12 is applied where
+the results page is prepared, not in the template.
+
+**Not built.** Keyword search over the pictures: the keyword scores are not used, so
+their matching inside words (`king` in `making`) is left as it is and goes with the pages
+of 2025 (D54). A picture viewer on our own page. Paging. Choosing the pictures of the post
+a chunk came from: a chunk does not name its post.
+
+**Delivery.**
+
+1. In `ml`: the gallery index made again with the thumbnail names, and a step that writes
+   the list of the files the gallery index names (5,661 pictures and their thumbnails), so
+   that the pictures Tom removed are not uploaded.
+2. Before the upload Tom reads the free space on the server (`df -h`). If less than 10 GB
+   would be left after 3.6 GB more, stop: that is the case of D53's second half, which is
+   not designed here.
+3. Tom uploads the pictures and thumbnails of that list with `rsync`, which can be
+   stopped and continued, and then the index. Programmer supplies the commands and a check
+   that the server holds every file of the list with its size. The upload changes nothing
+   a visitor sees and can be done before the code.
+4. The code by `git pull`, rebuild, start, `docker compose restart nginx`.
+5. Checks: an answer about a subject with pictures shows thumbnails; a thumbnail opens
+   the full picture; "All pictures" opens the page with both sections; a dig deeper shows
+   its pictures; a stored answer from before the deploy shows pictures; an answer with no
+   picture looks as before; a picture whose name holds a space opens; the pages of 2025
+   under `/cgimages/` still open.
+
+Rollback: the code alone, by `git checkout` of the commit before and a rebuild. The
+uploaded files harm nothing and stay.
+
+**Local check with Tom before the review.** The local site runs without nginx, so nothing
+serves `/cgimages/` there. Programmer settles how the local site shows the pictures (for
+example a git-ignored compose override and the base address set in `site_local.ini`), on
+the condition that no file the server uses changes for it. Tom looks at an answer with few
+pictures, one with over 12, the pictures page, and a narrow window.
+
+**Tests** (`site_2024`, Flask's test client, a small index and job files in the tests' own
+data, no mocks):
+
+- A job whose provided documents include a thread with pictures: the results page has the
+  thumbnail, the link to the full picture, and the subject as a link to the thread.
+- A job with no such thread: no heading and no link.
+- A job with over 12 pictures: 12 thumbnails, and the link with the full count.
+- The pictures page: provided threads first, then related ones; a thread in both is shown
+  once, with the provided ones.
+- A record of a revise (no related documents): one section on the pictures page.
+- A document of a newsletter among the provided ones changes nothing.
+- A file name with a space, a `#` and a `%`: the address in the page is percent-encoded.
+  A subject with a tag in it appears as text.
+- The author of a thread is nowhere in either page.
+- The pictures page of an unknown job, and of a job without an answer, is a 404.
+- No index setting, and an index file that is missing: both pages are served without
+  pictures, and the log line is captured and asserted.
+- The status response of a finished job carries the thumbnails.
+- In `ml`: the gallery index names the thumbnail of each picture, and the file list holds
+  exactly the pictures and thumbnails of the gallery index.
+
+**The yearly update** gains its last step from this: the upload and the new index on the
+server. It is written into the instructions of `imageGetter` (`programmer_todo.md`, YU3)
+when this is deployed.
 
 ---
 
