@@ -6,9 +6,10 @@ import json
 import math
 import mimetypes
 import re
+import threading
 from collections import defaultdict
 from datetime import datetime
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Dict, List, Set
 from urllib.parse import parse_qs, urlparse
@@ -100,10 +101,12 @@ class ReviewState:
         self.setSuggestions = setSuggestions
         self.strDecisionsPath = strDecisionsPath
         self.dctDecisions = load_decisions(strDecisionsPath)
+        self.lock = threading.Lock()
         self.dctFiles = {d["hash"]: d["local_filename"] for d in content_items(dctIndex, {}, setSuggestions)}
 
     def items(self) -> List[Dict]:
-        return content_items(self.dctIndex, self.dctDecisions, self.setSuggestions)
+        with self.lock:
+            return content_items(self.dctIndex, self.dctDecisions, self.setSuggestions)
 
     def check_known(self, strHash: str):
         if strHash not in self.dctFiles:
@@ -114,17 +117,19 @@ class ReviewState:
         self.check_known(strHash)
         if strDecision not in DECISIONS:
             raise ValueError(f"Decision {strDecision} is not one of {DECISIONS}")
-        self.dctDecisions[strHash] = strDecision
-        save_decisions(self.strDecisionsPath, self.dctDecisions)
+        with self.lock:
+            self.dctDecisions[strHash] = strDecision
+            save_decisions(self.strDecisionsPath, self.dctDecisions)
 
     def keep(self, lstHashes: List[str]) -> int:
         """Mark keep each of the contents not marked remove; returns how many were marked."""
         for strHash in lstHashes:
             self.check_known(strHash)
-        lstKept = [strHash for strHash in lstHashes if self.dctDecisions.get(strHash) != "remove"]
-        for strHash in lstKept:
-            self.dctDecisions[strHash] = "keep"
-        save_decisions(self.strDecisionsPath, self.dctDecisions)
+        with self.lock:
+            lstKept = [strHash for strHash in lstHashes if self.dctDecisions.get(strHash) != "remove"]
+            for strHash in lstKept:
+                self.dctDecisions[strHash] = "keep"
+            save_decisions(self.strDecisionsPath, self.dctDecisions)
         return len(lstKept)
 
 
@@ -234,7 +239,7 @@ def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
     return ''.join(lstHtml)
 
 
-def make_server(state: ReviewState, strFullDir: str, strThumbsDir: str, strHost: str, intPort: int) -> HTTPServer:
+def make_server(state: ReviewState, strFullDir: str, strThumbsDir: str, strHost: str, intPort: int) -> ThreadingHTTPServer:
     """An HTTP server of the review tool; a port of 0 takes a free one."""
     pathFull = Path(strFullDir)
     pathThumbs = Path(strThumbsDir)
@@ -271,7 +276,9 @@ def make_server(state: ReviewState, strFullDir: str, strThumbsDir: str, strHost:
                 self.send_body(render_page(state.items(), strList, int(strPage)).encode("utf-8"),
                                "text/html; charset=utf-8")
             elif urlParts.path == "/decisions":
-                self.send_json(state.dctDecisions)
+                with state.lock:
+                    dctDecisions = dict(state.dctDecisions)
+                self.send_json(dctDecisions)
             elif len(lstSegments) == 2 and lstSegments[0] in ("thumb", "full") \
                     and lstSegments[1] in state.dctFiles:
                 strName = state.dctFiles[lstSegments[1]]
@@ -301,4 +308,4 @@ def make_server(state: ReviewState, strFullDir: str, strThumbsDir: str, strHost:
             except ValueError:
                 self.send_error(400)
 
-    return HTTPServer((strHost, intPort), ReviewHandler)
+    return ThreadingHTTPServer((strHost, intPort), ReviewHandler)

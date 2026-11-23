@@ -2,6 +2,7 @@
 # ABOUTME: Tests the three lists, their order, clicks saved to the decisions file, and the tool's HTTP interface
 
 import json
+import socket
 import threading
 import urllib.error
 import urllib.request
@@ -187,6 +188,14 @@ def post(strUrl, objBody):
 
 class TestHttpInterface:
     """Tests through the tool's own HTTP interface."""
+
+    def test_answers_while_a_browser_holds_an_idle_connection(self, server):
+        strBase, _ = server
+        strHost, strPort = strBase.rsplit("/", 1)[1].split(":")
+
+        with socket.create_connection((strHost, int(strPort))):
+            with urllib.request.urlopen(strBase + "/decisions", timeout=5) as response:
+                assert response.status == 200
 
     def test_decision_saved_and_read_back(self, server):
         strBase, state = server
