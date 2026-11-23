@@ -4,6 +4,7 @@
 SOURCEDOCPATHS = ["../data/msgs","../data/news","../data/aeroelectric","../data/cozybuilders"]
 #SOURCEDOCPATHS = ["../data/test",]
 COMPLETEDEMBEDFILE = "embedstatus.txt"
+EXPERIMENTDIR = "../data/chunk_experiment"
 
 CHUNKSIZE = 250 #initial 75
 EMBEDMODEL = "nomic-embed-text"

@@ -293,13 +293,17 @@ push or merge.
       chunks). Tests first, among them the plan's example of 10 words.
       Done. The chunker makes the plan's count of chunks for all five variants (42,234, 65,877,
       29,054, 48,982, 32,718).
-- [~] 2.1d `embedder.py` takes chunk size, overlap, collection name, Chroma port and Ollama port
+- [x] 2.1d `embedder.py` takes chunk size, overlap, collection name, Chroma port and Ollama port
       as parameters, with a progress file per collection. With no parameters it does what it does
       today. Tests first.
-- [ ] 2.1e A file that fails is logged and left out of the progress file, and the run goes on;
+      Done; also `--sources`, for the trial. A chunk size or overlap without a `--collection` is
+      refused. Importing `embedder.py` ran it until this change: the first test run opened the
+      production collection on port 8000. Checked read-only: 42,276 ids, hash `92d43eed...`, as
+      deployed.
+- [x] 2.1e A file that fails is logged and left out of the progress file, and the run goes on;
       20 failures in a row end the variant (plan 2.1). Tests first, with a real unreachable
       Ollama address.
-- [ ] 2.2a Start the experiment's Chroma (port 8010, data in `data/chunk_experiment/chroma`) and
+- [~] 2.2a Start the experiment's Chroma (port 8010, data in `data/chunk_experiment/chroma`) and
       the GPU Ollama (port 11998). Record the two `docker run` commands here.
 - [ ] 2.2b The queue (A, C, B, D, E on port 11998) with its stop and continue commands, one line
       each (plan 2.2a). The trial on `data/test_min`: stopped part way, continued, counts checked

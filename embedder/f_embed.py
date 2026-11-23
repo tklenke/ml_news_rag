@@ -93,6 +93,7 @@ class Embedder():
 
     def embed_file(self, textdocspath): 
       text_data = readtextfile(textdocspath)
+      chunks_stored = 0
 
       for filename, text in text_data.items():
         chunks = self.chunksplitter(text)
@@ -107,7 +108,8 @@ class Embedder():
         ids = [get_chunk_id(id, index) for index in chunknumber]
         metadatas = [{"source": id} for index in chunknumber]
         self.chromacollection.add(ids=ids, documents=chunks, embeddings=embeds, metadatas=metadatas)
-      return
+        chunks_stored += len(chunks)
+      return chunks_stored
 
 
 if __name__ == "__main__":  

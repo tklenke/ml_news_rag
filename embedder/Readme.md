@@ -31,5 +31,12 @@ pip install -r requirements. txt
 python embedder.py
 ```
 
-
-
+Without parameters it embeds into the production collection with the settings of
+`embedder_settings.py`. With a collection of another name it takes a chunk size, an overlap
+and ports, and lists the embedded files in `data/chunk_experiment/`:
+```
+python embedder.py --collection words400_overlap80 --chunk-size 400 --overlap 80 \
+    --chroma-port 8010 --ollama-port 11998
+```
+A file that fails is printed with `FAILED` and the traceback, and is tried again by the next
+run. 20 failures in a row end the run.
