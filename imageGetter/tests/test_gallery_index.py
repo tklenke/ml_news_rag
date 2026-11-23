@@ -79,7 +79,27 @@ class TestBuildGalleryIndex:
         dctGallery, _ = build_gallery_index(dctIndex, DECISIONS, full_dir)
 
         assert dctGallery["THREADbbbbb"]["metadata"] == dctIndex["THREADbbbbb"]["metadata"]
-        assert dctGallery["THREADbbbbb"]["images"][0] == dctIndex["THREADbbbbb"]["images"][1]
+        assert dctGallery["THREADbbbbb"]["images"][0] == {**dctIndex["THREADbbbbb"]["images"][1],
+                                                          "thumbnail_filename": "b_photo_thumb.jpg"}
+
+    def test_each_picture_names_its_thumbnail(self, full_dir):
+        dctIndex = make_index()
+        dctIndex["THREADbbbbb"]["images"].append(image("b_two.dots.png", "dots"))
+        (Path(full_dir) / "b_two.dots.png").write_bytes(b"x")
+
+        dctGallery, _ = build_gallery_index(dctIndex, DECISIONS, full_dir)
+
+        assert [dctImage["thumbnail_filename"] for dctImage in dctGallery["THREADbbbbb"]["images"]] \
+            == ["b_photo_thumb.jpg", "b_two.dots_thumb.jpg"]
+        assert [dctImage["thumbnail_filename"] for dctImage in dctGallery["THREADaaaaa"]["images"]] \
+            == ["a_photo_thumb.jpg", "a_tiny_thumb.jpg"]
+
+    def test_full_index_is_not_changed(self, full_dir):
+        dctIndex = make_index()
+
+        build_gallery_index(dctIndex, DECISIONS, full_dir)
+
+        assert dctIndex == make_index()
 
     def test_undecided_content_stays_and_is_counted(self, full_dir):
         dctGallery, dctStats = build_gallery_index(make_index(), {"poster": "remove"}, full_dir)

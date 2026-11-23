@@ -3,6 +3,7 @@
 
 from pathlib import Path
 from typing import Dict, Tuple
+from rename_images import thumbnail_name
 
 
 def build_gallery_index(dctIndex: Dict, dctDecisions: Dict[str, str], strFullDir: str) -> Tuple[Dict, Dict[str, int]]:
@@ -11,7 +12,7 @@ def build_gallery_index(dctIndex: Dict, dctDecisions: Dict[str, str], strFullDir
 
     An entry whose file is not on disk is dropped; a content marked remove is dropped;
     a content is listed once per thread and stays in each thread it is in; a thread left
-    with no picture is left out. Undecided contents stay.
+    with no picture is left out. Undecided contents stay. Each picture names its thumbnail.
 
     Raises:
         ValueError: a file is on disk but its entry has not been measured
@@ -43,7 +44,7 @@ def build_gallery_index(dctIndex: Dict, dctDecisions: Dict[str, str], strFullDir
             setSeen.add(strHash)
             if strHash not in dctDecisions:
                 setUndecided.add(strHash)
-            lstImages.append(dctImage)
+            lstImages.append({**dctImage, "thumbnail_filename": thumbnail_name(dctImage["local_filename"])})
         if lstImages:
             dctGallery[strMessageId] = {**dctEntry, "images": lstImages}
             dctStats["pictures"] += len(lstImages)

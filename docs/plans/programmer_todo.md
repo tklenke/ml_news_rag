@@ -346,9 +346,14 @@ tests of `site_2024` carry a small index and job files of their own and do not r
 Nothing of the 2025 pages under `/cgimages/` is changed or deleted (D54), and no full picture
 goes to the server (D53).
 
-- [ ] PA1 `ml`: the gallery index names the thumbnail of each picture. Test first. Make the
+- [x] PA1 `ml`: the gallery index names the thumbnail of each picture. Test first. Make the
       gallery index again and check that nothing else in it changed (2,368 threads, 5,661
       pictures) and that every named thumbnail is on disk.
+      Done 2026-11-23. Each picture entry has `thumbnail_filename` (`thumbnail_name` of
+      `rename_images.py`). New gallery index `data/images/gallery261123b.idx` (the CLI does
+      not overwrite; `gallery261123.idx` stays): without that field it equals the old one,
+      key order included; 2,368 threads, 5,661 pictures, 5,661 distinct thumbnail names,
+      all on disk in `data/images/thumbs`.
 - [ ] PA2 `ml`: the step that writes the list of the thumbnails the gallery index names. Test
       first: the list holds exactly those.
 - [ ] PA3 `site_2024`: the settings (path of the index, base address of the thumbnails) and
