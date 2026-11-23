@@ -429,8 +429,18 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       (`LongPathsEnabled` 0) a name in `\\wsl.localhost\...\data\images\full\` may have 198
       characters. 8 names changed; the one on disk (`muhearpIrTA_…`, 213 bytes) and its
       thumbnail were renamed once more and its entry in `rename_map.json` updated.
-- [ ] IU5 The decisions file (one decision per content hash) and the one loading of the 2025
+- [x] IU5 The decisions file (one decision per content hash) and the one loading of the 2025
       removal lists. Report the contents removed in one thread and kept in another.
+      Done 2026-11-23: `imageGetter/image_decisions.json` (content hash to `remove`/`keep`,
+      tracked), loaded once by `imageGetter/load_removals_cli.py` from `input/remove_list`
+      only, carried through `rename_map.json`. 441 names listed, 424 carried to a file on
+      disk, 17 never on disk under that name. 222 contents `remove` (244 files). 42 contents
+      removed in some copies only (180 removed files, 94 kept), 23 of them across threads,
+      19 within one thread: no decision, listed in `imageGetter/image_suggestions.json` for
+      the tool.
+      Tom decided (2026-11-23) not to load `input/remove_list2`: a second round of 2025
+      (27 pages, about 207 more pictures) that was never applied; all 203 pictures only it
+      names are on the 2025 gallery pages. They come up in the review tool like any others.
 - [ ] IU6 The review tool, as the plan describes it. Show it to Tom on the files of 2025
       before the download, so that a change he asks for costs little.
 - [ ] IU7 The step that makes the index the gallery reads.
