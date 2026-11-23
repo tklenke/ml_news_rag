@@ -145,6 +145,23 @@ Run in WSL from `imageGetter/`, then open `http://127.0.0.1:8765/` in a browser:
   **New**: every other undecided picture. **Decided**: everything marked.
 - Commit `image_decisions.json` after a session of review.
 
+### Make the Gallery Index
+
+After the review, run in WSL from `imageGetter/`:
+
+```bash
+../venv/bin/python gallery_index_cli.py \
+  ../data/images/indexYYMMDDhhmmss.idx \
+  ../data/images/full \
+  image_decisions.json \
+  ../data/images/galleryYYMMDD.idx
+```
+
+It drops entries whose file is not on disk and contents marked `remove`, lists a content
+once per thread (it stays in every thread it is in), and leaves out threads with no
+picture. Undecided contents stay, and are counted. It refuses a file on disk that has not
+been measured, and an output file that already exists.
+
 ### Phase 4: Deduplicate Images
 
 Remove duplicate images (based on file size) and missing files from the index:

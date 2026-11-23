@@ -1,0 +1,52 @@
+# ABOUTME: Makes the index the gallery reads from the full image index, its measures and Tom's decisions
+# ABOUTME: Drops missing files and removed contents, lists a content once per thread, leaves out empty threads
+
+from pathlib import Path
+from typing import Dict, Tuple
+
+
+def build_gallery_index(dctIndex: Dict, dctDecisions: Dict[str, str], strFullDir: str) -> Tuple[Dict, Dict[str, int]]:
+    """
+    Make the gallery index.
+
+    An entry whose file is not on disk is dropped; a content marked remove is dropped;
+    a content is listed once per thread and stays in each thread it is in; a thread left
+    with no picture is left out. Undecided contents stay.
+
+    Raises:
+        ValueError: a file is on disk but its entry has not been measured
+
+    Returns:
+        (gallery index in the shape of the full index, counts: threads, pictures,
+         removed, missing, repeated_in_thread, undecided_contents)
+    """
+    pathFull = Path(strFullDir)
+    dctGallery = {}
+    dctStats = {"threads": 0, "pictures": 0, "removed": 0, "missing": 0, "repeated_in_thread": 0}
+    setUndecided = set()
+    for strMessageId, dctEntry in dctIndex.items():
+        lstImages = []
+        setSeen = set()
+        for dctImage in dctEntry.get("images", []):
+            if not (pathFull / dctImage["local_filename"]).is_file():
+                dctStats["missing"] += 1
+                continue
+            strHash = dctImage.get("content_hash")
+            if strHash is None:
+                raise ValueError(f"Not measured, measure first: {dctImage['local_filename']}")
+            if dctDecisions.get(strHash) == "remove":
+                dctStats["removed"] += 1
+                continue
+            if strHash in setSeen:
+                dctStats["repeated_in_thread"] += 1
+                continue
+            setSeen.add(strHash)
+            if strHash not in dctDecisions:
+                setUndecided.add(strHash)
+            lstImages.append(dctImage)
+        if lstImages:
+            dctGallery[strMessageId] = {**dctEntry, "images": lstImages}
+            dctStats["pictures"] += len(lstImages)
+    dctStats["threads"] = len(dctGallery)
+    dctStats["undecided_contents"] = len(setUndecided)
+    return dctGallery, dctStats

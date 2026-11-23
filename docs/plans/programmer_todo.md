@@ -465,7 +465,12 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       Approved by Tom (2026-11-23) after trying it on a scratch copy of the decisions.
       One full-suite run had 7 failures that four runs after it did not repeat; which tests
       failed is not known (output was cut). If it comes back, keep the whole output.
-- [ ] IU7 The step that makes the index the gallery reads.
+- [x] IU7 The step that makes the index the gallery reads.
+      Done 2026-11-23: `imageGetter/gallery_index.py`, `gallery_index_cli.py`. Drops by
+      decision only (Tom, IU6), not by size; undecided contents stay and are counted; a file
+      on disk that is not measured stops it. Tried on the 2025 files into the scratchpad,
+      not into `data/`: 2,275 threads, 5,312 pictures; dropped 579 marked remove, 591 not
+      on disk, 329 repeated in a thread (6,811 entries in all).
 - [ ] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
       missing), then measuring, then his review in the tool.
 - [ ] IU9 The gallery index and the thumbnails of the new files. `README.md` of `imageGetter/`
