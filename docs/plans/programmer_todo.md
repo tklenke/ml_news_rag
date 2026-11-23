@@ -354,8 +354,14 @@ goes to the server (D53).
       not overwrite; `gallery261123.idx` stays): without that field it equals the old one,
       key order included; 2,368 threads, 5,661 pictures, 5,661 distinct thumbnail names,
       all on disk in `data/images/thumbs`.
-- [ ] PA2 `ml`: the step that writes the list of the thumbnails the gallery index names. Test
+- [x] PA2 `ml`: the step that writes the list of the thumbnails the gallery index names. Test
       first: the list holds exactly those.
+      Done 2026-11-23: `imageGetter/thumbnail_list_cli.py` (function `thumbnail_filenames`
+      in `gallery_index.py`), one name per line for `rsync --files-from`; it stops on a
+      name with a line break or a thumbnail not on disk. Written:
+      `data/images/thumbs261123b.txt`, 5,661 names, 54.8 MB. For PA9: no name holds a
+      plain space; 15 hold U+202F (narrow no-break space), 6 a `#`, 3 a `%`. The check
+      "a thumbnail whose name holds a space" uses one of the 15. 100 names start with `-`.
 - [ ] PA3 `site_2024`: the settings (path of the index, base address of the thumbnails) and
       the loading of the index, once in each worker. No setting, or a file that cannot be
       read: no pictures, one line in the log, the site works. Tests first, the log line

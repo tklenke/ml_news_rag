@@ -7,7 +7,7 @@ from pathlib import Path
 # Import function to test
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from gallery_index import build_gallery_index
+from gallery_index import build_gallery_index, thumbnail_filenames
 
 
 def image(strName, strHash, intBytes=5000):
@@ -118,3 +118,24 @@ class TestBuildGalleryIndex:
 
         with pytest.raises(ValueError, match="a_gone.jpg"):
             build_gallery_index(make_index(), DECISIONS, full_dir)
+
+
+class TestThumbnailFilenames:
+    """Tests for the list of the thumbnails the gallery index names."""
+
+    def test_list_holds_exactly_the_thumbnails_of_the_gallery_index(self, full_dir):
+        dctGallery, _ = build_gallery_index(make_index(), DECISIONS, full_dir)
+
+        assert thumbnail_filenames(dctGallery) == ["a_photo_thumb.jpg", "a_tiny_thumb.jpg",
+                                                   "b_photo_thumb.jpg"]
+
+    def test_name_with_spaces_kept_as_it_is(self):
+        dctGallery = {"THREADddddd": {"images": [{"thumbnail_filename": "d_my photo #1 100%_thumb.jpg"}]}}
+
+        assert thumbnail_filenames(dctGallery) == ["d_my photo #1 100%_thumb.jpg"]
+
+    def test_name_with_a_line_break_refused(self):
+        dctGallery = {"THREADddddd": {"images": [{"thumbnail_filename": "d_two\nlines_thumb.jpg"}]}}
+
+        with pytest.raises(ValueError, match="line break"):
+            thumbnail_filenames(dctGallery)
