@@ -362,10 +362,16 @@ goes to the server (D53).
       `data/images/thumbs261123b.txt`, 5,661 names, 54.8 MB. For PA9: no name holds a
       plain space; 15 hold U+202F (narrow no-break space), 6 a `#`, 3 a `%`. The check
       "a thumbnail whose name holds a space" uses one of the 15. 100 names start with `-`.
-- [ ] PA3 `site_2024`: the settings (path of the index, base address of the thumbnails) and
+- [x] PA3 `site_2024`: the settings (path of the index, base address of the thumbnails) and
       the loading of the index, once in each worker. No setting, or a file that cannot be
       read: no pictures, one line in the log, the site works. Tests first, the log line
       captured.
+      Done 2026-11-23 (`site_2024` `4ce6064`): `fwww/src/pictures.py` (`PictureIndex`),
+      `site_app.Pictures`; `site.ini` `[PICTURES]` `INDEX = /app/gallery/gallery.idx`,
+      `THUMBS_URL = /cgimages/pictures/thumbs`. The plan names `/cgimages/pictures` as the
+      base; the setting is the thumbnails' own address so the code adds no `/thumbs`.
+      The pages that show "the site works" without an index are tested in PA5 and PA6.
+      `data/` is git-ignored in `site_2024` (plan's check). Full suite: 303 passed.
 - [ ] PA4 The one function that takes the documents of a job and the index and returns the
       threads with their pictures, in order, each thread once. Tests first: a thread in the
       provided and the related documents, a document of a newsletter, a link that does not
