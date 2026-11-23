@@ -121,6 +121,30 @@ python generate_thumbnails_cli.py \
 
 After downloading and processing images, use this workflow to dedupe, tag, review, and curate your image collection:
 
+### Review Pictures by Content
+
+Run in WSL from `imageGetter/`, then open `http://127.0.0.1:8765/` in a browser:
+
+```bash
+../venv/bin/python review_images_cli.py \
+  ../data/images/indexYYMMDDhhmmss.idx \
+  ../data/images/full \
+  ../data/images/thumbs \
+  image_decisions.json \
+  image_suggestions.json
+```
+
+- One content (same SHA-256) is one picture, shown under its earliest thread. Files under
+  1,000 bytes are not shown.
+- A click marks a picture `remove` (red); a second click takes it back. Each click is
+  written to `image_decisions.json` at once.
+- The button at the end of a page marks every picture of the page not marked `remove`
+  as `keep`.
+- **Suggested**: undecided pictures in 2 or more threads, with a shorter side under 200
+  pixels, named `imageNNN` under 20,000 bytes, or removed in some copies only in 2025.
+  **New**: every other undecided picture. **Decided**: everything marked.
+- Commit `image_decisions.json` after a session of review.
+
 ### Phase 4: Deduplicate Images
 
 Remove duplicate images (based on file size) and missing files from the index:

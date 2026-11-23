@@ -443,6 +443,13 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       names are on the 2025 gallery pages. They come up in the review tool like any others.
 - [ ] IU6 The review tool, as the plan describes it. Show it to Tom on the files of 2025
       before the download, so that a change he asks for costs little.
+      Built 2026-11-23, waiting for Tom to look at it: `imageGetter/review_images.py`,
+      `review_images_cli.py` (port 8765, command in `imageGetter/README.md`). On the 2025
+      files: 5,388 contents measured, 47 under 1,000 bytes not shown; Suggested 431, New
+      4,717, Decided 193 (the 222 `remove` less 29 under 1,000 bytes). A content is shown
+      under its earliest thread; threads by date, contents in more threads first.
+      Not decided by the plan, chosen here: 100 pictures a page; a click on a `keep`
+      picture marks it `remove`, a second click leaves it undecided.
 - [ ] IU7 The step that makes the index the gallery reads.
 - [ ] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
       missing), then measuring, then his review in the tool.
