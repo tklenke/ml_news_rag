@@ -9,11 +9,13 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0, the Phase 1 code change with the site fixes, and the follow-on fixes are
-deployed. The evaluation is done. Next are the corpus update and the answer display, which deploy
-with the model change (1.6). They are independent: either first, or CU5 running unattended during
-the answer display. Then Phase 4, then Phase 2 (D41). One session per group; start each session
-fresh. Code review happens once per deploy, not per commit.
+**Order:** Phase 0, the Phase 1 code change with the site fixes, the follow-on fixes, and the
+answer display with the corpus update and the model change are deployed (`775692d`); the browser
+checks of AD7 are open. Then Phase 4, then Phase 2 (D41). One session per group; start each
+session fresh. Code review happens once per deploy, not per commit.
+
+**Deploys:** nginx looks up the name `flask` only when it starts. A deploy or rollback that
+recreates the flask container ends with `docker compose restart nginx`.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
@@ -72,6 +74,37 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
 
           ls -la ~/site_ini_before_s10
           rm -r ~/site_ini_before_s10
+
+- [ ] **From the deploy of the answer display and the corpus update (2026-11-22).** Only once the
+      browser checks of AD7 are done and Tom says the site has run well. Ends both rollbacks
+      below. The image and the data directory can be removed separately.
+
+          cd ~/site_2024
+          docker image rm site_2024-flask:c311cda
+          sudo rm -r ~/chroma_before_corpus_update
+          rm ~/chroma_corpus_update.tar.gz ~/chroma_corpus_update.sha256
+          rm ~/collection_check.py ~/query_check.py
+
+      Rollback of the code (not rehearsed). Forward again: `git checkout main`,
+      `docker compose build flask`, then the last two lines.
+
+          cd ~/site_2024
+          git checkout c311cda
+          docker tag site_2024-flask:c311cda site_2024-flask:latest
+          docker compose up -d --force-recreate flask
+          docker compose restart nginx
+
+      Rollback of the data (not rehearsed):
+
+          cd ~/site_2024
+          docker compose stop flask chroma-rag
+          sudo mv data/chroma ~/chroma_rejected
+          sudo mv ~/chroma_before_corpus_update data/chroma
+          docker compose up -d
+          docker compose restart nginx
+
+      Local leftovers, Tom's choice: `~/chroma_deploy`,
+      `site_2024/data/chroma_before_corpus_update`, and `refetch_backup` on Windows.
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
@@ -153,11 +186,10 @@ Result, 30 answers per model, rated blind by Tom:
     gpt-6-luna             14        13         3         2       5.6       328   0.00074
     gpt-6.1-terra          11        15         4         1       5.0        30   0.00574
 
-- [ ] 1.6 Deploy Tom's choice of 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` =
+- [x] 1.6 Deploy Tom's choice of 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` =
       `gpt-6.2-sol` (not evaluated). Set in the tracked `site.ini` (`1e72014`) and tried on the
       local site with one question and one dig deeper. Tom waived the code review of this change.
-      **Do not merge or deploy alone:** it goes out with "Answer display" and "Corpus update" below (D38, D42). The
-      server still uses `gpt-4o-mini` and `gpt-4.1`, which shut down 2027-01-14.
+      Deployed 2026-11-22 (`775692d`) with "Answer display" and "Corpus update" (D38, D42).
 
 Still useful:
 
@@ -188,10 +220,15 @@ data, since the tests of `site_2024` do not read `ml/`.
       pages keep `markdown_to_html`; test that one with raw HTML still shows it.
 - [x] AD4 `evaluation/review_answers.py` uses the same function.
 - [x] AD5 `README.md`: the models now used.
-- [~] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
+- [x] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
       If it reads badly, stop and report to Architect; do not restyle on your own.
-- [ ] AD7 Merge and deploy (Tom waived the code review of all of it, D47)
+      Tom approved the look on 2026-11-22.
+- [~] AD7 Merge and deploy (Tom waived the code review of all of it, D47)
       with 1.6 and the corpus update (CU8) by the plan's deploy steps and checks. Add what the deploy leaves on the server to "Server cleanup".
+      Deployed 2026-11-22: `775692d`, count and id hash and the three query results as expected.
+      nginx then gave 502: the deploy steps did not restart it. `docker compose restart nginx`
+      gave 200 (the log was not read, so the stale address is inferred). Tom verified that the
+      website works. Open: Tom's results of the single browser checks.
 
 ## Corpus update (repo: `ml/`; data in `../site_2024/data/chroma`)
 
@@ -234,8 +271,10 @@ do not start those of `ml/docker-compose.yaml`.
       `data/corpus_update/after.json` (id hash `92d43eed...`). 2: 99 short chunks, smallest
       cosine 0.99998. 4: passed on the local site (`gpt-6-luna`, new thread among the sources).
       Tar, SHA-256 and check script for the server: `~/chroma_deploy` (local).
-- [ ] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
+- [~] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
       the tar to "Server cleanup".
+      Deployed 2026-11-22: 42,276 chunks, id hash `92d43eed...`. Open: a question about a new
+      thread lists that thread as a source (one of the browser checks of AD7).
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 

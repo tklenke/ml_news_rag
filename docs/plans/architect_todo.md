@@ -8,19 +8,12 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-22 (twelfth revision: D41 to D44, "Corpus update"). Everything through
-the follow-on fixes is deployed (`c311cda`). Next for the Programmer: the corpus update (CU0 to
-CU8) and the answer display (AD1 to AD7), which deploy together with the model change (`1e72014`
-in `site_2024`). Waiting on Architect: the reports of CU7, and AD6 if a table reads badly in a
-narrow window. Next design: the image gallery (4.2).
+Plan revised on 2026-11-22 (twelfth revision, D41 to D47). Everything through the answer
+display, the corpus update and the model change is deployed (`775692d`); Tom's single browser
+checks are open (`programmer_todo.md`, AD7). Next design: the image gallery (4.2).
 
 ## Open
 
-- [ ] If the Programmer reports from AD6 that a table reads badly in a narrow window: design
-      its styling.
-- [ ] `ml/requirements.txt` is created by CU1 (the role files tell every session to read it;
-      it does not exist yet). Close this when CU1 is done.
-- [ ] Read the reports of CU7 before the deploy.
 - [ ] Design the image gallery (plan 4.2), then reference links (4.1) (D41). The links are made
       by the site from ids, since answers are rendered with raw HTML off (D40).
 
@@ -38,7 +31,7 @@ R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.
 
 Phase 0, the Phase 1 code change, the follow-on fixes and the twelve plan revisions through
 2026-11-22 are done: planning, question set, site review, the designs of the three deploys, of
-the answer display and of the corpus update, decisions D1 to D44, the Programmer's notes through the evaluation, and the review findings
+the answer display and of the corpus update, decisions D1 to D47, the Programmer's notes through the evaluation, and the review findings
 R4 and R5. The evaluation showed no candidate slow at its default reasoning effort, so no
 reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
 file.
@@ -49,8 +42,7 @@ file.
   `../site_2024/` (retrieval, prompts, LLM calls, pages, deployment). See the plan.
 - Production RAG settings (`site_2024/fwww/site.ini`): `EMBED = nomic-embed-text`,
   `PREFIX = search_query:` (documents are embedded with `search_document:`; the
-  asymmetry is correct, and the missing space after the colon changes nothing: plan 1.1), `LLM_DRAFT = gpt-4o-mini`, `LLM_REVISE = gpt-4.1`
-  (`gpt-6-luna` and `gpt-6.2-sol` once `1e72014` is deployed),
+  asymmetry is correct, and the missing space after the colon changes nothing: plan 1.1), `LLM_DRAFT = gpt-6-luna`, `LLM_REVISE = gpt-6.2-sol`,
   `MAX_DISTANCE = .35`, `MIN_DOCUMENTS = 5`, `MAX_DOCUMENTS = 60`,
   `MAX_DRAFT_DOCUMENTS = 15`.
 - `site.ini` holds real keys until S10 is done. Read settings from it with a pattern
@@ -60,8 +52,7 @@ file.
 - Production job log (2026-11-21): about 850 questions, about 45 rated (roughly 20 of
   those `n/a`; the scale changed over time). Typical first answer: about 4,500 tokens
   in, 300 out, 5 s. A sampled follow-up: about 21,000 tokens in.
-- The server runs `main` at `c311cda`, delivered by `git pull` (reported by the Programmer;
-  `main` in the repo is at `c311cda`). The rollbacks to `bed83f4`
+- The server runs `main` at `775692d`, delivered by `git pull`. The rollbacks to `bed83f4`
   and to the state before Phase 0 (`906ffd8` plus a stash) are kept there until the server
   cleanup (`programmer_todo.md`).
 - The server has 1.9 GiB of memory, 2 CPUs, a 2 GB swap file, Docker 29.10.0 and Compose
@@ -78,7 +69,7 @@ file.
 - The Windows copy of the project (`/mnt/c/Users/tom/Documents/projects/ml`) is an older clone
   with uncommitted edits. On 2026-11-22 its `f_filter.py` and `process_message.py` were the
   same as in `ml`. Its `data/` is where Tom's fetches arrive.
-- The collection holds 41,427 chunks of 11,161 sources (2026-11-22, before the corpus update).
+- The collection holds 42,276 chunks of 11,388 sources (2026-11-22, after the corpus update).
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is

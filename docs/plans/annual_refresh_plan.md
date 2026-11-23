@@ -1,7 +1,7 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (twelfth revision); Phase 0, the Phase 1 code change and the follow-on fixes deployed (`c311cda`); models chosen; the answer display and the corpus update are designed and deploy with them
+**Status:** Revised 2026-11-22 (twelfth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the browser checks of the last deploy are open; next is the image gallery (4.2)
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
@@ -182,10 +182,11 @@ at `bed83f4`. Programmer follows the same version-control rules there.
 4. **[REVISED - 2026-11-22] Phase 1 evaluation:** harness, baseline, blind rating by
    Tom. Done 2026-11-22 (1.5).
 5. **[REVISED - 2026-11-22] Answer display, corpus update and model change, one deploy
-   (D38, D39, D42):** see "Answer display" and "Corpus update". It carries S3.
+   (D38, D39, D42):** see "Answer display" and "Corpus update". It carries S3. Deployed
+   2026-11-22 (`775692d`); the browser checks are open (`programmer_todo.md`, AD7).
 6. **[REVISED - 2026-11-22] Phase 4:** image gallery (4.2), then reference links (4.1)
    (D41). Not yet designed.
-7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 if tokens permit (D41).
+7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
 
 One Programmer session per step. Code review once per deploy.
 
@@ -600,9 +601,8 @@ a config change. The prompt wording from 1.1 is already deployed by then.
 and a `git pull`.
 
 **[REVISED - 2026-11-22]** The commit is `1e72014` on `wip/annual-refresh` in
-`site_2024`, pushed and not merged. It is not deployed alone: it goes out with the UI
-changes (D38). Its code review is waived (D37); the UI changes are reviewed. Until that
-deploy the server uses `gpt-4o-mini` and `gpt-4.1`, which stop on January 14.
+`site_2024`. It is not deployed alone: it goes out with the UI changes (D38). Code
+review is waived (D37, D47). Deployed 2026-11-22 (`775692d`).
 
 ---
 
@@ -1062,8 +1062,12 @@ start. Checks:
 - Three stored answers from before the deploy, one of them with a list, read well.
 - The home page looks as before.
 
-Rollback: `git checkout c311cda`, rebuild, start. That also returns to `gpt-4o-mini`
-and `gpt-4.1`, which answer until January 14.
+**[REVISED - 2026-11-22]** nginx looks up the name `flask` only when it starts, so the
+deploy and either rollback end with `docker compose restart nginx`. The deploy steps left
+it out, and the site gave 502 until nginx was restarted.
+
+Rollback: `git checkout c311cda`, rebuild, start, restart nginx. That also returns to
+`gpt-4o-mini` and `gpt-4.1`, which answer until January 14.
 
 **To watch afterwards.** `gpt-6.2-sol` answers were never sampled, so what a dig deeper
 or a follow-up writes (code, quotes, wider tables) is unknown. CommonMark renders all of
@@ -1161,7 +1165,8 @@ exactly what was checked. Nothing is embedded on the server.
    change; the three rehearsal questions give the same top 10 as locally; a question
    about a new thread lists that thread as a source.
 
-Rollback of the data alone: stop flask and Chroma, move the two directories back, start.
+Rollback of the data alone: stop flask and Chroma, move the two directories back, start,
+restart nginx.
 It does not depend on the rollback of the code ("Answer display"); either can be done
 alone. `chroma_before_corpus_update` and the tar go on the "Server cleanup" list.
 
@@ -1202,7 +1207,7 @@ this is a lookup. Design after Phase 1.
 
 | Risk | Mitigation |
 |---|---|
-| Shutdown date reached before the model switch | **[REVISED - 2026-11-22]** The switch is committed (`1e72014`) and waits for the UI changes (D38). If those are not ready in time, it can be merged and deployed alone. |
+| Shutdown date reached before the model switch | **[REVISED - 2026-11-22]** Closed: the switch is deployed (`775692d`). |
 | New models reject the current API call | Closed: all four candidates answer the current call on the upgraded SDK (0.7). |
 | Chroma upgrade damages or cannot read the collection | Rehearsed on a local copy with before and after checks (0.6, passed); server data tarred before the deploy (0.8). A re-embed takes hours if both fail. |
 | One deploy carries many changes | The full stack runs locally first; without Docker locally, Chroma is split out (Phase 0 assumptions). |

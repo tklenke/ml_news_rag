@@ -15,11 +15,13 @@ finished work items are in the git history of this file.
       on the server (the Programmer supplies the command).
 - [ ] From 2026-11-28, if the site has run well: server cleanup with the Programmer
       (commands in `programmer_todo.md`, "Server cleanup").
-- [ ] With the Programmer, before the answer display is reviewed: look at an answer with a
-      table in a narrow browser window on the local site (AD6).
+- [x] Look at an answer with a table in a narrow browser window on the local site (AD6). Approved
+      2026-11-22.
 - [x] Fetch again the 10 threads that were already in the corpus (D44). Done 2026-11-22; 8 had new
       posts.
-- [ ] With the Programmer, at the deploy: upload the Chroma tar to the server (CU8).
+- [x] At the deploy: upload the Chroma tar to the server (CU8). Done 2026-11-22.
+- [ ] Report the browser checks of the deploy of 2026-11-22 (AD7; plan "Answer display", "Deploy",
+      and "Corpus update", "Delivery" step 5).
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
 - [x] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5). Done 2026-11-22, first answer only (D35).
