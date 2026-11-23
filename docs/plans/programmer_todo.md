@@ -372,10 +372,13 @@ goes to the server (D53).
       base; the setting is the thumbnails' own address so the code adds no `/thumbs`.
       The pages that show "the site works" without an index are tested in PA5 and PA6.
       `data/` is git-ignored in `site_2024` (plan's check). Full suite: 303 passed.
-- [ ] PA4 The one function that takes the documents of a job and the index and returns the
+- [x] PA4 The one function that takes the documents of a job and the index and returns the
       threads with their pictures, in order, each thread once. Tests first: a thread in the
       provided and the related documents, a document of a newsletter, a link that does not
       start with `https://groups.google.com/`.
+      Done 2026-11-23 (`site_2024` `f84300b`): `get_pictures` in `fwww/src/pictures.py`
+      returns (provided threads, related threads not among them). A thread: subject, date,
+      link (`url_from_source`), pictures (`thumbnail_url`, `url` or `None`). Full suite: 311.
 - [ ] PA5 The results page: the section under the answer and its short disclaimer, above the
       feedback buttons, at most 12 thumbnails, the link with the count. Tests of the plan
       first, through the page, also through the status response.
