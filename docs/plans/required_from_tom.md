@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D55 in the plan's table, D50 and D51 as amended on 2026-11-23.
+All decided: D1 to D56 in the plan's table, D50 and D51 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -39,6 +39,9 @@ finished work items are in the git history of this file.
       (PA7); at the deploy, upload the thumbnails and the index (under 100 MB; the Programmer
       supplies the commands) and do the browser checks, one of them in a browser that is not
       signed in to Google.
+- [ ] Reference links, the trial (plan 4.1a): on the local page the Programmer shows, rate the
+      10 answers of batch 1 and mark up to 50 citations `yes` / `no` (does the chunk support
+      the sentence). A second batch only if the result is on the line.
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 

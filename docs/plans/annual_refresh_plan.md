@@ -1,11 +1,17 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-23 (sixteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is done; the pictures of an answer (4.2) are designed and decided
+**Status:** Revised 2026-11-23 (seventeenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is done; the pictures of an answer (4.2) are designed and decided; the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-23 (seventeenth revision):** The reference links are designed (4.1, D56). The
+  chunks in the prompt are numbered, the model writes the number after a statement, and the
+  site makes the link. Whether `gpt-6-luna` cites correctly, and whether its answers stay
+  as good with the changed prompt, is not known, so a trial on the 30 rated questions comes
+  first and the display is built only if the trial passes a rule fixed here. The
+  Programmer does the pictures (4.2) first.
 - **2026-11-23 (sixteenth revision):** The pictures of an answer are designed (4.2). Tom
   decided what a visitor gets: thumbnails under the answer from the threads the answer was
   given, and a page with the pictures of every thread found (D52); a click opens the full
@@ -192,6 +198,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D53 | (2026-11-23) A click on a thumbnail opens the full picture at Google Groups, by the attachment address, as the pages of 2025 do. No full picture is put on our server. Replaces Tom's first choice of the same day, the full picture from our own server. |
 | D54 | (2026-11-23) The pictures of an answer are meant to replace the keyword pages and the gallery of 2025 under `/cgimages/` entirely. Those are not deleted yet. |
 | D55 | (2026-11-23) The thumbnails are directly under the answer and its short disclaimer, above the feedback buttons. At most 12 are shown there. A dig deeper or a follow-up has no rule of its own: its thumbnails follow its provided documents (4.2). |
+| D56 | (2026-11-23) Reference links in answers are built in two steps: a trial of numbered sources on the rated questions, then the display, only if the trial passes (4.1). The pictures of an answer (4.2) are built first. |
 
 ## Two repositories
 
@@ -228,7 +235,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    2026-11-22 (`775692d`); every check passed.
 6. **[REVISED - 2026-11-23] Phase 4:** the image update (4.0, D49), then the image gallery
    (4.2), then reference links (4.1) (D41). 4.0 is done (2026-11-23); 4.2 is designed
-   and decided (D52 to D55); 4.1 is not designed.
+   and decided (D52 to D55) and is built first; 4.1 is designed (D56): a trial, then the
+   display if the trial passes.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
@@ -1485,19 +1493,170 @@ details in `programmer_todo.md`, IU1 to IU9). Tom waived the code review.
 - The yearly steps with their commands are in `imageGetter/README.md`, "Yearly Update".
 - The server still has the pages of 2025. What replaces them is 4.2.
 
-### 4.1 Reference links inside answers (D5)
+### 4.1 Reference links inside answers (D5, D56)
 
-Users want links to the source documents within the answer text, as Gemini does.
-Today sources are listed below the answer only. To evaluate: label each chunk in
-the prompt with its source id, ask the model to cite ids, convert ids to links
-when rendering. Open points: citation accuracy of the cheap tier, and how to link
-non-message sources (newsletters, Canard Pusher). Links rendered from model
-output must go through the same sanitising as S3. Design after Phase 1.
+**[REVISED - 2026-11-23] (seventeenth revision)** Designed. It replaces the outline that
+stood here. Repo `site_2024`. Built after 4.2.
 
-**[REVISED - 2026-11-22]** Not part of the deploy with the model change (D39). It changes
-the prompt, so its answers are not the ones Tom rated, and citation accuracy needs its
-own check. S3 is closed by the answer renderer ("Answer display"); the links of this
-feature are to be made by the site from ids, not taken as HTML from the model.
+**What it is.** Visitors want to see, inside the answer, which source a statement comes
+from. Today the sources are a list below the answer.
+
+**How.**
+
+- The chunks in the prompt are numbered: each starts with `[1]`, `[2]` and so on, in the
+  order they are sent. The prompt asks the model to write the number of the chunk after a
+  statement it takes from it.
+- The model returns numbers, not links. The site turns a number into a link to the source
+  of that chunk when it shows the answer. The record of a job already keeps its chunks in
+  the order they were sent, so number 3 is the third provided document.
+- No HTML is taken from the model, so "Answer display" stands as it is (D40).
+
+**Looked for and not found: a ready-made feature.** Read on 2026-11-23 for Architect, four
+pages of OpenAI's documentation (the text guide, the file search guide, the reference of
+`chat.completions`, the structured outputs guide). The annotations of `chat.completions`
+are documented for web search only; file citations belong to file search over files
+uploaded to OpenAI. Nothing was found that cites text the caller puts in the prompt.
+Parts of two of the pages were read as summaries, and no other page was read, so this is
+not proof that none exists.
+
+**Not known, and the reason for a trial.**
+
+- Whether `gpt-6-luna` cites the chunk a statement really comes from, cites at all, or
+  cites everything. A wrong link is worse than none: it lends a source to advice on
+  building an aircraft.
+- Whether the answers stay as good. The prompt changes, so the answers are no longer the
+  ones Tom rated, and `gpt-6-luna` passed that rating with 14 `perfect` against 17.
+
+**A limit to expect.** A link goes to the thread, the newsletter or the page, never to the
+post or the passage; in a long thread the visitor still has to look. Showing the text the
+model read is not part of this.
+
+#### 4.1a The trial
+
+**The prompt.**
+
+- `build_prompt` can number the chunks. Whether it does is one setting in `site.ini`, off
+  until the trial has passed. The trial calls the same function with numbering on, so it
+  measures what production would send; switching it on later is a commit, and a revert
+  switches it off.
+- A numbered chunk is `[n] ` followed by its text; the chunks are separated as today.
+- With numbering on, the instruction of each of the three prompts gains this text, fixed
+  here so that the trial and production use the same words:
+
+  > Each piece of context starts with its number in square brackets. After a statement
+  > that you take from the context, write the number of the piece it comes from in square
+  > brackets, like this: [3]. For more than one piece write [2][5]. Use only the numbers
+  > given. Do not write a list of sources at the end.
+
+- With numbering off the prompts are, character for character, what they are today. A
+  test holds that.
+- All three kinds of prompt are numbered by the same code. In a revise the chunks are the
+  provided and then the related ones in the order retrieved, so a number in the draft
+  means the same chunk in the revise. In a follow-up the previous content keeps its
+  numbers and the additional content goes on counting after it; the record of each lists
+  the chunks in that same order (1.1 items 7 and 8).
+- The record of an answer made with numbering says so (one true or false value in
+  `result`). Without it no number is ever made into a link: an answer of today that
+  happens to hold `[1]` stays as it is.
+
+**The run** (paid, about 3 cents: 30 calls at the cost of a first answer).
+
+- The 30 questions of the model evaluation, `gpt-6-luna`, first answer only (D35).
+- The same chunks as the rated answers. The collection has changed since the evaluation
+  (the corpus update), so the chunks are fetched by the ids saved with each prompt of the
+  evaluation (`evaluation/output/prompts`), not retrieved again. First, with numbering
+  off, the prompt built from the fetched chunks must equal the saved prompt. A question
+  where it does not (a chunk of a thread fetched again) is reported and left out.
+- The answers go to a directory of their own beside those of the evaluation.
+
+**Counted by a script,** over the answers of the run:
+
+- answers with no number at all, listed;
+- numbers that name no chunk, listed;
+- per answer, the numbers written and the distinct chunks cited, of how many sent;
+- anything that looks like a citation and is not in the form asked for (a bracket or
+  parenthesis holding digits and other text, a list of sources at the end), listed;
+- median tokens, reasoning tokens, latency and cost beside those of the rated run.
+
+**Checked by Tom,** on batch 1 (10 questions), on a local page like the rating page:
+
+1. He rates each of the 10 answers `perfect` / `ok` / `not_good` and notes factual errors,
+   as in 1.4. The numbers are shown as written. This is not blind: there is one answer
+   per question.
+2. For up to 5 citations of each answer, chosen at random by the page, he sees the
+   sentence with its number beside the text of the chunk, and marks whether the chunk
+   supports the sentence: `yes` or `no`. At most 50 judgements.
+
+**The rule, fixed before the run.** The display is built if all three hold:
+
+- Of the 30 answers at most 1 holds a number that names no chunk, and at least 27 hold a
+  number. An answer that says the context does not cover the question is not counted as
+  missing one; Architect reads the answers without a number and says which they are.
+- At least 9 of 10 of the citations Tom judged are `yes`.
+- On the 10 questions the answers have no more `not_good` and no more factual errors than
+  the rated `gpt-6-luna` answers to the same questions.
+
+If the second or third is within one judgement of the line, batch 2 is checked the same
+way before deciding. If the trial fails on the form of the citations only, the wording
+above is changed once and the run repeated. Any other failure goes to Tom: not built,
+or tried with `gpt-6.1-terra` at eight times the cost per answer.
+
+Ten questions and 50 citations are a small sample. That is accepted, as in 1.5: the
+feature is one setting and can be switched off in minutes.
+
+**Not in the trial.** A dig deeper and a follow-up. `gpt-6.2-sol` was never evaluated
+(D35), and it is not evaluated here. Before the deploy Tom looks at three of them on the
+local site.
+
+**Tests** (4.1a): the prompts with numbering off are unchanged; a numbered first prompt,
+revise and follow-up, with the follow-up's additional content counting on from the
+previous content and reading sensibly when it is empty; the record says whether the
+answer was numbered; the counting script on a few answers written for the test, one with
+a number too high, one with none, one with `(3)` and one with a list of sources.
+
+#### 4.1b The display
+
+Built only after Architect has recorded that the trial passed.
+
+- **One place.** The function that gives the HTML of an answer (`answer_html.py`) also
+  takes the sources of the numbered chunks. A rule added to the renderer works on the
+  text of the parsed answer, not on the finished HTML, and not inside code. It makes a
+  link of `[3]`, and of each number of `[2, 5]`, if the model writes that form.
+- The link shows the number as written, leads to the address the source list already
+  uses for that source (`url_from_source`), and carries the source's label as its title.
+  It opens in a new tab.
+- A number that names no chunk, or a chunk whose source has no address, stays text.
+- An answer whose record does not say it was numbered gets no links.
+- **The numbers come from the record before it is reduced** to one row per source for the
+  page (1.1 item 6): several chunks of one source have different numbers and the same
+  link.
+- **The source list** under the answer shows, for each source, the numbers of its chunks,
+  so that a visitor can go from a number to its row and back.
+- **A link the model defines itself.** Markdown lets a text define what `[1]` links to
+  (`[1]: https://...`). The answer renderer no longer reads such definitions, so a number
+  can only lead to our source. Checked when this is built: that none of the 90 archived
+  answers is shown differently for it.
+- The rating page of the evaluation uses the same function and shows the same links.
+- With the pictures (4.2) there is nothing to settle: both read the same documents of the
+  record and neither changes the other.
+
+**Tests** (4.1b), through the results page where the page is the subject: a numbered
+answer has a link to the source of chunk 3 at `[3]`; `[2, 5]` gives two links; a number
+too high, and a number in a code span, stay text; an answer that is not numbered and
+holds `[1]` has no link; two chunks of one source link to the same address and the
+source row shows both numbers; a definition `[1]: https://example.com` in an answer does
+not change where `[1]` leads; hostile text as in "Answer display" still gives no tag and
+no `javascript:` link; a revise and a follow-up record link by their own lists.
+
+**Deploy.** Code review, merge with Tom's approval, `git pull`, rebuild, start, restart
+nginx; the setting on in the same deploy. Checks: a question whose answer has numbers,
+and a click on one opens the source; the number is in the row of that source; a dig
+deeper and a follow-up each show links that open; a stored answer from before the deploy
+looks as before; the pictures still show. Rollback: the setting off (a revert and a
+`git pull`); answers made while it was on keep their links.
+
+**To watch afterwards.** The share of `not_good` ratings on the site before and after,
+told apart by the date of the job.
 
 ### 4.2 Pictures of an answer (D52 to D55)
 

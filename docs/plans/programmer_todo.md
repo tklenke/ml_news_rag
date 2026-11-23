@@ -366,9 +366,10 @@ A stop writes `STOPPED by the stop command` to the log.
 
 ## Phase 4
 
-The image update (plan 4.0) is done. Next: "Pictures of an answer" (plan 4.2), then "Yearly
-update instructions"; both are at the end of this section. Ask Tom if he wants the other
-order. The reference links (4.1) are not yet designed (D41). S3 is done by "Answer display".
+The image update (plan 4.0) is done. Next, in this order (Tom, 2026-11-23): "Pictures of an
+answer" (plan 4.2), then "Reference links: the trial" (plan 4.1a). "Yearly update
+instructions" has no place in that order yet: ask Tom when he wants it. All three are at the
+end of this section. S3 is done by "Answer display".
 
 ### Image update (repo: `ml/`, module `imageGetter/`)
 
@@ -528,6 +529,32 @@ goes to the server (D53).
       down as seen. Add the upload and the index to the yearly steps of `imageGetter`
       (YU3). Report to Architect in a note in `architect_todo.md`: the checks, what the
       deploy left on the server, and anything in the design that did not fit the code.
+
+### Reference links: the trial (repo: `../site_2024/`)
+
+Plan: "4.1 Reference links inside answers", 4.1a. Read all of 4.1; the tests are listed there.
+After "Pictures of an answer". Nothing of this is deployed with numbering on: the setting stays
+off, and with it off every prompt is what it is today. The display (4.1b) has no tasks yet;
+do not start it.
+
+- [ ] RL1 `build_prompt` numbers the chunks when told to, with the plan's wording, for all
+      three kinds of prompt; the setting in `site.ini`, off; the record says whether an answer
+      was numbered. Tests first, the first of them that the prompts with numbering off are
+      unchanged.
+- [ ] RL2 The run: the 30 questions, `gpt-6-luna`, the chunks fetched by the ids saved with the
+      evaluation's prompts. Before any paid call: with numbering off, the prompt built from
+      the fetched chunks equals the saved prompt, for each question; report those where it
+      does not and leave them out. Answers into a directory of their own. Then the paid run
+      (about 3 cents); tell Tom before it starts.
+- [ ] RL3 The counting script of the plan, tests first, and its output for the run.
+- [ ] RL4 The page for Tom: batch 1, the rating of each answer as in the evaluation, and up to
+      5 citations of each answer, chosen at random, the sentence beside the text of its chunk,
+      `yes` or `no`. Each click saved at once. Show it to Tom on two answers before he does
+      the ten.
+- [ ] RL5 Report to Architect in a note in `architect_todo.md`: the counts, Tom's ratings
+      beside his ratings of the `gpt-6-luna` answers to the same questions, his `yes` and `no`,
+      the questions left out, the answers without a number (by question id). Do not apply the
+      rule yourself and do not change the wording of the prompt: both are Architect's.
 
 ### Yearly update instructions (repo: `ml/`, modules `msgGetter/` and `imageGetter/`)
 

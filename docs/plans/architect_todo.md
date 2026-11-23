@@ -8,12 +8,12 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-23 (sixteenth revision: the pictures of an answer, plan 4.2, designed
-and decided, D52 to D55; the fifteenth recorded the image update, 4.0, as run). Everything through the answer
+Plan revised on 2026-11-23 (seventeenth revision: the reference links, plan 4.1, designed as a
+trial and then the display, D56; the sixteenth designed the pictures of an answer, 4.2, D52 to D55; the fifteenth recorded the image update, 4.0, as run). Everything through the answer
 display, the corpus update and the model change is deployed (`775692d`) and every check passed.
 The embedding of the Phase 2 variants runs at night from 2026-11-22, stopped each morning and
 continued each evening (plan 2.2a): A, C, B and D are done, E was not finished on 2026-11-23, and
-the Programmer's report of the five checks (2.2d) is not written yet. Next design: the reference links (4.1).
+the Programmer's report of the five checks (2.2d) is not written yet. The Programmer builds the pictures first, then the citation trial. No design is open.
 
 ## Open
 
@@ -22,8 +22,11 @@ the Programmer's report of the five checks (2.2d) is not written yet. Next desig
 - [x] The pictures of an answer (plan 4.2): designed and decided on 2026-11-23 (sixteenth
       revision, D52 to D55); the Programmer's tasks are PA1 to PA9.
 - [ ] Read the Programmer's report of the pictures of an answer (PA9).
-- [ ] Design the reference links (4.1) (D41). The links are made
-      by the site from ids, since answers are rendered with raw HTML off (D40).
+- [x] Design the reference links (4.1): done 2026-11-23 (seventeenth revision, D56), a trial
+      (4.1a, tasks RL1 to RL5) and then the display (4.1b).
+- [ ] Read the Programmer's report of the citation trial (RL5), read the answers without a
+      number, apply the rule of 4.1a and record the result in the plan. Only then write the
+      Programmer's tasks for the display (4.1b).
 - [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
       whether the five collections are fit for the labelling (2.3).
 
