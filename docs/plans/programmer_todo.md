@@ -366,7 +366,8 @@ A stop writes `STOPPED by the stop command` to the log.
 
 ## Phase 4
 
-The image update (plan 4.0) first; it is designed. The image gallery (4.2) and the reference
+The image update (plan 4.0) is done. Next: "Yearly update instructions" at the end of this
+section. The image gallery (4.2) and the reference
 links (4.1) are not yet designed (D41). S3 is done by "Answer display".
 
 ### Image update (repo: `ml/`, module `imageGetter/`)
@@ -488,3 +489,135 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       ("Yearly Update" in `imageGetter/README.md`, a line in the top-level procedure).
       Report in `architect_todo.md`.
       Code review of the image update waived by Tom (2026-11-23).
+
+### Yearly update instructions (repo: `ml/`, modules `msgGetter/` and `imageGetter/`)
+
+Asked for by Tom on 2026-11-23. Tom will run the message fetch and the image update himself
+in about a year, alone, from the page. **Write for a reader who has forgotten everything:** he
+knows what the project is and can use a terminal, and remembers no path, no command, no order
+of steps and none of this year's surprises. Documentation only: no code change in this task. A
+fault found while writing is reported to Tom, not fixed here.
+
+The measure of done: Tom can go from "a year has passed" to new messages in `data/msgs_md` and
+a new gallery index without asking anyone and without reading the code.
+
+What exists today:
+
+- `msgGetter/Readme.md`: five lines of steps and old notes. It names a script that does not
+  exist (`process_messages.py`; the file is `process_message.py`), and says nothing of where
+  the output lands or of anything found in 2026.
+- `imageGetter/README.md`: the section "Yearly Update" has this year's seven commands in
+  order, and "Prerequisites" has the Chrome setup. The file is written for the one who built
+  it: it does not say what to expect from a step, how to tell that it worked, or what to do
+  when it did not. The rest of the file (Phases 1 to 6) describes the build of 2025.
+
+Tasks:
+
+- [ ] YU1 Read both modules' code and the two READMEs, then settle with Tom, before writing:
+      a. **Where the commands are run from.** The image download of 2026 ran with the
+         Windows Python from the WSL directory (`\\wsl.localhost\...`). The message fetch
+         of 2026 ran in the Windows clone (`C:\Users\tom\Documents\projects\ml`), an older
+         copy with uncommitted edits, and its files were copied to WSL afterwards. Tom finds
+         the clone brittle. Ask him which way the instructions describe. If he wants the
+         message fetch run from the WSL directory too, that has not been tried: try it with
+         him on a few ids before it is written down as the way. If it needs a code change,
+         stop and report to Architect.
+      b. **Where the instructions live.** Architect's suggestion: one section "Yearly Update"
+         at the top of each module's README, complete in itself, and the top-level
+         `README.md` procedure naming the two in order with what comes between and after
+         them (the embedding and the deploy are not this task; name them and point to where
+         they are described). `msgGetter/Readme.md` becomes `README.md` (`git mv`). Tom may
+         prefer one file for both.
+- [ ] YU2 `msgGetter`: the yearly fetch, written out. It must cover at least:
+      - What the step is for and what it produces: the id list file, a `.md` per thread in
+        `data/msgs_md`, a `.txt` per thread in `data/msgs`, and which later step reads which.
+      - What has to be installed on Windows and how to check each: Python and its packages
+        (give the `pip install` line and a command that shows they import), Chrome,
+        ChromeDriver. For ChromeDriver: where to see Chrome's version, where to download the
+        matching one, into which folder to unzip it so that the path written in the scripts
+        finds it, and what the error looks like when the versions differ.
+      - Starting Chrome on the debug port: the exact command, that every Chrome window is
+        closed first, that Chrome needs a profile of its own for the port to open (found in
+        2026 for the images; `chrome_with_debug.bat` names another profile folder: say which
+        one is used and make the file and the text agree), how to check that the port is
+        open, and that he signs in to Google Groups in that window.
+      - The start date: where the last run's date is found (the name of the newest
+        `msgids_*.txt`), which line of `get_msg_ids.py` to edit, and whether the range starts
+        on the last run's end date or a day before it (the id files of 2025 and 2026
+        overlap by a day; ask Tom which he wants and say why).
+      - Each command, where it is run from, about how long it took in 2026, what the screen
+        shows while it runs, and how to tell it finished well: the number of ids, the number
+        of files written, where to look.
+      - That it can be stopped and run again, and what it skips when run again.
+      - **Known threads with new replies.** A thread that already has a `.txt` is passed
+        over, so replies of the last year to an older thread are not fetched. In 2026 this
+        was 10 threads; they were fetched again by moving their `.txt` and `.md` aside (D44).
+        Write how to list such threads from the new id file and how to fetch them again,
+        with the rule that a refetched file shorter than the one it replaces is not used.
+      - Getting the files to where the next steps read them, if they are not written there
+        (depends on YU1a), and a count that shows nothing was lost on the way.
+      - The filter: what `f_filter.py` removes, that the `.txt` can be made again from the
+        `.md` in WSL without Chrome, and the command for it.
+      - A check at the end: how many new threads to expect (227 in 2026, for scale), opening
+        two or three of the new `.md` files and what a good one looks like, and what the
+        button text of his own posts looked like before the filter knew it.
+      - What follows: the embedding. Name the step and where it is described; if it is
+        described nowhere he could follow, say so in the report (YU5).
+      - Troubleshooting, each with the message as it appears and what to do: ChromeDriver
+        and Chrome versions differ; the debug port is not open; not signed in (what the
+        fetched page then holds); Google slows or blocks the fetch; a thread that fails.
+        Where a case has not been seen, say so instead of guessing its message.
+- [ ] YU3 `imageGetter`: the section "Yearly Update" made complete in itself, on the same
+      pattern. Keep the seven steps and add at least:
+      - That it starts only after the messages are in `data/msgs_md`, and how to check that.
+      - For each step: where it is run (WSL or Windows PowerShell), the command with the
+        parts that change each year marked (the index name with its date and time, the log
+        name, the gallery index name) and how to find this year's value, what it prints,
+        about how long it took in 2026, and how to tell it worked.
+      - The numbers of 2026 for scale: 2,631 threads and 6,811 entries in the index, 591
+        downloaded with none failed, 346 new contents to review, 611 thumbnails, 2,368
+        threads and 5,661 pictures in the gallery index.
+      - The download: the Chrome setup in full here or by a link to "Prerequisites" that
+        lands on the exact lines; that WSL has to be running; that PowerShell is needed and
+        why cmd does not work; what a failed download looks like in the log and that running
+        the step again fetches only what is missing.
+      - The review tool, as a short user's guide: how to start it, the address to open, the
+        three lists and which to do first, what the dashed frame means, what a click does,
+        what the button at the end of a page does, that a decision is saved at once and can
+        be changed but not undone, how to know he is finished (Suggested and New empty), how
+        to stop the tool, and that `image_decisions.json` is then committed (give the git
+        commands).
+      - What a signature picture or other clutter looked like in 2026, in two or three
+        examples in words, so that he recognises the kind.
+      - What is left alone on purpose: files in `data/images` are never deleted by these
+        steps; the copies `full_before_rename` and `thumbs_before_rename` belong to the one
+        rename of 2026 and are not part of a yearly run; `rename_images_cli.py` and
+        `load_removals_cli.py` were run once and are not run again.
+      - What follows: how the gallery index reaches the site. Not designed on 2026-11-23
+        (plan 4.2); leave a line that says so and names the plan section, for Architect to
+        replace when 4.2 is built.
+      - Mark the older sections of the file (Phases 1 to 6) for what they are, so that he
+        does not take them for steps of the yearly run. Do not delete them.
+      - Troubleshooting, as in YU2.
+- [ ] YU4 Proof by Tom. He reads both from the top and walks through them without help:
+      every command that changes nothing is run (the checks, starting Chrome, the review
+      tool on a scratch copy of the decisions); the others he reads and says what he would
+      type. Every place where he stops to ask is a gap: fix the text, not the answer in the
+      chat. A fresh fetch is not made for this.
+- [ ] YU5 Top-level `README.md`: the update procedure names the steps in order and points
+      to the two sections (its step 4 is empty today). Report to Architect in a note in
+      `architect_todo.md`: what was settled in YU1, anything in the code that made the
+      instructions awkward or that Tom should not have to do by hand (an edited constant,
+      a path written in a script), and any later step of the yearly update that has no
+      instructions he could follow.
+
+Rules for the writing:
+
+- Every command is one he can paste: full paths or the `cd` before it, and no placeholder
+  without a line that says how to find the value.
+- A command is written down only if it was run this year or is run now, and the text says
+  which. Nothing is described from reading the code alone without saying so.
+- One step, one action, one way to tell it worked. Short sentences. No "simply" and no
+  "as usual": there is no usual after 12 months.
+- Dates and versions of 2026 are given as examples and marked as such (Chrome and
+  ChromeDriver 158, Python 3.13 on Windows).

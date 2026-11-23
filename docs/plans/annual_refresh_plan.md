@@ -1,11 +1,19 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-23 (fourteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is designed and comes before the design of the image gallery (4.2)
+**Status:** Revised 2026-11-23 (fifteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is done; next is the design of the image gallery (4.2)
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-23 (fifteenth revision):** The image update (4.0) is done and recorded as it
+  was run. Three decisions Tom made while the Programmer built it are folded in. No file
+  is dropped for its size: Tom reviews the files under 1,000 bytes like any other, and a
+  picture leaves the gallery only by his decision (amends D50). The local name replaces
+  the characters Windows does not allow, because a `:` had cut 11 files of 2025 to empty
+  ones, and it is at most 180 bytes, because 7 names could never be stored (both amend
+  D51). The review tool is described as Tom approved it: a keep or discard choice on each
+  picture.
 - **2026-11-23 (fourteenth revision):** The image database is brought up to date and its
   clutter removed before the gallery is designed (D49; 4.0). Architect measured the 6,211
   downloaded files against the 424 Tom removed by hand in 2025: no rule of name, size and
@@ -168,8 +176,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D47 | (2026-11-22) Code review of the deploy with the answer display, the corpus update and the model change is waived (all of it). |
 | D48 | (2026-11-22) The embedding of the Phase 2 variants runs overnight from 2026-11-22, unattended, ahead of Phase 4 (2.2a). It is stopped in the morning and continued in the evening, over about two nights. Tom watches the coding; the run itself is unattended. The rest of Phase 2 stays after Phase 4 (D41). |
 | D49 | (2026-11-23) Before the image gallery is designed, the image database gets the current images and the image getter is repaired (4.0). How the database is used (4.2) is discussed after that. |
-| D50 | (2026-11-23) Signature pictures and other clutter: a file under 1,000 bytes is dropped without review. Everything else is Tom's decision, made by clicking in a local review tool; name, size and number of occurrences only choose what the tool shows him first. |
-| D51 | (2026-11-23) The local file name of an image gains the attachment id, and the files on disk are renamed once (4.0). |
+| D50 | (2026-11-23) Signature pictures and other clutter: every picture is Tom's decision, made by clicking in a local review tool; name, size and number of occurrences only choose what the tool shows him first. Amended the same day, during the work: a file under 1,000 bytes is no longer dropped without review; it is shown on the Suggested list and leaves the gallery only by its decision. |
+| D51 | (2026-11-23) The local file name of an image gains the attachment id, and the files on disk are renamed once (4.0). Added the same day, during the work: each character of the sender's file name that Windows does not allow becomes `_` (the list is in 4.0), and a local name is at most 180 bytes, the sender's file name shortened with its extension kept. |
 
 ## Two repositories
 
@@ -205,7 +213,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    (D38, D39, D42):** see "Answer display" and "Corpus update". It carries S3. Deployed
    2026-11-22 (`775692d`); every check passed.
 6. **[REVISED - 2026-11-23] Phase 4:** the image update (4.0, D49), then the image gallery
-   (4.2), then reference links (4.1) (D41). 4.0 is designed; 4.2 and 4.1 are not.
+   (4.2), then reference links (4.1) (D41). 4.0 is done (2026-11-23); 4.2 and 4.1 are not
+   designed.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
@@ -1298,6 +1307,10 @@ deploy alone does not show which caused it; rolling back one of them does.
 **[REVISED - 2026-11-23]** New. Repo `ml/`, module `imageGetter/`. Nothing here changes the
 site or the server; what the site shows of the images is 4.2.
 
+**[REVISED - 2026-11-23] (fifteenth revision)** Done; see "Result" at the end of this
+section. The design below is as built. Where Tom changed it during the work, the paragraph
+is marked.
+
 **What was measured** (Architect, 2026-11-23, read-only; the index `czindex.idx` of 2025,
 the files in `data/images/full`, the hand removal lists in `imageGetter/input/`):
 
@@ -1351,6 +1364,14 @@ the files in `data/images/full`, the hand removal lists in `imageGetter/input/`)
   removal lists of 2025 hold the present names, so they are loaded (below) by the present
   name or after being carried through the same rename, not left to miss. Not confirmed:
   that an attachment id is one post; in the collisions looked at it differed between them.
+
+  **[REVISED - 2026-11-23] (fifteenth revision)** Two additions by Tom (D51). Each of
+  `< > : " / \ | ? *` in the sender's file name becomes `_`: on Windows a `:` writes to an
+  alternate data stream, so the download of 2025 left 11 such pictures as zero-byte files
+  cut at the colon. And a local name is at most 180 bytes, the sender's file name shortened
+  with its extension kept: 7 names of 822 to 1,017 bytes (long Google photo ids) could
+  never be stored, and with Windows long paths off a name under
+  `\\wsl.localhost\...\data\images\full\` may have 198 characters.
 - **Date.** The date is read with or without `unread,` before it. Test with a message of
   2026.
 - **The index builder reports** the files it could not read, with the reason, and goes on.
@@ -1369,27 +1390,36 @@ the files in `data/images/full`, the hand removal lists in `imageGetter/input/`)
   content of which Tom removed every copy becomes `remove`. A content of which he removed
   some copies and kept others gets no decision and is shown to him as a suggestion; the
   Programmer reports how many there are.
-- **Dropped without review:** a file under 1,000 bytes (D50). It needs no decision and is
-  not shown.
+- **[REVISED - 2026-11-23] (fifteenth revision) Nothing is dropped without review.** A
+  file under 1,000 bytes is shown on the Suggested list and decided like any other (Tom,
+  amending D50). The first design dropped those files unseen; of the 47 contents
+  concerned, 29 were already `remove` from 2025 and 18 were undecided.
 - **The review tool** (D50). A local page, served on `127.0.0.1` by a script of
   `imageGetter/` with Python's standard library, not part of the site.
-  - Thumbnails; one click on a picture marks it `remove`, a second click takes that back.
-    Each click is saved at once, so closing the browser loses nothing.
+  - **[REVISED - 2026-11-23] (fifteenth revision)** Thumbnails, each with a keep or
+    discard choice (Tom asked for this in place of a click that marks `remove`). A picture
+    not yet clicked shows keep with a dashed frame and is not saved; a click on the
+    picture switches keep and discard and is saved at once, so closing the browser loses
+    nothing. A decision can be changed but not taken back to undecided.
   - One content is one picture on the page, with the number of threads it is in, its
     width and height and its file name. A link opens the full picture.
-  - A button at the end of a page marks every picture of that page not marked `remove` as
-    `keep`, which is what makes it leave the list of undecided ones.
+  - A button at the end of a page saves the pictures of that page that still have the
+    dashed frame as `keep`, which is what makes them leave the list of undecided ones.
   - Three lists. Suggested: undecided pictures that are in 2 or more threads, or have a
-    shorter side under 200 pixels, or are named `imageNNN` and are under 20,000 bytes.
-    New: every other undecided picture. Decided: everything marked, to take a click back.
+    shorter side under 200 pixels, or are named `imageNNN` and are under 20,000 bytes, or
+    are under 1,000 bytes, or were removed in 2025 in some copies and kept in others.
+    New: every other undecided picture. Decided: everything marked, to change a decision.
+  - 100 pictures a page, with the instructions at the top and the bottom of each page.
   - Pictures of the same thread stay together, and repeated ones come first, so that a
     signature picture changed each month is seen beside its neighbours.
   - The thresholds of "Suggested" only order Tom's work. They remove nothing.
 - **The index the gallery reads** is made by one step from the full index, the measures
-  and the decisions: without the files under 1,000 bytes, without the contents marked
-  `remove`, without the entries whose file is missing, and with a content listed once per
-  thread. A thread left with no picture is not in it. A content that is in several threads
-  stays in each of them.
+  and the decisions: without the contents marked `remove`, without the entries whose file
+  is missing, and with a content listed once per thread. A thread left with no picture is
+  not in it. A content that is in several threads stays in each of them.
+  **[REVISED - 2026-11-23] (fifteenth revision)** Size is no longer a cause (D50 as
+  amended). An undecided content stays in and is counted; a file on disk that has no
+  measures stops the step.
 - **Thumbnails** are made for the new files as today.
 - **Not part of this:** the keyword tagging, and the static pages under `/cgimages/` on the
   server. Both belong to how the database is used (4.2). Until then the server keeps the
@@ -1407,10 +1437,39 @@ in one thread and kept in another left undecided; the gallery index for a small 
 has a file under 1,000 bytes, a removed content, a missing file and a content twice in a
 thread.
 
+**[REVISED - 2026-11-23] (fifteenth revision)** As built: Tom waived TDD and tests for the
+download changes (IU3); his download on Windows was the check, and the mocked tests of
+`test_download.py` stay as they were. The script of the review page is checked for syntax
+only, not run by the tests.
+
 **Order.** Code and tests; the 2025 files measured and the 2025 removals loaded; Tom's
 download on Windows; measuring; Tom's review in the tool; the gallery index and the
 thumbnails. Reported to Architect at the end: threads and pictures in the gallery index,
 pictures dropped by each cause, pictures still undecided, and the downloads that failed.
+
+**[REVISED - 2026-11-23] (fifteenth revision) Result** (Programmer's report, 2026-11-23;
+details in `programmer_todo.md`, IU1 to IU9). Tom waived the code review.
+
+- Gallery index `data/images/gallery261123.idx`, made from `index261123105058.idx` (2,631
+  threads, 6,811 entries) and `imageGetter/image_decisions.json`: 2,368 threads and 5,661
+  pictures, each with a thumbnail.
+- Left out: 663 entries marked remove, 487 repeated in a thread, none for a missing file.
+- Decisions: 5,734 contents, 5,401 keep, 333 remove, none undecided.
+- Download: 591 fetched, none failed: the pictures of the new threads and those missing
+  from older ones, among them the ones a shared name had kept from being saved. The split
+  was not counted. 346 of the 591 were contents not seen before.
+- Rename: 6,211 pictures and 6,190 thumbnails. In the index of 2025, 211 names had been
+  shared by 465 attachments.
+- The removal lists of 2025: `input/remove_list` was loaded (222 contents `remove`).
+  `input/remove_list2`, a second round of 2025 that was never applied, was not (Tom); its
+  pictures came up in the tool like any others.
+- The 4,717 contents of the New list from 2025, pictures Tom had kept then, were marked
+  `keep` in one step on his word, so that New held only the downloads.
+- Left on disk: the copies `data/images/full_before_rename` and `thumbs_before_rename`;
+  19 files that no URL of the 2025 index names (11 of them empty); 10 thumbnails that no
+  picture names any more.
+- The yearly steps with their commands are in `imageGetter/README.md`, "Yearly Update".
+- The server still has the pages of 2025. What replaces them is 4.2.
 
 ### 4.1 Reference links inside answers (D5)
 

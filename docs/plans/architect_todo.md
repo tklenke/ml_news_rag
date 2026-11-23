@@ -8,15 +8,18 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-23 (fourteenth revision, D49 to D51: the image update, plan 4.0). Everything through the answer
+Plan revised on 2026-11-23 (fifteenth revision: the image update, plan 4.0, is done and recorded
+as run, with Tom's changes to D50 and D51). Everything through the answer
 display, the corpus update and the model change is deployed (`775692d`) and every check passed.
 The embedding of the Phase 2 variants runs at night from 2026-11-22, stopped each morning and
-continued each evening (plan 2.2a); read the
-Programmer's report of it first. Next design, after the image update: how the image database is used (4.2).
+continued each evening (plan 2.2a): A, C, B and D are done, E was not finished on 2026-11-23, and
+the Programmer's report of the five checks (2.2d) is not written yet. Next design: how the image
+database is used (4.2), starting with a discussion with Tom.
 
 ## Open
 
-- [ ] Read the Programmer's report of the image update (IU9).
+- [x] Read the Programmer's report of the image update (IU9) and fold it and the three notes
+      of 2026-11-23 into the plan (fifteenth revision, 4.0 "Result").
 - [ ] Design the image gallery (plan 4.2), then reference links (4.1) (D41). Discuss with Tom
       first how the image database is to be used. The keyword scores match inside words
       (`king` in `making`); settle that there. A chunk names its thread, not its post, so a
@@ -27,42 +30,10 @@ Programmer's report of it first. Next design, after the image update: how the im
 
 ## Notes from Programmer
 
-All notes through 2026-11-22 are answered in the plan (eleventh revision); they are in the git
+All notes through 2026-11-23 are answered in the plan (the image update in the fifteenth
+revision, 4.0); they are in the git
 history of this file. The two S12 gaps the Programmer left as
 they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
-
-- **NOTE FROM PROGRAMMER (2026-11-23): image update (plan 4.0) done, report.** Gallery
-  index `data/images/gallery261123.idx`, made from `index261123105058.idx` (2,631 threads,
-  6,811 entries) and `imageGetter/image_decisions.json`:
-  - In the gallery index: 2,368 threads, 5,661 pictures; every one has a thumbnail.
-  - Dropped: 663 entries marked remove, 487 repeated in a thread, 0 file not on disk.
-    No entry is dropped for its size (Tom's change to D50, note below).
-  - Undecided: 0. Decisions: 5,734 contents, 5,401 keep, 333 remove.
-  - Download: 591 fetched, 0 failed (Windows, Chrome with its own profile on the debug
-    port: Chrome would not open the port on the normal profile). Of the 591, 346 were new
-    contents for review; the rest were copies of contents already decided.
-  - Thumbnails: 611 made. One failed, `eJJziZ0ar3U_6340f919ea129_part0_1_Ahaa.jpg`: the
-    file of 2025 is truncated; it is marked remove, so it is not in the gallery.
-    The 10 old thumbnails that two pictures shared are now named by no picture; left in
-    `data/images/thumbs` (no deleting there in this task).
-  - The server still has the pages of 2025; the gallery index is not deployed (4.2).
-- **NOTE FROM PROGRAMMER (2026-11-23):** Decided by Tom during IU6, a change to D50 for the
-  plan: files under 1,000 bytes are no longer dropped without review. The review tool shows
-  them on the Suggested list, and the gallery index (IU7) drops a picture only by its
-  decision. 47 contents are under 1,000 bytes: 29 were `remove` from 2025, 18 undecided.
-  Also decided by Tom: the 4,717 contents of the New list (the 2025 pictures he kept, in
-  one thread only) were marked `keep` in one step, so New will hold only the downloads.
-- **NOTE FROM PROGRAMMER (2026-11-23):** Decided by Tom during IU2, an addition to D51 for
-  the plan: the local name of an image replaces each of `< > : " / \ | ? *` in the sender's
-  file name with `_`. 21 names of the current index hold one. On Windows a `:` writes to an
-  alternate data stream, so the download of 2025 left 11 of them as zero-byte files cut at
-  the colon; those pictures were never saved. Also found in the rename (details in
-  `programmer_todo.md`, IU2): 19 files on disk that no URL of `czindex.idx` names (the 11
-  empty ones and 8 pictures), left as they are; and 10 thumbnails each shared by two
-  pictures whose names differ only in the extension, made from one of the two.
-  A second addition to D51, also decided by Tom during IU4: a local name is at most 180
-  bytes, the sender's file name shortened with its extension kept (8 names; long Google
-  photo ids, and Windows long paths are off).
 
 ## Notes from Code Reviewer
 
@@ -75,7 +46,7 @@ Phase 0, the Phase 1 code change, the follow-on fixes and the twelve plan revisi
 the answer display, of the corpus update and of the overnight embedding (thirteenth revision),
 decisions D1 to D48, the Programmer's notes through the evaluation, and the review findings
 R4 and R5. The image update (plan 4.0) was designed on 2026-11-23 (fourteenth revision,
-D49 to D51). The evaluation showed no candidate slow at its default reasoning effort, so no
+D49 to D51) and its result recorded the same day (fifteenth revision). The evaluation showed no candidate slow at its default reasoning effort, so no
 reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
 file.
 
@@ -125,4 +96,10 @@ file.
 - Attachment URLs of Google Groups need a login (tried 2026-11-23); image downloads run on
   Windows with Tom's Chrome. An image index entry is a thread, not a post.
 - `data/images/footer_review.html` (git-ignored) is the page Tom judged the clutter rules on.
+- The gallery reads `data/images/gallery261123.idx` (2,368 threads, 5,661 pictures, every one
+  with a thumbnail). Decisions are by content hash in `imageGetter/image_decisions.json`. The
+  server still has the static pages of 2025 under `/cgimages/`.
+- Tom wants to run the yearly message and image fetch himself next year, from written steps
+  (`programmer_todo.md`, "Yearly update instructions"). He finds running the getters from the
+  Windows clone brittle.
 - The chunk experiment has a Chroma of its own: port 8010, `ml/data/chunk_experiment/chroma`.

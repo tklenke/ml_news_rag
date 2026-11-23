@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D51 in the plan's table.
+All decided: D1 to D51 in the plan's table, D50 and D51 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -25,14 +25,16 @@ finished work items are in the git history of this file.
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
 - [x] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5). Done 2026-11-22, first answer only (D35).
-- [ ] Before leaving on 2026-11-22, for the overnight embedding (plan 2.2a): Windows set not to
-      sleep, Docker Desktop left running, the GPU left free.
+- [x] Before leaving on 2026-11-22, for the overnight embedding (plan 2.2a): Windows set not to
+      sleep, Docker Desktop left running, the GPU left free. The run started that evening.
 - [ ] Each morning until the five variants are done: run the stop command, and each evening the
       continue command ("Stop and continue" in `programmer_todo.md`). Read "For Tom in the
       morning" there.
-- [ ] Image update (plan 4.0): try the review tool on the pictures of 2025 when the Programmer
+- [x] Image update (plan 4.0): try the review tool on the pictures of 2025 when the Programmer
       shows it; run the download on Windows with Chrome signed in; then decide the suggested
-      and the new pictures in the tool.
+      and the new pictures in the tool. Done 2026-11-23; nothing is undecided.
+- [ ] Yearly update instructions: follow the Programmer's draft from the page alone and say
+      where it leaves you guessing (`programmer_todo.md`, YU4).
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 
