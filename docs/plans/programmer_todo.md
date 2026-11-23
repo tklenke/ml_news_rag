@@ -320,17 +320,34 @@ push or merge.
       Ids and texts of all five collections equal the chunker's. A second start was refused.
       Trial collections and progress files deleted; an empty `defaultdb` stays, since every
       `Embedder` opens it.
-- [~] 2.2c Start the queue detached. Record under "Stop and continue" below the two commands, the
+- [x] 2.2c Start the queue detached. Record under "Start and stop" below the two commands, the
       start time and the log file. Check after 10 minutes that the log advances and the seconds
       per chunk are near the plan's (0.22 at 250 words). Then commit this file. The session may
       end; the run does not need it.
+      Started 2026-11-22 18:25:38. After 10 minutes: 608 files, 0 failed, log advancing, 0.239 s
+      per chunk (with storing in Chroma, which the plan's 0.22 leaves out), GPU at 98%. At that
+      rate A takes 2.8 hours, and all five about 14.5 if the others are slower by the same share.
 - [ ] 2.2d When all five have run: the five checks of plan 2.2a, reported in a note in
       `architect_todo.md`. Then stop and remove the GPU Ollama container; the experiment's
       Chroma stays for 2.3.
 
-### Stop and continue (for Tom)
+### Start and stop (for Tom)
 
-(the Programmer puts the two commands here at 2.2c)
+Evening, start or continue (starts both containers and the queue; refused while the queue is
+running):
+
+    ~/projects/ml/venv/bin/python ~/projects/ml/embedder/chunk_queue.py start
+
+Morning, stop (ends the queue, then stops the GPU Ollama container; the GPU is free). Ctrl-C does
+not stop the queue, which runs in the background:
+
+    ~/projects/ml/venv/bin/python ~/projects/ml/embedder/chunk_queue.py stop
+
+Keep a WSL terminal open at night: WSL may end background processes when the last one closes
+(not tried here). After a restart of Windows, Docker Desktop has to be running first.
+
+Log: `~/projects/ml/data/chunk_experiment/queue.log`. `END ... exit code 1` means files failed
+(search for `FAILED`); the next continue tries them again.
 
 ### For Tom in the morning
 
