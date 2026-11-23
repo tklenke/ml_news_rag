@@ -210,6 +210,17 @@ class TestHttpInterface:
         assert 'data-hash="sig"' not in strPage
         assert "Subject THREADearly" in strPage
 
+    def test_instructions_at_top_and_bottom_of_a_page(self, server):
+        strBase, _ = server
+
+        strPage = get(strBase + "/?list=new&page=1").decode("utf-8")
+        strDecided = get(strBase + "/?list=decided&page=1").decode("utf-8")
+
+        assert strPage.count("saved the moment you click") == 2
+        assert strPage.count("The button below marks") == 2
+        assert strDecided.count("saved the moment you click") == 2
+        assert "The button below marks" not in strDecided
+
     def test_thumbnail_and_full_picture_served_by_content(self, server):
         strBase, _ = server
 

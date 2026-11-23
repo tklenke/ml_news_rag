@@ -139,7 +139,8 @@ figure img { width: 200px; height: 200px; object-fit: contain; background: #eee;
 figure label { margin-right: 1em; font-size: 1.1em; cursor: pointer; }
 figure.remove img { border-color: #c00; opacity: 0.35; }
 figure.keep img { border-color: #080; }
-button { margin: 2em 0; padding: 0.6em 1.2em; font-size: 1em; }
+button { margin: 0 0 2em; padding: 0.6em 1.2em; font-size: 1em; }
+.instructions { background: #ffd; border: 1px solid #cc9; padding: 0.5em 1em; margin: 1em 0; }
 """
 
 PAGE_SCRIPT = """
@@ -170,6 +171,17 @@ def radio(strHash: str, strValue: str, strLabel: str, strDecision) -> str:
     return f'<label><input type="radio" name="{strHash}" value="{strValue}"{strChecked}> {strLabel}</label>'
 
 
+def instructions(strList: str) -> str:
+    """What to do on a page, shown at its top and bottom."""
+    strText = ('Each keep or discard is saved the moment you click it; closing the page loses nothing. '
+               'A choice can be changed at any time.')
+    if strList != "decided":
+        strText += (' The button below marks every picture of this page not set to discard as keep, '
+                    'then shows the next pictures. Pictures you leave without a choice and without '
+                    'pressing the button stay in this list.')
+    return f'<p class="instructions">{strText}</p>'
+
+
 def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
     """HTML of one page of one list."""
     dctCounts = {s: 0 for s in LISTS}
@@ -191,6 +203,7 @@ def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
     if intPage < intPages:
         lstHtml.append(f'<a href="/?list={strList}&page={intPage + 1}">Next</a>')
     lstHtml.append('</p>')
+    lstHtml.append(instructions(strList))
 
     strThread = None
     for dctItem in lstPage:
@@ -213,8 +226,9 @@ def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
     if strThread is not None:
         lstHtml.append('</div>')
 
+    lstHtml.append(instructions(strList))
     if strList != "decided" and lstPage:
-        lstHtml.append('<button id="keep">Keep every picture of this page not marked remove</button>')
+        lstHtml.append('<button id="keep">Keep all the others on this page, then show the next pictures</button>')
     lstHtml.append(f'<script>{PAGE_SCRIPT}</script></body></html>')
     return ''.join(lstHtml)
 
