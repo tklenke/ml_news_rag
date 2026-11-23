@@ -106,24 +106,25 @@ class TestReviewState:
     def make_state(self, tmp_path):
         return ReviewState(make_index(), set(), str(tmp_path / "decisions.json"))
 
-    def test_click_marks_remove_and_second_click_takes_it_back(self, tmp_path):
+    def test_decision_saved_at_once_and_can_be_changed(self, tmp_path):
         state = self.make_state(tmp_path)
 
-        assert state.toggle_remove("sig") == "remove"
+        state.decide("sig", "remove")
         assert load_decisions(state.strDecisionsPath) == {"sig": "remove"}
 
-        assert state.toggle_remove("sig") is None
-        assert load_decisions(state.strDecisionsPath) == {}
+        state.decide("sig", "keep")
+        assert load_decisions(state.strDecisionsPath) == {"sig": "keep"}
 
-    def test_click_on_a_kept_picture_marks_it_remove(self, tmp_path):
+    def test_decision_other_than_remove_or_keep_refused(self, tmp_path):
         state = self.make_state(tmp_path)
-        state.keep(["sig"])
 
-        assert state.toggle_remove("sig") == "remove"
+        with pytest.raises(ValueError):
+            state.decide("sig", "maybe")
+        assert not Path(state.strDecisionsPath).exists()
 
     def test_keep_marks_only_those_not_marked_remove(self, tmp_path):
         state = self.make_state(tmp_path)
-        state.toggle_remove("sig")
+        state.decide("sig", "remove")
 
         state.keep(["sig", "photo_e"])
 
@@ -133,7 +134,7 @@ class TestReviewState:
         state = self.make_state(tmp_path)
 
         with pytest.raises(KeyError):
-            state.toggle_remove("nothere")
+            state.decide("nothere", "remove")
         with pytest.raises(KeyError):
             state.keep(["nothere"])
         assert not Path(state.strDecisionsPath).exists()
@@ -143,7 +144,7 @@ class TestReviewState:
         pathDecisions.write_text(json.dumps({"other": "remove"}))
         state = ReviewState(make_index(), set(), str(pathDecisions))
 
-        state.toggle_remove("sig")
+        state.decide("sig", "remove")
 
         assert load_decisions(str(pathDecisions)) == {"other": "remove", "sig": "remove"}
 
@@ -183,17 +184,18 @@ def post(strUrl, objBody):
 class TestHttpInterface:
     """Tests through the tool's own HTTP interface."""
 
-    def test_click_saved_and_read_back(self, server):
+    def test_decision_saved_and_read_back(self, server):
         strBase, state = server
 
-        assert post(strBase + "/toggle", {"hash": "sig"}) == {"hash": "sig", "decision": "remove"}
+        assert post(strBase + "/decide", {"hash": "sig", "decision": "remove"}) == \
+            {"hash": "sig", "decision": "remove"}
 
         assert json.loads(get(strBase + "/decisions")) == {"sig": "remove"}
         assert load_decisions(state.strDecisionsPath) == {"sig": "remove"}
 
     def test_keep_saved_and_read_back(self, server):
         strBase, state = server
-        post(strBase + "/toggle", {"hash": "sig"})
+        post(strBase + "/decide", {"hash": "sig", "decision": "remove"})
 
         assert post(strBase + "/keep", {"hashes": ["sig", "photo_e"]}) == {"kept": 1}
 
@@ -227,5 +229,21 @@ class TestHttpInterface:
                 get(strBase + strPath)
             assert excinfo.value.code == 404
         with pytest.raises(urllib.error.HTTPError) as excinfo:
-            post(strBase + "/toggle", {"hash": "nothere"})
+            post(strBase + "/decide", {"hash": "nothere", "decision": "remove"})
         assert excinfo.value.code == 404
+
+    def test_decision_other_than_remove_or_keep_is_400(self, server):
+        strBase, _ = server
+
+        with pytest.raises(urllib.error.HTTPError) as excinfo:
+            post(strBase + "/decide", {"hash": "sig", "decision": "maybe"})
+        assert excinfo.value.code == 400
+
+    def test_page_has_a_keep_and_a_discard_choice_per_picture_with_the_decision_checked(self, server):
+        strBase, _ = server
+        post(strBase + "/decide", {"hash": "sig", "decision": "remove"})
+
+        strPage = get(strBase + "/?list=decided&page=1").decode("utf-8")
+
+        assert 'name="sig" value="keep">' in strPage
+        assert 'name="sig" value="remove" checked>' in strPage

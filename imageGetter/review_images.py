@@ -1,4 +1,4 @@
-# ABOUTME: Local review tool of image contents (D50): one picture per content, a click marks it remove
+# ABOUTME: Local review tool of image contents (D50): one picture per content, each marked keep or discard
 # ABOUTME: Builds the suggested, new and decided lists and serves them on 127.0.0.1 with the standard library
 
 import html
@@ -10,9 +10,9 @@ from collections import defaultdict
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Set
 from urllib.parse import parse_qs, urlparse
-from image_decisions import load_decisions, save_decisions
+from image_decisions import DECISIONS, load_decisions, save_decisions
 from rename_images import thumbnail_name
 
 MIN_SIZE_BYTES = 1000
@@ -108,15 +108,13 @@ class ReviewState:
         if strHash not in self.dctFiles:
             raise KeyError(strHash)
 
-    def toggle_remove(self, strHash: str) -> Optional[str]:
-        """Mark a content remove, or take a remove back; returns its decision after the click."""
+    def decide(self, strHash: str, strDecision: str):
+        """Mark a content remove or keep."""
         self.check_known(strHash)
-        if self.dctDecisions.get(strHash) == "remove":
-            del self.dctDecisions[strHash]
-        else:
-            self.dctDecisions[strHash] = "remove"
+        if strDecision not in DECISIONS:
+            raise ValueError(f"Decision {strDecision} is not one of {DECISIONS}")
+        self.dctDecisions[strHash] = strDecision
         save_decisions(self.strDecisionsPath, self.dctDecisions)
-        return self.dctDecisions.get(strHash)
 
     def keep(self, lstHashes: List[str]) -> int:
         """Mark keep each of the contents not marked remove; returns how many were marked."""
@@ -136,22 +134,23 @@ nav a.current { font-weight: bold; }
 h2 { font-size: 1em; margin: 1.5em 0 0.5em; border-bottom: 1px solid #ccc; }
 .pictures { display: flex; flex-wrap: wrap; gap: 8px; }
 figure { margin: 0; width: 200px; font-size: 0.8em; word-break: break-all; }
-figure img { width: 200px; height: 200px; object-fit: contain; background: #eee; cursor: pointer;
+figure img { width: 200px; height: 200px; object-fit: contain; background: #eee;
              border: 4px solid transparent; box-sizing: border-box; }
+figure label { margin-right: 1em; font-size: 1.1em; cursor: pointer; }
 figure.remove img { border-color: #c00; opacity: 0.35; }
 figure.keep img { border-color: #080; }
 button { margin: 2em 0; padding: 0.6em 1.2em; font-size: 1em; }
 """
 
 PAGE_SCRIPT = """
-document.querySelectorAll('figure img').forEach(function (img) {
-  img.addEventListener('click', function () {
-    var fig = img.closest('figure');
-    fetch('/toggle', {method: 'POST', headers: {'Content-Type': 'application/json'},
-                      body: JSON.stringify({hash: fig.dataset.hash})})
+document.querySelectorAll('figure input[type=radio]').forEach(function (radio) {
+  radio.addEventListener('change', function () {
+    var fig = radio.closest('figure');
+    fetch('/decide', {method: 'POST', headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({hash: fig.dataset.hash, decision: radio.value})})
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (d) { fig.className = d.decision || ''; })
-      .catch(function (e) { alert('Not saved: ' + e); });
+      .then(function (d) { fig.className = d.decision; })
+      .catch(function (e) { radio.checked = false; alert('Not saved: ' + e); });
   });
 });
 var btn = document.getElementById('keep');
@@ -163,6 +162,12 @@ if (btn) btn.addEventListener('click', function () {
     .catch(function (e) { alert('Not saved: ' + e); });
 });
 """
+
+
+def radio(strHash: str, strValue: str, strLabel: str, strDecision) -> str:
+    """One choice of a picture's decision, checked when it is the decision taken."""
+    strChecked = ' checked' if strDecision == strValue else ''
+    return f'<label><input type="radio" name="{strHash}" value="{strValue}"{strChecked}> {strLabel}</label>'
 
 
 def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
@@ -199,7 +204,9 @@ def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
         lstHtml.append(
             f'<figure data-hash="{strHash}" class="{dctItem["decision"] or ""}">'
             f'<img src="/thumb/{strHash}" loading="lazy" alt="">'
-            f'<figcaption>{dctItem["thread_count"]} thread{"s" if dctItem["thread_count"] > 1 else ""}, '
+            f'<figcaption>{radio(strHash, "keep", "keep", dctItem["decision"])}'
+            f'{radio(strHash, "remove", "discard", dctItem["decision"])}<br>'
+            f'{dctItem["thread_count"]} thread{"s" if dctItem["thread_count"] > 1 else ""}, '
             f'{dctItem["width"]} x {dctItem["height"]}, {dctItem["size_bytes"]:,} bytes '
             f'<a href="/full/{strHash}" target="_blank">full</a><br>'
             f'{html.escape(dctItem["local_filename"])}</figcaption></figure>')
@@ -267,9 +274,9 @@ def make_server(state: ReviewState, strFullDir: str, strThumbsDir: str, strHost:
             intLength = int(self.headers.get("Content-Length", 0))
             try:
                 dctBody = json.loads(self.rfile.read(intLength))
-                if self.path == "/toggle":
-                    strHash = dctBody["hash"]
-                    self.send_json({"hash": strHash, "decision": state.toggle_remove(strHash)})
+                if self.path == "/decide":
+                    state.decide(dctBody["hash"], dctBody["decision"])
+                    self.send_json({"hash": dctBody["hash"], "decision": dctBody["decision"]})
                 elif self.path == "/keep":
                     self.send_json({"kept": state.keep(dctBody["hashes"])})
                 else:

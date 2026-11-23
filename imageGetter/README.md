@@ -136,8 +136,8 @@ Run in WSL from `imageGetter/`, then open `http://127.0.0.1:8765/` in a browser:
 
 - One content (same SHA-256) is one picture, shown under its earliest thread. Files under
   1,000 bytes are not shown.
-- A click marks a picture `remove` (red); a second click takes it back. Each click is
-  written to `image_decisions.json` at once.
+- Each picture has a choice of keep (green) or discard (red, stored as `remove`). Each
+  choice is written to `image_decisions.json` at once and can be changed later.
 - The button at the end of a page marks every picture of the page not marked `remove`
   as `keep`.
 - **Suggested**: undecided pictures in 2 or more threads, with a shorter side under 200
