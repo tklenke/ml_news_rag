@@ -31,6 +31,21 @@ All notes through 2026-11-22 are answered in the plan (eleventh revision); they 
 history of this file. The two S12 gaps the Programmer left as
 they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
 
+- **NOTE FROM PROGRAMMER (2026-11-23): image update (plan 4.0) done, report.** Gallery
+  index `data/images/gallery261123.idx`, made from `index261123105058.idx` (2,631 threads,
+  6,811 entries) and `imageGetter/image_decisions.json`:
+  - In the gallery index: 2,368 threads, 5,661 pictures; every one has a thumbnail.
+  - Dropped: 663 entries marked remove, 487 repeated in a thread, 0 file not on disk.
+    No entry is dropped for its size (Tom's change to D50, note below).
+  - Undecided: 0. Decisions: 5,734 contents, 5,401 keep, 333 remove.
+  - Download: 591 fetched, 0 failed (Windows, Chrome with its own profile on the debug
+    port: Chrome would not open the port on the normal profile). Of the 591, 346 were new
+    contents for review; the rest were copies of contents already decided.
+  - Thumbnails: 611 made. One failed, `eJJziZ0ar3U_6340f919ea129_part0_1_Ahaa.jpg`: the
+    file of 2025 is truncated; it is marked remove, so it is not in the gallery.
+    The 10 old thumbnails that two pictures shared are now named by no picture; left in
+    `data/images/thumbs` (no deleting there in this task).
+  - The server still has the pages of 2025; the gallery index is not deployed (4.2).
 - **NOTE FROM PROGRAMMER (2026-11-23):** Decided by Tom during IU6, a change to D50 for the
   plan: files under 1,000 bytes are no longer dropped without review. The review tool shows
   them on the Suggested list, and the gallery index (IU7) drops a picture only by its

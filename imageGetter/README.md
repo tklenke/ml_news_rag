@@ -63,11 +63,15 @@ Attachment URLs need a Google login: fetched without one they answer with the si
 The download therefore runs on Windows, through Tom's Chrome, signed in to Google Groups,
 with Selenium attached to Chrome's debug port:
 
+Close every Chrome window first, then:
+
 ```powershell
-chrome.exe --remote-debugging-port=9222
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir=C:\chrome-debug
 ```
 
-Log into Google Groups in that Chrome window before running the download.
+Chrome does not open the debug port on its normal profile, so it gets a profile of its
+own (`C:\chrome-debug`). Log into Google Groups in that Chrome window before running the
+download. The profile stays signed in; delete the folder after the download if it should not.
 
 The download is run by the Windows Python (3.13, with `selenium`, `requests`, `Pillow` and
 `tqdm` installed), from this directory in WSL, so that relative paths reach `../data` in WSL.
@@ -75,6 +79,51 @@ Use PowerShell: cmd cannot use a `\\wsl.localhost\...` path as its current direc
 WSL must be running (a WSL terminal open).
 
 ChromeDriver is given with `--chromedriver`. Its version must match the installed Chrome.
+
+## Yearly Update
+
+The steps in order, with the commands as run on 2026-11-23. Run them after the messages
+have been fetched into `data/msgs_md`. Each step is described in the sections below.
+
+1. **Build the index** from all messages (WSL, in `imageGetter/`). It writes
+   `indexYYMMDDhhmmss.idx` and a stats file into `data/images`:
+   ```bash
+   ../venv/bin/python extract_image_urls.py ../data/msgs_md ../data/images
+   ```
+2. **Measure** the pictures already on disk into the new index (WSL):
+   ```bash
+   ../venv/bin/python measure_images_cli.py ../data/images/index261123105058.idx ../data/images/full
+   ```
+3. **Download** what is not on disk (Windows, PowerShell, Chrome signed in on the debug
+   port with its own profile; see Prerequisites):
+   ```powershell
+   & "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir=C:\chrome-debug
+   cd \\wsl.localhost\Debian\home\tom\projects\ml\imageGetter
+   python download_images_cli.py `
+     --chromedriver C:\Users\tom\Documents\projects\chromedriver-win64\chromedriver.exe `
+     --log ..\data\images\download_261123.log `
+     ..\data\images\index261123105058.idx `
+     ..\data\images\full
+   ```
+4. **Measure** again, for the downloaded files (same command as step 2).
+5. **Review** in the review tool until Suggested and New are empty, then commit
+   `image_decisions.json` (see "Review Pictures by Content"):
+   ```bash
+   ../venv/bin/python review_images_cli.py ../data/images/index261123105058.idx \
+     ../data/images/full ../data/images/thumbs image_decisions.json image_suggestions.json
+   ```
+6. **Thumbnails** for the new files (existing ones are skipped):
+   ```bash
+   ../venv/bin/python generate_thumbnails_cli.py ../data/images/full ../data/images/thumbs
+   ```
+7. **Gallery index** (see "Make the Gallery Index"):
+   ```bash
+   ../venv/bin/python gallery_index_cli.py ../data/images/index261123105058.idx \
+     ../data/images/full image_decisions.json ../data/images/gallery261123.idx
+   ```
+
+The static pages under `/cgimages/` on the server (Phases 4 to 6 below) are not part of
+the yearly update until the gallery is redesigned (plan 4.2).
 
 ## Usage
 

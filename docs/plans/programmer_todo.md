@@ -471,9 +471,19 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       on disk that is not measured stops it. Tried on the 2025 files into the scratchpad,
       not into `data/`: 2,275 threads, 5,312 pictures; dropped 579 marked remove, 591 not
       on disk, 329 repeated in a thread (6,811 entries in all).
-- [ ] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
+- [x] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
       missing), then measuring, then his review in the tool.
-- [ ] IU9 The gallery index and the thumbnails of the new files. `README.md` of `imageGetter/`
+- [x] IU9 The gallery index and the thumbnails of the new files. `README.md` of `imageGetter/`
       and the update procedure in the top-level `README.md`. Report to Architect in a note in
       `architect_todo.md`: threads and pictures in the gallery index, pictures dropped by each
       cause, pictures still undecided, downloads that failed.
+      IU8 done 2026-11-23: Tom's download, 591 fetched, 0 failed (Chrome needed its own
+      profile, `--user-data-dir=C:\chrome-debug`, for the debug port). The download rewrote
+      the index with CRLF only; content checked equal to the copy taken before it
+      (`index261123105058_before_download.idx`). Measured: 591, all pictures. Tom reviewed
+      the 346 new contents (341 keep, 5 remove; decisions `616f717`).
+      IU9 done 2026-11-23: 611 thumbnails made (the 591, the 20 of the former shared
+      thumbnails); one failed, a truncated file of 2025 marked remove. Gallery index
+      `data/images/gallery261123.idx`: 2,368 threads, 5,661 pictures. READMEs updated
+      ("Yearly Update" in `imageGetter/README.md`, a line in the top-level procedure).
+      Report in `architect_todo.md`.
