@@ -1,12 +1,16 @@
 # Required From Tom
 
-**Last Updated:** 2026-11-22
+**Last Updated:** 2026-11-23
 
 Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D48 in the plan's table. The dated list of what Tom decided and the
+D1 to D50 are in the plan's table.
+
+- [ ] The local file name of an image: the form with the attachment id and one rename of the
+      6,211 files (Architect's recommendation), or the present names kept (plan 4.0, `@@TOM`).
+ The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
 ## Work items
@@ -29,6 +33,9 @@ finished work items are in the git history of this file.
 - [ ] Each morning until the five variants are done: run the stop command, and each evening the
       continue command ("Stop and continue" in `programmer_todo.md`). Read "For Tom in the
       morning" there.
+- [ ] Image update (plan 4.0): try the review tool on the pictures of 2025 when the Programmer
+      shows it; run the download on Windows with Chrome signed in; then decide the suggested
+      and the new pictures in the tool.
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 

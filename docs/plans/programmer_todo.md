@@ -1,6 +1,6 @@
 # Programmer Todo
 
-**Last Updated:** 2026-11-22
+**Last Updated:** 2026-11-23
 
 # ACTIVE: Annual RAG / Website Refresh
 
@@ -11,7 +11,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Order:** Phase 0, the Phase 1 code change with the site fixes, the follow-on fixes, and the
 answer display with the corpus update and the model change are deployed (`775692d`). **Now: the
-overnight embedding of Phase 2 (2.1c to 2.2d below, D48).** After it Phase 4, then the rest of
+overnight embedding of Phase 2 (2.1c to 2.2d below, D48).** After it Phase 4, starting with the image update (plan 4.0, D49), then the rest of
 Phase 2 (D41). One session per group; start each
 session fresh. Code review happens once per deploy, not per commit.
 
@@ -364,6 +364,36 @@ A stop writes `STOPPED by the stop command` to the log.
       `refresh_questions.csv` (40 questions, plan 2.3). `reserve` rows are not used unless
       Architect says so.
 
-## Phase 4 (not yet designed)
+## Phase 4
 
-The image gallery (plan 4.2) first, then reference links (4.1) (D41). S3 is done by "Answer display".
+The image update (plan 4.0) first; it is designed. The image gallery (4.2) and the reference
+links (4.1) are not yet designed (D41). S3 is done by "Answer display".
+
+### Image update (repo: `ml/`, module `imageGetter/`)
+
+Plan: "4.0 Image update (D49, D50)". Read it whole; the tests are listed there. Nothing here
+touches `site_2024` or the server. `data/` and `imageGetter/input/` are git-ignored: a test
+carries its own small pictures. Do not delete or overwrite a file in `data/images` or
+`imageGetter/input` other than by the rename of IU2; copy `data/images/full` first.
+
+- [ ] IU1 The date is read with or without `unread,` before it. The index builder reports the
+      files it could not read and goes on.
+- [ ] IU2 **Waits for Tom's decision on the local name (the `@@TOM` in plan 4.0).** The local
+      name with the attachment id, and the one rename of the files on disk. Report how many
+      files were renamed and how many names had been shared.
+- [ ] IU3 Download: timeout, a response that is not 200 fails, chromedriver path and log file
+      as parameters. Settle with Tom how the Windows run reaches `data/images/full`; write
+      the commands in `imageGetter/README.md`.
+- [ ] IU4 The measuring step: bytes, width, height and content hash into each image entry.
+      Run it on the files of 2025.
+- [ ] IU5 The decisions file (one decision per content hash) and the one loading of the 2025
+      removal lists. Report the contents removed in one thread and kept in another.
+- [ ] IU6 The review tool, as the plan describes it. Show it to Tom on the files of 2025
+      before the download, so that a change he asks for costs little.
+- [ ] IU7 The step that makes the index the gallery reads.
+- [ ] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
+      missing), then measuring, then his review in the tool.
+- [ ] IU9 The gallery index and the thumbnails of the new files. `README.md` of `imageGetter/`
+      and the update procedure in the top-level `README.md`. Report to Architect in a note in
+      `architect_todo.md`: threads and pictures in the gallery index, pictures dropped by each
+      cause, pictures still undecided, downloads that failed.

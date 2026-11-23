@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (thirteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); next design is the image gallery (4.2)
+**Status:** Revised 2026-11-23 (fourteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is designed and comes before the design of the image gallery (4.2)
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-23 (fourteenth revision):** The image database is brought up to date and its
+  clutter removed before the gallery is designed (D49; 4.0). Architect measured the 6,211
+  downloaded files against the 424 Tom removed by hand in 2025: no rule of name, size and
+  number of occurrences separates signature pictures from build photos, so only files
+  under 1,000 bytes are dropped without review and the rest is decided by Tom in a tool
+  where he clicks (D50). Two faults join the same pass: two attachments of one thread can
+  get the same local file name, and the threads fetched in 2026 lose their date.
 - **2026-11-22 (thirteenth revision):** The embedding of the Phase 2 variants is brought
   forward to run overnight while Tom is away, over two nights, stopped each morning and
   continued each evening (D48; 2.2a). Only the embedding moves: the
@@ -159,6 +166,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D46 | (2026-11-22) F2 is not finished before the deploy; Phase 2 embeds everything on the current Ollama. Amends D43. |
 | D47 | (2026-11-22) Code review of the deploy with the answer display, the corpus update and the model change is waived (all of it). |
 | D48 | (2026-11-22) The embedding of the Phase 2 variants runs overnight from 2026-11-22, unattended, ahead of Phase 4 (2.2a). It is stopped in the morning and continued in the evening, over about two nights. Tom watches the coding; the run itself is unattended. The rest of Phase 2 stays after Phase 4 (D41). |
+| D49 | (2026-11-23) Before the image gallery is designed, the image database gets the current images and the image getter is repaired (4.0). How the database is used (4.2) is discussed after that. |
+| D50 | (2026-11-23) Signature pictures and other clutter: a file under 1,000 bytes is dropped without review. Everything else is Tom's decision, made by clicking in a local review tool; name, size and number of occurrences only choose what the tool shows him first. |
 
 ## Two repositories
 
@@ -193,8 +202,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
 5. **[REVISED - 2026-11-22] Answer display, corpus update and model change, one deploy
    (D38, D39, D42):** see "Answer display" and "Corpus update". It carries S3. Deployed
    2026-11-22 (`775692d`); every check passed.
-6. **[REVISED - 2026-11-22] Phase 4:** image gallery (4.2), then reference links (4.1)
-   (D41). Not yet designed.
+6. **[REVISED - 2026-11-23] Phase 4:** the image update (4.0, D49), then the image gallery
+   (4.2), then reference links (4.1) (D41). 4.0 is designed; 4.2 and 4.1 are not.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
@@ -1280,6 +1289,123 @@ deploy alone does not show which caused it; rolling back one of them does.
 
 **[REVISED - 2026-11-21]** Per D8 these two items are the website refresh.
 **[REVISED - 2026-11-22]** 4.2 first, then 4.1 (D41).
+**[REVISED - 2026-11-23]** 4.0 before both (D49).
+
+### 4.0 Image update (D49, D50)
+
+**[REVISED - 2026-11-23]** New. Repo `ml/`, module `imageGetter/`. Nothing here changes the
+site or the server; what the site shows of the images is 4.2.
+
+**What was measured** (Architect, 2026-11-23, read-only; the index `czindex.idx` of 2025,
+the files in `data/images/full`, the hand removal lists in `imageGetter/input/`):
+
+- An index entry is a thread, not a post: its author and date are those of the first post.
+- 6,211 files are downloaded. Tom removed 424 of them by hand in 2025.
+- An index built today from `data/msgs_md` has 2,631 threads and 6,811 images: 92 threads
+  with 287 images are new (all from the 2025 to 2026 id list), 3 older threads changed,
+  and 338 images in all are not on disk.
+- An attachment URL fetched without a login answers with Google's sign-in page (two URLs
+  tried). The download stays a step Tom runs on Windows with Chrome.
+- The file name is the sender's: it is the last part of the attachment URL, and the
+  getter only puts the thread id and the part number before it. 730 entries are named
+  `imageNNN`; Tom kept 462 of them.
+- Identical content (same hash) is in 2 or more threads for 223 pictures, in 3 or more for
+  51. Tom looked at the 51: most are real. The most frequent is a 750 x 1,085 poster in 40
+  threads, a signature picture that no size rule finds; the fifth is a canopy photo in 13
+  threads. Tom also knows of calendar pictures that one sender used as a signature and
+  changed each month.
+- Shorter side under 100 pixels: 144 files outside those 51, 94 of them removed by hand.
+  Tom looked at the 50 that are left: some are to be kept, and every one of those is over
+  1,000 bytes.
+- Under 1,000 bytes: 159 files, 118 removed by hand, 41 still in the database. 7 of the
+  159 have a shorter side of 100 pixels or more (the largest 404 x 222 in 810 bytes);
+  Tom has not looked at those 7.
+- About 104 of the 424 hand removals match no rule tried (one-off cartoons and pictures
+  off the subject).
+- **Fault: local file names collide.** The local name is `<thread>_part<part>_<file name>`.
+  Two posts of one thread that attach a file of the same name at the same part get one
+  local name, and the download skips the second as already there. 233 names are shared by
+  510 attachments. Many are a signature picture repeated in a thread; names a phone gives
+  (`image.png`, `image0.jpeg`) are probably different pictures. How many pictures are
+  missing is not known until they are downloaded.
+- **Fault: no date.** 45 of the 92 new threads get an empty date: the fetch of 2026 was
+  made signed in and writes `unread,` before the date.
+- Also seen: duplicates are found by file size within a thread only; the download has no
+  timeout and does not look at the HTTP status (a sign-in page is caught only because it
+  is not a picture); the path of chromedriver is written in the code; the index builder
+  passes over a file that raises, without a word; the log of a download is written to
+  whatever directory the command is run in.
+- For 4.2, not here: the keyword scores match inside words (`king` in `making`, `port`
+  in `support`).
+
+**Design.**
+
+- **Local name.** @@TOM: Architect recommends `<thread>_<attachment id>_part<part>_<file
+  name>`, the attachment id being the part of the URL after `attach/`, and the 6,211 files
+  on disk renamed once to it (each to the name of the first URL that has its present name,
+  in the order of the index, since that is the one that was downloaded). The other choice
+  is to keep the present names and use the new form only for a name that is already
+  taken; that leaves two forms. Not decided.
+- **Date.** The date is read with or without `unread,` before it. Test with a message of
+  2026.
+- **The index builder reports** the files it could not read, with the reason, and goes on.
+- **Download.** A timeout on each request; a response that is not 200 is a failure; the
+  path of chromedriver and the log file are parameters. A picture already on disk is not
+  fetched again, as today. The Programmer settles with Tom how the Windows run reaches
+  `data/images/full`, and writes the commands down.
+- **Measuring.** A step of its own, run in WSL after a download, writes into each image
+  entry the size in bytes, the width, the height and a hash of the content, for every file
+  on disk that has none yet. It needs no login and also covers the files of 2025.
+- **Decisions are kept by content.** One tracked file in `imageGetter/` holds a decision
+  per content hash: `remove` or `keep`. A picture is decided once; every copy of it, in
+  old and in later threads, follows. A file name is never a reason: `BLACKLIST_EXACT` and
+  `BLACKLIST_PATTERNS` stay as they are for now and are not added to.
+- **The removals of 2025 are loaded once** from the lists in `imageGetter/input/`. A
+  content of which Tom removed every copy becomes `remove`. A content of which he removed
+  some copies and kept others gets no decision and is shown to him as a suggestion; the
+  Programmer reports how many there are.
+- **Dropped without review:** a file under 1,000 bytes (D50). It needs no decision and is
+  not shown.
+- **The review tool** (D50). A local page, served on `127.0.0.1` by a script of
+  `imageGetter/` with Python's standard library, not part of the site.
+  - Thumbnails; one click on a picture marks it `remove`, a second click takes that back.
+    Each click is saved at once, so closing the browser loses nothing.
+  - One content is one picture on the page, with the number of threads it is in, its
+    width and height and its file name. A link opens the full picture.
+  - A button at the end of a page marks every picture of that page not marked `remove` as
+    `keep`, which is what makes it leave the list of undecided ones.
+  - Three lists. Suggested: undecided pictures that are in 2 or more threads, or have a
+    shorter side under 200 pixels, or are named `imageNNN` and are under 20,000 bytes.
+    New: every other undecided picture. Decided: everything marked, to take a click back.
+  - Pictures of the same thread stay together, and repeated ones come first, so that a
+    signature picture changed each month is seen beside its neighbours.
+  - The thresholds of "Suggested" only order Tom's work. They remove nothing.
+- **The index the gallery reads** is made by one step from the full index, the measures
+  and the decisions: without the files under 1,000 bytes, without the contents marked
+  `remove`, without the entries whose file is missing, and with a content listed once per
+  thread. A thread left with no picture is not in it. A content that is in several threads
+  stays in each of them.
+- **Thumbnails** are made for the new files as today.
+- **Not part of this:** the keyword tagging, and the static pages under `/cgimages/` on the
+  server. Both belong to how the database is used (4.2). Until then the server keeps the
+  pages of 2025.
+- **`README.md` of `imageGetter/`** gives the steps of a yearly update in order, with the
+  commands as they were run, and the top-level `README.md` names the step in its update
+  procedure.
+
+**Tests** (TDD, in `imageGetter/tests/`): two attachments of one thread with the same name
+and part get different local names; the date of a 2026 message; a failed and a non-200
+download leave no file and are counted as failed (against a local address that answers,
+not a mocked request); measures written for a real small picture; a click saved and read
+back through the tool's own HTTP interface; the 2025 lists loaded, with a content removed
+in one thread and kept in another left undecided; the gallery index for a small set that
+has a file under 1,000 bytes, a removed content, a missing file and a content twice in a
+thread.
+
+**Order.** Code and tests; the 2025 files measured and the 2025 removals loaded; Tom's
+download on Windows; measuring; Tom's review in the tool; the gallery index and the
+thumbnails. Reported to Architect at the end: threads and pictures in the gallery index,
+pictures dropped by each cause, pictures still undecided, and the downloads that failed.
 
 ### 4.1 Reference links inside answers (D5)
 
