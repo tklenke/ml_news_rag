@@ -39,6 +39,9 @@ they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
   `programmer_todo.md`, IU2): 19 files on disk that no URL of `czindex.idx` names (the 11
   empty ones and 8 pictures), left as they are; and 10 thumbnails each shared by two
   pictures whose names differ only in the extension, made from one of the two.
+  A second addition to D51, also decided by Tom during IU4: a local name is at most 180
+  bytes, the sender's file name shortened with its extension kept (8 names; long Google
+  photo ids, and Windows long paths are off).
 
 ## Notes from Code Reviewer
 

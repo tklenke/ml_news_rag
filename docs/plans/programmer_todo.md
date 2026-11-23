@@ -414,8 +414,21 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       Chromedriver 158.0.8127.36, Chrome 158.0.8127.36/37.
       Tom finds running the getters from the Windows clone brittle; the other getters could
       be run the same way (not part of this task).
-- [ ] IU4 The measuring step: bytes, width, height and content hash into each image entry.
+- [x] IU4 The measuring step: bytes, width, height and content hash into each image entry.
       Run it on the files of 2025.
+      Done 2026-11-23: `imageGetter/measure_images_cli.py`. The working index is
+      `data/images/index261123105058.idx`, built from `data/msgs_md` with the new names
+      (copy before measuring: `index261123105058_before_measure.idx`). 6,220 entries measured
+      (the 6,211 files; 9 attachments are linked twice), none unreadable, 591 not on disk:
+      these are what IU8 downloads. Against the plan: 159 files under 1,000 bytes, 223
+      contents in 2 or more threads and 51 in 3 or more, as measured by Architect; the poster
+      is in 42 threads, not 40 (not looked into).
+      Found here and decided by Tom (2026-11-23): a local name is at most 180 bytes, the
+      sender's file name shortened with its extension kept. 7 names of 822 to 1,017 bytes
+      (long Google photo ids) could never be stored, and with Windows long paths off
+      (`LongPathsEnabled` 0) a name in `\\wsl.localhost\...\data\images\full\` may have 198
+      characters. 8 names changed; the one on disk (`muhearpIrTA_…`, 213 bytes) and its
+      thumbnail were renamed once more and its entry in `rename_map.json` updated.
 - [ ] IU5 The decisions file (one decision per content hash) and the one loading of the 2025
       removal lists. Report the contents removed in one thread and kept in another.
 - [ ] IU6 The review tool, as the plan describes it. Show it to Tom on the files of 2025

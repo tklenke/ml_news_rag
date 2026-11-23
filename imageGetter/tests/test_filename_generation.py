@@ -125,3 +125,26 @@ class TestFilenameGeneration:
         strFilename = generate_filename(strMessageId, strUrl, "0.1")
 
         assert strFilename == "bR7YtmqscSU_hash_part0_1_a_b_c_d_e_f_g_h_i_j.JPG"
+
+    def test_long_filename_capped_with_extension_kept(self):
+        """Should shorten a long sender's file name so the local name is at most 180 bytes."""
+        strMessageId = "GYF6ePxajNo"
+        strUrl = ("https://groups.google.com/group/cozy_builders/attach/374b8443d8799/"
+                  + "A" * 900 + "=w1197-h898-s-no.jpeg?part=0.3&view=1")
+
+        strFilename = generate_filename(strMessageId, strUrl, "0.3")
+
+        assert len(strFilename.encode('utf-8')) == 180
+        assert strFilename.startswith("GYF6ePxajNo_374b8443d8799_part0_3_AAAA")
+        assert strFilename.endswith("A.jpeg")
+
+    def test_long_non_ascii_filename_not_cut_inside_a_character(self):
+        """Should cap by bytes without cutting a multi-byte character in two."""
+        strMessageId = "ABC"
+        strUrl = "https://groups.google.com/group/cozy_builders/attach/hash/" + "é" * 200 + ".jpg?part=0.1"
+
+        strFilename = generate_filename(strMessageId, strUrl, "0.1")
+
+        assert len(strFilename.encode('utf-8')) <= 180
+        assert strFilename.startswith("ABC_hash_part0_1_éé")
+        assert strFilename.endswith("é.jpg")

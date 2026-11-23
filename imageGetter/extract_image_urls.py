@@ -337,6 +337,11 @@ def _parse_attachment_url(strUrl: str) -> Dict[str, str]:
         return None
 
 
+# Longest local file name in bytes. With Windows long paths off, a full path stays under 260
+# characters when the download writes into the WSL data directory (D51, decided by Tom)
+MAX_LOCAL_FILENAME_BYTES = 180
+
+
 def generate_filename(strMessageId: str, strUrl: str, strPart: str) -> str:
     """
     Generate standardized local filename for downloaded image.
@@ -348,6 +353,8 @@ def generate_filename(strMessageId: str, strUrl: str, strPart: str) -> str:
     - Replaces spaces in filename with underscores
     - Replaces characters a Windows file name cannot hold with underscores,
       since the download runs on Windows
+    - Shortens the original filename, keeping its extension, so the whole name
+      is at most MAX_LOCAL_FILENAME_BYTES
     - Preserves file extension case
     - Preserves message_id case
 
@@ -379,8 +386,17 @@ def generate_filename(strMessageId: str, strUrl: str, strPart: str) -> str:
     # Replace spaces and characters Windows cannot store in filename with underscores
     strFilenameNormalized = re.sub(r'[ <>:"/\\|?*]', '_', strFilename)
 
-    # Build final filename
-    return f"{strMessageId}_{strAttachmentId}_part{strPartNormalized}_{strFilenameNormalized}"
+    # Build final filename, shortening the sender's file name (extension kept) if it is too long
+    strPrefix = f"{strMessageId}_{strAttachmentId}_part{strPartNormalized}_"
+    strLocalFilename = strPrefix + strFilenameNormalized
+    if len(strLocalFilename.encode('utf-8')) > MAX_LOCAL_FILENAME_BYTES:
+        strStem, strDot, strExtension = strFilenameNormalized.rpartition('.')
+        strExtension = strDot + strExtension if strDot else ''
+        strStem = strStem if strDot else strFilenameNormalized
+        intStemBytes = MAX_LOCAL_FILENAME_BYTES - len((strPrefix + strExtension).encode('utf-8'))
+        strStem = strStem.encode('utf-8')[:intStemBytes].decode('utf-8', errors='ignore')
+        strLocalFilename = strPrefix + strStem + strExtension
+    return strLocalFilename
 
 
 def build_image_index(strPath: str) -> Dict[str, Dict]:
