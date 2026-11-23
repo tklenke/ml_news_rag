@@ -4,6 +4,7 @@
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 import chromadb
 import pytest
@@ -72,7 +73,10 @@ def test_trial_has_collections_and_sources_of_its_own():
     assert all("--sources" not in lstCommand for _, lstCommand in get_commands())
 
 
-def test_variants_run_one_after_another_also_after_one_that_fails(chroma_port, tmp_path, capfd):
+def test_variants_run_one_after_another_also_after_one_that_fails(chroma_port, tmp_path, capfd,
+                                                                  monkeypatch):
+    # The queue runs in the directory of the embedder, as main() of the queue does
+    monkeypatch.chdir(Path(__file__).parent.parent)
     (tmp_path / "doc.txt").write_text("some words")
     lstCommands = [
         (strName, [sys.executable, "-u", "embedder.py", "--collection", strName,
@@ -81,7 +85,6 @@ def test_variants_run_one_after_another_also_after_one_that_fails(chroma_port, t
         for strName, strOllamaPort in (("queue_test_fails", get_free_port()),
                                        ("queue_test_works", "11434"))]
     import embedder
-    from pathlib import Path
     lstProgress = [Path(embedder.get_progress_file(strName)) for strName, _ in lstCommands]
     try:
         run_variants(lstCommands)
