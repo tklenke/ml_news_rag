@@ -381,7 +381,7 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       Done: a file it cannot read is written to stderr with the reason. On `data/msgs_md`: 2,631
       threads, 6,811 images, no file unreadable, no empty date. Before the fix 46 dates were
       empty: the plan's 45 new threads and `cnmK72T1MjE`, a 2025 thread fetched again in 2026.
-- [ ] IU2 The local name with the attachment id (D51), and the one rename of the files on disk
+- [~] IU2 The local name with the attachment id (D51), and the one rename of the files on disk
       and of their thumbnails, after copying both directories. Report how many files were
       renamed and how many names had been shared.
 - [ ] IU3 Download: timeout, a response that is not 200 fails, chromedriver path and log file

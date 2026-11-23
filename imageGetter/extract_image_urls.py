@@ -341,39 +341,46 @@ def generate_filename(strMessageId: str, strUrl: str, strPart: str) -> str:
     """
     Generate standardized local filename for downloaded image.
 
-    Format: {message_id}_part{part}_{filename}
+    Format: {message_id}_{attachment_id}_part{part}_{filename}
+    - The attachment id is the URL path segment after attach/; it keeps two
+      attachments of one thread with the same file name and part apart
     - Replaces dots in part number with underscores (0.1 -> 0_1)
     - Replaces spaces in filename with underscores
+    - Replaces characters a Windows file name cannot hold with underscores,
+      since the download runs on Windows
     - Preserves file extension case
     - Preserves message_id case
 
     Args:
         strMessageId: Message ID (e.g., "a42YFDFx8WY")
-        strUrl: Full image URL (used to extract filename if needed)
+        strUrl: Full image URL (used to extract attachment id and filename)
         strPart: Part number (e.g., "0.1", "0.2")
 
     Returns:
-        Standardized filename (e.g., "a42YFDFx8WY_part0_1_Image.jpeg")
+        Standardized filename (e.g., "a42YFDFx8WY_7d6ac224e41ae_part0_1_Image.jpeg")
     """
     from urllib.parse import urlparse, unquote
 
-    # Extract filename from URL
+    # Extract attachment id and filename from URL
+    # Path format: /group/cozy_builders/attach/{attachment_id}/{filename}
     parsed = urlparse(strUrl)
     strPath = parsed.path
     lstPathParts = strPath.split('/')
     if len(lstPathParts) >= 5:
+        strAttachmentId = lstPathParts[-2]
         strFilename = unquote(lstPathParts[-1])  # Last part is filename
     else:
+        strAttachmentId = "unknown"
         strFilename = "unknown"
 
     # Replace dots in part number with underscores
     strPartNormalized = strPart.replace('.', '_')
 
-    # Replace spaces in filename with underscores
-    strFilenameNormalized = strFilename.replace(' ', '_')
+    # Replace spaces and characters Windows cannot store in filename with underscores
+    strFilenameNormalized = re.sub(r'[ <>:"/\\|?*]', '_', strFilename)
 
     # Build final filename
-    return f"{strMessageId}_part{strPartNormalized}_{strFilenameNormalized}"
+    return f"{strMessageId}_{strAttachmentId}_part{strPartNormalized}_{strFilenameNormalized}"
 
 
 def build_image_index(strPath: str) -> Dict[str, Dict]:

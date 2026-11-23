@@ -1,5 +1,5 @@
 # ABOUTME: Unit tests for generating standardized filenames for downloaded images
-# ABOUTME: Tests message_id + part + original filename combination with space/dot replacement
+# ABOUTME: Tests message_id + attachment id + part + original filename, with character replacement
 
 import pytest
 from pathlib import Path
@@ -14,7 +14,7 @@ class TestFilenameGeneration:
     """Tests for generating standardized local filenames."""
 
     def test_generate_filename_basic(self):
-        """Should generate filename with message_id, part, and original filename."""
+        """Should generate filename with message_id, attachment id, part, and original filename."""
         strMessageId = "A20JX9PGHII"
         strUrl = "https://groups.google.com/group/cozy_builders/attach/b7b89755afd4fbca/image001.gif?part=0.1"
         strPart = "0.1"
@@ -23,8 +23,8 @@ class TestFilenameGeneration:
         # Generate filename
         strFilename = generate_filename(strMessageId, strUrl, strPart)
 
-        # Should be: message_id + part + filename
-        assert strFilename == "A20JX9PGHII_part0_1_image001.gif"
+        # Should be: message_id + attachment id + part + filename
+        assert strFilename == "A20JX9PGHII_b7b89755afd4fbca_part0_1_image001.gif"
 
     def test_replace_spaces_with_underscores(self):
         """Should replace spaces in filename with underscores."""
@@ -37,7 +37,7 @@ class TestFilenameGeneration:
         strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Spaces should be replaced with underscores
-        assert strFilename == "ABC123_part0_1_p-lead_wiring.gif"
+        assert strFilename == "ABC123_hash_part0_1_p-lead_wiring.gif"
 
     def test_replace_dots_in_part_number(self):
         """Should replace dots in part number with underscores."""
@@ -50,7 +50,7 @@ class TestFilenameGeneration:
         strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Part number dot should be replaced
-        assert strFilename == "XYZ789_part0_2_image.jpg"
+        assert strFilename == "XYZ789_hash_part0_2_image.jpg"
 
     def test_preserve_file_extension(self):
         """Should preserve the file extension correctly."""
@@ -63,7 +63,7 @@ class TestFilenameGeneration:
         strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Extension should be preserved (case-sensitive)
-        assert strFilename == "TEST123_part0_1_Photo.JPEG"
+        assert strFilename == "TEST123_hash_part0_1_Photo.JPEG"
 
     def test_handle_multiple_spaces(self):
         """Should handle multiple consecutive spaces."""
@@ -76,7 +76,7 @@ class TestFilenameGeneration:
         strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # All spaces replaced
-        assert strFilename == "ABC_part0_1_Screenshot_2025-06-15_145512.png"
+        assert strFilename == "ABC_hash_part0_1_Screenshot_2025-06-15_145512.png"
 
     def test_handle_filename_from_url(self):
         """Should extract filename from URL when passed separately."""
@@ -89,7 +89,7 @@ class TestFilenameGeneration:
         strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Should work with query parameters in URL
-        assert strFilename == "a42YFDFx8WY_part0_1_Image.jpeg"
+        assert strFilename == "a42YFDFx8WY_7d6ac224e41ae_part0_1_Image.jpeg"
 
     def test_handle_lowercase_message_id(self):
         """Should preserve case of message_id."""
@@ -102,4 +102,26 @@ class TestFilenameGeneration:
         strFilename = generate_filename(strMessageId, strUrl, strPart)
 
         # Case should be preserved
-        assert strFilename == "a42YFDFx8WY_part0_3_test.jpg"
+        assert strFilename == "a42YFDFx8WY_hash_part0_3_test.jpg"
+
+    def test_attachments_with_same_name_and_part_get_different_names(self):
+        """Should give two attachments of one thread with the same file name and part different names."""
+        strMessageId = "FrAIYkFHlGg"
+        strUrlFirst = "https://groups.google.com/group/cozy_builders/attach/98e7a9d9cee99/image.png?part=0.1&view=1"
+        strUrlSecond = "https://groups.google.com/group/cozy_builders/attach/1a2b3c4d5e6f7/image.png?part=0.1&view=1"
+
+        strFirst = generate_filename(strMessageId, strUrlFirst, "0.1")
+        strSecond = generate_filename(strMessageId, strUrlSecond, "0.1")
+
+        assert strFirst == "FrAIYkFHlGg_98e7a9d9cee99_part0_1_image.png"
+        assert strSecond == "FrAIYkFHlGg_1a2b3c4d5e6f7_part0_1_image.png"
+
+    def test_replace_characters_windows_cannot_store(self):
+        """Should replace each character a Windows file name cannot hold with an underscore."""
+        strMessageId = "bR7YtmqscSU"
+        strUrl = ("https://groups.google.com/group/cozy_builders/attach/hash/"
+                  "a%3Ab%5Cc%22d%2Fe%3Ff%2Ag%3Ch%3Ei%7Cj.JPG?part=0.1")
+
+        strFilename = generate_filename(strMessageId, strUrl, "0.1")
+
+        assert strFilename == "bR7YtmqscSU_hash_part0_1_a_b_c_d_e_f_g_h_i_j.JPG"
