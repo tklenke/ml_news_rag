@@ -59,26 +59,22 @@ pip install -r requirements.txt
 
 ### For Image Download (Phase 2)
 
-**Phase 2.2-2.4:** Uses standard HTTP requests (requests library)
-- Most Google Groups attachment URLs are publicly accessible
-- Includes retry logic with exponential backoff
-- Validates images after download
+Attachment URLs need a Google login: fetched without one they answer with the sign-in page.
+The download therefore runs on Windows, through Tom's Chrome, signed in to Google Groups,
+with Selenium attached to Chrome's debug port:
 
-**Fallback (if needed):** If attachments require authentication, we'll use Selenium with Chrome debug mode:
-
-```bash
-# Windows
+```powershell
 chrome.exe --remote-debugging-port=9222
-
-# Linux/Mac
-google-chrome --remote-debugging-port=9222
 ```
 
-**Important:** Log into Google Groups in the Chrome instance before running download scripts.
+Log into Google Groups in that Chrome window before running the download.
 
-### ChromeDriver (only if Selenium needed)
+The download is run by the Windows Python (3.13, with `selenium`, `requests`, `Pillow` and
+`tqdm` installed), from this directory in WSL, so that relative paths reach `../data` in WSL.
+Use PowerShell: cmd cannot use a `\\wsl.localhost\...` path as its current directory.
+WSL must be running (a WSL terminal open).
 
-ChromeDriver must be available at `../../chromedriver-win64/chromedriver.exe` (relative to this directory).
+ChromeDriver is given with `--chromedriver`. Its version must match the installed Chrome.
 
 ## Usage
 
@@ -95,13 +91,23 @@ python extract_image_urls.py \
 
 ### Phase 2: Download Images
 
-```bash
-# Make sure Chrome is running with --remote-debugging-port=9222 first!
-python download_images_cli.py \
-  ../data/image_index.json \
-  ../data/images/full \
-  --limit 5
+In PowerShell on Windows, with Chrome running as above (one command, shown on several lines):
+
+```powershell
+cd \\wsl.localhost\Debian\home\tom\projects\ml\imageGetter
+python download_images_cli.py `
+  --chromedriver C:\Users\tom\Documents\projects\chromedriver-win64\chromedriver.exe `
+  --log ..\data\images\download_YYMMDD.log `
+  ..\data\images\indexYYMMDDhhmmss.idx `
+  ..\data\images\full
 ```
+
+- A picture already in `full` is not fetched again, so a run can be repeated.
+- A request that takes longer than `--timeout` seconds (default 60), or answers with a
+  status other than 200, or is not a picture, fails and leaves no file. Each failure is
+  listed in the log as `FAILED <local name> <url>`.
+- `--limit N` downloads only the first N pictures, for a trial.
+- The download writes the index file back as it goes.
 
 ### Phase 3: Generate Thumbnails
 

@@ -15,24 +15,49 @@ from selenium.webdriver.support import expected_conditions as EC
 from tqdm import tqdm
 
 
-def create_selenium_driver():
+# Seconds a request or a page load may take before the attempt fails
+DEFAULT_TIMEOUT_SECONDS = 60
+
+
+def create_selenium_driver(strChromedriverPath: str, fltTimeout: float = DEFAULT_TIMEOUT_SECONDS):
     """
     Create Selenium WebDriver connected to Chrome debug port.
 
     Requires Chrome to be running with: chrome.exe --remote-debugging-port=9222
     Chrome instance must be logged into Google Groups.
 
+    Args:
+        strChromedriverPath: Path of chromedriver.exe
+        fltTimeout: Seconds a page may take to load
+
     Returns:
         WebDriver instance connected to existing Chrome session
     """
 
-    service = Service(executable_path='C:\\Users\\tom\\Documents\\projects\\chromedriver-win64\\chromedriver.exe')
+    service = Service(executable_path=strChromedriverPath)
     options = webdriver.ChromeOptions()
     options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
     driver = webdriver.Chrome(service=service, options=options)
+    driver.set_page_load_timeout(fltTimeout)
     return driver
 
-def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetries: int = 3, dctCookies: Optional[Dict] = None) -> bool:
+
+def fetch_to_file(strUrl: str, strOutputPath: str, dctCookies: Optional[Dict], fltTimeout: float):
+    """
+    Fetch a URL and write the response body to a file.
+
+    Raises:
+        requests.RequestException: The request failed or took longer than fltTimeout
+        Exception: The response status is not 200; nothing is written
+    """
+    response = requests.get(strUrl, cookies=dctCookies, timeout=fltTimeout)
+    if response.status_code != 200:
+        raise Exception(f"HTTP status {response.status_code}")
+    with open(strOutputPath, 'wb') as f:
+        f.write(response.content)
+
+def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetries: int = 3, dctCookies: Optional[Dict] = None,
+                   fltTimeout: float = DEFAULT_TIMEOUT_SECONDS, strChromedriverPath: Optional[str] = None) -> bool:
     """
     Download a single image from URL using Selenium.
 
@@ -42,9 +67,11 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
         seleniumDriver: Optional Selenium driver (for testing). If None, creates new one.
         intRetries: Number of retry attempts (default 3)
         dctCookies: Optional pre-extracted cookies dict for direct binary downloads
+        fltTimeout: Seconds each request may take
+        strChromedriverPath: Path of chromedriver.exe, used when no driver is given
 
     Returns:
-        True if successful, False otherwise
+        True if successful, False otherwise; a failed download leaves no file
     """
     # Create output directory if needed
     pathOutput = Path(strOutputPath)
@@ -54,7 +81,7 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
     boolCloseDriver = False
     if seleniumDriver is None:
         try:
-            seleniumDriver = create_selenium_driver()
+            seleniumDriver = create_selenium_driver(strChromedriverPath, fltTimeout)
             boolCloseDriver = True
         except Exception as e:
             print(f"Failed to create Selenium driver: {e}")
@@ -74,9 +101,7 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
                 strSrc = imgElement.get_attribute("src")
 
                 # Download from the extracted src URL
-                response = requests.get(strSrc)
-                with open(strOutputPath, 'wb') as f:
-                    f.write(response.content)
+                fetch_to_file(strSrc, strOutputPath, None, fltTimeout)
             else:
                 # Direct binary download approach - use requests with cookies
                 # Use provided cookies or extract from Selenium session
@@ -86,9 +111,7 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
                         dctCookies[cookie['name']] = cookie['value']
 
                 # Download directly with requests (avoids Chrome Downloads folder)
-                response = requests.get(strUrl, cookies=dctCookies)
-                with open(strOutputPath, 'wb') as f:
-                    f.write(response.content)
+                fetch_to_file(strUrl, strOutputPath, dctCookies, fltTimeout)
 
             # Validate image
             try:
@@ -108,6 +131,9 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
                 raise Exception(f"Downloaded file is not a valid image: {e}")
 
         except Exception as e:
+            # A failed attempt leaves no file behind
+            if Path(strOutputPath).exists():
+                Path(strOutputPath).unlink()
             print(f"Download attempt {intAttempt + 1}/{intRetries} failed: {e}")
             if intAttempt < intRetries - 1:
                 time.sleep(2 ** intAttempt)  # Exponential backoff
@@ -123,7 +149,9 @@ def download_image(strUrl: str, strOutputPath: str, seleniumDriver=None, intRetr
     return False
 
 
-def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int] = None, seleniumDriver=None) -> Dict[str, int]:
+def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int] = None, seleniumDriver=None,
+                   strChromedriverPath: Optional[str] = None, strLogPath: Optional[str] = None,
+                   fltTimeout: float = DEFAULT_TIMEOUT_SECONDS) -> Dict[str, int]:
     """
     Download all images from image index with progress tracking.
 
@@ -135,13 +163,18 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
         strOutputDir: Directory to save downloaded images
         intLimit: Optional limit on number of images to download
         seleniumDriver: Optional Selenium driver (for testing). If None, creates new one.
+        strChromedriverPath: Path of chromedriver.exe, used when no driver is given
+        strLogPath: Optional log file; lists each failed download and the totals
+        fltTimeout: Seconds each request may take
 
     Returns:
         Dict with statistics: {"total": int, "success": int, "failed": int, "skipped": int}
     """
-    # Open debug log file
-    fileDebug = open('download_debug.log', 'w', encoding='utf-8')
-    fileDebug.write("=== Image Download Debug Log ===\n\n")
+    # Open log file if one is given
+    fileLog = None
+    if strLogPath is not None:
+        fileLog = open(strLogPath, 'w', encoding='utf-8')
+        fileLog.write("=== Image Download Log ===\n\n")
 
     # Load image index
     with open(strIndexPath, 'r', encoding='utf-8') as f:
@@ -181,12 +214,15 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     boolCloseDriver = False
     if seleniumDriver is None:
         try:
-            seleniumDriver = create_selenium_driver()
+            seleniumDriver = create_selenium_driver(strChromedriverPath, fltTimeout)
             boolCloseDriver = True
         except Exception as e:
             print(f"Failed to create Selenium driver: {e}")
             # Mark all as failed
             dctStats["failed"] = dctStats["total"]
+            if fileLog is not None:
+                fileLog.write(f"Failed to create Selenium driver: {e}\n")
+                fileLog.close()
             return dctStats
 
     # Extract cookies once at the beginning (for direct binary downloads)
@@ -228,12 +264,16 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
             continue
 
         # Download image
-        boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3, dctCookies=dctCookies)
+        boolSuccess = download_image(strUrl, strOutputPath, seleniumDriver=seleniumDriver, intRetries=3, dctCookies=dctCookies,
+                                     fltTimeout=fltTimeout)
 
         if boolSuccess:
             dctStats["success"] += 1
         else:
             dctStats["failed"] += 1
+            if fileLog is not None:
+                fileLog.write(f"FAILED {strLocalFilename} {strUrl}\n")
+                fileLog.flush()
 
         # Increment processed counter
         intProcessedCount += 1
@@ -254,13 +294,14 @@ def download_batch(strIndexPath: str, strOutputDir: str, intLimit: Optional[int]
     with open(strIndexPath, 'w', encoding='utf-8') as f:
         json.dump(dctIndex, f, indent=1, ensure_ascii=False)
 
-    # Close debug log
-    fileDebug.write(f"\n=== Download Complete ===\n")
-    fileDebug.write(f"Total: {dctStats['total']}\n")
-    fileDebug.write(f"Success: {dctStats['success']}\n")
-    fileDebug.write(f"Skipped: {dctStats['skipped']}\n")
-    fileDebug.write(f"Failed: {dctStats['failed']}\n")
-    fileDebug.close()
+    # Close log
+    if fileLog is not None:
+        fileLog.write(f"\n=== Download Complete ===\n")
+        fileLog.write(f"Total: {dctStats['total']}\n")
+        fileLog.write(f"Success: {dctStats['success']}\n")
+        fileLog.write(f"Skipped: {dctStats['skipped']}\n")
+        fileLog.write(f"Failed: {dctStats['failed']}\n")
+        fileLog.close()
 
     # Close driver if we created it
     if boolCloseDriver:

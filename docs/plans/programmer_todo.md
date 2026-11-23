@@ -400,9 +400,20 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       The first run stopped part way on those thumbnails (1,644 pictures renamed); it was
       undone from the map, the directories checked identical to the copies, fixed under TDD
       and run again.
-- [ ] IU3 Download: timeout, a response that is not 200 fails, chromedriver path and log file
+- [x] IU3 Download: timeout, a response that is not 200 fails, chromedriver path and log file
       as parameters. Settle with Tom how the Windows run reaches `data/images/full`; write
       the commands in `imageGetter/README.md`.
+      Done 2026-11-23. Tom waived TDD and tests for IU3 (2026-11-23): his download on Windows
+      (IU8) is the check. The mocked tests of `test_download.py` stay as they are; one got
+      `status_code = 200` on its fake response. `test_handle_download_failure` still passes
+      only because a Mock's `get_cookies()` cannot be iterated (told to Tom).
+      Settled with Tom: PowerShell, `cd` to the WSL `imageGetter`, Windows Python 3.13 (has
+      selenium, requests, Pillow, tqdm; first `python` on PATH), relative paths into WSL
+      `data/`. Tried from WSL: that Python, started there, imports the module and sees the
+      6,230 files of `..\data\images\full`. Not tried: writing there, and Chrome.
+      Chromedriver 158.0.8127.36, Chrome 158.0.8127.36/37.
+      Tom finds running the getters from the Windows clone brittle; the other getters could
+      be run the same way (not part of this task).
 - [ ] IU4 The measuring step: bytes, width, height and content hash into each image entry.
       Run it on the files of 2025.
 - [ ] IU5 The decisions file (one decision per content hash) and the one loading of the 2025

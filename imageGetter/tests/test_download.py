@@ -41,6 +41,7 @@ class TestDownloadImage:
 
             # Mock requests.get to return image data
             mock_response = Mock()
+            mock_response.status_code = 200
             mock_response.content = bytesValidJpeg
             mock_requests_get.return_value = mock_response
 
