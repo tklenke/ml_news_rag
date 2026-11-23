@@ -303,13 +303,24 @@ push or merge.
 - [x] 2.1e A file that fails is logged and left out of the progress file, and the run goes on;
       20 failures in a row end the variant (plan 2.1). Tests first, with a real unreachable
       Ollama address.
-- [~] 2.2a Start the experiment's Chroma (port 8010, data in `data/chunk_experiment/chroma`) and
+- [x] 2.2a Start the experiment's Chroma (port 8010, data in `data/chunk_experiment/chroma`) and
       the GPU Ollama (port 11998). Record the two `docker run` commands here.
-- [ ] 2.2b The queue (A, C, B, D, E on port 11998) with its stop and continue commands, one line
+      Done; the model is 100% on the GPU.
+
+          docker run -d --name chunk_experiment_chroma -p 127.0.0.1:8010:8000 \
+              -v /home/tom/projects/ml/data/chunk_experiment/chroma:/data chromadb/chroma:1.5.9
+          docker run -d --name chunk_experiment_ollama --gpus all \
+              -p 127.0.0.1:11998:11434 site_2024-ollama-rag
+- [x] 2.2b The queue (A, C, B, D, E on port 11998) with its stop and continue commands, one line
       each (plan 2.2a). The trial on `data/test_min`: stopped part way, continued, counts checked
       against the chunker, then the trial collections and progress files deleted. Commit the code
       before the long run.
-- [ ] 2.2c Start the queue detached. Record under "Stop and continue" below the two commands, the
+      Done: `embedder/chunk_queue.py`. `data/test_min` holds one file, so the trial ran on it and
+      then on `data/test` (7 files), stopped there after 4 of 7 files of a variant and continued.
+      Ids and texts of all five collections equal the chunker's. A second start was refused.
+      Trial collections and progress files deleted; an empty `defaultdb` stays, since every
+      `Embedder` opens it.
+- [~] 2.2c Start the queue detached. Record under "Stop and continue" below the two commands, the
       start time and the log file. Check after 10 minutes that the log advances and the seconds
       per chunk are near the plan's (0.22 at 250 words). Then commit this file. The session may
       end; the run does not need it.
