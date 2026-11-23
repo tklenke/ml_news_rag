@@ -7,7 +7,8 @@
 ## Design Revision History
 
 - **2026-11-22 (thirteenth revision):** The embedding of the Phase 2 variants is brought
-  forward to run overnight while Tom is away (D48; 2.2a). Only the embedding moves: the
+  forward to run overnight while Tom is away, over two nights, stopped each morning and
+  continued each evening (D48; 2.2a). Only the embedding moves: the
   labelling and the rest of Phase 2 keep their place after Phase 4. Architect measured
   first that the current Ollama reads a chunk up to 2,048 tokens, so the 400-word variants
   are embedded whole, and that all five variants are about 13 hours of embedding on the
@@ -157,7 +158,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D45 | (2026-11-22) Old jobs need no compatibility: nobody digs deeper on a job that is days or months old. Chunk ids and the job format may change. |
 | D46 | (2026-11-22) F2 is not finished before the deploy; Phase 2 embeds everything on the current Ollama. Amends D43. |
 | D47 | (2026-11-22) Code review of the deploy with the answer display, the corpus update and the model change is waived (all of it). |
-| D48 | (2026-11-22) The embedding of the Phase 2 variants runs overnight from 2026-11-22, unattended, ahead of Phase 4 (2.2a). The rest of Phase 2 stays after Phase 4 (D41). |
+| D48 | (2026-11-22) The embedding of the Phase 2 variants runs overnight from 2026-11-22, unattended, ahead of Phase 4 (2.2a). It is stopped in the morning and continued in the evening, over about two nights. Tom watches the coding; the run itself is unattended. The rest of Phase 2 stays after Phase 4 (D41). |
 
 ## Two repositories
 
@@ -195,7 +196,7 @@ at `bed83f4`. Programmer follows the same version-control rules there.
 6. **[REVISED - 2026-11-22] Phase 4:** image gallery (4.2), then reference links (4.1)
    (D41). Not yet designed.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
-   Its embedding (2.1, 2.2a) is brought forward to the night of 2026-11-22 (D48).
+   Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
 One Programmer session per step. Code review once per deploy.
 
@@ -673,7 +674,8 @@ All five are run without that stop.
 
 ### 2.2a The embedding run (D48)
 
-**[REVISED - 2026-11-22]** New. Runs unattended overnight from 2026-11-22.
+**[REVISED - 2026-11-22]** New. Runs unattended at night from 2026-11-22, stopped each
+morning and continued each evening, until the five variants are done (about two nights).
 
 **What was measured** (Architect, 2026-11-22; calls to Ollama only, nothing stored):
 
@@ -708,23 +710,28 @@ All five are run without that stop.
 - **Ollama on the GPU.** A container of the image `site_2024-ollama-rag` with
   `--gpus all` on `127.0.0.1:11998`, as for the F2 repair. Same image as production, so
   the same Ollama version and model.
-- **Two queues.** The GPU queue runs A, C, B, D in that order: A first because nothing
-  can be compared without it, then the two plain sizes, then the overlap. E runs at the
-  same time on the site's CPU Ollama (port 11434), if the check below passes; otherwise
-  E is the last of the GPU queue. A queue goes on to its next variant when one ends,
-  also when it ended on failures.
-- **Check before E goes to the CPU:** 100 chunks of 400 words, embedded on both ports,
-  give the same vector (every cosine above 0.999). The F2 repair found the two equal,
-  but on 250-word chunks.
-- **Detached.** The queues run as background processes that do not depend on the
-  Programmer's session, with one log per queue in `ml/data/chunk_experiment/`. Each
-  variant logs its start, its end, the files and chunks done and the seconds per chunk.
-- **Stopped and continued.** The same command again carries on from the progress files
-  (one per collection, in `ml/data/chunk_experiment/`). A file stored but not yet in the
-  progress file is embedded again and Chroma ignores the ids it has.
-- **A trial first.** Before the long run, the same queues are run on `data/test_min`
-  into the experiment's Chroma, and the trial collections and progress files are deleted
-  after their counts are checked. A mistake then costs minutes, not the night.
+- **One queue.** The variants run one after another on the GPU, in the order A, C, B, D,
+  E: A first because nothing can be compared without it, then the two plain sizes, then
+  the two with overlap. The queue goes on to the next variant when one ends, also when it
+  ended on failures. Considered and dropped: E at the same time on the site's CPU Ollama.
+  It would save under 3 hours of a run that takes two nights either way, and adds a
+  second process and a check that CPU and GPU agree on long chunks.
+- **Detached.** The queue runs as a background process that does not depend on the
+  Programmer's session, with its log in `ml/data/chunk_experiment/`. Each variant logs
+  its start, its end, the files and chunks done and the seconds per chunk.
+- **Stopped in the morning, continued in the evening.** Two commands that Tom can run
+  himself, each one line, kept in `programmer_todo.md`. Stop: ends the queue and stops
+  the GPU Ollama container, so the GPU is free; the experiment's Chroma may stay up.
+  Continue: starts the GPU Ollama container and the queue. The queue carries on from the
+  progress files (one per collection, in `ml/data/chunk_experiment/`): a finished variant
+  is passed over, a started one goes on with the files not yet done. Stopping costs at
+  most the file being embedded: a file stored but not yet in the progress file is
+  embedded again and Chroma ignores the ids it has. Starting the queue while it is
+  already running is refused.
+- **A trial first.** Before the long run, the queue is run on `data/test_min` into the
+  experiment's Chroma, stopped part way and continued once, and the trial collections
+  and progress files are deleted after their counts are checked. A mistake then costs
+  minutes, not the night.
 
 **Checks when it has run** (Programmer, reported to Architect):
 
@@ -738,9 +745,8 @@ All five are run without that stop.
    token count (`prompt_eval_count` of a single call). A chunk at 2,048 tokens was cut.
 5. Per variant: hours taken and seconds per chunk.
 
-**Not known.** The CPU rate at 400 words (0.47 s per chunk was measured at 250), so when
-E ends. Whether the machine stays awake all night: if Windows sleeps or restarts, the
-run stops and is continued by hand.
+**Not known.** Whether the machine stays awake all night: if Windows sleeps or restarts,
+the run stops and is continued with the same command as in the evening.
 
 ### 2.3 Questions and labelling (needs Tom)
 

@@ -25,9 +25,10 @@ finished work items are in the git history of this file.
 - [x] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5). Done 2026-11-22, first answer only (D35).
 - [ ] Before leaving on 2026-11-22, for the overnight embedding (plan 2.2a): Windows set not to
-      sleep, Docker Desktop left running, the GPU left free, and the Programmer session started
-      so that it does not wait for an approval nobody is there to give.
-- [ ] In the morning: read "For Tom in the morning" in `programmer_todo.md`.
+      sleep, Docker Desktop left running, the GPU left free.
+- [ ] Each morning until the five variants are done: run the stop command, and each evening the
+      continue command ("Stop and continue" in `programmer_todo.md`). Read "For Tom in the
+      morning" there.
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 

@@ -10,7 +10,8 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 Plan revised on 2026-11-22 (thirteenth revision, D48). Everything through the answer
 display, the corpus update and the model change is deployed (`775692d`) and every check passed.
-The embedding of the Phase 2 variants runs overnight from 2026-11-22 (plan 2.2a); read the
+The embedding of the Phase 2 variants runs at night from 2026-11-22, stopped each morning and
+continued each evening (plan 2.2a); read the
 Programmer's report of it first. Next design: the image gallery (4.2).
 
 ## Open
