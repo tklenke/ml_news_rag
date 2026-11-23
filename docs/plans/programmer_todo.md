@@ -487,3 +487,4 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       `data/images/gallery261123.idx`: 2,368 threads, 5,661 pictures. READMEs updated
       ("Yearly Update" in `imageGetter/README.md`, a line in the top-level procedure).
       Report in `architect_todo.md`.
+      Code review of the image update waived by Tom (2026-11-23).
