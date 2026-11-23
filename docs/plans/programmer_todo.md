@@ -441,7 +441,7 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       Tom decided (2026-11-23) not to load `input/remove_list2`: a second round of 2025
       (27 pages, about 207 more pictures) that was never applied; all 203 pictures only it
       names are on the 2025 gallery pages. They come up in the review tool like any others.
-- [ ] IU6 The review tool, as the plan describes it. Show it to Tom on the files of 2025
+- [x] IU6 The review tool, as the plan describes it. Show it to Tom on the files of 2025
       before the download, so that a change he asks for costs little.
       Built 2026-11-23, waiting for Tom to look at it: `imageGetter/review_images.py`,
       `review_images_cli.py` (port 8765, command in `imageGetter/README.md`). On the 2025
@@ -462,6 +462,9 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       1): a picture not yet clicked shows keep with a dashed frame and is not saved; a click
       on the picture switches keep and discard; the button saves the dashed ones as keep.
       The page script is checked for syntax only (`node --check`), not run by the tests.
+      Approved by Tom (2026-11-23) after trying it on a scratch copy of the decisions.
+      One full-suite run had 7 failures that four runs after it did not repeat; which tests
+      failed is not known (output was cut). If it comes back, keep the whole output.
 - [ ] IU7 The step that makes the index the gallery reads.
 - [ ] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
       missing), then measuring, then his review in the tool.
