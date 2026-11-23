@@ -2,7 +2,7 @@
 # ABOUTME: Each file on disk takes the name of the first index entry that has its present name (D51)
 
 import os
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Dict, Set, Tuple
 from urllib.parse import urlparse
@@ -62,6 +62,9 @@ def apply_renames(dctRenames: Dict[str, str], strFullDir: str, strThumbsDir: str
     Rename pictures and their thumbnails.
 
     Every new name is checked first; if any is already taken, nothing is renamed.
+    A thumbnail whose name two pictures share (names that differ only in the
+    extension) was made from one of them only, so it goes with neither and
+    keeps its present name.
 
     Args:
         dctRenames: Dict of present name to new name
@@ -77,13 +80,15 @@ def apply_renames(dctRenames: Dict[str, str], strFullDir: str, strThumbsDir: str
     pathFull = Path(strFullDir)
     pathThumbs = Path(strThumbsDir)
 
+    cntThumbNames = Counter(thumbnail_name(strPresent) for strPresent in dctRenames)
+
     lstMoves = []
     lstTargets = []
     for strPresent, strNew in dctRenames.items():
         lstMoves.append((pathFull / strPresent, pathFull / strNew))
         pathThumb = pathThumbs / thumbnail_name(strPresent)
         pathNewThumb = pathThumbs / thumbnail_name(strNew)
-        if pathThumb.exists():
+        if pathThumb.exists() and cntThumbNames[pathThumb.name] == 1:
             lstMoves.append((pathThumb, pathNewThumb))
         # A thumbnail already under the new name would be taken for this picture's
         lstTargets += [pathFull / strNew, pathNewThumb]

@@ -117,6 +117,23 @@ class TestApplyRenames:
 
         assert sorted(p.name for p in pathFull.iterdir()) == ["T_9999_part0_1_a.jpg", "T_part0_1_other"]
 
+    def test_thumbnail_shared_by_two_pictures_left_alone(self, tmp_path):
+        """A thumbnail name two pictures share (they differ only in extension) goes with neither."""
+        pathFull, pathThumbs = self.make_dirs(tmp_path)
+        (pathFull / "T_part0_1_image1.jpeg").write_bytes(b"jpeg")
+        (pathFull / "T_part0_1_image1.png").write_bytes(b"png")
+        (pathThumbs / "T_part0_1_image1_thumb.jpg").write_bytes(b"thumb of one of them")
+
+        intPictures, intThumbs = apply_renames(
+            {"T_part0_1_image1.jpeg": "T_1111_part0_1_image1.jpeg",
+             "T_part0_1_image1.png": "T_2222_part0_1_image1.png"},
+            str(pathFull), str(pathThumbs))
+
+        assert (intPictures, intThumbs) == (2, 0)
+        assert sorted(p.name for p in pathFull.iterdir()) == [
+            "T_1111_part0_1_image1.jpeg", "T_2222_part0_1_image1.png"]
+        assert sorted(p.name for p in pathThumbs.iterdir()) == ["T_part0_1_image1_thumb.jpg"]
+
     def test_existing_target_refused_before_any_rename(self, tmp_path):
         """If any new name is already taken, nothing is renamed and nothing overwritten."""
         pathFull, pathThumbs = self.make_dirs(tmp_path)
