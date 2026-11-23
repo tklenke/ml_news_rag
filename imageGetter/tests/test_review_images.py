@@ -223,16 +223,26 @@ class TestHttpInterface:
         assert 'data-hash="sig"' not in strPage
         assert "Subject THREADearly" in strPage
 
+    def test_undecided_picture_shows_keep_chosen_but_not_saved(self, server):
+        strBase, state = server
+
+        strPage = get(strBase + "/?list=new&page=1").decode("utf-8")
+
+        assert '<figure data-hash="photo_e" class="unsaved">' in strPage
+        assert 'name="photo_e" value="keep" checked>' in strPage
+        assert 'name="photo_e" value="remove">' in strPage
+        assert state.dctDecisions == {}
+
     def test_instructions_at_top_and_bottom_of_a_page(self, server):
         strBase, _ = server
 
         strPage = get(strBase + "/?list=new&page=1").decode("utf-8")
         strDecided = get(strBase + "/?list=decided&page=1").decode("utf-8")
 
-        assert strPage.count("saved the moment you click") == 2
-        assert strPage.count("The button below marks") == 2
-        assert strDecided.count("saved the moment you click") == 2
-        assert "The button below marks" not in strDecided
+        assert strPage.count("saved the moment you click it") == 2
+        assert strPage.count("The button below saves") == 2
+        assert strDecided.count("saved the moment you click it") == 2
+        assert "The button below saves" not in strDecided
 
     def test_thumbnail_and_full_picture_served_by_content(self, server):
         strBase, _ = server

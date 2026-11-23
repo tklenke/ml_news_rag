@@ -456,6 +456,12 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       marked `keep` on his word. Instructions at the top and bottom of each page (he found the
       button confusing). Tom decided files under 1,000 bytes are reviewed, not dropped: they
       are on Suggested (note to Architect). IU7 drops by decision only, not by size.
+      Tom finished Suggested (2026-11-23, `4106b30`): all 5,388 contents decided, 5,060 keep,
+      328 remove. Fixed: the tool answered one connection at a time, and an idle browser
+      connection blocked it (now a thread per connection). Tom asked for, and agreed (option
+      1): a picture not yet clicked shows keep with a dashed frame and is not saved; a click
+      on the picture switches keep and discard; the button saves the dashed ones as keep.
+      The page script is checked for syntax only (`node --check`), not run by the tests.
 - [ ] IU7 The step that makes the index the gallery reads.
 - [ ] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
       missing), then measuring, then his review in the tool.

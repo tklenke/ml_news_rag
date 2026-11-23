@@ -135,10 +135,11 @@ Run in WSL from `imageGetter/`, then open `http://127.0.0.1:8765/` in a browser:
 ```
 
 - One content (same SHA-256) is one picture, shown under its earliest thread.
-- Each picture has a choice of keep (green) or discard (red, stored as `remove`). Each
-  choice is written to `image_decisions.json` at once and can be changed later.
-- The button at the end of a page marks every picture of the page not marked `remove`
-  as `keep`.
+- A click on a picture switches it between keep (green) and discard (red, stored as
+  `remove`); the keep and discard buttons set the choice directly. Each choice is written
+  to `image_decisions.json` at once and can be changed later.
+- A picture not yet clicked shows keep with a dashed frame: nothing is saved for it. The
+  button at the end of a page saves every dashed picture of the page as `keep`.
 - **Suggested**: undecided pictures under 1,000 bytes, in 2 or more threads, with a
   shorter side under 200 pixels, named `imageNNN` under 20,000 bytes, or removed in some copies only in 2025.
   **New**: every other undecided picture. **Decided**: everything marked.

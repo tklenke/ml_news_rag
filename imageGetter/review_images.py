@@ -145,19 +145,36 @@ figure img { width: 200px; height: 200px; object-fit: contain; background: #eee;
 figure label { margin-right: 1em; font-size: 1.1em; cursor: pointer; }
 figure.remove img { border-color: #c00; opacity: 0.35; }
 figure.keep img { border-color: #080; }
+figure.unsaved img { border: 4px dashed #080; }
+figure img { cursor: pointer; }
 button { margin: 0 0 2em; padding: 0.6em 1.2em; font-size: 1em; }
 .instructions { background: #ffd; border: 1px solid #cc9; padding: 0.5em 1em; margin: 1em 0; }
 """
 
 PAGE_SCRIPT = """
-document.querySelectorAll('figure input[type=radio]').forEach(function (radio) {
-  radio.addEventListener('change', function () {
-    var fig = radio.closest('figure');
-    fetch('/decide', {method: 'POST', headers: {'Content-Type': 'application/json'},
-                      body: JSON.stringify({hash: fig.dataset.hash, decision: radio.value})})
-      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function (d) { fig.className = d.decision; })
-      .catch(function (e) { radio.checked = false; alert('Not saved: ' + e); });
+function choice(fig, value) {
+  return fig.querySelector('input[value=' + value + ']');
+}
+function save(fig, value) {
+  var previousClass = fig.className;
+  var previous = fig.querySelector('input:checked');
+  choice(fig, value).checked = true;
+  fetch('/decide', {method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({hash: fig.dataset.hash, decision: value})})
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (d) { fig.className = d.decision; })
+    .catch(function (e) {
+      fig.className = previousClass;
+      if (previous) previous.checked = true;
+      alert('Not saved: ' + e);
+    });
+}
+document.querySelectorAll('figure').forEach(function (fig) {
+  fig.querySelectorAll('input[type=radio]').forEach(function (radio) {
+    radio.addEventListener('change', function () { save(fig, radio.value); });
+  });
+  fig.querySelector('img').addEventListener('click', function () {
+    save(fig, choice(fig, 'remove').checked ? 'keep' : 'remove');
   });
 });
 var btn = document.getElementById('keep');
@@ -172,19 +189,21 @@ if (btn) btn.addEventListener('click', function () {
 
 
 def radio(strHash: str, strValue: str, strLabel: str, strDecision) -> str:
-    """One choice of a picture's decision, checked when it is the decision taken."""
+    """One choice of a picture's decision, checked when it is the decision shown."""
     strChecked = ' checked' if strDecision == strValue else ''
     return f'<label><input type="radio" name="{strHash}" value="{strValue}"{strChecked}> {strLabel}</label>'
 
 
 def instructions(strList: str) -> str:
     """What to do on a page, shown at its top and bottom."""
-    strText = ('Each keep or discard is saved the moment you click it; closing the page loses nothing. '
-               'A choice can be changed at any time.')
+    strText = ('Click a picture to switch it between keep and discard, or click keep or discard. '
+               'Each choice is saved the moment you click it (solid frame: green keep, red discard); '
+               'closing the page loses nothing, and a choice can be changed at any time.')
     if strList != "decided":
-        strText += (' The button below marks every picture of this page not set to discard as keep, '
-                    'then shows the next pictures. Pictures you leave without a choice and without '
-                    'pressing the button stay in this list.')
+        strText += (' A picture you have not clicked shows keep with a dashed frame: it is not saved yet. '
+                    'The button below saves every picture still dashed as keep, then shows the next '
+                    'pictures. Pictures still dashed when you leave the page without pressing it '
+                    'stay in this list.')
     return f'<p class="instructions">{strText}</p>'
 
 
@@ -220,11 +239,12 @@ def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
             lstHtml.append(f'<h2>{html.escape(dctItem["date"])}: {html.escape(dctItem["subject"])} '
                            f'({html.escape(strThread)})</h2><div class="pictures">')
         strHash = html.escape(dctItem["hash"])
+        strShown = dctItem["decision"] or "keep"
         lstHtml.append(
-            f'<figure data-hash="{strHash}" class="{dctItem["decision"] or ""}">'
+            f'<figure data-hash="{strHash}" class="{dctItem["decision"] or "unsaved"}">'
             f'<img src="/thumb/{strHash}" loading="lazy" alt="">'
-            f'<figcaption>{radio(strHash, "keep", "keep", dctItem["decision"])}'
-            f'{radio(strHash, "remove", "discard", dctItem["decision"])}<br>'
+            f'<figcaption>{radio(strHash, "keep", "keep", strShown)}'
+            f'{radio(strHash, "remove", "discard", strShown)}<br>'
             f'{dctItem["thread_count"]} thread{"s" if dctItem["thread_count"] > 1 else ""}, '
             f'{dctItem["width"]} x {dctItem["height"]}, {dctItem["size_bytes"]:,} bytes '
             f'<a href="/full/{strHash}" target="_blank">full</a><br>'
@@ -234,7 +254,7 @@ def render_page(lstItems: List[Dict], strList: str, intPage: int) -> str:
 
     lstHtml.append(instructions(strList))
     if strList != "decided" and lstPage:
-        lstHtml.append('<button id="keep">Keep all the others on this page, then show the next pictures</button>')
+        lstHtml.append('<button id="keep">Save every dashed picture as keep, then show the next pictures</button>')
     lstHtml.append(f'<script>{PAGE_SCRIPT}</script></body></html>')
     return ''.join(lstHtml)
 
