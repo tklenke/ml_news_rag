@@ -388,12 +388,12 @@ goes to the server (D53).
       an empty gallery index (`conftest.py`), so no test gets the "No pictures" line by
       chance of order. Full suite: 326.
 - [x] PA6 The pictures page `/cozyrag/<job id>/pictures`, with its 404 cases. Tests first.
-      Done 2026-11-23 (`site_2024`, see the commit after `d51897f`): `cozyrag_pictures.html`
+      Done 2026-11-23 (`site_2024` `6dfee65`): `cozyrag_pictures.html`
       extends `layout.html` (the `/processid` page does not); a job without pictures gets
       "No pictures were found for this answer." The threads of both pages are one include,
       `picture_threads.html`. The 404 cases are in the existing tests of `test_pages.py`.
       Full suite: 342.
-- [ ] PA7 Local check with Tom before the review: settle how the local site shows the
+- [~] PA7 Local check with Tom before the review: settle how the local site shows the
       thumbnails without changing a file the server uses (plan, "Local check"). He looks at
       an answer with few pictures, one with over 12, the pictures page, a dig deeper and a
       narrow window. If he wants the look changed, report to Architect; do not restyle on
