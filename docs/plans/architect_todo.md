@@ -8,14 +8,17 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-22 (twelfth revision, D41 to D47). Everything through the answer
+Plan revised on 2026-11-22 (thirteenth revision, D48). Everything through the answer
 display, the corpus update and the model change is deployed (`775692d`) and every check passed.
-Next design: the image gallery (4.2).
+The embedding of the Phase 2 variants runs overnight from 2026-11-22 (plan 2.2a); read the
+Programmer's report of it first. Next design: the image gallery (4.2).
 
 ## Open
 
 - [ ] Design the image gallery (plan 4.2), then reference links (4.1) (D41). The links are made
       by the site from ids, since answers are rendered with raw HTML off (D40).
+- [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
+      whether the five collections are fit for the labelling (2.3).
 
 ## Notes from Programmer
 
@@ -31,7 +34,8 @@ R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.
 
 Phase 0, the Phase 1 code change, the follow-on fixes and the twelve plan revisions through
 2026-11-22 are done: planning, question set, site review, the designs of the three deploys, of
-the answer display and of the corpus update, decisions D1 to D47, the Programmer's notes through the evaluation, and the review findings
+the answer display, of the corpus update and of the overnight embedding (thirteenth revision),
+decisions D1 to D48, the Programmer's notes through the evaluation, and the review findings
 R4 and R5. The evaluation showed no candidate slow at its default reasoning effort, so no
 reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
 file.
@@ -77,3 +81,6 @@ file.
   `site_2024/data/rehearsal/`. Both old images are kept locally under the tag `old-stack`.
 - The live certificate expires 2027-02-20.
 - `gpt-4o-mini` and `gpt-4.1` shut down on 2027-01-14.
+- Ollama 0.40.17 reads a chunk up to 2,048 tokens and cuts a longer one without error
+  (measured 2026-11-22). The local GPU is a GTX 1650 with 4 GB: 0.15 to 0.29 s per chunk.
+- The chunk experiment has a Chroma of its own: port 8010, `ml/data/chunk_experiment/chroma`.

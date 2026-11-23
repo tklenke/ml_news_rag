@@ -10,8 +10,9 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0, the Phase 1 code change with the site fixes, the follow-on fixes, and the
-answer display with the corpus update and the model change are deployed (`775692d`). Next is
-Phase 4, then Phase 2 (D41). One session per group; start each
+answer display with the corpus update and the model change are deployed (`775692d`). **Now: the
+overnight embedding of Phase 2 (2.1c to 2.2e below, D48).** After it Phase 4, then the rest of
+Phase 2 (D41). One session per group; start each
 session fresh. Code review happens once per deploy, not per commit.
 
 **Deploys:** nginx looks up the name `flask` only when it starts. A deploy or rollback that
@@ -278,13 +279,41 @@ do not start those of `ml/docker-compose.yaml`.
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
-Start after Phase 4 (D41). 2.1a and 2.1b are done as CU2 and CU3.
+2.1a and 2.1b are done as CU2 and CU3. 2.1c to 2.2e are the overnight embedding (D48): plan 2.1
+and 2.2a, read both whole. 2.3 to 2.5 start after Phase 4 (D41).
 
-- [ ] 2.1c Add overlap to `chunksplitter` (default 0 reproduces current chunks)
-- [ ] 2.1d `embedder.py` takes chunk size, overlap and collection name as parameters,
-      with a progress file per collection
-- [ ] 2.2 Embed variant B on the full corpus and report the time taken before running A (rebuilt,
-      plan 2.2), C, D, E
+**Tom is away during 2.1c to 2.2d.** Nobody answers a question tonight. Where a rule says stop
+and ask, write the question under "For Tom in the morning" below, and carry on with what does not
+depend on the answer. If the question blocks the long run, do not start the run on a guess:
+leave it not started and say so there. Do not write to the Chroma on port 8000, do not stop or
+change a container of `site_2024`, do not change `site_2024`, and do not push or merge.
+
+- [ ] 2.1c Add overlap to `chunksplitter` by the rule of plan 2.1 (default 0 reproduces current
+      chunks). Tests first, among them the plan's example of 10 words.
+- [ ] 2.1d `embedder.py` takes chunk size, overlap, collection name, Chroma port and Ollama port
+      as parameters, with a progress file per collection. With no parameters it does what it does
+      today. Tests first.
+- [ ] 2.1e A file that fails is logged and left out of the progress file, and the run goes on;
+      20 failures in a row end the variant (plan 2.1). Tests first, with a real unreachable
+      Ollama address.
+- [ ] 2.2a Start the experiment's Chroma (port 8010, data in `data/chunk_experiment/chroma`) and
+      the GPU Ollama (port 11998). Record the two `docker run` commands here.
+- [ ] 2.2b The check before E goes to the CPU: 100 chunks of 400 words on ports 11998 and 11434.
+      Record the smallest cosine. Below 0.999: E is the last of the GPU queue.
+- [ ] 2.2c The trial on `data/test_min`: both queues, counts checked against the chunker, then
+      the trial collections and progress files deleted. Commit the code before the long run.
+- [ ] 2.2d Start the two queues detached (GPU: A, C, B, D; CPU: E). Record here the commands, the
+      start time, the log files, and the command that continues a stopped run. Check after 10
+      minutes that both logs advance and the seconds per chunk are near the plan's (0.22 at 250
+      words on the GPU). Then commit this file. The session may end; the run does not need it.
+- [ ] 2.2e When it has run: the five checks of plan 2.2a, reported in a note in
+      `architect_todo.md`. A variant not finished is continued, not started again. Then stop and
+      remove the GPU Ollama container; the experiment's Chroma stays for 2.3.
+
+### For Tom in the morning
+
+(nothing yet)
+
 - [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom, one batch of 10 questions at a time (plan 2.3)
 - [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
       each batch (plan 2.4)

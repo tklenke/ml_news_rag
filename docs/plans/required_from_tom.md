@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D47 in the plan's table. The dated list of what Tom decided and the
+All decided: D1 to D48 in the plan's table. The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
 ## Work items
@@ -24,6 +24,10 @@ finished work items are in the git history of this file.
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
 - [x] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5). Done 2026-11-22, first answer only (D35).
+- [ ] Before leaving on 2026-11-22, for the overnight embedding (plan 2.2a): Windows set not to
+      sleep, Docker Desktop left running, the GPU left free, and the Programmer session started
+      so that it does not wait for an approval nobody is there to give.
+- [ ] In the morning: read "For Tom in the morning" in `programmer_todo.md`.
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 

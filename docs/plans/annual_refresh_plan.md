@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (twelfth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); next is the image gallery (4.2)
+**Status:** Revised 2026-11-22 (thirteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); next design is the image gallery (4.2)
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-22 (thirteenth revision):** The embedding of the Phase 2 variants is brought
+  forward to run overnight while Tom is away (D48; 2.2a). Only the embedding moves: the
+  labelling and the rest of Phase 2 keep their place after Phase 4. Architect measured
+  first that the current Ollama reads a chunk up to 2,048 tokens, so the 400-word variants
+  are embedded whole, and that all five variants are about 13 hours of embedding on the
+  GPU. The variants go into a Chroma of their own, not into the directory that is copied
+  to the server. 2.1 gains the rule for overlap and for a file that fails.
 - **2026-11-22 (twelfth revision):** A year of new Google Groups threads is embedded and
   deployed with the model change and the answer display ("Corpus update", D42). Comparing
   the collection with the files showed two faults, repaired in the same pass (D43): chunk
@@ -150,6 +157,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D45 | (2026-11-22) Old jobs need no compatibility: nobody digs deeper on a job that is days or months old. Chunk ids and the job format may change. |
 | D46 | (2026-11-22) F2 is not finished before the deploy; Phase 2 embeds everything on the current Ollama. Amends D43. |
 | D47 | (2026-11-22) Code review of the deploy with the answer display, the corpus update and the model change is waived (all of it). |
+| D48 | (2026-11-22) The embedding of the Phase 2 variants runs overnight from 2026-11-22, unattended, ahead of Phase 4 (2.2a). The rest of Phase 2 stays after Phase 4 (D41). |
 
 ## Two repositories
 
@@ -187,6 +195,7 @@ at `bed83f4`. Programmer follows the same version-control rules there.
 6. **[REVISED - 2026-11-22] Phase 4:** image gallery (4.2), then reference links (4.1)
    (D41). Not yet designed.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
+   Its embedding (2.1, 2.2a) is brought forward to the night of 2026-11-22 (D48).
 
 One Programmer session per step. Code review once per deploy.
 
@@ -617,8 +626,21 @@ Independent of Phase 1: it measures retrieval only and calls no LLM.
   files (the `if current_chunk:` test is always true). Fix under TDD.
   **[REVISED - 2026-11-22]** Done earlier, with the corpus update (CU3).
 - Add overlap to `chunksplitter` (default 0, which reproduces current behaviour).
+  **[REVISED - 2026-11-22]** The rule: a chunk starts `size - overlap` words after the
+  start of the one before it, and the last chunk is the one that reaches the end of the
+  text. No chunk holds only words that the chunk before it already has. With 10 words,
+  size 4 and overlap 2 the chunks are words 1 to 4, 3 to 6, 5 to 8 and 7 to 10.
 - `embedder.py` takes chunk size, overlap and collection name as parameters
   instead of edited constants, with a separate progress file per collection.
+  **[REVISED - 2026-11-22]** Also the Chroma port and the Ollama port. Run with no
+  parameters it embeds into the production collection as it does today, with the settings
+  of `embedder_settings.py`.
+- **[REVISED - 2026-11-22]** A file that fails does not end the run. The failure is
+  written to the log with the file name and the traceback, the file is not put in the
+  progress file, and the run goes on; a later run tries it again. After 20 failures in a
+  row the run of that variant ends, since the cause is then not the file. Until now any
+  exception ended the embedder, which is fine with someone watching and not overnight.
+  The test produces the failure with a real unreachable Ollama address.
 - `embedder/` has no tests today; these changes add them. **[REVISED - 2026-11-22]** The
   first ones come with the corpus update.
 
@@ -646,6 +668,79 @@ Embedding model (`nomic-embed-text`) and prefixes stay fixed.
 **Corpus:** full corpus (about 11,000 files, 100 MB). A subset would make retrieval
 artificially easy. Programmer times variant B first; if a full variant takes more
 than a few hours, stop and discuss before running the rest.
+**[REVISED - 2026-11-22]** The timing is measured (2.2a): 2.3 to 3.0 hours per variant.
+All five are run without that stop.
+
+### 2.2a The embedding run (D48)
+
+**[REVISED - 2026-11-22]** New. Runs unattended overnight from 2026-11-22.
+
+**What was measured** (Architect, 2026-11-22; calls to Ollama only, nothing stored):
+
+- The current Ollama (0.40.17) reads a chunk up to 2,048 tokens. Replacing the last 60
+  words of a chunk of 575 to 1,607 tokens changes its vector (cosine 0.994 to 0.998);
+  doing the same to a chunk already over 2,048 tokens changes nothing (cosine 1.00000).
+  A longer chunk is cut at 2,048 with no error. In three newsletters 400 words were 575
+  to 676 tokens, so the 400-word variants are embedded whole. Three files, not a survey.
+- On the GPU (GTX 1650, the site's Ollama image with `--gpus all`, model wholly on the
+  GPU), 300 random files per size, one call per file: 0.153 s per chunk at 150 words,
+  0.220 at 250, 0.288 at 400.
+- Chunks per variant, counted from the 11,388 files (9.0 million words) with the overlap
+  rule of 2.1, and the embedding time those rates give. Storing in Chroma is not in it.
+
+  | Variant | Collection | Chunks | Hours |
+  |---|---|---|---|
+  | A | `words250_overlap0` | 42,234 | 2.6 |
+  | B | `words150_overlap0` | 65,877 | 2.8 |
+  | C | `words400_overlap0` | 29,054 | 2.3 |
+  | D | `words250_overlap50` | 48,982 | 3.0 |
+  | E | `words400_overlap80` | 32,718 | 2.6 |
+
+  13.3 hours in all, one after another on the GPU. A is the production count of 42,276
+  less the 42 prefix-only chunks.
+
+**Design.**
+
+- **A Chroma of its own.** A `chromadb/chroma:1.5.9` container on `127.0.0.1:8010` with
+  the data directory `ml/data/chunk_experiment/chroma` (git-ignored). The site's
+  `data/chroma` is what a deploy copies to the server, so the experiment stays out of it.
+  Nothing in this run writes to port 8000 or changes a container of `site_2024`.
+- **Ollama on the GPU.** A container of the image `site_2024-ollama-rag` with
+  `--gpus all` on `127.0.0.1:11998`, as for the F2 repair. Same image as production, so
+  the same Ollama version and model.
+- **Two queues.** The GPU queue runs A, C, B, D in that order: A first because nothing
+  can be compared without it, then the two plain sizes, then the overlap. E runs at the
+  same time on the site's CPU Ollama (port 11434), if the check below passes; otherwise
+  E is the last of the GPU queue. A queue goes on to its next variant when one ends,
+  also when it ended on failures.
+- **Check before E goes to the CPU:** 100 chunks of 400 words, embedded on both ports,
+  give the same vector (every cosine above 0.999). The F2 repair found the two equal,
+  but on 250-word chunks.
+- **Detached.** The queues run as background processes that do not depend on the
+  Programmer's session, with one log per queue in `ml/data/chunk_experiment/`. Each
+  variant logs its start, its end, the files and chunks done and the seconds per chunk.
+- **Stopped and continued.** The same command again carries on from the progress files
+  (one per collection, in `ml/data/chunk_experiment/`). A file stored but not yet in the
+  progress file is embedded again and Chroma ignores the ids it has.
+- **A trial first.** Before the long run, the same queues are run on `data/test_min`
+  into the experiment's Chroma, and the trial collections and progress files are deleted
+  after their counts are checked. A mistake then costs minutes, not the night.
+
+**Checks when it has run** (Programmer, reported to Architect):
+
+1. Per variant: the collection's count equals the number of chunks the chunker makes of
+   the files, computed without embedding. The table above is Architect's count of the
+   same thing; a difference is reported, not explained away.
+2. Per variant: the files that failed, and the files not done.
+3. Variant A against production: 100 random chunks of at most 512 tokens have the vector
+   the production collection holds for the same text (cosine above 0.999).
+4. Per variant: how many chunks are over 6,000 characters, and for the 20 longest their
+   token count (`prompt_eval_count` of a single call). A chunk at 2,048 tokens was cut.
+5. Per variant: hours taken and seconds per chunk.
+
+**Not known.** The CPU rate at 400 words (0.47 s per chunk was measured at 250), so when
+E ends. Whether the machine stays awake all night: if Windows sleeps or restarts, the
+run stops and is continued by hand.
 
 ### 2.3 Questions and labelling (needs Tom)
 
