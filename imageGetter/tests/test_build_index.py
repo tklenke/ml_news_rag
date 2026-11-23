@@ -100,6 +100,21 @@ class TestBuildImageIndex:
             # Clean up
             os.unlink(strTempPath)
 
+    def test_report_unreadable_file_and_continue(self, tmp_path, capsys):
+        """Should report a file it cannot read, with the reason, and index the others."""
+        import shutil
+
+        shutil.copy(FIXTURES_DIR / "A20JX9PGHII.md", tmp_path / "A20JX9PGHII.md")
+        pathUnreadable = tmp_path / "broken.md"
+        pathUnreadable.mkdir()
+
+        dctIndex = build_image_index(str(tmp_path))
+
+        assert list(dctIndex) == ["A20JX9PGHII"]
+        strStderr = capsys.readouterr().err
+        assert f"Could not read {pathUnreadable}: " in strStderr
+        assert "Is a directory" in strStderr
+
     def test_returns_dict_ready_for_json(self):
         """Should return a dict structure ready to serialize as JSON."""
         # Point to file with images

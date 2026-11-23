@@ -64,6 +64,14 @@ class TestExtractMessageMetadata:
         # Should extract date (first date occurrence)
         assert dctMetadata["date"] == "Feb 11, 2011"
 
+    def test_extract_date_marked_unread(self):
+        """Should extract the date of a thread fetched signed in, where 'unread,' precedes it."""
+        strMarkdown = load_fixture("BNrZOn-UhGo.md")
+
+        dctMetadata = extract_message_metadata(strMarkdown)
+
+        assert dctMetadata["date"] == "Aug 19, 2026"
+
     def test_extract_all_metadata(self):
         """Should extract all metadata fields from markdown."""
         strMarkdown = load_fixture("a42YFDFx8WY.md")

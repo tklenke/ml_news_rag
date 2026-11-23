@@ -376,8 +376,11 @@ touches `site_2024` or the server. `data/` and `imageGetter/input/` are git-igno
 carries its own small pictures. Do not delete or overwrite a file in `data/images` or
 `imageGetter/input` other than by the rename of IU2; copy `data/images/full` first.
 
-- [ ] IU1 The date is read with or without `unread,` before it. The index builder reports the
+- [x] IU1 The date is read with or without `unread,` before it. The index builder reports the
       files it could not read and goes on.
+      Done: a file it cannot read is written to stderr with the reason. On `data/msgs_md`: 2,631
+      threads, 6,811 images, no file unreadable, no empty date. Before the fix 46 dates were
+      empty: the plan's 45 new threads and `cnmK72T1MjE`, a 2025 thread fetched again in 2026.
 - [ ] IU2 The local name with the attachment id (D51), and the one rename of the files on disk
       and of their thumbnails, after copying both directories. Report how many files were
       renamed and how many names had been shared.

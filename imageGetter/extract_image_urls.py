@@ -2,6 +2,7 @@
 # ABOUTME: Filters to include only groups.google.com attachments, excludes profile photos and tracking pixels
 
 import re
+import sys
 from typing import List, Dict
 from urllib.parse import urlparse, parse_qs, unquote
 from config import INVALID_KEYWORDS
@@ -287,8 +288,9 @@ def extract_message_metadata(strMarkdownContent: str) -> Dict[str, str]:
         dctMetadata["author"] = matchAuthor.group(1).strip()
 
     # Extract date from timestamp: > Feb 11, 2011, 2:21:35 AM
+    # A thread fetched signed in has 'unread,' before it: > unread, Aug 19, 2026, 8:13:34 AM
     # Capture only the date part: Feb 11, 2011
-    matchDate = re.search(r'>\s+([A-Za-z]+\s+\d+,\s+\d{4})', strMarkdownContent)
+    matchDate = re.search(r'>\s+(?:unread,\s+)?([A-Za-z]+\s+\d+,\s+\d{4})', strMarkdownContent)
     if matchDate:
         dctMetadata["date"] = matchDate.group(1)
 
@@ -462,7 +464,8 @@ def build_image_index(strPath: str) -> Dict[str, Dict]:
             }
 
         except Exception as e:
-            # Skip files that can't be processed
+            # Report files that can't be processed and go on with the rest
+            print(f"Could not read {pathFile}: {e}", file=sys.stderr)
             continue
 
     return dctIndex
