@@ -26,8 +26,15 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
 
 ## Notes from Programmer
 
-None open. All notes through 2026-11-23 are answered in the plan; they are in the git history
-of this file.
+- [ ] **NOTE FROM PROGRAMMER (2026-11-23): Tom amended D55 at the local check (PA7).** The
+      pictures section of the results page is no longer under the answer and its short
+      disclaimer. Order of the page now: answer, short disclaimer, ask another / dig deeper /
+      follow-up, Provided Docs, pictures (up to 12 and "All pictures (N)"), Other Related Docs,
+      statistics, full disclaimer. Tom's reason, as discussed: the pictures come from the
+      provided threads and belong beside that list; the actions follow the answer directly.
+      Cost accepted by Tom: on a phone the pictures are below the actions and a table of up to
+      15 rows. Built in `site_2024` (`cozyrag_results.html`, test in `test_pictures.py`). Plan
+      4.2 and D55 still say "directly under the answer": please record the amendment.
 
 ## Notes from Code Reviewer
 

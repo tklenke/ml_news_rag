@@ -398,6 +398,12 @@ goes to the server (D53).
       an answer with few pictures, one with over 12, the pictures page, a dig deeper and a
       narrow window. If he wants the look changed, report to Architect; do not restyle on
       your own.
+      2026-11-23: local setup: index copied to `site_2024/data/gallery/gallery.idx` (sudo,
+      `data/` is root's), `THUMBS_URL = http://127.0.0.1:8090` in `site_local.ini`, and
+      `python3 -m http.server 8090 --bind 127.0.0.1 --directory ~/projects/ml/data/images/thumbs`.
+      Tom moved the pictures below Provided Docs (D55 amended; note in `architect_todo.md`;
+      `site_2024` commit "Show the pictures of an answer after the provided docs"). He is
+      checking with a new question on the styled answer page.
 - [ ] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
       the listed thumbnails, then the index) and the check that the server holds every file
       of the list with its size. Short lines, and a line count beside any comparison.
