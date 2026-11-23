@@ -451,6 +451,11 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       Not decided by the plan, chosen here: 100 pictures a page.
       Tom asked (2026-11-23) for a keep or discard choice on each picture instead of a click
       that marks remove; a decision can be changed but not taken back to undecided.
+      Tom's first review (2026-11-23, `07c1c65`): two pages of Suggested; the 21 undecided
+      201 x 145 calendar pictures (one sender) marked `remove` on his word; the 4,717 of New
+      marked `keep` on his word. Instructions at the top and bottom of each page (he found the
+      button confusing). Tom decided files under 1,000 bytes are reviewed, not dropped: they
+      are on Suggested (note to Architect). IU7 drops by decision only, not by size.
 - [ ] IU7 The step that makes the index the gallery reads.
 - [ ] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
       missing), then measuring, then his review in the tool.

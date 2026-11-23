@@ -31,6 +31,12 @@ All notes through 2026-11-22 are answered in the plan (eleventh revision); they 
 history of this file. The two S12 gaps the Programmer left as
 they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
 
+- **NOTE FROM PROGRAMMER (2026-11-23):** Decided by Tom during IU6, a change to D50 for the
+  plan: files under 1,000 bytes are no longer dropped without review. The review tool shows
+  them on the Suggested list, and the gallery index (IU7) drops a picture only by its
+  decision. 47 contents are under 1,000 bytes: 29 were `remove` from 2025, 18 undecided.
+  Also decided by Tom: the 4,717 contents of the New list (the 2025 pictures he kept, in
+  one thread only) were marked `keep` in one step, so New will hold only the downloads.
 - **NOTE FROM PROGRAMMER (2026-11-23):** Decided by Tom during IU2, an addition to D51 for
   the plan: the local name of an image replaces each of `< > : " / \ | ? *` in the sender's
   file name with `_`. 21 names of the current index hold one. On Windows a `:` writes to an

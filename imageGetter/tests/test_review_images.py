@@ -54,15 +54,15 @@ class TestContentItems:
         assert dctItems["sig"]["thread_id"] == "THREADearly"
         assert dctItems["sig"]["local_filename"] == "e_sig.jpg"
 
-    def test_file_under_1000_bytes_and_unmeasured_entry_are_not_shown(self):
+    def test_unmeasured_entry_is_not_shown(self):
         dctItems = by_hash(content_items(make_index(), {}, set()))
 
-        assert set(dctItems) == {"photo_l", "photo_e", "sig"}
+        assert set(dctItems) == {"photo_l", "photo_e", "sig", "tiny"}
 
     def test_threads_by_date_and_repeated_contents_first_within_a_thread(self):
         lstItems = content_items(make_index(), {}, set())
 
-        assert [dctItem["hash"] for dctItem in lstItems] == ["sig", "photo_e", "photo_l"]
+        assert [dctItem["hash"] for dctItem in lstItems] == ["sig", "photo_e", "tiny", "photo_l"]
 
 
 class TestLists:
@@ -89,6 +89,10 @@ class TestLists:
         assert self.list_of(image("a.jpg", "h", intBytes=19999, strFilename="Image12.jpg")) == "suggested"
         assert self.list_of(image("a.jpg", "h", intBytes=20000, strFilename="image003.png")) == "new"
         assert self.list_of(image("a.jpg", "h", intBytes=5000, strFilename="myimage003.png")) == "new"
+
+    def test_under_1000_bytes_is_suggested(self):
+        assert self.list_of(image("a.gif", "h", intBytes=999)) == "suggested"
+        assert self.list_of(image("a.gif", "h", intBytes=1000)) == "new"
 
     def test_removed_in_some_copies_in_2025_is_suggested(self):
         assert self.list_of(image("a.jpg", "h"), setSuggestions={"h"}) == "suggested"

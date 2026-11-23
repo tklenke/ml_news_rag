@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, urlparse
 from image_decisions import DECISIONS, load_decisions, save_decisions
 from rename_images import thumbnail_name
 
-MIN_SIZE_BYTES = 1000
+SUGGEST_UNDER_BYTES = 1000
 SUGGEST_SHORT_SIDE_PIXELS = 200
 SUGGEST_IMAGENNN_BYTES = 20000
 PAGE_SIZE = 100
@@ -33,7 +33,8 @@ def thread_date(dctEntry: Dict) -> datetime:
 
 def is_suggested(dctItem: Dict, setSuggestions: Set[str]) -> bool:
     """Whether an undecided content belongs on the Suggested list."""
-    if dctItem["hash"] in setSuggestions or dctItem["thread_count"] >= 2:
+    if dctItem["hash"] in setSuggestions or dctItem["thread_count"] >= 2 \
+            or dctItem["size_bytes"] < SUGGEST_UNDER_BYTES:
         return True
     if min(dctItem["width"], dctItem["height"]) < SUGGEST_SHORT_SIDE_PIXELS:
         return True
@@ -42,7 +43,7 @@ def is_suggested(dctItem: Dict, setSuggestions: Set[str]) -> bool:
 
 def content_items(dctIndex: Dict, dctDecisions: Dict[str, str], setSuggestions: Set[str]) -> List[Dict]:
     """
-    One item per measured content of 1,000 bytes or more, shown under its earliest thread.
+    One item per measured content, shown under its earliest thread.
 
     Items are ordered by the date of that thread, the pictures of one thread together
     and those in more threads first.
@@ -56,7 +57,7 @@ def content_items(dctIndex: Dict, dctDecisions: Dict[str, str], setSuggestions: 
     for strMessageId, dctEntry in dctIndex.items():
         for dctImage in dctEntry.get("images", []):
             strHash = dctImage.get("content_hash")
-            if strHash is None or dctImage["size_bytes"] < MIN_SIZE_BYTES:
+            if strHash is None:
                 continue
             dctThreads[strHash].add(strMessageId)
             tplKey = (thread_date(dctEntry), strMessageId)
