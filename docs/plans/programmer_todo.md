@@ -289,9 +289,11 @@ depend on the answer; do not start the long run on a guess. Do not write to the 
 8000, do not stop or change a container of `site_2024`, do not change `site_2024`, and do not
 push or merge.
 
-- [ ] 2.1c Add overlap to `chunksplitter` by the rule of plan 2.1 (default 0 reproduces current
+- [x] 2.1c Add overlap to `chunksplitter` by the rule of plan 2.1 (default 0 reproduces current
       chunks). Tests first, among them the plan's example of 10 words.
-- [ ] 2.1d `embedder.py` takes chunk size, overlap, collection name, Chroma port and Ollama port
+      Done. The chunker makes the plan's count of chunks for all five variants (42,234, 65,877,
+      29,054, 48,982, 32,718).
+- [~] 2.1d `embedder.py` takes chunk size, overlap, collection name, Chroma port and Ollama port
       as parameters, with a progress file per collection. With no parameters it does what it does
       today. Tests first.
 - [ ] 2.1e A file that fails is logged and left out of the progress file, and the run goes on;

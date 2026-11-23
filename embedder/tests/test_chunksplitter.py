@@ -1,5 +1,5 @@
 # ABOUTME: Tests for splitting a text into prefixed chunks of words
-# ABOUTME: Covers chunk boundaries, the prefix, whitespace and texts without a remainder
+# ABOUTME: Covers chunk boundaries, overlap, the prefix, whitespace and texts without a remainder
 
 from types import SimpleNamespace
 
@@ -10,9 +10,9 @@ from f_embed import Embedder
 PREFIX = "search_document:"
 
 
-def split(strText, intChunkSize=3):
-    """Splits a text with the given chunk size, without connecting to any server."""
-    settings = SimpleNamespace(prefix=PREFIX, chunk_size=intChunkSize)
+def split(strText, intChunkSize=3, intOverlap=0):
+    """Splits a text with the given settings, without connecting to any server."""
+    settings = SimpleNamespace(prefix=PREFIX, chunk_size=intChunkSize, overlap=intOverlap)
     return Embedder.chunksplitter(settings, strText)
 
 
@@ -47,3 +47,42 @@ def test_no_chunk_without_words_after_the_last_full_chunk(intWords):
 @pytest.mark.parametrize("strText", ["", " \n\t "])
 def test_text_without_words_has_no_chunks(strText):
     assert split(strText) == []
+
+
+def get_numbered_text(intWords):
+    """Returns a text of the words 1, 2, 3 and so on."""
+    return " ".join(str(i + 1) for i in range(intWords))
+
+
+def test_overlapping_chunks_end_with_the_one_that_reaches_the_end_of_the_text():
+    assert split(get_numbered_text(10), 4, 2) == [
+        f"{PREFIX} 1 2 3 4", f"{PREFIX} 3 4 5 6", f"{PREFIX} 5 6 7 8", f"{PREFIX} 7 8 9 10"]
+
+
+def test_overlapping_remainder_is_the_last_chunk():
+    assert split(get_numbered_text(7), 4, 2) == [
+        f"{PREFIX} 1 2 3 4", f"{PREFIX} 3 4 5 6", f"{PREFIX} 5 6 7"]
+
+
+@pytest.mark.parametrize("intWords", [1, 3, 4])
+def test_text_that_fits_in_one_chunk_is_one_chunk_with_overlap(intWords):
+    strText = get_numbered_text(intWords)
+    assert split(strText, 4, 2) == [f"{PREFIX} {strText}"]
+
+
+@pytest.mark.parametrize("strText", ["", " \n\t "])
+def test_text_without_words_has_no_chunks_with_overlap(strText):
+    assert split(strText, 4, 2) == []
+
+
+@pytest.mark.parametrize("intSize, intOverlap", [(250, 50), (400, 80), (4, 3)])
+def test_every_chunk_has_words_the_chunk_before_it_lacks(intSize, intOverlap):
+    for intWords in range(1, 4 * intSize):
+        lstChunks = [strChunk.split()[1:]
+                     for strChunk in split(get_numbered_text(intWords), intSize, intOverlap)]
+        assert [int(lstChunk[0]) for lstChunk in lstChunks] == [
+            1 + i * (intSize - intOverlap) for i in range(len(lstChunks))]
+        assert all(len(lstChunk) == intSize for lstChunk in lstChunks[:-1])
+        assert int(lstChunks[-1][-1]) == intWords
+        assert all(int(lstChunk[-1]) > int(lstBefore[-1])
+                   for lstBefore, lstChunk in zip(lstChunks, lstChunks[1:]))

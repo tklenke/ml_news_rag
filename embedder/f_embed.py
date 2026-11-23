@@ -25,6 +25,7 @@ class Embedder():
         self.set_model()
         self.set_prefix()
         self.set_chunk_size()
+        self.set_overlap()
 
     def set_collection(self, dbname="defaultdb", initialize=False):
       print(f"embdr:opening {dbname}...")
@@ -45,6 +46,13 @@ class Embedder():
     
     def set_chunk_size(self, chunk_size=100):
       self.chunk_size = chunk_size
+      return
+
+    #the chunk size is set first: the overlap has to be smaller
+    def set_overlap(self, overlap=0):
+      if not 0 <= overlap < self.chunk_size:
+        raise ValueError(f"overlap {overlap} is not from 0 to {self.chunk_size - 1}")
+      self.overlap = overlap
       return
     
     def get_collection_count(self):
@@ -74,10 +82,11 @@ class Embedder():
 
         if word_count >= self.chunk_size:
           chunks.append(' '.join(current_chunk))
-          current_chunk = [self.prefix]
-          word_count = 0
+          current_chunk = [self.prefix] + current_chunk[len(current_chunk) - self.overlap:]
+          word_count = self.overlap
 
-      if word_count > 0:
+      #words that overlap with the chunk before are not a chunk by themselves
+      if word_count > (self.overlap if chunks else 0):
         chunks.append(' '.join(current_chunk))
 
       return chunks

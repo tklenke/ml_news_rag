@@ -1,6 +1,8 @@
 # ABOUTME: Tests for embedding a file into a collection
 # ABOUTME: Uses a real Chroma server and the local Ollama; checks ids, sources and completeness
 
+import pytest
+
 
 def write_words(path, intWords):
     """Writes a file of numbered words and returns its path as a string."""
@@ -28,3 +30,19 @@ def test_file_without_words_is_not_stored(embdr, tmp_path, capsys):
     embdr.embed_file(write_words(tmp_path / "empty.txt", 0))
     assert embdr.get_collection_count() == 0
     assert "zero chunks, skipping embed" in capsys.readouterr().out
+
+
+def test_chunks_overlap_by_the_number_of_words_set(embdr, tmp_path):
+    embdr.set_chunk_size(4)
+    embdr.set_overlap(2)
+    embdr.embed_file(write_words(tmp_path / "w", 6))
+    dctRows = embdr.chromacollection.get()
+    assert dict(zip(dctRows["ids"], dctRows["documents"])) == {
+        "w#0": "search_document: w0 w1 w2 w3", "w#1": "search_document: w2 w3 w4 w5"}
+
+
+@pytest.mark.parametrize("intOverlap", [4, 5, -1])
+def test_overlap_outside_the_chunk_size_is_refused(embdr, intOverlap):
+    embdr.set_chunk_size(4)
+    with pytest.raises(ValueError, match="overlap"):
+        embdr.set_overlap(intOverlap)
