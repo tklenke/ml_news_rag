@@ -133,6 +133,20 @@ def test_stop_ends_every_process_and_the_container(queue, container, tmp_path, c
     assert "stopped" in capsys.readouterr().out
 
 
+def test_stop_is_written_to_the_log_after_the_queue_has_ended(queue, tmp_path):
+    assert queue.start(SLEEPER)
+    wait_for_text(tmp_path / "queue.log", "sleeping")
+    queue.stop()
+    lstLines = (tmp_path / "queue.log").read_text().splitlines()
+    assert lstLines[-1].endswith("STOPPED by the stop command")
+    assert lstLines[-1][:3] in ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+
+def test_stop_of_a_queue_that_is_not_running_writes_nothing_to_the_log(queue, tmp_path):
+    queue.stop()
+    assert not (tmp_path / "queue.log").exists()
+
+
 def test_queue_can_be_started_again_after_a_stop(queue, tmp_path):
     assert queue.start(SLEEPER)
     queue.stop()

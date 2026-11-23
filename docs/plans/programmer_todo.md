@@ -348,6 +348,7 @@ Keep a WSL terminal open at night: WSL may end background processes when the las
 
 Log: `~/projects/ml/data/chunk_experiment/queue.log`. `END ... exit code 1` means files failed
 (search for `FAILED`); the next continue tries them again.
+A stop writes `STOPPED by the stop command` to the log.
 
 ### For Tom in the morning
 

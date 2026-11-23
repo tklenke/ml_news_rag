@@ -139,7 +139,12 @@ class ChunkQueue():
                     time.sleep(0.1)
                 if not self.is_running():
                     break
-            print("The queue did not stop" if self.is_running() else "The queue is stopped")
+            if self.is_running():
+                print("The queue did not stop")
+            else:
+                with open(self.logfile, "a") as log:
+                    log.write(f"\n{time.ctime()} STOPPED by the stop command\n")
+                print("The queue is stopped")
         else:
             print("The queue is not running")
         result = subprocess.run(["docker", "stop", self.stop_container], capture_output=True,
