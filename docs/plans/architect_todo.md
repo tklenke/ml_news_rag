@@ -17,13 +17,7 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
 
 ## Open
 
-- [x] Read the Programmer's report of the image update (IU9) and fold it and the three notes
-      of 2026-11-23 into the plan (fifteenth revision, 4.0 "Result").
-- [x] The pictures of an answer (plan 4.2): designed and decided on 2026-11-23 (sixteenth
-      revision, D52 to D55); the Programmer's tasks are PA1 to PA9.
 - [ ] Read the Programmer's report of the pictures of an answer (PA9).
-- [x] Design the reference links (4.1): done 2026-11-23 (seventeenth revision, D56), a trial
-      (4.1a, tasks RL1 to RL5) and then the display (4.1b).
 - [ ] Read the Programmer's report of the citation trial (RL5), read the answers without a
       number, apply the rule of 4.1a and record the result in the plan. Only then write the
       Programmer's tasks for the display (4.1b).
@@ -32,25 +26,17 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
 
 ## Notes from Programmer
 
-All notes through 2026-11-23 are answered in the plan (the image update in the fifteenth
-revision, 4.0); they are in the git
-history of this file. The two S12 gaps the Programmer left as
-they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
+None open. All notes through 2026-11-23 are answered in the plan; they are in the git history
+of this file.
 
 ## Notes from Code Reviewer
 
-R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.
+None open (R4 and R5 of 2026-11-22 are D33 and D34 in the plan).
 
 ## Completed
 
-Phase 0, the Phase 1 code change, the follow-on fixes and the twelve plan revisions through
-2026-11-22 are done: planning, question set, site review, the designs of the three deploys, of
-the answer display, of the corpus update and of the overnight embedding (thirteenth revision),
-decisions D1 to D48, the Programmer's notes through the evaluation, and the review findings
-R4 and R5. The image update (plan 4.0) was designed on 2026-11-23 (fourteenth revision,
-D49 to D51) and its result recorded the same day (fifteenth revision). The evaluation showed no candidate slow at its default reasoning effort, so no
-reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
-file.
+Everything through the seventeenth plan revision (2026-11-23) and decisions D1 to D56. The item
+list is in the git history of this file.
 
 ## Facts worth keeping
 
@@ -61,8 +47,8 @@ file.
   asymmetry is correct, and the missing space after the colon changes nothing: plan 1.1), `LLM_DRAFT = gpt-6-luna`, `LLM_REVISE = gpt-6.2-sol`,
   `MAX_DISTANCE = .35`, `MIN_DOCUMENTS = 5`, `MAX_DOCUMENTS = 60`,
   `MAX_DRAFT_DOCUMENTS = 15`.
-- `site.ini` holds real keys until S10 is done. Read settings from it with a pattern
-  that names the setting; never print the file.
+- The keys are in the git-ignored `site_2024/fwww/site_local.ini` (S10, deployed). Never
+  print that file; read a setting with a pattern that names it.
 - `ml/asker/` and `ml/modelTesting/` are stale harnesses that query an `all-minilm`
   collection. They are not the production path.
 - Production job log (2026-11-21): about 850 questions, about 45 rated (roughly 20 of
@@ -80,8 +66,6 @@ file.
   both names (D32; checked on the live site). `m24tom.com-0010` is the only usable
   certificate on the server.
 - A job's `result` holds the model name OpenAI returned, and the results page shows it.
-- The renderer trial of 2026-11-22 was run in a session scratchpad and is not kept; its
-  results are in the plan ("Answer display").
 - The Windows copy of the project (`/mnt/c/Users/tom/Documents/projects/ml`) is an older clone
   with uncommitted edits. On 2026-11-22 its `f_filter.py` and `process_message.py` were the
   same as in `ml`. Its `data/` is where Tom's fetches arrive.

@@ -9,11 +9,12 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
-**Order:** Phase 0, the Phase 1 code change with the site fixes, the follow-on fixes, and the
-answer display with the corpus update and the model change are deployed (`775692d`). **Now: the
-overnight embedding of Phase 2 (2.1c to 2.2d below, D48).** After it Phase 4, starting with the image update (plan 4.0, D49), then the rest of
-Phase 2 (D41). One session per group; start each
-session fresh. Code review happens once per deploy, not per commit.
+**Order:** everything through the answer display, the corpus update and the model change is
+deployed (`775692d`), and the image update is done. **Now: "Pictures of an answer" (PA1 to
+PA9), then "Reference links: the trial" (RL1 to RL5)**, both under Phase 4. Beside them: 2.2d
+when the overnight embedding has run all five variants. The rest of Phase 2 follows Phase 4
+(D41). "Yearly update instructions" has no place yet: ask Tom. One session per group; start
+each session fresh. Code review happens once per deploy, not per commit.
 
 **Deploys:** nginx looks up the name `flask` only when it starts. A deploy or rollback that
 recreates the flask container ends with `docker compose restart nginx`.
@@ -187,10 +188,8 @@ Result, 30 answers per model, rated blind by Tom:
     gpt-6-luna             14        13         3         2       5.6       328   0.00074
     gpt-6.1-terra          11        15         4         1       5.0        30   0.00574
 
-- [x] 1.6 Deploy Tom's choice of 2026-11-22: `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` =
-      `gpt-6.2-sol` (not evaluated). Set in the tracked `site.ini` (`1e72014`) and tried on the
-      local site with one question and one dig deeper. Tom waived the code review of this change.
-      Deployed 2026-11-22 (`775692d`) with "Answer display" and "Corpus update" (D38, D42).
+Deployed 2026-11-22 (`775692d`): `LLM_DRAFT` = `gpt-6-luna`, `LLM_REVISE` = `gpt-6.2-sol` (not
+evaluated). Tom waived the code review of this change.
 
 Still useful:
 
@@ -208,125 +207,58 @@ Still useful:
 - A job's `result` holds the model name OpenAI returned (`llm_functions.py`, `r['model']`), and
   the results page shows it.
 
-## Answer display (repo: `../site_2024/`, one deploy with 1.6)
+## Answer display and corpus update (done)
 
-Plan: "Answer display (D39, D40)". Read it whole; the tests are listed there. The archived
-answers named there are in `ml/docs/archive/`; copy the text a test needs into the test's own
-data, since the tests of `site_2024` do not read `ml/`.
+Deployed 2026-11-22 (`775692d`) with the model change; Tom waived the code review (D47) and his
+browser checks all passed. Task details (AD1 to AD7, CU0 to CU8) are in the git history of
+this file.
 
-- [x] AD1 Add `markdown-it-py` to `requirements_direct.txt` and freeze. Record the version.
-- [x] AD2 The function that gives the HTML of an answer, with the settings of the plan. Tests
-      first: table, list after a text line, nested bullets, hostile text.
-- [x] AD3 The results page uses it, with the answer in the `overflow-x` container. The site's own
-      pages keep `markdown_to_html`; test that one with raw HTML still shows it.
-- [x] AD4 `evaluation/review_answers.py` uses the same function.
-- [x] AD5 `README.md`: the models now used.
-- [x] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
-      If it reads badly, stop and report to Architect; do not restyle on your own.
-      Tom approved the look on 2026-11-22.
-- [x] AD7 Merge and deploy (Tom waived the code review of all of it, D47)
-      with 1.6 and the corpus update (CU8) by the plan's deploy steps and checks. Add what the deploy leaves on the server to "Server cleanup".
-      Deployed 2026-11-22: `775692d`, count and id hash and the three query results as expected.
-      nginx then gave 502: the deploy steps did not restart it. `docker compose restart nginx`
-      gave 200 (the log was not read, so the stale address is inferred). Tom did the
-      browser checks on 2026-11-22: all passed.
+Still useful:
 
-## Corpus update (repo: `ml/`; data in `../site_2024/data/chroma`)
-
-Plan: "Corpus update (D42 to D44)". Read it whole. Only the containers of `site_2024` are used;
-do not start those of `ml/docker-compose.yaml`.
-
-- [x] CU0 Delivery step 1: copy of the local Chroma directory, count and id hash saved, top 15 of
-      the 52 questions saved. Before anything below writes to the collection.
-      Done: `data/corpus_update/before.json` (41,427 ids, hash `bb73f996...`), made by `snapshot.py`
-      there; `embedstatus_before.txt` beside it. The directory copy is identical by checksum.
-- [x] CU1 `ml/requirements.txt` (`chromadb-client` 1.5.9, `ollama`, `markdownify`, `pytest`, and
-      what the tests need) and the venv brought to it. The client works with the local server.
-- [x] CU2 Tests for `chunksplitter` covering current behaviour (was 2.1a).
-- [x] CU3 Failing test, then fix: no prefix-only chunk when the word count is an exact multiple of
-      the chunk size, or for an empty file (was 2.1b).
-- [x] CU4 Failing test, then fix: chunk ids are `<source>#<number>`; `cp__no2` and `cp__no21`
-      are both stored whole.
-- [x] CU5 The repairs F1 and F2, under TDD, as a script in `embedder/`. F2 can be stopped and
-      continued. Report how many vectors were updated and how many chunks were added (80 expected).
-      F1 done: 80 chunks added. F2 stopped after about 3,360 of 36,500 chunks (3 replaced): Tom
-      needed the GPU. It ran in a container of the site's Ollama image with `--gpus all` on port
-      11998 (same vectors as the CPU); it continues from `embedder/` with
-      `../venv/bin/python repair_collection.py 11998`. Not finished before the deploy (D46).
-- [x] CU6 The messages:
-      a. Copy the 227 markdown files, and the 10 refetched ones once Tom reports them done, from
-         the Windows copy to `data/msgs_md`. A refetched file shorter than the one it replaces
-         is not used; report it.
-      b. The unchanged filter reproduces the present `.txt` of the 227. If not, stop and report.
-      c. Failing test, then the filter pattern for the button text. Make the `.txt` files again.
-      d. For the refetched threads: delete their stored chunks and their lines in
-         `embedstatus.txt`.
-      e. Run the embedder. Report the files and chunks added.
-      Done. a: 227 new and 8 refetched; `IO1b3H0WdYI` and `UklKWGIn43Q` came back with the same
-      posts and are not used. b: no difference. c: 24 files changed. d: 57 chunks deleted.
-      e: 727 chunks of new threads, 99 of the 8 refetched. 42,276 in the collection.
-- [x] CU7 The plan's "Checks before the deploy". Report 1 to 3 to Architect.
-      1 passed: 42,276 unique ids, 11,388 sources, every source whole, nothing extra but the 42
-      prefix-only chunks. 3: 17 of 52 questions changed; 27 of 780 places are new chunks (21 from
-      new threads, 4 from refetched ones, 2 from the Canard Pushers added by F1). Results in
-      `data/corpus_update/after.json` (id hash `92d43eed...`). 2: 99 short chunks, smallest
-      cosine 0.99998. 4: passed on the local site (`gpt-6-luna`, new thread among the sources).
-      Tar, SHA-256 and check script for the server: `~/chroma_deploy` (local).
-- [x] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
-      the tar to "Server cleanup".
-      Deployed 2026-11-22: 42,276 chunks, id hash `92d43eed...`. The check with a
-      question about a new thread passed (Tom, with AD7).
+- The HTML of an answer comes from one function (`fwww/src/answer_html.py`, `markdown-it-py`),
+  used by the results page and by `evaluation/review_answers.py`. The site's own pages keep
+  `markdown_to_html`.
+- The tests of `site_2024` do not read `ml/`; a test carries its own data.
+- At that deploy nginx gave 502 until `docker compose restart nginx` (the log was not read, so
+  the stale address is inferred).
+- The collection: 42,276 chunks of 11,388 sources, id hash `92d43eed...`; 42 prefix-only
+  chunks are still in it. Chunk ids are `<source>#<number>`.
+- For the production collection only the containers of `site_2024` are used; do not start
+  those of `ml/docker-compose.yaml`.
+- `data/corpus_update/`: `before.json` (41,427 ids), `after.json` and `snapshot.py`, which
+  made them (count, id hash, top 15 of the 52 questions).
+- The repair F2 was stopped after about 3,360 of 36,500 chunks (3 replaced) and was not
+  finished (D46). It continues from `embedder/` with
+  `../venv/bin/python repair_collection.py 11998`.
+- Messages of 2026: 227 new threads and 8 fetched again; `IO1b3H0WdYI` and `UklKWGIn43Q` came
+  back with the same posts and were not used.
+- The tar, its SHA-256 and the check script of the deploy: `~/chroma_deploy` (local).
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
-2.1a and 2.1b are done as CU2 and CU3. 2.1c to 2.2d are the overnight embedding (D48): plan 2.1
-and 2.2a, read both whole. 2.3 to 2.5 start after Phase 4 (D41).
+2.1a to 2.2c are done (2026-11-22; details in the git history of this file). Open: 2.2d, when
+all five variants have run. 2.3 to 2.5 start after Phase 4 (D41). Plan 2.1 to 2.4.
 
-**Tom watches for about an hour from the start, then leaves.** Ask him while he is there. The aim
-of that hour is the long run started (2.2c): do the tasks in order and keep each small. Once he
-has left, write a question under "For Tom in the morning" below and carry on with what does not
-depend on the answer; do not start the long run on a guess. Do not write to the Chroma on port
-8000, do not stop or change a container of `site_2024`, do not change `site_2024`, and do not
-push or merge.
+Do not write to the Chroma on port 8000 and do not stop or change a container of `site_2024`.
 
-- [x] 2.1c Add overlap to `chunksplitter` by the rule of plan 2.1 (default 0 reproduces current
-      chunks). Tests first, among them the plan's example of 10 words.
-      Done. The chunker makes the plan's count of chunks for all five variants (42,234, 65,877,
-      29,054, 48,982, 32,718).
-- [x] 2.1d `embedder.py` takes chunk size, overlap, collection name, Chroma port and Ollama port
-      as parameters, with a progress file per collection. With no parameters it does what it does
-      today. Tests first.
-      Done; also `--sources`, for the trial. A chunk size or overlap without a `--collection` is
-      refused. Importing `embedder.py` ran it until this change: the first test run opened the
-      production collection on port 8000. Checked read-only: 42,276 ids, hash `92d43eed...`, as
-      deployed.
-- [x] 2.1e A file that fails is logged and left out of the progress file, and the run goes on;
-      20 failures in a row end the variant (plan 2.1). Tests first, with a real unreachable
-      Ollama address.
-- [x] 2.2a Start the experiment's Chroma (port 8010, data in `data/chunk_experiment/chroma`) and
-      the GPU Ollama (port 11998). Record the two `docker run` commands here.
-      Done; the model is 100% on the GPU.
+Still useful:
 
-          docker run -d --name chunk_experiment_chroma -p 127.0.0.1:8010:8000 \
-              -v /home/tom/projects/ml/data/chunk_experiment/chroma:/data chromadb/chroma:1.5.9
-          docker run -d --name chunk_experiment_ollama --gpus all \
-              -p 127.0.0.1:11998:11434 site_2024-ollama-rag
-- [x] 2.2b The queue (A, C, B, D, E on port 11998) with its stop and continue commands, one line
-      each (plan 2.2a). The trial on `data/test_min`: stopped part way, continued, counts checked
-      against the chunker, then the trial collections and progress files deleted. Commit the code
-      before the long run.
-      Done: `embedder/chunk_queue.py`. `data/test_min` holds one file, so the trial ran on it and
-      then on `data/test` (7 files), stopped there after 4 of 7 files of a variant and continued.
-      Ids and texts of all five collections equal the chunker's. A second start was refused.
-      Trial collections and progress files deleted; an empty `defaultdb` stays, since every
-      `Embedder` opens it.
-- [x] 2.2c Start the queue detached. Record under "Start and stop" below the two commands, the
-      start time and the log file. Check after 10 minutes that the log advances and the seconds
-      per chunk are near the plan's (0.22 at 250 words). Then commit this file. The session may
-      end; the run does not need it.
-      Started 2026-11-22 18:25:38. After 10 minutes: 608 files, 0 failed, log advancing, 0.239 s
-      per chunk (with storing in Chroma, which the plan's 0.22 leaves out), GPU at 98%. At that
-      rate A takes 2.8 hours, and all five about 14.5 if the others are slower by the same share.
+- `chunksplitter` takes an overlap (default 0 gives the present chunks). It makes the plan's
+  count of chunks for all five variants.
+- `embedder.py` takes chunk size, overlap, `--collection`, Chroma port, Ollama port and
+  `--sources`, with a progress file per collection; with no parameters it does what it did. A
+  chunk size or overlap without `--collection` is refused. A file that fails is logged and
+  left out of the progress file; 20 failures in a row end the variant.
+- The queue is `embedder/chunk_queue.py` (A, C, B, D, E). The experiment's Chroma is on port
+  8010 (data in `data/chunk_experiment/chroma`; an empty `defaultdb` stays in it), the GPU
+  Ollama on port 11998. The queue's `start` runs both; the commands they were made with:
+
+      docker run -d --name chunk_experiment_chroma -p 127.0.0.1:8010:8000 \
+          -v /home/tom/projects/ml/data/chunk_experiment/chroma:/data chromadb/chroma:1.5.9
+      docker run -d --name chunk_experiment_ollama --gpus all \
+          -p 127.0.0.1:11998:11434 site_2024-ollama-rag
+
+- Started 2026-11-22 18:25:38. 0.239 s per chunk at 250 words, storing included.
 - [ ] 2.2d When all five have run: the five checks of plan 2.2a, reported in a note in
       `architect_todo.md`. Then stop and remove the GPU Ollama container; the experiment's
       Chroma stays for 2.3.
@@ -371,125 +303,41 @@ answer" (plan 4.2), then "Reference links: the trial" (plan 4.1a). "Yearly updat
 instructions" has no place in that order yet: ask Tom when he wants it. All three are at the
 end of this section. S3 is done by "Answer display".
 
-### Image update (repo: `ml/`, module `imageGetter/`)
+### Image update (done)
 
-Plan: "4.0 Image update (D49, D50)". Read it whole; the tests are listed there. Nothing here
-touches `site_2024` or the server. `data/` and `imageGetter/input/` are git-ignored: a test
-carries its own small pictures. Do not delete or overwrite a file in `data/images` or
-`imageGetter/input` other than by the rename of IU2; copy `data/images/full` first.
+Plan 4.0. Done 2026-11-23 in `ml/imageGetter/`; Tom waived the code review. Nothing of it is
+on the server. Task details (IU1 to IU9) are in the git history of this file.
 
-- [x] IU1 The date is read with or without `unread,` before it. The index builder reports the
-      files it could not read and goes on.
-      Done: a file it cannot read is written to stderr with the reason. On `data/msgs_md`: 2,631
-      threads, 6,811 images, no file unreadable, no empty date. Before the fix 46 dates were
-      empty: the plan's 45 new threads and `cnmK72T1MjE`, a 2025 thread fetched again in 2026.
-- [x] IU2 The local name with the attachment id (D51), and the one rename of the files on disk
-      and of their thumbnails, after copying both directories. Report how many files were
-      renamed and how many names had been shared.
-      Done 2026-11-23: 6,211 pictures and 6,190 thumbnails renamed by
-      `imageGetter/rename_images_cli.py`, each checked against the copy by content. In
-      `czindex.idx` 211 names had been shared by 465 attachments (the plan's 233 by 510 are
-      of the current index). Copies: `data/images/full_before_rename`, `thumbs_before_rename`.
-      Map of old to new names, for IU5: `data/images/rename_map.json`.
-      Tom decided (2026-11-23) that `< > : " / \ | ? *` in a file name become `_`: on Windows
-      a `:` left an empty file cut at the colon (note to Architect).
-      Left as they are, no URL of `czindex.idx` names them (19): 11 zero-byte files cut at a
-      `:`, and 8 pictures (five `*_1_Cozy_Sal.jpg` of 609,712 bytes, `VUWjfJP7VcM_part0_1_clip_image002.jpg`,
-      two `l2tMQ8mbmp0_*_flute_countersink.jpg`).
-      Not renamed: 10 thumbnails each shared by two pictures that differ only in the extension
-      (`…image1.jpeg` and `…image1.png`); it was made from one of them. They keep their old
-      names, and IU9 makes a thumbnail for each of the 20 pictures.
-      The first run stopped part way on those thumbnails (1,644 pictures renamed); it was
-      undone from the map, the directories checked identical to the copies, fixed under TDD
-      and run again.
-- [x] IU3 Download: timeout, a response that is not 200 fails, chromedriver path and log file
-      as parameters. Settle with Tom how the Windows run reaches `data/images/full`; write
-      the commands in `imageGetter/README.md`.
-      Done 2026-11-23. Tom waived TDD and tests for IU3 (2026-11-23): his download on Windows
-      (IU8) is the check. The mocked tests of `test_download.py` stay as they are; one got
-      `status_code = 200` on its fake response. `test_handle_download_failure` still passes
-      only because a Mock's `get_cookies()` cannot be iterated (told to Tom).
-      Settled with Tom: PowerShell, `cd` to the WSL `imageGetter`, Windows Python 3.13 (has
-      selenium, requests, Pillow, tqdm; first `python` on PATH), relative paths into WSL
-      `data/`. Tried from WSL: that Python, started there, imports the module and sees the
-      6,230 files of `..\data\images\full`. Not tried: writing there, and Chrome.
-      Chromedriver 158.0.8127.36, Chrome 158.0.8127.36/37.
-      Tom finds running the getters from the Windows clone brittle; the other getters could
-      be run the same way (not part of this task).
-- [x] IU4 The measuring step: bytes, width, height and content hash into each image entry.
-      Run it on the files of 2025.
-      Done 2026-11-23: `imageGetter/measure_images_cli.py`. The working index is
-      `data/images/index261123105058.idx`, built from `data/msgs_md` with the new names
-      (copy before measuring: `index261123105058_before_measure.idx`). 6,220 entries measured
-      (the 6,211 files; 9 attachments are linked twice), none unreadable, 591 not on disk:
-      these are what IU8 downloads. Against the plan: 159 files under 1,000 bytes, 223
-      contents in 2 or more threads and 51 in 3 or more, as measured by Architect; the poster
-      is in 42 threads, not 40 (not looked into).
-      Found here and decided by Tom (2026-11-23): a local name is at most 180 bytes, the
-      sender's file name shortened with its extension kept. 7 names of 822 to 1,017 bytes
-      (long Google photo ids) could never be stored, and with Windows long paths off
-      (`LongPathsEnabled` 0) a name in `\\wsl.localhost\...\data\images\full\` may have 198
-      characters. 8 names changed; the one on disk (`muhearpIrTA_…`, 213 bytes) and its
-      thumbnail were renamed once more and its entry in `rename_map.json` updated.
-- [x] IU5 The decisions file (one decision per content hash) and the one loading of the 2025
-      removal lists. Report the contents removed in one thread and kept in another.
-      Done 2026-11-23: `imageGetter/image_decisions.json` (content hash to `remove`/`keep`,
-      tracked), loaded once by `imageGetter/load_removals_cli.py` from `input/remove_list`
-      only, carried through `rename_map.json`. 441 names listed, 424 carried to a file on
-      disk, 17 never on disk under that name. 222 contents `remove` (244 files). 42 contents
-      removed in some copies only (180 removed files, 94 kept), 23 of them across threads,
-      19 within one thread: no decision, listed in `imageGetter/image_suggestions.json` for
-      the tool.
-      Tom decided (2026-11-23) not to load `input/remove_list2`: a second round of 2025
-      (27 pages, about 207 more pictures) that was never applied; all 203 pictures only it
-      names are on the 2025 gallery pages. They come up in the review tool like any others.
-- [x] IU6 The review tool, as the plan describes it. Show it to Tom on the files of 2025
-      before the download, so that a change he asks for costs little.
-      Built 2026-11-23, waiting for Tom to look at it: `imageGetter/review_images.py`,
-      `review_images_cli.py` (port 8765, command in `imageGetter/README.md`). On the 2025
-      files: 5,388 contents measured, 47 under 1,000 bytes not shown; Suggested 431, New
-      4,717, Decided 193 (the 222 `remove` less 29 under 1,000 bytes). A content is shown
-      under its earliest thread; threads by date, contents in more threads first.
-      Not decided by the plan, chosen here: 100 pictures a page.
-      Tom asked (2026-11-23) for a keep or discard choice on each picture instead of a click
-      that marks remove; a decision can be changed but not taken back to undecided.
-      Tom's first review (2026-11-23, `07c1c65`): two pages of Suggested; the 21 undecided
-      201 x 145 calendar pictures (one sender) marked `remove` on his word; the 4,717 of New
-      marked `keep` on his word. Instructions at the top and bottom of each page (he found the
-      button confusing). Tom decided files under 1,000 bytes are reviewed, not dropped: they
-      are on Suggested (note to Architect). IU7 drops by decision only, not by size.
-      Tom finished Suggested (2026-11-23, `4106b30`): all 5,388 contents decided, 5,060 keep,
-      328 remove. Fixed: the tool answered one connection at a time, and an idle browser
-      connection blocked it (now a thread per connection). Tom asked for, and agreed (option
-      1): a picture not yet clicked shows keep with a dashed frame and is not saved; a click
-      on the picture switches keep and discard; the button saves the dashed ones as keep.
-      The page script is checked for syntax only (`node --check`), not run by the tests.
-      Approved by Tom (2026-11-23) after trying it on a scratch copy of the decisions.
-      One full-suite run had 7 failures that four runs after it did not repeat; which tests
-      failed is not known (output was cut). If it comes back, keep the whole output.
-- [x] IU7 The step that makes the index the gallery reads.
-      Done 2026-11-23: `imageGetter/gallery_index.py`, `gallery_index_cli.py`. Drops by
-      decision only (Tom, IU6), not by size; undecided contents stay and are counted; a file
-      on disk that is not measured stops it. Tried on the 2025 files into the scratchpad,
-      not into `data/`: 2,275 threads, 5,312 pictures; dropped 579 marked remove, 591 not
-      on disk, 329 repeated in a thread (6,811 entries in all).
-- [x] IU8 With Tom: his download on Windows (287 new pictures expected, and those that were
-      missing), then measuring, then his review in the tool.
-- [x] IU9 The gallery index and the thumbnails of the new files. `README.md` of `imageGetter/`
-      and the update procedure in the top-level `README.md`. Report to Architect in a note in
-      `architect_todo.md`: threads and pictures in the gallery index, pictures dropped by each
-      cause, pictures still undecided, downloads that failed.
-      IU8 done 2026-11-23: Tom's download, 591 fetched, 0 failed (Chrome needed its own
-      profile, `--user-data-dir=C:\chrome-debug`, for the debug port). The download rewrote
-      the index with CRLF only; content checked equal to the copy taken before it
-      (`index261123105058_before_download.idx`). Measured: 591, all pictures. Tom reviewed
-      the 346 new contents (341 keep, 5 remove; decisions `616f717`).
-      IU9 done 2026-11-23: 611 thumbnails made (the 591, the 20 of the former shared
-      thumbnails); one failed, a truncated file of 2025 marked remove. Gallery index
-      `data/images/gallery261123.idx`: 2,368 threads, 5,661 pictures. READMEs updated
-      ("Yearly Update" in `imageGetter/README.md`, a line in the top-level procedure).
-      Report in `architect_todo.md`.
-      Code review of the image update waived by Tom (2026-11-23).
+Still useful:
+
+- Never delete or overwrite a file in `data/images` or `imageGetter/input`. Both and `data/`
+  are git-ignored: a test carries its own small pictures.
+- Gallery index: `data/images/gallery261123.idx`, 2,368 threads, 5,661 pictures, made by
+  `gallery_index_cli.py`. It drops by decision only, never by size, and stops on a file on
+  disk that is not measured.
+- Working index: `data/images/index261123105058.idx` (2,631 threads, 6,811 entries), built
+  from `data/msgs_md` and measured by `measure_images_cli.py`. Copies beside it:
+  `..._before_measure.idx`, `..._before_download.idx`.
+- Decisions: `imageGetter/image_decisions.json` (tracked; content hash to `remove` / `keep`).
+  Nothing is undecided: 5,734 contents, of them 333 `remove`. `image_suggestions.json` feeds
+  the Suggested list of the review tool (`review_images_cli.py`, port 8765).
+- Run once in 2026 and not again: `rename_images_cli.py` (copies `full_before_rename`,
+  `thumbs_before_rename`; map `data/images/rename_map.json`) and `load_removals_cli.py`.
+  `input/remove_list2` was not loaded (Tom).
+- 10 thumbnails of 2025 keep their old names (each was shared by two pictures); each of the
+  20 pictures also has a thumbnail under its own name.
+- Left on disk and named by no index: 11 zero-byte files cut at a `:`, and 8 pictures.
+- A local name: each of `< > : " / \ | ? *` becomes `_`, at most 180 bytes, extension kept.
+- The download ran in Windows PowerShell from the WSL `imageGetter` directory with the Windows
+  Python 3.13, Chrome on the debug port with a profile of its own
+  (`--user-data-dir=C:\chrome-debug`), Chrome and ChromeDriver 158. 591 fetched, 0 failed. It
+  rewrote the index with CRLF; the content was unchanged.
+- One thumbnail cannot be made: a truncated file of 2025, marked `remove`.
+- Tom waived TDD for the download (IU3). `test_handle_download_failure` passes only because a
+  Mock's `get_cookies()` cannot be iterated (told to Tom).
+- The review tool's page script is checked for syntax only (`node --check`).
+- One full-suite run had 7 failures that four runs after it did not repeat; which tests is not
+  known. If it comes back, keep the whole output.
 
 ### Pictures of an answer (repos: `ml/` and `../site_2024/`, one deploy)
 
