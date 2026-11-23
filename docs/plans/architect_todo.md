@@ -8,21 +8,19 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-23 (fourteenth revision, D49 and D50: the image update, plan 4.0). Everything through the answer
+Plan revised on 2026-11-23 (fourteenth revision, D49 to D51: the image update, plan 4.0). Everything through the answer
 display, the corpus update and the model change is deployed (`775692d`) and every check passed.
 The embedding of the Phase 2 variants runs at night from 2026-11-22, stopped each morning and
 continued each evening (plan 2.2a); read the
-Programmer's report of it first. Open with Tom: the local file name of an image (the `@@TOM`
-in plan 4.0). Next design, after the image update: how the image database is used (4.2).
+Programmer's report of it first. Next design, after the image update: how the image database is used (4.2).
 
 ## Open
 
-- [ ] Get Tom's decision on the local file name of an image (the `@@TOM` in plan 4.0), record
-      it and take the flag out. IU2 in `programmer_todo.md` waits for it.
 - [ ] Read the Programmer's report of the image update (IU9).
 - [ ] Design the image gallery (plan 4.2), then reference links (4.1) (D41). Discuss with Tom
       first how the image database is to be used. The keyword scores match inside words
-      (`king` in `making`); settle that there. The links are made
+      (`king` in `making`); settle that there. A chunk names its thread, not its post, so a
+      result can show the images of its threads but not of the posts the model read. The links are made
       by the site from ids, since answers are rendered with raw HTML off (D40).
 - [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
       whether the five collections are fit for the labelling (2.3).
@@ -44,7 +42,7 @@ Phase 0, the Phase 1 code change, the follow-on fixes and the twelve plan revisi
 the answer display, of the corpus update and of the overnight embedding (thirteenth revision),
 decisions D1 to D48, the Programmer's notes through the evaluation, and the review findings
 R4 and R5. The image update (plan 4.0) was designed on 2026-11-23 (fourteenth revision,
-D49, D50). The evaluation showed no candidate slow at its default reasoning effort, so no
+D49 to D51). The evaluation showed no candidate slow at its default reasoning effort, so no
 reasoning setting was taken to Tom (plan 1.3). The item list is in the git history of this
 file.
 

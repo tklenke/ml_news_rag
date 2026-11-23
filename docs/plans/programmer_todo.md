@@ -378,9 +378,9 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
 
 - [ ] IU1 The date is read with or without `unread,` before it. The index builder reports the
       files it could not read and goes on.
-- [ ] IU2 **Waits for Tom's decision on the local name (the `@@TOM` in plan 4.0).** The local
-      name with the attachment id, and the one rename of the files on disk. Report how many
-      files were renamed and how many names had been shared.
+- [ ] IU2 The local name with the attachment id (D51), and the one rename of the files on disk
+      and of their thumbnails, after copying both directories. Report how many files were
+      renamed and how many names had been shared.
 - [ ] IU3 Download: timeout, a response that is not 200 fails, chromedriver path and log file
       as parameters. Settle with Tom how the Windows run reaches `data/images/full`; write
       the commands in `imageGetter/README.md`.

@@ -12,7 +12,8 @@
   number of occurrences separates signature pictures from build photos, so only files
   under 1,000 bytes are dropped without review and the rest is decided by Tom in a tool
   where he clicks (D50). Two faults join the same pass: two attachments of one thread can
-  get the same local file name, and the threads fetched in 2026 lose their date.
+  get the same local file name, and the threads fetched in 2026 lose their date. Tom
+  decided that the name gains the attachment id and the files are renamed once (D51).
 - **2026-11-22 (thirteenth revision):** The embedding of the Phase 2 variants is brought
   forward to run overnight while Tom is away, over two nights, stopped each morning and
   continued each evening (D48; 2.2a). Only the embedding moves: the
@@ -168,6 +169,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D48 | (2026-11-22) The embedding of the Phase 2 variants runs overnight from 2026-11-22, unattended, ahead of Phase 4 (2.2a). It is stopped in the morning and continued in the evening, over about two nights. Tom watches the coding; the run itself is unattended. The rest of Phase 2 stays after Phase 4 (D41). |
 | D49 | (2026-11-23) Before the image gallery is designed, the image database gets the current images and the image getter is repaired (4.0). How the database is used (4.2) is discussed after that. |
 | D50 | (2026-11-23) Signature pictures and other clutter: a file under 1,000 bytes is dropped without review. Everything else is Tom's decision, made by clicking in a local review tool; name, size and number of occurrences only choose what the tool shows him first. |
+| D51 | (2026-11-23) The local file name of an image gains the attachment id, and the files on disk are renamed once (4.0). |
 
 ## Two repositories
 
@@ -1340,12 +1342,15 @@ the files in `data/images/full`, the hand removal lists in `imageGetter/input/`)
 
 **Design.**
 
-- **Local name.** @@TOM: Architect recommends `<thread>_<attachment id>_part<part>_<file
-  name>`, the attachment id being the part of the URL after `attach/`, and the 6,211 files
-  on disk renamed once to it (each to the name of the first URL that has its present name,
-  in the order of the index, since that is the one that was downloaded). The other choice
-  is to keep the present names and use the new form only for a name that is already
-  taken; that leaves two forms. Not decided.
+- **Local name (D51).** `<thread>_<attachment id>_part<part>_<file name>`, the attachment
+  id being the part of the URL after `attach/`. The thread id stays first: it is the id
+  the site holds for a source, and the key of the index. The 6,211 files on disk are
+  renamed once, each to the name of the first URL that has its present name, in the order
+  of the index, since that is the one that was downloaded; the thumbnails are renamed with
+  them. `data/images/full` and `data/images/thumbs` are copied before the rename. The
+  removal lists of 2025 hold the present names, so they are loaded (below) by the present
+  name or after being carried through the same rename, not left to miss. Not confirmed:
+  that an attachment id is one post; in the collisions looked at it differed between them.
 - **Date.** The date is read with or without `unread,` before it. Test with a message of
   2026.
 - **The index builder reports** the files it could not read, with the reason, and goes on.

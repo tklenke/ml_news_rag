@@ -6,10 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-D1 to D50 are in the plan's table.
-
-- [ ] The local file name of an image: the form with the attachment id and one rename of the
-      6,211 files (Architect's recommendation), or the present names kept (plan 4.0, `@@TOM`).
+All decided: D1 to D51 in the plan's table.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
