@@ -351,7 +351,12 @@ Log: `~/projects/ml/data/chunk_experiment/queue.log`. `END ... exit code 1` mean
 
 ### For Tom in the morning
 
-(nothing yet)
+- 2026-11-23 08:29: A, C, B and D done, each count equal to the plan's table, no file failed.
+  E stopped by Tom at 08:25 after 4,647 of 11,388 files (13,734 chunks); about 1.8 hours left.
+- The first queue ended without a stop and without an error in the log, after about 9,070 files
+  of A (about 20:37 by its rate). The containers kept running. A queue was started again at
+  21:48 and finished A without embedding anything twice. Question for Tom: did you close
+  terminals or this session around 20:37, and did you run `start` at 21:48?
 
 - [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom, one batch of 10 questions at a time (plan 2.3)
 - [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
