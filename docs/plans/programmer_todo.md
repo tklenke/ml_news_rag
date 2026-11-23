@@ -366,9 +366,9 @@ A stop writes `STOPPED by the stop command` to the log.
 
 ## Phase 4
 
-The image update (plan 4.0) is done. Next: "Yearly update instructions" at the end of this
-section. The image gallery (4.2) and the reference
-links (4.1) are not yet designed (D41). S3 is done by "Answer display".
+The image update (plan 4.0) is done. Next: "Pictures of an answer" (plan 4.2), then "Yearly
+update instructions"; both are at the end of this section. Ask Tom if he wants the other
+order. The reference links (4.1) are not yet designed (D41). S3 is done by "Answer display".
 
 ### Image update (repo: `ml/`, module `imageGetter/`)
 
@@ -490,6 +490,45 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       Report in `architect_todo.md`.
       Code review of the image update waived by Tom (2026-11-23).
 
+### Pictures of an answer (repos: `ml/` and `../site_2024/`, one deploy)
+
+Plan: "4.2 Pictures of an answer (D52 to D55)". Read it whole; the tests are listed there. The
+tests of `site_2024` carry a small index and job files of their own and do not read `ml/`.
+Nothing of the 2025 pages under `/cgimages/` is changed or deleted (D54), and no full picture
+goes to the server (D53).
+
+- [ ] PA1 `ml`: the gallery index names the thumbnail of each picture. Test first. Make the
+      gallery index again and check that nothing else in it changed (2,368 threads, 5,661
+      pictures) and that every named thumbnail is on disk.
+- [ ] PA2 `ml`: the step that writes the list of the thumbnails the gallery index names. Test
+      first: the list holds exactly those.
+- [ ] PA3 `site_2024`: the settings (path of the index, base address of the thumbnails) and
+      the loading of the index, once in each worker. No setting, or a file that cannot be
+      read: no pictures, one line in the log, the site works. Tests first, the log line
+      captured.
+- [ ] PA4 The one function that takes the documents of a job and the index and returns the
+      threads with their pictures, in order, each thread once. Tests first: a thread in the
+      provided and the related documents, a document of a newsletter, a link that does not
+      start with `https://groups.google.com/`.
+- [ ] PA5 The results page: the section under the answer and its short disclaimer, above the
+      feedback buttons, at most 12 thumbnails, the link with the count. Tests of the plan
+      first, through the page, also through the status response.
+- [ ] PA6 The pictures page `/cozyrag/<job id>/pictures`, with its 404 cases. Tests first.
+- [ ] PA7 Local check with Tom before the review: settle how the local site shows the
+      thumbnails without changing a file the server uses (plan, "Local check"). He looks at
+      an answer with few pictures, one with over 12, the pictures page, a dig deeper and a
+      narrow window. If he wants the look changed, report to Architect; do not restyle on
+      your own.
+- [ ] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
+      the listed thumbnails, then the index) and the check that the server holds every file
+      of the list with its size. Short lines, and a line count beside any comparison.
+- [ ] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
+      "Delivery", ending with `docker compose restart nginx`. The checks of the plan, among
+      them what a browser not signed in to Google gets from a click on a thumbnail, written
+      down as seen. Add the upload and the index to the yearly steps of `imageGetter`
+      (YU3). Report to Architect in a note in `architect_todo.md`: the checks, what the
+      deploy left on the server, and anything in the design that did not fit the code.
+
 ### Yearly update instructions (repo: `ml/`, modules `msgGetter/` and `imageGetter/`)
 
 Asked for by Tom on 2026-11-23. Tom will run the message fetch and the image update himself
@@ -593,9 +632,9 @@ Tasks:
         steps; the copies `full_before_rename` and `thumbs_before_rename` belong to the one
         rename of 2026 and are not part of a yearly run; `rename_images_cli.py` and
         `load_removals_cli.py` were run once and are not run again.
-      - What follows: how the gallery index reaches the site. Not designed on 2026-11-23
-        (plan 4.2); leave a line that says so and names the plan section, for Architect to
-        replace when 4.2 is built.
+      - What follows: how the thumbnails and the gallery index reach the site (plan 4.2,
+        "Delivery"). If "Pictures of an answer" is deployed, write the step with the commands
+        as run (PA9). If not yet, leave a line that says so and names the task.
       - Mark the older sections of the file (Phases 1 to 6) for what they are, so that he
         does not take them for steps of the yearly run. Do not delete them.
       - Troubleshooting, as in YU2.

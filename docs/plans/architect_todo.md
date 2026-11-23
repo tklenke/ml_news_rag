@@ -9,21 +9,19 @@ Active workstream: the annual RAG / website refresh. The plan is
 ## Resume point
 
 Plan revised on 2026-11-23 (sixteenth revision: the pictures of an answer, plan 4.2, designed
-with three points open for Tom; the fifteenth recorded the image update, 4.0, as run). Everything through the answer
+and decided, D52 to D55; the fifteenth recorded the image update, 4.0, as run). Everything through the answer
 display, the corpus update and the model change is deployed (`775692d`) and every check passed.
 The embedding of the Phase 2 variants runs at night from 2026-11-22, stopped each morning and
 continued each evening (plan 2.2a): A, C, B and D are done, E was not finished on 2026-11-23, and
-the Programmer's report of the five checks (2.2d) is not written yet. Next: Tom's answers on 4.2,
-then the Programmer's tasks for it.
+the Programmer's report of the five checks (2.2d) is not written yet. Next design: the reference links (4.1).
 
 ## Open
 
 - [x] Read the Programmer's report of the image update (IU9) and fold it and the three notes
       of 2026-11-23 into the plan (fifteenth revision, 4.0 "Result").
-- [~] The pictures of an answer (plan 4.2): designed on 2026-11-23 (sixteenth revision, D52 to
-      D54). Open with Tom, marked `@@TOM` in 4.2: where on the results page, the limit of 12,
-      a dig deeper; and his confirmation that the full pictures become public. When he has
-      answered: remove the flag, record the decisions, write the Programmer's tasks.
+- [x] The pictures of an answer (plan 4.2): designed and decided on 2026-11-23 (sixteenth
+      revision, D52 to D55); the Programmer's tasks are PA1 to PA9.
+- [ ] Read the Programmer's report of the pictures of an answer (PA9).
 - [ ] Design the reference links (4.1) (D41). The links are made
       by the site from ids, since answers are rendered with raw HTML off (D40).
 - [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
@@ -99,7 +97,8 @@ file.
 - `data/images/footer_review.html` (git-ignored) is the page Tom judged the clutter rules on.
 - The gallery reads `data/images/gallery261123.idx` (2,368 threads, 5,661 pictures, every one
   with a thumbnail). Decisions are by content hash in `imageGetter/image_decisions.json`. The
-  server still has the static pages of 2025 under `/cgimages/`.
+  server still has the static pages of 2025 under `/cgimages/`; they are to be replaced by the
+  pictures of an answer and are not deleted yet (D54).
 - Tom wants to run the yearly message and image fetch himself next year, from written steps
   (`programmer_todo.md`, "Yearly update instructions"). He finds running the getters from the
   Windows clone brittle.
