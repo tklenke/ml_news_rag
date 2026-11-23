@@ -1,7 +1,7 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-22 (twelfth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the browser checks of the last deploy are open; next is the image gallery (4.2)
+**Status:** Revised 2026-11-22 (twelfth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); next is the image gallery (4.2)
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
@@ -183,7 +183,7 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    Tom. Done 2026-11-22 (1.5).
 5. **[REVISED - 2026-11-22] Answer display, corpus update and model change, one deploy
    (D38, D39, D42):** see "Answer display" and "Corpus update". It carries S3. Deployed
-   2026-11-22 (`775692d`); the browser checks are open (`programmer_todo.md`, AD7).
+   2026-11-22 (`775692d`); every check passed.
 6. **[REVISED - 2026-11-22] Phase 4:** image gallery (4.2), then reference links (4.1)
    (D41). Not yet designed.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.

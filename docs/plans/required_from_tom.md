@@ -20,8 +20,7 @@ finished work items are in the git history of this file.
 - [x] Fetch again the 10 threads that were already in the corpus (D44). Done 2026-11-22; 8 had new
       posts.
 - [x] At the deploy: upload the Chroma tar to the server (CU8). Done 2026-11-22.
-- [ ] Report the browser checks of the deploy of 2026-11-22 (AD7; plan "Answer display", "Deploy",
-      and "Corpus update", "Delivery" step 5).
+- [x] Report the browser checks of the deploy of 2026-11-22 (AD7). All passed.
 - [ ] Delete `~/site.ini.before_s10` on the local machine (the backup with the keys from S10).
 - [x] Rate model answers, blind, in batches of 10: `perfect` / `ok` / `not_good` plus
       factual errors (Phase 1.4, 1.5). Done 2026-11-22, first answer only (D35).

@@ -10,8 +10,8 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** Phase 0, the Phase 1 code change with the site fixes, the follow-on fixes, and the
-answer display with the corpus update and the model change are deployed (`775692d`); the browser
-checks of AD7 are open. Then Phase 4, then Phase 2 (D41). One session per group; start each
+answer display with the corpus update and the model change are deployed (`775692d`). Next is
+Phase 4, then Phase 2 (D41). One session per group; start each
 session fresh. Code review happens once per deploy, not per commit.
 
 **Deploys:** nginx looks up the name `flask` only when it starts. A deploy or rollback that
@@ -75,8 +75,8 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
           ls -la ~/site_ini_before_s10
           rm -r ~/site_ini_before_s10
 
-- [ ] **From the deploy of the answer display and the corpus update (2026-11-22).** Only once the
-      browser checks of AD7 are done and Tom says the site has run well. Ends both rollbacks
+- [ ] **From the deploy of the answer display and the corpus update (2026-11-22).** Not before 2026-11-28,
+      and only if Tom says the site has run well. Ends both rollbacks
       below. The image and the data directory can be removed separately.
 
           cd ~/site_2024
@@ -223,12 +223,12 @@ data, since the tests of `site_2024` do not read `ml/`.
 - [x] AD6 Local check with Tom before the review: a table answer in a narrow browser window.
       If it reads badly, stop and report to Architect; do not restyle on your own.
       Tom approved the look on 2026-11-22.
-- [~] AD7 Merge and deploy (Tom waived the code review of all of it, D47)
+- [x] AD7 Merge and deploy (Tom waived the code review of all of it, D47)
       with 1.6 and the corpus update (CU8) by the plan's deploy steps and checks. Add what the deploy leaves on the server to "Server cleanup".
       Deployed 2026-11-22: `775692d`, count and id hash and the three query results as expected.
       nginx then gave 502: the deploy steps did not restart it. `docker compose restart nginx`
-      gave 200 (the log was not read, so the stale address is inferred). Tom verified that the
-      website works. Open: Tom's results of the single browser checks.
+      gave 200 (the log was not read, so the stale address is inferred). Tom did the
+      browser checks on 2026-11-22: all passed.
 
 ## Corpus update (repo: `ml/`; data in `../site_2024/data/chroma`)
 
@@ -271,10 +271,10 @@ do not start those of `ml/docker-compose.yaml`.
       `data/corpus_update/after.json` (id hash `92d43eed...`). 2: 99 short chunks, smallest
       cosine 0.99998. 4: passed on the local site (`gpt-6-luna`, new thread among the sources).
       Tar, SHA-256 and check script for the server: `~/chroma_deploy` (local).
-- [~] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
+- [x] CU8 Deploy with AD7 by the plan's "Delivery" steps. Add `~/chroma_before_corpus_update` and
       the tar to "Server cleanup".
-      Deployed 2026-11-22: 42,276 chunks, id hash `92d43eed...`. Open: a question about a new
-      thread lists that thread as a source (one of the browser checks of AD7).
+      Deployed 2026-11-22: 42,276 chunks, id hash `92d43eed...`. The check with a
+      question about a new thread passed (Tom, with AD7).
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 

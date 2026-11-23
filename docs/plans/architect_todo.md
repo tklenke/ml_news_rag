@@ -9,8 +9,8 @@ Active workstream: the annual RAG / website refresh. The plan is
 ## Resume point
 
 Plan revised on 2026-11-22 (twelfth revision, D41 to D47). Everything through the answer
-display, the corpus update and the model change is deployed (`775692d`); Tom's single browser
-checks are open (`programmer_todo.md`, AD7). Next design: the image gallery (4.2).
+display, the corpus update and the model change is deployed (`775692d`) and every check passed.
+Next design: the image gallery (4.2).
 
 ## Open
 
