@@ -379,9 +379,14 @@ goes to the server (D53).
       Done 2026-11-23 (`site_2024` `f84300b`): `get_pictures` in `fwww/src/pictures.py`
       returns (provided threads, related threads not among them). A thread: subject, date,
       link (`url_from_source`), pictures (`thumbnail_url`, `url` or `None`). Full suite: 311.
-- [ ] PA5 The results page: the section under the answer and its short disclaimer, above the
+- [x] PA5 The results page: the section under the answer and its short disclaimer, above the
       feedback buttons, at most 12 thumbnails, the link with the count. Tests of the plan
       first, through the page, also through the status response.
+      Done 2026-11-23 (`site_2024` `d51897f`): `render_results` in `site_app.py` serves
+      both the page and the status response; the cut to 12 is `first_pictures`. Thumbnails
+      are shown at 120 x 120, `loading="lazy"`; links open in a new tab. The test app now has
+      an empty gallery index (`conftest.py`), so no test gets the "No pictures" line by
+      chance of order. Full suite: 326.
 - [ ] PA6 The pictures page `/cozyrag/<job id>/pictures`, with its 404 cases. Tests first.
 - [ ] PA7 Local check with Tom before the review: settle how the local site shows the
       thumbnails without changing a file the server uses (plan, "Local check"). He looks at
