@@ -31,6 +31,15 @@ All notes through 2026-11-22 are answered in the plan (eleventh revision); they 
 history of this file. The two S12 gaps the Programmer left as
 they are (2026-11-22) are in `docs/notes/opportunities_for_improvement.md`.
 
+- **NOTE FROM PROGRAMMER (2026-11-23):** Decided by Tom during IU2, an addition to D51 for
+  the plan: the local name of an image replaces each of `< > : " / \ | ? *` in the sender's
+  file name with `_`. 21 names of the current index hold one. On Windows a `:` writes to an
+  alternate data stream, so the download of 2025 left 11 of them as zero-byte files cut at
+  the colon; those pictures were never saved. Also found in the rename (details in
+  `programmer_todo.md`, IU2): 19 files on disk that no URL of `czindex.idx` names (the 11
+  empty ones and 8 pictures), left as they are; and 10 thumbnails each shared by two
+  pictures whose names differ only in the extension, made from one of the two.
+
 ## Notes from Code Reviewer
 
 R4 and R5 of the code review of 2026-11-22 are decided: D33 and D34 in the plan.

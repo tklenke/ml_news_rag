@@ -381,9 +381,25 @@ carries its own small pictures. Do not delete or overwrite a file in `data/image
       Done: a file it cannot read is written to stderr with the reason. On `data/msgs_md`: 2,631
       threads, 6,811 images, no file unreadable, no empty date. Before the fix 46 dates were
       empty: the plan's 45 new threads and `cnmK72T1MjE`, a 2025 thread fetched again in 2026.
-- [~] IU2 The local name with the attachment id (D51), and the one rename of the files on disk
+- [x] IU2 The local name with the attachment id (D51), and the one rename of the files on disk
       and of their thumbnails, after copying both directories. Report how many files were
       renamed and how many names had been shared.
+      Done 2026-11-23: 6,211 pictures and 6,190 thumbnails renamed by
+      `imageGetter/rename_images_cli.py`, each checked against the copy by content. In
+      `czindex.idx` 211 names had been shared by 465 attachments (the plan's 233 by 510 are
+      of the current index). Copies: `data/images/full_before_rename`, `thumbs_before_rename`.
+      Map of old to new names, for IU5: `data/images/rename_map.json`.
+      Tom decided (2026-11-23) that `< > : " / \ | ? *` in a file name become `_`: on Windows
+      a `:` left an empty file cut at the colon (note to Architect).
+      Left as they are, no URL of `czindex.idx` names them (19): 11 zero-byte files cut at a
+      `:`, and 8 pictures (five `*_1_Cozy_Sal.jpg` of 609,712 bytes, `VUWjfJP7VcM_part0_1_clip_image002.jpg`,
+      two `l2tMQ8mbmp0_*_flute_countersink.jpg`).
+      Not renamed: 10 thumbnails each shared by two pictures that differ only in the extension
+      (`…image1.jpeg` and `…image1.png`); it was made from one of them. They keep their old
+      names, and IU9 makes a thumbnail for each of the 20 pictures.
+      The first run stopped part way on those thumbnails (1,644 pictures renamed); it was
+      undone from the map, the directories checked identical to the copies, fixed under TDD
+      and run again.
 - [ ] IU3 Download: timeout, a response that is not 200 fails, chromedriver path and log file
       as parameters. Settle with Tom how the Windows run reaches `data/images/full`; write
       the commands in `imageGetter/README.md`.
