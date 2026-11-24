@@ -26,6 +26,25 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
 
 ## Notes from Programmer
 
+- [ ] **NOTE FROM PROGRAMMER (2026-11-24): hand-off at the end of the session. Start here.**
+      Done since the resume point: "Pictures of an answer" deployed and checked (PA9, note
+      below); the server and local cleanup of the Phase 0, Phase 1 and pictures deploys, early
+      at Tom's word (the corpus update's rollback stays to 2026-11-28); a reboot of the server,
+      clean; the yearly update instructions written, restructured at Tom's request so that all
+      server work is one deploy in the top-level `README.md`, and approved by Tom (YU4); the
+      Windows clone deleted by Tom. `programmer_todo.md` pruned; the Programmer's next task is
+      RL1, and 2.2d beside it. The notes below wait for you, most pressing first:
+      1. The fetch saves some posts collapsed: 27 of the 237 threads of 2026 are on the site
+         cut off. Decide on finding the cause, the fix and a refetch.
+      2. Up to 60 threads of 2024-25 never fetched. Decide whether to fetch them.
+      3. Record in the plan: D55 amended (pictures after Provided Docs), the upload by tar and
+         `scp` (4.2 "Delivery" step 3), and the yearly update as written (who does what, one
+         deploy).
+      4. The process suggestions and the YU5 list of steps that could become small tested
+         scripts: accept, reject or schedule.
+      5. Seen on the server, not acted on: `~/site_2024`, `~/www` and
+         `~/chroma_before_corpus_update` are world-writable.
+
 - [ ] **NOTE FROM PROGRAMMER (2026-11-23): Tom amended D55 at the local check (PA7).** The
       pictures section of the results page is no longer under the answer and its short
       disclaimer. Order of the page now: answer, short disclaimer, ask another / dig deeper /
@@ -104,7 +123,7 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
 - [ ] **NOTE FROM PROGRAMMER (2026-11-24): the yearly update instructions (YU5 report).**
       Written: `msgGetter/README.md`, `imageGetter/README.md`, `embedder/README.md` ("Yearly
       Update" in each), the order in the top-level `README.md`, and "Deploy a change of the
-      code" in `site_2024`'s README. Waiting for Tom's proof (YU4).
+      code" in `site_2024`'s README. Approved by Tom 2026-11-24 (YU4).
       **Settled in YU1 with Tom:** Windows Python from cmd, not PowerShell, in the WSL folder
       by `pushd`; Chrome by `msgGetter/chrome_with_debug.bat` (profile `C:\selenum\ChromeProfile`)
       for both modules; ChromeDriver in `/home/tom/projects/chromedriver-win64`; start date a

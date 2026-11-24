@@ -1,6 +1,6 @@
 # Programmer Todo
 
-**Last Updated:** 2026-11-23
+**Last Updated:** 2026-11-24
 
 # ACTIVE: Annual RAG / Website Refresh
 
@@ -10,11 +10,15 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
 **Order:** everything through the answer display, the corpus update and the model change is
-deployed (`775692d`), and the image update is done. **Now: "Pictures of an answer" (PA1 to
-PA9), then "Reference links: the trial" (RL1 to RL5)**, both under Phase 4. Beside them: 2.2d
-when the overnight embedding has run all five variants. The rest of Phase 2 follows Phase 4
-(D41). "Yearly update instructions" has no place yet: ask Tom. One session per group; start
-each session fresh. Code review happens once per deploy, not per commit.
+deployed (`775692d`); the image update is done; "Pictures of an answer" is deployed
+(`4f85f9e`); the yearly update instructions are written and approved. **Now: "Reference
+links: the trial" (RL1 to RL5)** under Phase 4. Beside it: 2.2d when the overnight embedding
+has run all five variants. The rest of Phase 2 follows Phase 4 (D41). One session per group;
+start each session fresh. Code review happens once per deploy, not per commit.
+
+**The yearly update** (fetch, pictures, embedding, deploy) is in the top-level `README.md`.
+A deploy of the site's code alone: `site_2024` README, "Deploy a change of the code". Server
+commands go to Tom in short blocks, each with what to expect, and he pastes the output.
 
 **Deploys:** nginx looks up the name `flask` only when it starts. A deploy or rollback that
 recreates the flask container ends with `docker compose restart nginx`.
@@ -45,16 +49,11 @@ Still useful:
 Leftovers kept on the server as the rollback for each deploy. Add to this list whenever a deploy
 leaves something behind. Until an entry is done, no `docker system prune` on the server.
 
-- [x] **From the Phase 0 deploy (2026-11-21).** Done 2026-11-24, early at Tom's word: stash
-      `906ffd8` dropped; images `old-stack` (flask, ollama), `chromadb/chroma:1.1.1`,
-      `nginx:latest` removed; `~/site_backup_2026-11-21` and `~/deploy_logs.txt` deleted. Four
-      containers up, site answers; free space 27 to 28 GB (shared layers). Kept:
-      `certbot/certbot:latest` (renewal uses it), the exited `hello-world` container. Still Tom's
-      choice: `server/old.nginx_all_apps.conf`, `server/certbot/conf/live/m24tom.old`,
-      `~/project.tar.gz`, `~/certbot_bu.tar`.
-
-- [x] **From the Phase 1 deploy (2026-11-21).** Done 2026-11-24, early at Tom's word:
-      `~/site_ini_before_s10` (one file, `site.ini`) deleted.
+Done 2026-11-24, early at Tom's word: the entries of the Phase 0 deploy, the Phase 1 deploy
+and the pictures deploy (details in the git history of this file). Still Tom's choice, on no
+schedule: `server/old.nginx_all_apps.conf`, `server/certbot/conf/live/m24tom.old`,
+`~/project.tar.gz`, `~/certbot_bu.tar`, the exited `hello-world` container. Keep
+`certbot/certbot:latest`: the certificate renewal uses it.
 
 - [ ] **From the deploy of the answer display and the corpus update (2026-11-22).** Not before 2026-11-28,
       and only if Tom says the site has run well. Ends both rollbacks
@@ -84,9 +83,7 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
           docker compose up -d
           docker compose restart nginx
 
-      Local leftover, Tom's choice (root's, needs `sudo`):
-      `site_2024/data/chroma_before_corpus_update`. `~/chroma_deploy` and `refetch_backup`
-      deleted 2026-11-24.
+      The local leftovers of this deploy were deleted 2026-11-24.
 
 - [x] **From the deploy of the pictures of an answer (2026-11-24, PA8 and PA9).** Done
       2026-11-24, early at Tom's word: image `site_2024-flask:775692d` and `~/pictures_deploy`
@@ -324,159 +321,13 @@ Still useful:
 - One full-suite run had 7 failures that four runs after it did not repeat; which tests is not
   known. If it comes back, keep the whole output.
 
-### Pictures of an answer (repos: `ml/` and `../site_2024/`, one deploy)
+### Pictures of an answer (done)
 
-Plan: "4.2 Pictures of an answer (D52 to D55)". Read it whole; the tests are listed there. The
-tests of `site_2024` carry a small index and job files of their own and do not read `ml/`.
-Nothing of the 2025 pages under `/cgimages/` is changed or deleted (D54), and no full picture
-goes to the server (D53).
-
-- [x] PA1 `ml`: the gallery index names the thumbnail of each picture. Test first. Make the
-      gallery index again and check that nothing else in it changed (2,368 threads, 5,661
-      pictures) and that every named thumbnail is on disk.
-      Done 2026-11-23. Each picture entry has `thumbnail_filename` (`thumbnail_name` of
-      `rename_images.py`). New gallery index `data/images/gallery261123b.idx` (the CLI does
-      not overwrite; `gallery261123.idx` stays): without that field it equals the old one,
-      key order included; 2,368 threads, 5,661 pictures, 5,661 distinct thumbnail names,
-      all on disk in `data/images/thumbs`.
-- [x] PA2 `ml`: the step that writes the list of the thumbnails the gallery index names. Test
-      first: the list holds exactly those.
-      Done 2026-11-23: `imageGetter/thumbnail_list_cli.py` (function `thumbnail_filenames`
-      in `gallery_index.py`), one name per line for `rsync --files-from`; it stops on a
-      name with a line break or a thumbnail not on disk. Written:
-      `data/images/thumbs261123b.txt`, 5,661 names, 54.8 MB. For PA9: no name holds a
-      plain space; 15 hold U+202F (narrow no-break space), 6 a `#`, 3 a `%`. The check
-      "a thumbnail whose name holds a space" uses one of the 15. 100 names start with `-`.
-- [x] PA3 `site_2024`: the settings (path of the index, base address of the thumbnails) and
-      the loading of the index, once in each worker. No setting, or a file that cannot be
-      read: no pictures, one line in the log, the site works. Tests first, the log line
-      captured.
-      Done 2026-11-23 (`site_2024` `4ce6064`): `fwww/src/pictures.py` (`PictureIndex`),
-      `site_app.Pictures`; `site.ini` `[PICTURES]` `INDEX = /app/gallery/gallery.idx`,
-      `THUMBS_URL = /cgimages/pictures/thumbs`. The plan names `/cgimages/pictures` as the
-      base; the setting is the thumbnails' own address so the code adds no `/thumbs`.
-      The pages that show "the site works" without an index are tested in PA5 and PA6.
-      `data/` is git-ignored in `site_2024` (plan's check). Full suite: 303 passed.
-- [x] PA4 The one function that takes the documents of a job and the index and returns the
-      threads with their pictures, in order, each thread once. Tests first: a thread in the
-      provided and the related documents, a document of a newsletter, a link that does not
-      start with `https://groups.google.com/`.
-      Done 2026-11-23 (`site_2024` `f84300b`): `get_pictures` in `fwww/src/pictures.py`
-      returns (provided threads, related threads not among them). A thread: subject, date,
-      link (`url_from_source`), pictures (`thumbnail_url`, `url` or `None`). Full suite: 311.
-- [x] PA5 The results page: the section under the answer and its short disclaimer, above the
-      feedback buttons, at most 12 thumbnails, the link with the count. Tests of the plan
-      first, through the page, also through the status response.
-      Done 2026-11-23 (`site_2024` `d51897f`): `render_results` in `site_app.py` serves
-      both the page and the status response; the cut to 12 is `first_pictures`. Thumbnails
-      are shown at 120 x 120, `loading="lazy"`; links open in a new tab. The test app now has
-      an empty gallery index (`conftest.py`), so no test gets the "No pictures" line by
-      chance of order. Full suite: 326.
-- [x] PA6 The pictures page `/cozyrag/<job id>/pictures`, with its 404 cases. Tests first.
-      Done 2026-11-23 (`site_2024` `6dfee65`): `cozyrag_pictures.html`
-      extends `layout.html` (the `/processid` page does not); a job without pictures gets
-      "No pictures were found for this answer." The threads of both pages are one include,
-      `picture_threads.html`. The 404 cases are in the existing tests of `test_pages.py`.
-      Full suite: 342.
-- [x] PA7 Local check with Tom before the review: settle how the local site shows the
-      thumbnails without changing a file the server uses (plan, "Local check"). He looks at
-      an answer with few pictures, one with over 12, the pictures page, a dig deeper and a
-      narrow window. If he wants the look changed, report to Architect; do not restyle on
-      your own.
-      2026-11-23: local setup: index copied to `site_2024/data/gallery/gallery.idx` (sudo,
-      `data/` is root's), `THUMBS_URL = http://127.0.0.1:8090` in `site_local.ini`, and
-      `python3 -m http.server 8090 --bind 127.0.0.1 --directory ~/projects/ml/data/images/thumbs`.
-      Tom moved the pictures below Provided Docs (D55 amended; note in `architect_todo.md`;
-      `site_2024` commit "Show the pictures of an answer after the provided docs").
-      Done 2026-11-23: Tom checked on the local site with the R2 fix loaded; the look stays
-      as it is. Of the latest 150 local answers none has under 13 pictures, and job
-      `7OCvxGFMr6` has 133 on its pictures page (the plan's measure was at most 80).
-- [x] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
-      the listed thumbnails, then the index) and the check that the server holds every file
-      of the list with its size. Short lines, and a line count beside any comparison.
-      2026-11-23: compose line done (`site_2024` `25187e5`, `./data/gallery:/app/gallery:ro`).
-      Done 2026-11-23: the upload commands and the check, below. Tar, SHA-256 and `scp`
-      as for the Chroma tar, not `rsync`: Tom moves files that way, and `rsync` is not
-      installed locally. The check is a SHA-256 of each file, which covers its size.
-      Rehearsed locally into a scratch "server" directory: 5,661 files, 0 failures. With
-      one file removed and one changed, the check printed 5 lines. Without
-      `--verbatim-files-from`, tar reads the 100 names that start with `-` as options.
-      Run by Tom on the server 2026-11-24, step by step: `df -h` 27 GB free on `/` (59 GB,
-      54% used); `~/www/cgimages` is admin's, `~/site_2024/data` root's; `upload.sha256`
-      3 OK; thumbnails 0 failures, 5661 files; `data/gallery` was empty; index hash
-      `2f67e99e…8ca8`, equal to the one uploaded. The site does not read it until PA9.
-
-      Local: make the upload directory (62 MB tar, 3.8 MB index).
-
-          mkdir ~/pictures_deploy
-          cd ~/projects/ml/data/images/thumbs
-          L=../thumbs261123b.txt
-          tr '\n' '\0' < $L | xargs -0 sha256sum -- \
-            > ~/pictures_deploy/thumbs.sha256
-          wc -l < ~/pictures_deploy/thumbs.sha256      # 5661
-          tar -cf ~/pictures_deploy/thumbs.tar \
-            --verbatim-files-from -T $L
-          cp ../gallery261123b.idx ~/pictures_deploy/gallery.idx
-          cd ~/pictures_deploy
-          sha256sum thumbs.tar thumbs.sha256 gallery.idx \
-            > upload.sha256
-
-      Local: copy it to the server's home directory, as for the Chroma tar.
-
-          scp -r ~/pictures_deploy <server>:~
-
-      Server: free space for the record, owners, then the upload checked.
-
-          df -h
-          ls -ld ~/www/cgimages ~/site_2024/data
-          cd ~/pictures_deploy
-          sha256sum -c upload.sha256                   # 3 lines, each OK
-
-      Server: the thumbnails, then the check. This assumes `admin` owns `~/www/cgimages`;
-      if `ls -ld` showed root, stop and ask.
-
-          mkdir -p ~/www/cgimages/pictures/thumbs
-          cd ~/www/cgimages/pictures/thumbs
-          tar -xf ~/pictures_deploy/thumbs.tar
-          sha256sum -c --quiet \
-            ~/pictures_deploy/thumbs.sha256 2>&1 | wc -l   # 0
-          ls -A | wc -l                                # 5661
-
-      Server: the index, after the thumbnails. `data/` is root's locally; `sudo` assumes
-      the same there.
-
-          cd ~/site_2024
-          sudo mkdir -p data/gallery
-          sudo cp ~/pictures_deploy/gallery.idx data/gallery/gallery.idx
-          sha256sum data/gallery/gallery.idx
-          grep gallery.idx ~/pictures_deploy/upload.sha256  # same hash
-
-      `~/pictures_deploy` on the server is on the "Server cleanup" list.
-- [x] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
-      "Delivery", ending with `docker compose restart nginx`. The checks of the plan, among
-      them what a browser not signed in to Google gets from a click on a thumbnail, written
-      down as seen. Add the upload and the index to the yearly steps of `imageGetter`
-      (YU3). Report to Architect in a note in `architect_todo.md`: the checks, what the
-      deploy left on the server, and anything in the design that did not fit the code.
-      2026-11-24: review waived for the rest by Tom (below). Both repos fast-forwarded to
-      `main` and pushed: `site_2024` `4f85f9e`, `ml` `72957f4`. Deployed 2026-11-24:
-      running image tagged `site_2024-flask:775692d`, `git pull`, build, `up -d flask`,
-      `restart nginx`; Tom confirmed the container sees the index and the site works.
-      Done 2026-11-24. The plan's checks, as Tom saw them in the browser: an answer with
-      pictures shows thumbnails; a thumbnail opens the picture at Google Groups when signed
-      in; "All pictures" opens the page with both sections; a dig deeper shows its
-      pictures; a stored answer from before the deploy shows pictures; an answer with no
-      picture looks as before; the thumbnail
-      `…switches_9.08.03%E2%80%AFAM_thumb.jpg` (U+202F in its name) shows; the 2025 pages
-      under `/cgimages/` open. Not signed in to Google, a click on a thumbnail gives
-      Google's sign-in page (as D53 expected). Leftovers on "Server cleanup". The commands
-      of the upload as run are in PA8, for YU3. Reported to Architect. Rollback of the code:
-
-          cd ~/site_2024
-          git checkout 775692d
-          docker tag site_2024-flask:775692d site_2024-flask:latest
-          docker compose up -d --force-recreate flask
-          docker compose restart nginx
+Plan 4.2. Deployed 2026-11-24 (`site_2024` `4f85f9e`, `ml` `72957f4`); every check of the
+plan's "Delivery" passed, and a click on a thumbnail without a Google sign-in gives Google's
+sign-in page (D53, accepted). Tom waived the rest of the code review; R4 dropped by Tom.
+Upload by tar, SHA-256 and `scp` (not `rsync`). Task details are in the git history of this
+file; the yearly upload is in the top-level `README.md`.
 
 ### Reference links: the trial (repo: `../site_2024/`)
 
@@ -504,163 +355,14 @@ do not start it.
       the questions left out, the answers without a number (by question id). Do not apply the
       rule yourself and do not change the wording of the prompt: both are Architect's.
 
-### Yearly update instructions (repo: `ml/`, modules `msgGetter/` and `imageGetter/`)
+### Yearly update instructions (done)
 
-Asked for by Tom on 2026-11-23. Tom will run the message fetch and the image update himself
-in about a year, alone, from the page. **Write for a reader who has forgotten everything:** he
-knows what the project is and can use a terminal, and remembers no path, no command, no order
-of steps and none of this year's surprises. Documentation only: no code change in this task. A
-fault found while writing is reported to Tom, not fixed here.
-
-The measure of done: Tom can go from "a year has passed" to new messages in `data/msgs_md` and
-a new gallery index without asking anyone and without reading the code.
-
-What exists today:
-
-- `msgGetter/Readme.md`: five lines of steps and old notes. It names a script that does not
-  exist (`process_messages.py`; the file is `process_message.py`), and says nothing of where
-  the output lands or of anything found in 2026.
-- `imageGetter/README.md`: the section "Yearly Update" has this year's seven commands in
-  order, and "Prerequisites" has the Chrome setup. The file is written for the one who built
-  it: it does not say what to expect from a step, how to tell that it worked, or what to do
-  when it did not. The rest of the file (Phases 1 to 6) describes the build of 2025.
-
-Tasks:
-
-- [~] YU1 Read both modules' code and the two READMEs, then settle with Tom, before writing:
-      Settled with Tom 2026-11-24: both modules run with the Windows Python from cmd (not
-      PowerShell), in the WSL directory reached by `pushd \\wsl.localhost\Debian\...`; Chrome
-      started by `msgGetter/chrome_with_debug.bat` (profile `C:\selenum\ChromeProfile`) for
-      both; ChromeDriver unzipped into `\\wsl.localhost\Debian\home\tom\projects\chromedriver-win64`;
-      the start date a day before the last end date; one "Yearly Update" section per module
-      README; the top-level README lists the whole year in order, including the embedding and
-      the deploy, and Tom asked for instructions for both (embedding in `ml`, site deploy in
-      `site_2024`'s README, data uploads in `ml`). `get_msg_ids.py` takes the two values of
-      the Windows clone's run: `startDate = '2026-11-20'`, `nMaxSequentialDupePages = 20`.
-      Tom deletes the Windows clone once all is confirmed; nothing else of it is kept.
-      Still to do: the trial with Tom of the fetch from the WSL directory (one thread), set up
-      and written in `docs/plans/yu1_fetch_trial.md`. Run 2026-11-24: running from the WSL
-      directory in cmd works. The fetch saved 2 of the thread's 3 posts collapsed (cut off);
-      40 corpus files hold such posts (27 of 2026). Reported to Tom and Architect; not fixed.
-      a. **Where the commands are run from.** The image download of 2026 ran with the
-         Windows Python from the WSL directory (`\\wsl.localhost\...`). The message fetch
-         of 2026 ran in the Windows clone (`C:\Users\tom\Documents\projects\ml`), an older
-         copy with uncommitted edits, and its files were copied to WSL afterwards. Tom finds
-         the clone brittle. Ask him which way the instructions describe. If he wants the
-         message fetch run from the WSL directory too, that has not been tried: try it with
-         him on a few ids before it is written down as the way. If it needs a code change,
-         stop and report to Architect.
-      b. **Where the instructions live.** Architect's suggestion: one section "Yearly Update"
-         at the top of each module's README, complete in itself, and the top-level
-         `README.md` procedure naming the two in order with what comes between and after
-         them (the embedding and the deploy are not this task; name them and point to where
-         they are described). `msgGetter/Readme.md` becomes `README.md` (`git mv`). Tom may
-         prefer one file for both.
-- [~] YU2 `msgGetter`: the yearly fetch, written out. It must cover at least:
-      2026-11-24: written in `msgGetter/README.md` (renamed from `Readme.md`); waits for Tom's
-      reading, then YU4. Found while writing, reported to Architect: the 60 ids of the
-      `msgGetter` copy of `msgids_2024-09-03_2025-10-02.txt`.
-      - What the step is for and what it produces: the id list file, a `.md` per thread in
-        `data/msgs_md`, a `.txt` per thread in `data/msgs`, and which later step reads which.
-      - What has to be installed on Windows and how to check each: Python and its packages
-        (give the `pip install` line and a command that shows they import), Chrome,
-        ChromeDriver. For ChromeDriver: where to see Chrome's version, where to download the
-        matching one, into which folder to unzip it so that the path written in the scripts
-        finds it, and what the error looks like when the versions differ.
-      - Starting Chrome on the debug port: the exact command, that every Chrome window is
-        closed first, that Chrome needs a profile of its own for the port to open (found in
-        2026 for the images; `chrome_with_debug.bat` names another profile folder: say which
-        one is used and make the file and the text agree), how to check that the port is
-        open, and that he signs in to Google Groups in that window.
-      - The start date: where the last run's date is found (the name of the newest
-        `msgids_*.txt`), which line of `get_msg_ids.py` to edit, and whether the range starts
-        on the last run's end date or a day before it (the id files of 2025 and 2026
-        overlap by a day; ask Tom which he wants and say why).
-      - Each command, where it is run from, about how long it took in 2026, what the screen
-        shows while it runs, and how to tell it finished well: the number of ids, the number
-        of files written, where to look.
-      - That it can be stopped and run again, and what it skips when run again.
-      - **Known threads with new replies.** A thread that already has a `.txt` is passed
-        over, so replies of the last year to an older thread are not fetched. In 2026 this
-        was 10 threads; they were fetched again by moving their `.txt` and `.md` aside (D44).
-        Write how to list such threads from the new id file and how to fetch them again,
-        with the rule that a refetched file shorter than the one it replaces is not used.
-      - Getting the files to where the next steps read them, if they are not written there
-        (depends on YU1a), and a count that shows nothing was lost on the way.
-      - The filter: what `f_filter.py` removes, that the `.txt` can be made again from the
-        `.md` in WSL without Chrome, and the command for it.
-      - A check at the end: how many new threads to expect (227 in 2026, for scale), opening
-        two or three of the new `.md` files and what a good one looks like, and what the
-        button text of his own posts looked like before the filter knew it.
-      - What follows: the embedding. Name the step and where it is described; if it is
-        described nowhere he could follow, say so in the report (YU5).
-      - Troubleshooting, each with the message as it appears and what to do: ChromeDriver
-        and Chrome versions differ; the debug port is not open; not signed in (what the
-        fetched page then holds); Google slows or blocks the fetch; a thread that fails.
-        Where a case has not been seen, say so instead of guessing its message.
-- [~] YU3 `imageGetter`: the section "Yearly Update" made complete in itself, on the same
-      2026-11-24: written, at the top of `imageGetter/README.md`, with the upload as step 9;
-      the older sections follow under "Reference". "Prerequisites" (PowerShell, `C:\chrome-debug`)
-      is replaced by the cmd way settled in YU1. Waits for Tom's reading, then YU4.
-      pattern. Keep the seven steps and add at least:
-      - That it starts only after the messages are in `data/msgs_md`, and how to check that.
-      - For each step: where it is run (WSL or Windows PowerShell), the command with the
-        parts that change each year marked (the index name with its date and time, the log
-        name, the gallery index name) and how to find this year's value, what it prints,
-        about how long it took in 2026, and how to tell it worked.
-      - The numbers of 2026 for scale: 2,631 threads and 6,811 entries in the index, 591
-        downloaded with none failed, 346 new contents to review, 611 thumbnails, 2,368
-        threads and 5,661 pictures in the gallery index.
-      - The download: the Chrome setup in full here or by a link to "Prerequisites" that
-        lands on the exact lines; that WSL has to be running; that PowerShell is needed and
-        why cmd does not work; what a failed download looks like in the log and that running
-        the step again fetches only what is missing.
-      - The review tool, as a short user's guide: how to start it, the address to open, the
-        three lists and which to do first, what the dashed frame means, what a click does,
-        what the button at the end of a page does, that a decision is saved at once and can
-        be changed but not undone, how to know he is finished (Suggested and New empty), how
-        to stop the tool, and that `image_decisions.json` is then committed (give the git
-        commands).
-      - What a signature picture or other clutter looked like in 2026, in two or three
-        examples in words, so that he recognises the kind.
-      - What is left alone on purpose: files in `data/images` are never deleted by these
-        steps; the copies `full_before_rename` and `thumbs_before_rename` belong to the one
-        rename of 2026 and are not part of a yearly run; `rename_images_cli.py` and
-        `load_removals_cli.py` were run once and are not run again.
-      - What follows: how the thumbnails and the gallery index reach the site (plan 4.2,
-        "Delivery"). If "Pictures of an answer" is deployed, write the step with the commands
-        as run (PA9). If not yet, leave a line that says so and names the task.
-        Deployed 2026-11-24: the commands as run are under PA8 (tar, SHA-256, `scp`).
-      - Mark the older sections of the file (Phases 1 to 6) for what they are, so that he
-        does not take them for steps of the yearly run. Do not delete them.
-      - Troubleshooting, as in YU2.
-- [ ] YU4 Proof by Tom. Ready 2026-11-24: all five texts are written. He reads both from the top and walks through them without help:
-      every command that changes nothing is run (the checks, starting Chrome, the review
-      tool on a scratch copy of the decisions); the others he reads and says what he would
-      type. Every place where he stops to ask is a gap: fix the text, not the answer in the
-      chat. A fresh fetch is not made for this.
-- [~] YU5 Top-level `README.md`: the update procedure names the steps in order and points
-      2026-11-24: written, with the deploy and the cleanup (Tom asked for both, YU1). Also
-      written at Tom's request: `embedder/README.md` (renamed from `Readme.md`) "Yearly Update"
-      (the embedding and the copy of the collection to the server) and `site_2024` README
-      "Deploy a change of the code" (`site_2024` `8371a37`). Report to Architect sent. Waits
-      for YU4.
-      Restructured 2026-11-24 at Tom's request: the modules hold only local work; the check
-      of the server's collection, the packing, the deploy, the checks, the way back and the
-      cleanup are in the top-level `README.md`, done once for everything.
-      to the two sections (its step 4 is empty today). Report to Architect in a note in
-      `architect_todo.md`: what was settled in YU1, anything in the code that made the
-      instructions awkward or that Tom should not have to do by hand (an edited constant,
-      a path written in a script), and any later step of the yearly update that has no
-      instructions he could follow.
-
-Rules for the writing:
-
-- Every command is one he can paste: full paths or the `cd` before it, and no placeholder
-  without a line that says how to find the value.
-- A command is written down only if it was run this year or is run now, and the text says
-  which. Nothing is described from reading the code alone without saying so.
-- One step, one action, one way to tell it worked. Short sentences. No "simply" and no
-  "as usual": there is no usual after 12 months.
-- Dates and versions of 2026 are given as examples and marked as such (Chrome and
-  ChromeDriver 158, Python 3.13 on Windows).
+Written and approved by Tom 2026-11-24 (YU1 to YU5): "Yearly Update" in `msgGetter/README.md`,
+`imageGetter/README.md` and `embedder/README.md` for the work on this machine, and in the
+top-level `README.md` the order, the check of the server's collection, the packing, the one
+deploy of everything, the checks, the way back and the cleanup. `site_2024` README: "Deploy a
+change of the code". Settled with Tom: Windows Python from cmd via `pushd` into the WSL folder,
+`chrome_with_debug.bat` for both modules, ChromeDriver in `/home/tom/projects/chromedriver-win64`.
+The fetch from the WSL folder was tried (`docs/plans/yu1_fetch_trial.md`). The Windows clone
+is deleted. Faults found and the awkward steps are with Architect. Task details are in the git
+history of this file.
