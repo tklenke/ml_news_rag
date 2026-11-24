@@ -66,3 +66,8 @@ def thumbnail_filenames(dctGallery: Dict) -> List[str]:
         if "\n" in strName or "\r" in strName:
             raise ValueError(f"Thumbnail name has a line break: {strName!r}")
     return lstNames
+
+
+def thumbnails_not_on_disk(lstNames: List[str], strThumbsDir: str) -> List[str]:
+    """The names of the list that are not a file in strThumbsDir, in the order of the list."""
+    return [strName for strName in lstNames if not (Path(strThumbsDir) / strName).is_file()]

@@ -7,7 +7,7 @@ from pathlib import Path
 # Import function to test
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from gallery_index import build_gallery_index, thumbnail_filenames
+from gallery_index import build_gallery_index, thumbnail_filenames, thumbnails_not_on_disk
 
 
 def image(strName, strHash, intBytes=5000):
@@ -139,3 +139,24 @@ class TestThumbnailFilenames:
 
         with pytest.raises(ValueError, match="line break"):
             thumbnail_filenames(dctGallery)
+
+
+class TestThumbnailsNotOnDisk:
+    """Tests for the check that every listed thumbnail is on disk before the upload."""
+
+    def test_every_thumbnail_on_disk_gives_none(self, tmp_path):
+        (tmp_path / "a_thumb.jpg").write_bytes(b"x")
+        (tmp_path / "b c_thumb.jpg").write_bytes(b"x")
+
+        assert thumbnails_not_on_disk(["a_thumb.jpg", "b c_thumb.jpg"], str(tmp_path)) == []
+
+    def test_missing_thumbnails_given_in_order(self, tmp_path):
+        (tmp_path / "b_thumb.jpg").write_bytes(b"x")
+
+        assert thumbnails_not_on_disk(["a_thumb.jpg", "b_thumb.jpg", "c_thumb.jpg"], str(tmp_path)) \
+            == ["a_thumb.jpg", "c_thumb.jpg"]
+
+    def test_a_directory_of_that_name_is_not_a_thumbnail(self, tmp_path):
+        (tmp_path / "a_thumb.jpg").mkdir()
+
+        assert thumbnails_not_on_disk(["a_thumb.jpg"], str(tmp_path)) == ["a_thumb.jpg"]

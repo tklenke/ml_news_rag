@@ -6,7 +6,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from gallery_index import thumbnail_filenames
+from gallery_index import thumbnail_filenames, thumbnails_not_on_disk
 
 
 def main():
@@ -42,7 +42,7 @@ Example:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
-    lstMissing = [strName for strName in lstNames if not (Path(args.thumbs_dir) / strName).is_file()]
+    lstMissing = thumbnails_not_on_disk(lstNames, args.thumbs_dir)
     if lstMissing:
         for strName in lstMissing:
             print(f"Error: Thumbnail not on disk: {strName}", file=sys.stderr)
