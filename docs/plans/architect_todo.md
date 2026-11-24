@@ -92,6 +92,15 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
       `process_message.py` (a check for a collapsed post would also catch it), and whether to
       refetch the 40 threads. The yearly instructions (YU2) will name the check either way.
 
+- [ ] **NOTE FROM PROGRAMMER (2026-11-24): up to 60 threads of 2024-25 may never have been
+      fetched (found writing YU2).** `msgGetter/msgids_2024-09-03_2025-10-02.txt` (in git since
+      `a405976`, 328 lines) differs from `data/msgids_2024-09-03_2025-10-02.txt` (327 lines, the
+      one the fetch reads): 60 ids are only in the `msgGetter` copy, are in no id file in `data`
+      and have no `.txt`; 29 ids are only in the `data` copy. Probably two runs of the id search
+      over the same dates. Not looked into further. Needs a decision: whether to fetch the 60
+      (a fetch with that file in `data` would get them) and what to do with the `msgGetter`
+      copy. The README says it is not used.
+
 ## Notes from Code Reviewer
 
 None open (R4 and R5 of 2026-11-22 are D33 and D34 in the plan).

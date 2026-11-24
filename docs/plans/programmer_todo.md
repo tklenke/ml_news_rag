@@ -556,7 +556,10 @@ Tasks:
          them (the embedding and the deploy are not this task; name them and point to where
          they are described). `msgGetter/Readme.md` becomes `README.md` (`git mv`). Tom may
          prefer one file for both.
-- [ ] YU2 `msgGetter`: the yearly fetch, written out. It must cover at least:
+- [~] YU2 `msgGetter`: the yearly fetch, written out. It must cover at least:
+      2026-11-24: written in `msgGetter/README.md` (renamed from `Readme.md`); waits for Tom's
+      reading, then YU4. Found while writing, reported to Architect: the 60 ids of the
+      `msgGetter` copy of `msgids_2024-09-03_2025-10-02.txt`.
       - What the step is for and what it produces: the id list file, a `.md` per thread in
         `data/msgs_md`, a `.txt` per thread in `data/msgs`, and which later step reads which.
       - What has to be installed on Windows and how to check each: Python and its packages
