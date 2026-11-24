@@ -489,6 +489,9 @@ PA2) and `site_2024` `main..d21cee0` (PA3 to PA6, the compose line `25187e5`, To
 
 **Verdict: Not approved** (R1 is open).
 
+**Waived by Tom (2026-11-24):** the Code Reviewer's check of R1 (fixed in `e589235`) and the
+review of the PA8 commits (`0f3ee3b`, `dd43472`, todo text only). PA9 may merge and deploy.
+
 Checked and fine: the code matches plan 4.2 and the tests cover every test the plan lists.
 `site_2024` full suite: 343 passed, output clean. `ml` `imageGetter`: 170 passed, 12
 skipped; every skip was there before this work. The job `source` values are the index's
