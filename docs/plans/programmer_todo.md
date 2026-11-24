@@ -634,12 +634,17 @@ Tasks:
       - Mark the older sections of the file (Phases 1 to 6) for what they are, so that he
         does not take them for steps of the yearly run. Do not delete them.
       - Troubleshooting, as in YU2.
-- [ ] YU4 Proof by Tom. He reads both from the top and walks through them without help:
+- [ ] YU4 Proof by Tom. Ready 2026-11-24: all five texts are written. He reads both from the top and walks through them without help:
       every command that changes nothing is run (the checks, starting Chrome, the review
       tool on a scratch copy of the decisions); the others he reads and says what he would
       type. Every place where he stops to ask is a gap: fix the text, not the answer in the
       chat. A fresh fetch is not made for this.
-- [ ] YU5 Top-level `README.md`: the update procedure names the steps in order and points
+- [~] YU5 Top-level `README.md`: the update procedure names the steps in order and points
+      2026-11-24: written, with the deploy and the cleanup (Tom asked for both, YU1). Also
+      written at Tom's request: `embedder/README.md` (renamed from `Readme.md`) "Yearly Update"
+      (the embedding and the copy of the collection to the server) and `site_2024` README
+      "Deploy a change of the code" (`site_2024` `8371a37`). Report to Architect sent. Waits
+      for YU4.
       to the two sections (its step 4 is empty today). Report to Architect in a note in
       `architect_todo.md`: what was settled in YU1, anything in the code that made the
       instructions awkward or that Tom should not have to do by hand (an edited constant,

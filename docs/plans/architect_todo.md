@@ -101,6 +101,35 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
       (a fetch with that file in `data` would get them) and what to do with the `msgGetter`
       copy. The README says it is not used.
 
+- [ ] **NOTE FROM PROGRAMMER (2026-11-24): the yearly update instructions (YU5 report).**
+      Written: `msgGetter/README.md`, `imageGetter/README.md`, `embedder/README.md` ("Yearly
+      Update" in each), the order in the top-level `README.md`, and "Deploy a change of the
+      code" in `site_2024`'s README. Waiting for Tom's proof (YU4).
+      **Settled in YU1 with Tom:** Windows Python from cmd, not PowerShell, in the WSL folder
+      by `pushd`; Chrome by `msgGetter/chrome_with_debug.bat` (profile `C:\selenum\ChromeProfile`)
+      for both modules; ChromeDriver in `/home/tom/projects/chromedriver-win64`; start date a
+      day before the last end; Tom deletes the Windows clone once all is confirmed. Tom
+      widened the task to the embedding and the deploy.
+      **Awkward in the code, for Tom to do by hand each year** (code changes, not made):
+      1. `get_msg_ids.py`: the start date is a constant to edit (step 3), and the id file is
+         written into `msgGetter` and must be moved to `data` by hand (step 4).
+      2. ChromeDriver's path is written into both `msgGetter` scripts as a relative path;
+         `imageGetter` takes `--chromedriver`. One option in all three would remove the rule
+         "ChromeDriver must sit in `/home/tom/projects`".
+      3. The older threads with new replies (set aside, refetch, keep the longer copy), the
+         deletion of their chunks, the collapsed-post check, the rebuild of `.txt` from `.md`
+         and the count and hash of the collection are Python pasted from the READMEs. Each
+         could be a small CLI with tests.
+      4. The index, gallery and list names carry a date the steps carry in shell variables
+         (`$IDX`, `$G`, `$L`); a new terminal means setting them again.
+      **Later steps without instructions he could follow:** `webGetter` (not run in 2026; the
+      top README says so). The Chroma upload was never written down in 2026 (given in chat);
+      `embedder/README.md` steps 6 to 8 follow the plan and a local rehearsal, not a record.
+      The gallery index alone (without a code deploy) has not been replaced on the server;
+      `imageGetter` step 9d restarts flask and nginx for it, not tried.
+      **Faults found and reported separately:** collapsed posts (note above), the 60 unfetched
+      ids of 2024-25 (note above).
+
 ## Notes from Code Reviewer
 
 None open (R4 and R5 of 2026-11-22 are D33 and D34 in the plan).
