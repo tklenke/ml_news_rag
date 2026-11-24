@@ -404,9 +404,11 @@ goes to the server (D53).
       Tom moved the pictures below Provided Docs (D55 amended; note in `architect_todo.md`;
       `site_2024` commit "Show the pictures of an answer after the provided docs"). He is
       checking with a new question on the styled answer page.
-- [ ] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
+- [~] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
       the listed thumbnails, then the index) and the check that the server holds every file
       of the list with its size. Short lines, and a line count beside any comparison.
+      2026-11-23: compose line done (`site_2024` `25187e5`, `./data/gallery:/app/gallery:ro`).
+      Still to do: the upload commands and the check.
 - [ ] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
       "Delivery", ending with `docker compose restart nginx`. The checks of the plan, among
       them what a browser not signed in to Google gets from a click on a thumbnail, written
