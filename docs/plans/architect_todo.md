@@ -83,6 +83,15 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
          removing an image's last tag deletes it. Expected output should be read from a
          rehearsal, not predicted.
 
+- [ ] **NOTE FROM PROGRAMMER (2026-11-24): the message fetch saves some posts collapsed
+      (YU1 trial).** A refetch of `XxpI4Rhe3vY` saved 2 of its 3 posts as Google's cut-off
+      preview, although "Expand all" was found and clicked. In the corpus, 40 markdown files
+      hold such posts (164 posts), 27 of them among the 237 threads of 2026; they are embedded
+      and on the site cut off. Details and examples: `docs/plans/yu1_fetch_trial.md`, "Result".
+      Cause not investigated. Needs a decision: whether and when to find the cause and fix
+      `process_message.py` (a check for a collapsed post would also catch it), and whether to
+      refetch the 40 threads. The yearly instructions (YU2) will name the check either way.
+
 ## Notes from Code Reviewer
 
 None open (R4 and R5 of 2026-11-22 are D33 and D34 in the plan).

@@ -539,7 +539,9 @@ Tasks:
       the Windows clone's run: `startDate = '2026-11-20'`, `nMaxSequentialDupePages = 20`.
       Tom deletes the Windows clone once all is confirmed; nothing else of it is kept.
       Still to do: the trial with Tom of the fetch from the WSL directory (one thread), set up
-      and written in `docs/plans/yu1_fetch_trial.md` (how to undo it is there too).
+      and written in `docs/plans/yu1_fetch_trial.md`. Run 2026-11-24: running from the WSL
+      directory in cmd works. The fetch saved 2 of the thread's 3 posts collapsed (cut off);
+      40 corpus files hold such posts (27 of 2026). Reported to Tom and Architect; not fixed.
       a. **Where the commands are run from.** The image download of 2026 ran with the
          Windows Python from the WSL directory (`\\wsl.localhost\...`). The message fetch
          of 2026 ran in the Windows clone (`C:\Users\tom\Documents\projects\ml`), an older

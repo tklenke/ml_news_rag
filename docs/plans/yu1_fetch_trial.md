@@ -1,6 +1,6 @@
 # YU1 trial: the message fetch from the WSL directory, in cmd
 
-**Started 2026-11-24. Status: set up, waiting for Tom to run steps 1 to 3.**
+**Run 2026-11-24. Status: done; the setup works, the fetch has a fault (Result).**
 
 Purpose: show that `msgGetter/process_message.py` runs with the Windows Python, from cmd, in
 the WSL directory (reached by `pushd`), before the yearly instructions say so (YU1a in
@@ -64,4 +64,20 @@ changed. If anything differs, put the 2026 copies back (above). Then remove
 
 ## Result
 
-Not yet run.
+Run by Tom 2026-11-24. **The way of running works:** `pushd` gave `Z:\home\tom\projects\ml\msgGetter`;
+the debug port answered (`Chrome/158.0.8127.37`); ChromeDriver was found at
+`..\..\chromedriver-win64`; `Ids: 10717`, `Msgs already filtered: 10668`, `Net to complete: 1`,
+one thread fetched in 7.5 s. Ids are 10,717 against 10,669 files because the id files overlap.
+
+**The fetched thread was not complete.** Of its 3 posts, the first 2 were saved collapsed:
+Google's preview line, no `<address>` header, the text cut off ("Thank you, Buly, for sharing
+the"). Only the last post was expanded. The script printed no "no exapansion found", so the
+"Expand all" button was found and clicked. The copy of 2026 has all 3 posts whole; it was put
+back (`mv`), and `data/yu_trial_aside/` removed. Cause not investigated (YU is documentation).
+
+**The same fault is in the corpus** (read-only count, 2026-11-24): a post whose header line
+(`### name`) is not followed by its `<address>` line. 40 of 10,670 markdown files, 164 posts;
+27 of the 237 threads of the 2026 id file. Six examples looked at by eye are all cut off the
+same way (`ZP_Rx2os1p0`, `zxOKYr5IxXs`, `IKClafV9ED4`, `i9xIUpzV9CM`, `iWuj0DIQS_0`,
+`is0tnKKY-kE`). Older files hold fewer `###` headers, so the count may miss older cases.
+Reported to Tom and to Architect.
