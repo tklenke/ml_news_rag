@@ -406,11 +406,64 @@ goes to the server (D53).
       Done 2026-11-23: Tom checked on the local site with the R2 fix loaded; the look stays
       as it is. Of the latest 150 local answers none has under 13 pictures, and job
       `7OCvxGFMr6` has 133 on its pictures page (the plan's measure was at most 80).
-- [~] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
+- [x] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
       the listed thumbnails, then the index) and the check that the server holds every file
       of the list with its size. Short lines, and a line count beside any comparison.
       2026-11-23: compose line done (`site_2024` `25187e5`, `./data/gallery:/app/gallery:ro`).
-      Still to do: the upload commands and the check.
+      Done 2026-11-23: the upload commands and the check, below. Tar, SHA-256 and `scp`
+      as for the Chroma tar, not `rsync`: Tom moves files that way, and `rsync` is not
+      installed locally. The check is a SHA-256 of each file, which covers its size.
+      Rehearsed locally into a scratch "server" directory: 5,661 files, 0 failures. With
+      one file removed and one changed, the check printed 5 lines. Without
+      `--verbatim-files-from`, tar reads the 100 names that start with `-` as options.
+      Not yet run on the server; the upload is step 3 of the plan's "Delivery" (PA9).
+
+      Local: make the upload directory (62 MB tar, 3.8 MB index).
+
+          mkdir ~/pictures_deploy
+          cd ~/projects/ml/data/images/thumbs
+          L=../thumbs261123b.txt
+          tr '\n' '\0' < $L | xargs -0 sha256sum -- \
+            > ~/pictures_deploy/thumbs.sha256
+          wc -l < ~/pictures_deploy/thumbs.sha256      # 5661
+          tar -cf ~/pictures_deploy/thumbs.tar \
+            --verbatim-files-from -T $L
+          cp ../gallery261123b.idx ~/pictures_deploy/gallery.idx
+          cd ~/pictures_deploy
+          sha256sum thumbs.tar thumbs.sha256 gallery.idx \
+            > upload.sha256
+
+      Local: copy it to the server's home directory, as for the Chroma tar.
+
+          scp -r ~/pictures_deploy <server>:~
+
+      Server: free space for the record, owners, then the upload checked.
+
+          df -h
+          ls -ld ~/www/cgimages ~/site_2024/data
+          cd ~/pictures_deploy
+          sha256sum -c upload.sha256                   # 3 lines, each OK
+
+      Server: the thumbnails, then the check. This assumes `admin` owns `~/www/cgimages`;
+      if `ls -ld` showed root, stop and ask.
+
+          mkdir -p ~/www/cgimages/pictures/thumbs
+          cd ~/www/cgimages/pictures/thumbs
+          tar -xf ~/pictures_deploy/thumbs.tar
+          sha256sum -c --quiet \
+            ~/pictures_deploy/thumbs.sha256 2>&1 | wc -l   # 0
+          ls -A | wc -l                                # 5661
+
+      Server: the index, after the thumbnails. `data/` is root's locally; `sudo` assumes
+      the same there.
+
+          cd ~/site_2024
+          sudo mkdir -p data/gallery
+          sudo cp ~/pictures_deploy/gallery.idx data/gallery/gallery.idx
+          sha256sum data/gallery/gallery.idx
+          grep gallery.idx ~/pictures_deploy/upload.sha256  # same hash
+
+      `~/pictures_deploy` on the server goes on the "Server cleanup" list at the deploy.
 - [ ] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
       "Delivery", ending with `docker compose restart nginx`. The checks of the plan, among
       them what a browser not signed in to Google gets from a click on a thumbnail, written

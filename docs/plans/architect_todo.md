@@ -35,6 +35,13 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
       Cost accepted by Tom: on a phone the pictures are below the actions and a table of up to
       15 rows. Built in `site_2024` (`cozyrag_results.html`, test in `test_pictures.py`). Plan
       4.2 and D55 still say "directly under the answer": please record the amendment.
+- [ ] **NOTE FROM PROGRAMMER (2026-11-23): the upload of 4.2 uses tar and `scp`, not `rsync`
+      (PA8).** Tom moves files to the server with tar and `scp`, as for the Chroma tar, and
+      `rsync` is not installed locally. The thumbnails go up as one 62 MB tar with a
+      SHA-256 per file. The check is `sha256sum -c` on the server, which covers the size the
+      plan asks for. What is lost is the plan's reason for `rsync`, that an upload can be
+      stopped and continued; at 62 MB a failed `scp` is run again. Plan 4.2 "Delivery"
+      step 3 still names `rsync`: please record the change, or say if you want `rsync`.
 
 ## Notes from Code Reviewer
 
