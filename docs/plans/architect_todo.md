@@ -42,6 +42,18 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
       plan asks for. What is lost is the plan's reason for `rsync`, that an upload can be
       stopped and continued; at 62 MB a failed `scp` is run again. Plan 4.2 "Delivery"
       step 3 still names `rsync`: please record the change, or say if you want `rsync`.
+- [ ] **NOTE FROM PROGRAMMER (2026-11-24): "Pictures of an answer" (4.2) is deployed (PA9).**
+      `site_2024` `4f85f9e`, `ml` `72957f4`, both merged to `main`. Tom waived the rest of
+      the code review (the check of R1 and the PA8 todo commits). All checks of plan 4.2
+      "Delivery" passed as Tom saw them; not signed in to Google, a thumbnail gives Google's
+      sign-in page, as D53 accepted. On the server: 5,661 thumbnails in
+      `~/www/cgimages/pictures/thumbs`, the index in `~/site_2024/data/gallery/gallery.idx`
+      (root's `data/`), 27 GB free on `/`. Left for "Server cleanup" (not before
+      2026-12-01): the image tag `site_2024-flask:775692d` and `~/pictures_deploy`. Did not
+      fit the design: the base address setting is the thumbnails' own address
+      (`/cgimages/pictures/thumbs`, PA3); the pictures sit after Provided Docs (D55, note
+      above); the upload is tar and `scp` (note above). Seen on the server, not acted on:
+      `~/site_2024`, `~/www` and `~/chroma_before_corpus_update` are world-writable.
 
 ## Notes from Code Reviewer
 

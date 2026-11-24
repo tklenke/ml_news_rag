@@ -108,9 +108,12 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       Local leftovers, Tom's choice: `~/chroma_deploy`,
       `site_2024/data/chroma_before_corpus_update`, and `refetch_backup` on Windows.
 
-- [ ] **From the upload of the pictures (2026-11-24, PA8).** Only after the PA9 deploy and its
-      checks. The thumbnails and the index are already in place; this is the upload copy.
+- [ ] **From the deploy of the pictures of an answer (2026-11-24, PA8 and PA9).** Not before
+      2026-12-01, and only if Tom says the site has run well. Ends the rollback of the code
+      (in PA9). The thumbnails and the index stay; `~/pictures_deploy` is the upload copy.
 
+          cd ~/site_2024
+          docker image rm site_2024-flask:775692d
           rm -r ~/pictures_deploy
 
       Local leftover, Tom's choice: `~/pictures_deploy`.
@@ -474,7 +477,7 @@ goes to the server (D53).
           grep gallery.idx ~/pictures_deploy/upload.sha256  # same hash
 
       `~/pictures_deploy` on the server is on the "Server cleanup" list.
-- [~] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
+- [x] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
       "Delivery", ending with `docker compose restart nginx`. The checks of the plan, among
       them what a browser not signed in to Google gets from a click on a thumbnail, written
       down as seen. Add the upload and the index to the yearly steps of `imageGetter`
@@ -484,8 +487,15 @@ goes to the server (D53).
       `main` and pushed: `site_2024` `4f85f9e`, `ml` `72957f4`. Deployed 2026-11-24:
       running image tagged `site_2024-flask:775692d`, `git pull`, build, `up -d flask`,
       `restart nginx`; Tom confirmed the container sees the index and the site works.
-      Still to do: the plan's checks written down as seen, the cleanup entry, YU3 note,
-      report to Architect. Rollback of the code:
+      Done 2026-11-24. The plan's checks, as Tom saw them in the browser: an answer with
+      pictures shows thumbnails; a thumbnail opens the picture at Google Groups when signed
+      in; "All pictures" opens the page with both sections; a dig deeper shows its
+      pictures; a stored answer from before the deploy shows pictures; an answer with no
+      picture looks as before; the thumbnail
+      `…switches_9.08.03%E2%80%AFAM_thumb.jpg` (U+202F in its name) shows; the 2025 pages
+      under `/cgimages/` open. Not signed in to Google, a click on a thumbnail gives
+      Google's sign-in page (as D53 expected). Leftovers on "Server cleanup". The commands
+      of the upload as run are in PA8, for YU3. Reported to Architect. Rollback of the code:
 
           cd ~/site_2024
           git checkout 775692d
@@ -679,6 +689,7 @@ Tasks:
       - What follows: how the thumbnails and the gallery index reach the site (plan 4.2,
         "Delivery"). If "Pictures of an answer" is deployed, write the step with the commands
         as run (PA9). If not yet, leave a line that says so and names the task.
+        Deployed 2026-11-24: the commands as run are under PA8 (tar, SHA-256, `scp`).
       - Mark the older sections of the file (Phases 1 to 6) for what they are, so that he
         does not take them for steps of the yearly run. Do not delete them.
       - Troubleshooting, as in YU2.
