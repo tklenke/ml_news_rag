@@ -108,6 +108,13 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
       Local leftovers, Tom's choice: `~/chroma_deploy`,
       `site_2024/data/chroma_before_corpus_update`, and `refetch_backup` on Windows.
 
+- [ ] **From the upload of the pictures (2026-11-24, PA8).** Only after the PA9 deploy and its
+      checks. The thumbnails and the index are already in place; this is the upload copy.
+
+          rm -r ~/pictures_deploy
+
+      Local leftover, Tom's choice: `~/pictures_deploy`.
+
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
 Deployed 2026-11-21 (`3278e9e`; Tom waived the code review): 1.0,
@@ -416,7 +423,10 @@ goes to the server (D53).
       Rehearsed locally into a scratch "server" directory: 5,661 files, 0 failures. With
       one file removed and one changed, the check printed 5 lines. Without
       `--verbatim-files-from`, tar reads the 100 names that start with `-` as options.
-      Not yet run on the server; the upload is step 3 of the plan's "Delivery" (PA9).
+      Run by Tom on the server 2026-11-24, step by step: `df -h` 27 GB free on `/` (59 GB,
+      54% used); `~/www/cgimages` is admin's, `~/site_2024/data` root's; `upload.sha256`
+      3 OK; thumbnails 0 failures, 5661 files; `data/gallery` was empty; index hash
+      `2f67e99e…8ca8`, equal to the one uploaded. The site does not read it until PA9.
 
       Local: make the upload directory (62 MB tar, 3.8 MB index).
 
@@ -463,7 +473,7 @@ goes to the server (D53).
           sha256sum data/gallery/gallery.idx
           grep gallery.idx ~/pictures_deploy/upload.sha256  # same hash
 
-      `~/pictures_deploy` on the server goes on the "Server cleanup" list at the deploy.
+      `~/pictures_deploy` on the server is on the "Server cleanup" list.
 - [ ] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
       "Delivery", ending with `docker compose restart nginx`. The checks of the plan, among
       them what a browser not signed in to Google gets from a click on a thumbnail, written
