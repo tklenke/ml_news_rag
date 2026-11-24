@@ -474,12 +474,24 @@ goes to the server (D53).
           grep gallery.idx ~/pictures_deploy/upload.sha256  # same hash
 
       `~/pictures_deploy` on the server is on the "Server cleanup" list.
-- [ ] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
+- [~] PA9 Code review of both repos, then merge with Tom's approval and deploy by the plan's
       "Delivery", ending with `docker compose restart nginx`. The checks of the plan, among
       them what a browser not signed in to Google gets from a click on a thumbnail, written
       down as seen. Add the upload and the index to the yearly steps of `imageGetter`
       (YU3). Report to Architect in a note in `architect_todo.md`: the checks, what the
       deploy left on the server, and anything in the design that did not fit the code.
+      2026-11-24: review waived for the rest by Tom (below). Both repos fast-forwarded to
+      `main` and pushed: `site_2024` `4f85f9e`, `ml` `72957f4`. Deployed 2026-11-24:
+      running image tagged `site_2024-flask:775692d`, `git pull`, build, `up -d flask`,
+      `restart nginx`; Tom confirmed the container sees the index and the site works.
+      Still to do: the plan's checks written down as seen, the cleanup entry, YU3 note,
+      report to Architect. Rollback of the code:
+
+          cd ~/site_2024
+          git checkout 775692d
+          docker tag site_2024-flask:775692d site_2024-flask:latest
+          docker compose up -d --force-recreate flask
+          docker compose restart nginx
 
 #### Code review results (2026-11-23)
 
