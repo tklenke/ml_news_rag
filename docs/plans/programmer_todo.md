@@ -433,10 +433,11 @@ height="120"` does not stretch them. `gallery261123b.idx` without `thumbnail_fil
 equals `gallery261123.idx` (compared). No list name starts with `#` or `;`. The loaded
 index holds about 9 MB in each worker (tracemalloc).
 
-- [ ] R1 MUST FIX `docs/plans/programmer_todo.md` PA8: `site_2024` `25187e5` (the compose
+- [x] R1 MUST FIX `docs/plans/programmer_todo.md` PA8: `site_2024` `25187e5` (the compose
       line of PA8) is committed, but PA8 is still `[ ]` and its notes do not mention the
       commit. Seen in the git log. Done: PA8 marked `[~]` and naming `25187e5`.
-- [ ] R2 SHOULD FIX `site_2024/fwww/src/pictures.py:55`: an index that reads as a JSON
+      Fixed: `ml` `e589235`.
+- [x] R2 SHOULD FIX `site_2024/fwww/src/pictures.py:55`: an index that reads as a JSON
       object but lacks a field the page uses breaks every answer that has a thread with
       pictures. The likeliest case is uploading `gallery261123.idx` (no
       `thumbnail_filename`), which sits right beside `gallery261123b.idx`; the same applies
@@ -448,11 +449,15 @@ index holds about 9 MB in each worker (tracemalloc).
       site works. Done: `PictureIndex.read` treats an index whose entries lack those fields
       as unreadable (no pictures, one log line), tests first, the line captured. A PA8
       upload check alone is not enough, because the index is replaced by hand every year.
-- [ ] R3 SHOULD FIX `ml/imageGetter/thumbnail_list_cli.py:46`: the check that every listed
+      Fixed: `site_2024` `4f85f9e` (`check_thread`; full suite 348). `gallery261123b.idx`
+      loads whole; `gallery261123.idx` gives no pictures and one log line.
+- [x] R3 SHOULD FIX `ml/imageGetter/thumbnail_list_cli.py:46`: the check that every listed
       thumbnail is on disk (the guard of the upload) is in the CLI and has no test.
       CLAUDE.md requires tests for all functionality. Read from the code, not tried. Done:
       a test where a thumbnail is missing, either for a function in `gallery_index.py` that
       the CLI calls or for the CLI itself run as a subprocess.
+      Fixed: `ml` `aa27933` (`thumbnails_not_on_disk` in `gallery_index.py`). On the real
+      data the CLI writes the same list as `thumbs261123b.txt`.
 - [ ] R4 CONSIDER `site_2024/fwww/site_app.py:17`: since Tom's move (`d21cee0`), the
       pictures sit below Provided Docs and not directly under the answer. The name
       `PICTURES_UNDER_ANSWER` and its comment ("thumbnails shown under an answer") still
