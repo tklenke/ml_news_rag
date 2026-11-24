@@ -13,7 +13,8 @@ says where it is run, what to type, what you should see and what to do if you do
 It finds the pictures attached to the year's new messages, downloads the ones not yet on
 disk, lets you throw out the clutter (signatures, logos, icons), and makes the two files the
 site's "Pictures of an answer" use: the **gallery index** (which threads have which pictures)
-and the **thumbnails** (200 x 200 JPEGs). The last step puts both on the server.
+and the **thumbnails** (200 x 200 JPEGs). The top-level `README.md` puts both on the
+server.
 
 All files are under `/home/tom/projects/ml/data/images` in WSL
 (`\\wsl.localhost\Debian\home\tom\projects\ml\data\images` from Windows):
@@ -215,87 +216,10 @@ L=~/projects/ml/data/images/thumbs$(date +%y%m%d).txt; echo $L
   stops if a thumbnail is not on disk (`Error: Thumbnail not on disk`): run step 6 again.
 - Run 2026-11-23 (`thumbs261123b.txt`, 5,661 names, 54.8 MB).
 
-### Step 9: put the thumbnails and the gallery index on the server
+### Next: back to the top-level README
 
-This changes nothing a visitor sees until step 9d restarts the site's flask container. The
-thumbnails go to `~/www/cgimages/pictures/thumbs` (served by nginx at
-`/cgimages/pictures/thumbs`), the index to `~/site_2024/data/gallery/gallery.idx` (read by the
-site). Run 2026-11-24 like this, except 9d (see there).
-
-**9a. Pack (WSL).** `$G` and `$L` are from steps 7 and 8. In a new terminal set them again,
-with the date those steps used: `G=~/projects/ml/data/images/gallery261124.idx` and
-`L=~/projects/ml/data/images/thumbs261124.txt` (examples; `ls -t ~/projects/ml/data/images`
-shows yours at the top).
-
-```bash
-cd ~/projects/ml/data/images/thumbs
-mkdir ~/pictures_deploy
-tr '\n' '\0' < $L | xargs -0 sha256sum -- > ~/pictures_deploy/thumbs.sha256
-wc -l < ~/pictures_deploy/thumbs.sha256
-tar -cf ~/pictures_deploy/thumbs.tar --verbatim-files-from -T $L
-cp $G ~/pictures_deploy/gallery.idx
-cd ~/pictures_deploy
-sha256sum thumbs.tar thumbs.sha256 gallery.idx > upload.sha256
-ls -la
-```
-
-- 2026 used `thumbs261123b.txt` and `gallery261123b.idx`.
-- `wc -l` prints the number of thumbnails; `tar` prints nothing; `ls` shows four files.
-- `--verbatim-files-from` matters: about 100 names start with `-`, and without it tar takes
-  them for options.
-
-**9b. Copy to the server (WSL).** As for any upload: `scp -r ~/pictures_deploy <server>:~`.
-On the server, check it arrived whole:
-
-```bash
-df -h /
-cd ~/pictures_deploy
-sha256sum -c upload.sha256
-```
-
-Three lines, each `OK`. A `FAILED`: copy again.
-
-**9c. Unpack and check (server).**
-
-```bash
-mkdir -p ~/www/cgimages/pictures/thumbs
-cd ~/www/cgimages/pictures/thumbs
-tar -xf ~/pictures_deploy/thumbs.tar
-sha256sum -c --quiet ~/pictures_deploy/thumbs.sha256 2>&1 | wc -l
-ls -A | wc -l
-```
-
-- The check prints `0`. Any other number: a file is missing or different; unpack again.
-- The count is at least the number from 9a. Thumbnails of earlier years stay; they harm
-  nothing. (2026, the first upload: exactly 5661.)
-
-**9d. Replace the gallery index (server).** The site reads it once per worker, so the flask
-container is restarted; nginx is restarted after it because it looks up `flask` only when it
-starts.
-
-```bash
-cd ~/site_2024
-sudo cp data/gallery/gallery.idx ~/gallery_before_$(date +%y%m%d).idx
-sudo cp ~/pictures_deploy/gallery.idx data/gallery/gallery.idx
-sha256sum data/gallery/gallery.idx
-grep gallery.idx ~/pictures_deploy/upload.sha256
-docker compose restart flask
-docker compose restart nginx
-docker compose ps
-```
-
-- The two hashes are equal; `ps` lists four containers, all up.
-- In a browser: ask a question about something with pictures, and check that thumbnails show
-  under Provided Docs, and that "All pictures for this answer" opens.
-- In 2026 the index went in first and the code came after it, so the restarts above have not
-  been run for an index alone.
-- If the site shows no pictures: `docker compose logs flask | grep "No pictures"` names the
-  problem. To go back: `sudo cp ~/gallery_before_<date>.idx data/gallery/gallery.idx` and the
-  two restarts.
-
-**9e. Clean up,** once the site has run well for a few days: on the server
-`rm -r ~/pictures_deploy` and `sudo rm ~/gallery_before_<date>.idx`; locally
-`rm -r ~/pictures_deploy`.
+The gallery index of step 7 and the list of step 8 are what goes to the server. The packing
+and the upload are in the top-level `README.md`, together with the rest of the year's deploy.
 
 ### Left alone on purpose
 

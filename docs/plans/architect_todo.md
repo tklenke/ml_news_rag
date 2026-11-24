@@ -124,9 +124,10 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
          (`$IDX`, `$G`, `$L`); a new terminal means setting them again.
       **Later steps without instructions he could follow:** `webGetter` (not run in 2026; the
       top README says so). The Chroma upload was never written down in 2026 (given in chat);
-      `embedder/README.md` steps 6 to 8 follow the plan and a local rehearsal, not a record.
-      The gallery index alone (without a code deploy) has not been replaced on the server;
-      `imageGetter` step 9d restarts flask and nginx for it, not tried.
+      the top-level `README.md` steps 5 to 7 follow the plan and a local rehearsal, not a record.
+      At Tom's request every server step is in the top-level `README.md` and done in one
+      deploy (collection, thumbnails, gallery index, code); that combined deploy has not been
+      run as one session.
       **Faults found and reported separately:** collapsed posts (note above), the 60 unfetched
       ids of 2024-25 (note above).
 

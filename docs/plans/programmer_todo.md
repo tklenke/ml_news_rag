@@ -645,6 +645,9 @@ Tasks:
       (the embedding and the copy of the collection to the server) and `site_2024` README
       "Deploy a change of the code" (`site_2024` `8371a37`). Report to Architect sent. Waits
       for YU4.
+      Restructured 2026-11-24 at Tom's request: the modules hold only local work; the check
+      of the server's collection, the packing, the deploy, the checks, the way back and the
+      cleanup are in the top-level `README.md`, done once for everything.
       to the two sections (its step 4 is empty today). Report to Architect in a note in
       `architect_todo.md`: what was settled in YU1, anything in the code that made the
       instructions awkward or that Tom should not have to do by hand (an edited constant,

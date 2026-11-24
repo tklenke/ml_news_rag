@@ -308,10 +308,8 @@ Expect the number of ids. On 2026-11-24 the filter, run like this over the 237 t
 
 ### Step 10: what comes next
 
-1. The pictures: `imageGetter/README.md`, section "Yearly Update". It reads `data/msgs_md`.
-2. The embedding of the new `.txt` files: `embedder/README.md`. It needs
-   `data/refetch_ids.txt` from step 5.
-3. The deploy: the top-level `README.md` lists the whole year in order.
+Back to the top-level `README.md`: the pictures (`imageGetter`), the check of the server's
+collection, then the embedding (`embedder`), which needs `data/refetch_ids.txt` from step 5.
 
 ### Not part of the yearly run
 
