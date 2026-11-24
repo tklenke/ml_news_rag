@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 ## Set up
-startDate = '2025-10-02'
+startDate = '2026-11-20'
 endDate = time.strftime("%Y-%m-%d", time.localtime())
 url = 'https://groups.google.com/g/cozy_builders'  # Replace with your desired URL
 urlBase = 'https://groups.google.com/g/cozy_builders/search?q=after%3A'
@@ -13,7 +13,7 @@ url = urlBase + startDate
 output_file = f"msgids_{startDate}_{endDate}.txt"
 max_pages = 600
 url_prefix = 'https://groups.google.com/g/cozy_builders/c/'
-nMaxSequentialDupePages = 10
+nMaxSequentialDupePages = 20
 nMsgIdLen = 11 #length of a google groups message ID
 
 service = Service(executable_path='..//..//chromedriver-win64//chromedriver.exe')

@@ -527,7 +527,18 @@ What exists today:
 
 Tasks:
 
-- [ ] YU1 Read both modules' code and the two READMEs, then settle with Tom, before writing:
+- [~] YU1 Read both modules' code and the two READMEs, then settle with Tom, before writing:
+      Settled with Tom 2026-11-24: both modules run with the Windows Python from cmd (not
+      PowerShell), in the WSL directory reached by `pushd \\wsl.localhost\Debian\...`; Chrome
+      started by `msgGetter/chrome_with_debug.bat` (profile `C:\selenum\ChromeProfile`) for
+      both; ChromeDriver unzipped into `\\wsl.localhost\Debian\home\tom\projects\chromedriver-win64`;
+      the start date a day before the last end date; one "Yearly Update" section per module
+      README; the top-level README lists the whole year in order, including the embedding and
+      the deploy, and Tom asked for instructions for both (embedding in `ml`, site deploy in
+      `site_2024`'s README, data uploads in `ml`). `get_msg_ids.py` takes the two values of
+      the Windows clone's run: `startDate = '2026-11-20'`, `nMaxSequentialDupePages = 20`.
+      Tom deletes the Windows clone once all is confirmed; nothing else of it is kept.
+      Still to do: the trial with Tom of the fetch from the WSL directory (one thread).
       a. **Where the commands are run from.** The image download of 2026 ran with the
          Windows Python from the WSL directory (`\\wsl.localhost\...`). The message fetch
          of 2026 ran in the Windows clone (`C:\Users\tom\Documents\projects\ml`), an older
