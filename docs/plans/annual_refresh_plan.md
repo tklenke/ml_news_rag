@@ -1,11 +1,19 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-23 (seventeenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the Phase 2 embedding runs overnight (2.2a); the image update (4.0) is done; the pictures of an answer (4.2) are designed and decided; the reference links (4.1) are designed as a trial first, then the display
+**Status:** Revised 2026-11-24 (eighteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-24 (eighteenth revision):** The pictures of an answer (4.2) are deployed and
+  recorded as they were built. Three points differ from the design. Tom moved the pictures
+  from under the answer to after Provided Docs when he saw the local site (amends D55).
+  The upload was one tar checked by SHA-256 and copied with `scp`, not `rsync`: `rsync` is
+  not installed locally and Tom moves files with tar and `scp`. The address setting is the
+  address of the thumbnails themselves. The yearly update is written down for Tom to run
+  himself, with all server work as one deploy ("Yearly update", D57). No design changed
+  for any of this; the plan is brought in line with what runs.
 - **2026-11-23 (seventeenth revision):** The reference links are designed (4.1, D56). The
   chunks in the prompt are numbered, the model writes the number after a statement, and the
   site makes the link. Whether `gpt-6-luna` cites correctly, and whether its answers stay
@@ -197,8 +205,9 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D52 | (2026-11-23) The results page shows thumbnails of the pictures from the threads the answer was given, and links to a page with the pictures of every thread found for the question: those the answer was given first, then the others (4.2). |
 | D53 | (2026-11-23) A click on a thumbnail opens the full picture at Google Groups, by the attachment address, as the pages of 2025 do. No full picture is put on our server. Replaces Tom's first choice of the same day, the full picture from our own server. |
 | D54 | (2026-11-23) The pictures of an answer are meant to replace the keyword pages and the gallery of 2025 under `/cgimages/` entirely. Those are not deleted yet. |
-| D55 | (2026-11-23) The thumbnails are directly under the answer and its short disclaimer, above the feedback buttons. At most 12 are shown there. A dig deeper or a follow-up has no rule of its own: its thumbnails follow its provided documents (4.2). |
+| D55 | (2026-11-23) The thumbnails are directly under the answer and its short disclaimer, above the feedback buttons. At most 12 are shown there. A dig deeper or a follow-up has no rule of its own: its thumbnails follow its provided documents (4.2). Amended the same day, when Tom saw the local site: the pictures are not under the answer but after Provided Docs, below the actions (ask another, dig deeper, follow-up). The limit of 12 stands. |
 | D56 | (2026-11-23) Reference links in answers are built in two steps: a trial of numbered sources on the rated questions, then the display, only if the trial passes (4.1). The pictures of an answer (4.2) are built first. |
+| D57 | (2026-11-24) Tom runs the yearly update himself from written steps. The work on his machine is in each module's README; the order and everything that touches the server are in the top-level `README.md`, and the server work is one deploy at the end. The getters run from the WSL folder; the Windows clone is deleted ("Yearly update"). |
 
 ## Two repositories
 
@@ -236,7 +245,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
 6. **[REVISED - 2026-11-23] Phase 4:** the image update (4.0, D49), then the image gallery
    (4.2), then reference links (4.1) (D41). 4.0 is done (2026-11-23); 4.2 is designed
    and decided (D52 to D55) and is built first; 4.1 is designed (D56): a trial, then the
-   display if the trial passes.
+   display if the trial passes. **[REVISED - 2026-11-24]** 4.2 is deployed (`4f85f9e`);
+   the trial of 4.1 is next.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
@@ -1663,6 +1673,9 @@ told apart by the date of the job.
 **[REVISED - 2026-11-23] (sixteenth revision)** Designed. It replaces the two sentences
 that stood here: a link on the results page to a page of pictures.
 
+**[REVISED - 2026-11-24] (eighteenth revision)** Deployed; see "Result" at the end of this
+section. The design below is as built. Where the build differs, the paragraph is marked.
+
 **What was measured** (Architect, 2026-11-23, read-only: the 52 questions of
 `refresh_questions.csv` against the local collection and `gallery261123.idx`):
 
@@ -1688,6 +1701,14 @@ that stood here: a link on the results page to a page of pictures.
   links to the full picture at Google Groups (D53): the `url` of its index entry,
   unchanged, which is what the pages of 2025 link to. It opens in a new tab. It sits
   directly under the answer and its short disclaimer, above the feedback buttons (D55).
+
+  **[REVISED - 2026-11-24] (eighteenth revision)** The place changed (D55 as amended).
+  The order of the results page is: answer, short disclaimer, the actions (ask another,
+  dig deeper, follow-up), Provided Docs, the pictures (up to 12 and the link to all),
+  Other Related Docs, statistics, full disclaimer. Tom's reason: the pictures come from
+  the provided threads and belong beside that list, and the actions follow the answer
+  directly. Accepted by Tom: on a phone the pictures are below the actions and a table
+  of up to 15 rows. The heading keeps its wording.
 - **Known and accepted (D53).** An attachment address answered with Google's sign-in page
   when Architect fetched it without a login (4.0). A visitor who is not signed in to
   Google as a member of the group will probably get that page and not the picture. Not
@@ -1726,6 +1747,9 @@ record of a revise.
 - **Settings** in the tracked `site.ini`: the path of the index and the base address of
   the pictures (`/cgimages/pictures`). With no index setting, or with a file that cannot
   be read, the site shows no pictures, says so once in the log and works as today.
+  **[REVISED - 2026-11-24] (eighteenth revision)** As built, the address setting is that
+  of the thumbnails themselves: `[PICTURES]` `INDEX = /app/gallery/gallery.idx` and
+  `THUMBS_URL = /cgimages/pictures/thumbs`. The design had named the directory above it.
 - **On the server** the index is `data/gallery/gallery.idx` in the checkout, a directory
   mounted read-only into the flask container; one line in `docker-compose.yaml`. It is not
   under an address nginx serves. `data/` must be git-ignored there; Programmer checks.
@@ -1765,6 +1789,14 @@ a chunk came from: a chunk does not name its post.
    stopped and continued, and then the index. Programmer supplies the commands and a check
    that the server holds every file of the list with its size. The upload changes nothing
    a visitor sees and can be done before the code.
+
+   **[REVISED - 2026-11-24] (eighteenth revision)** Done with tar and `scp`, not `rsync`:
+   `rsync` is not installed locally, and tar with `scp` is how Tom moves files to the
+   server. The thumbnails went up as one tar of 62 MB with a SHA-256 for each file, and
+   the check on the server was `sha256sum -c`, which covers the size this step asks for.
+   What `rsync` was named for, an upload that can be stopped and continued, is given up:
+   at 62 MB a failed `scp` is run again. Architect accepts this. A plan names what is
+   moved and how it is checked; the tool is the one Tom uses.
 4. The code by `git pull`, rebuild, start, `docker compose restart nginx`.
 5. Checks: an answer about a subject with pictures shows thumbnails; a thumbnail opens
    the picture at Google Groups in a browser signed in to the group; "All pictures" opens
@@ -1789,6 +1821,8 @@ data, no mocks):
 - A job whose provided documents include a thread with pictures: the results page has the
   thumbnail, the link to the picture at Google Groups (the `url` of the entry), and the
   subject as a link to the thread. The pictures are above the feedback buttons.
+  **[REVISED - 2026-11-24]** As built: the pictures are after Provided Docs (D55 as
+  amended), and the test holds that order.
 - A job with no such thread: no heading and no link.
 - A job with over 12 pictures: 12 thumbnails, and the link with the full count.
 - The pictures page: provided threads first, then related ones; a thread in both is shown
@@ -1808,7 +1842,53 @@ data, no mocks):
 
 **The yearly update** gains its last step from this: the upload and the new index on the
 server. It is written into the instructions of `imageGetter` (`programmer_todo.md`, YU3)
-when this is deployed.
+when this is deployed. **[REVISED - 2026-11-24]** It is in the top-level `README.md`
+instead, with the rest of the server work ("Yearly update", D57).
+
+**[REVISED - 2026-11-24] (eighteenth revision) Result** (Programmer's report, 2026-11-24).
+
+- Deployed: `site_2024` `4f85f9e`, `ml` `72957f4`, both merged to `main`. Tom waived the
+  rest of the code review (the check of R1 and the todo commits of the upload).
+- Every check of "Delivery" passed as Tom saw it. A click on a thumbnail in a browser
+  that is not signed in to Google gives Google's sign-in page, as D53 accepted.
+- On the server: 5,661 thumbnails in `~/www/cgimages/pictures/thumbs`, the index in
+  `~/site_2024/data/gallery/gallery.idx`, 27 GB free on `/`.
+- The gallery index made again with the thumbnail names is
+  `data/images/gallery261123b.idx`, and its list of thumbnails `thumbs261123b.txt`.
+- Differs from the design, each marked above: the place of the pictures, the address
+  setting, the upload.
+- Seen on the server and not acted on: `~/site_2024`, `~/www` and
+  `~/chroma_before_corpus_update` are world-writable.
+
+---
+
+## Yearly update (D57)
+
+**[REVISED - 2026-11-24] (eighteenth revision)** New. Recorded as the Programmer wrote it
+and Tom approved it (2026-11-24); Architect designed none of it.
+
+- **Who.** Tom runs the whole update himself, from the page. Nothing in it needs a
+  Programmer session.
+- **Where it is written.** The work on Tom's machine is the "Yearly Update" section of
+  `msgGetter/README.md` (fetch), `imageGetter/README.md` (pictures and his review of
+  them) and `embedder/README.md` (embedding). The top-level `README.md` gives the order
+  and sends him to each, and holds every step that touches the server.
+- **One deploy.** The collection, the thumbnails, the gallery index and any change of the
+  code go to the server together at the end, packed into one directory with checksums.
+  Before the embedding changes the local collection, its count and id hash are compared
+  with the server's; the deploy replaces the server's collection, so they must be equal
+  first. The way back and the cleanup are written with it.
+- **How the getters run.** Windows Python from cmd, in the WSL folder reached by `pushd`;
+  Chrome by `msgGetter/chrome_with_debug.bat` for both getters; ChromeDriver in
+  `/home/tom/projects/chromedriver-win64`. The Windows clone of the project is deleted.
+- **A deploy of the site's code alone** is in the README of `site_2024`.
+- **Not known.** The combined deploy has not been run as one session: each part was run
+  on its own in 2026. The steps for the upload of the collection follow this plan and a
+  local rehearsal, not a record of the run of 2026-11-22. The ways back were not run.
+- **Not covered.** `webGetter`: not run in 2026 and without instructions Tom could follow.
+- **Open, with Architect:** the fetch saves some posts cut off, and up to 60 threads of
+  2024-25 may never have been fetched (`architect_todo.md`). The steps that are Python
+  pasted from a README, and could be small tested scripts, are listed there too.
 
 ---
 

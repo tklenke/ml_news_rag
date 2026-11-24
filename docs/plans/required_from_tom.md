@@ -1,14 +1,29 @@
 # Required From Tom
 
-**Last Updated:** 2026-11-23
+**Last Updated:** 2026-11-24
 
 Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-All decided: D1 to D56 in the plan's table, D50 and D51 as amended on 2026-11-23.
+Decided: D1 to D57 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
+
+### Waiting for a decision (asked by Architect 2026-11-24)
+
+Details of each are in `architect_todo.md`, "Notes from Programmer".
+
+- [ ] **Collapsed posts.** 40 threads in the corpus hold posts cut off by the fetch, 27 of
+      them among the 237 threads of 2026; they are on the site that way. Find the cause and
+      fix the fetch now, with a refetch of the 40 and a deploy of the collection, or leave
+      it to the yearly update of 2027?
+- [ ] **Up to 60 threads of 2024-25 never fetched.** Fetch them, and if so in the same pass
+      as the collapsed posts?
+- [ ] **Process suggestions (8) and the yearly steps that could be small tested scripts
+      (4).** Which to take up, and when.
+- [ ] **World-writable directories on the server** (`~/site_2024`, `~/www`,
+      `~/chroma_before_corpus_update`). Look into why and tighten, or leave.
 
 ## Work items
 
@@ -27,15 +42,15 @@ finished work items are in the git history of this file.
       factual errors (Phase 1.4, 1.5). Done 2026-11-22, first answer only (D35).
 - [x] Before leaving on 2026-11-22, for the overnight embedding (plan 2.2a): Windows set not to
       sleep, Docker Desktop left running, the GPU left free. The run started that evening.
-- [ ] Each morning until the five variants are done: run the stop command, and each evening the
+- [x] (Done: the fifth variant finished 2026-11-23 21:57.) Each morning until the five variants are done: run the stop command, and each evening the
       continue command ("Stop and continue" in `programmer_todo.md`). Read "For Tom in the
       morning" there.
 - [x] Image update (plan 4.0): try the review tool on the pictures of 2025 when the Programmer
       shows it; run the download on Windows with Chrome signed in; then decide the suggested
       and the new pictures in the tool. Done 2026-11-23; nothing is undecided.
-- [ ] Yearly update instructions: follow the Programmer's draft from the page alone and say
+- [x] (Approved 2026-11-24, YU4.) Yearly update instructions: follow the Programmer's draft from the page alone and say
       where it leaves you guessing (`programmer_todo.md`, YU4).
-- [ ] Pictures of an answer (plan 4.2): look at the local site when the Programmer shows it
+- [x] (Done 2026-11-24, PA7 to PA9.) Pictures of an answer (plan 4.2): look at the local site when the Programmer shows it
       (PA7); at the deploy, upload the thumbnails and the index (under 100 MB; the Programmer
       supplies the commands) and do the browser checks, one of them in a browser that is not
       signed in to Google.
@@ -49,7 +64,8 @@ finished work items are in the git history of this file.
 
 - Tom waived the code review of the Phase 1 deploy (2026-11-21), the rest of that of the
   follow-on deploy (2026-11-22) and that of the model change (2026-11-22, D37). The UI
-  changes and the corpus update were waived on 2026-11-22 (D47).
+  changes and the corpus update were waived on 2026-11-22 (D47). The rest of the review of
+  the pictures of an answer was waived on 2026-11-24.
 - The OpenAI account has a budget limit with no auto reload (S2).
 - The account can call `gpt-6-luna`, `gpt-6.1-terra`, `gpt-6.2-sol` and `gpt-6.2-astra`.
 - One OpenAI key serves the server and local runs.
