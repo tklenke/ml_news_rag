@@ -393,7 +393,7 @@ goes to the server (D53).
       "No pictures were found for this answer." The threads of both pages are one include,
       `picture_threads.html`. The 404 cases are in the existing tests of `test_pages.py`.
       Full suite: 342.
-- [~] PA7 Local check with Tom before the review: settle how the local site shows the
+- [x] PA7 Local check with Tom before the review: settle how the local site shows the
       thumbnails without changing a file the server uses (plan, "Local check"). He looks at
       an answer with few pictures, one with over 12, the pictures page, a dig deeper and a
       narrow window. If he wants the look changed, report to Architect; do not restyle on
@@ -402,8 +402,10 @@ goes to the server (D53).
       `data/` is root's), `THUMBS_URL = http://127.0.0.1:8090` in `site_local.ini`, and
       `python3 -m http.server 8090 --bind 127.0.0.1 --directory ~/projects/ml/data/images/thumbs`.
       Tom moved the pictures below Provided Docs (D55 amended; note in `architect_todo.md`;
-      `site_2024` commit "Show the pictures of an answer after the provided docs"). He is
-      checking with a new question on the styled answer page.
+      `site_2024` commit "Show the pictures of an answer after the provided docs").
+      Done 2026-11-23: Tom checked on the local site with the R2 fix loaded; the look stays
+      as it is. Of the latest 150 local answers none has under 13 pictures, and job
+      `7OCvxGFMr6` has 133 on its pictures page (the plan's measure was at most 80).
 - [~] PA8 The compose line for the index directory; the upload commands for Tom (`rsync` of
       the listed thumbnails, then the index) and the check that the server holds every file
       of the list with its size. Short lines, and a line count beside any comparison.
