@@ -414,6 +414,52 @@ goes to the server (D53).
       (YU3). Report to Architect in a note in `architect_todo.md`: the checks, what the
       deploy left on the server, and anything in the design that did not fit the code.
 
+#### Code review results (2026-11-23)
+
+Reviewed, at Tom's request before PA7 and PA8 are finished: `ml` `a75299b..8bbe31f` (PA1,
+PA2) and `site_2024` `main..d21cee0` (PA3 to PA6, the compose line `25187e5`, Tom's move
+`d21cee0`). The PA8 commits still to come get a review of their own.
+
+**Verdict: Not approved** (R1 is open).
+
+Checked and fine: the code matches plan 4.2 and the tests cover every test the plan lists.
+`site_2024` full suite: 343 passed, output clean. `ml` `imageGetter`: 170 passed, 12
+skipped; every skip was there before this work. The job `source` values are the index's
+thread ids (read from a real job). Subjects are escaped, thumbnail names percent-encoded,
+and the author is never shown. Thumbnails are 200 x 200 squares, so `width="120"
+height="120"` does not stretch them. `gallery261123b.idx` without `thumbnail_filename`
+equals `gallery261123.idx` (compared). No list name starts with `#` or `;`. The loaded
+index holds about 9 MB in each worker (tracemalloc).
+
+- [ ] R1 MUST FIX `docs/plans/programmer_todo.md` PA8: `site_2024` `25187e5` (the compose
+      line of PA8) is committed, but PA8 is still `[ ]` and its notes do not mention the
+      commit. Seen in the git log. Done: PA8 marked `[~]` and naming `25187e5`.
+- [ ] R2 SHOULD FIX `site_2024/fwww/src/pictures.py:55`: an index that reads as a JSON
+      object but lacks a field the page uses breaks every answer that has a thread with
+      pictures. The likeliest case is uploading `gallery261123.idx` (no
+      `thumbnail_filename`), which sits right beside `gallery261123b.idx`; the same applies
+      to a thread without `metadata` or `images`, or a picture without `url`. Reproduced:
+      `get_pictures` with the older index raises `KeyError: 'thumbnail_filename'`. Then
+      `/processid` returns 500, and so does `/status`. On a 500, the polling page
+      (`cozyrag_answer.html:19`) fails to parse the reply as JSON, stops polling, and never
+      shows the answer. Plan 4.2 says an index that cannot be read gives no pictures and the
+      site works. Done: `PictureIndex.read` treats an index whose entries lack those fields
+      as unreadable (no pictures, one log line), tests first, the line captured. A PA8
+      upload check alone is not enough, because the index is replaced by hand every year.
+- [ ] R3 SHOULD FIX `ml/imageGetter/thumbnail_list_cli.py:46`: the check that every listed
+      thumbnail is on disk (the guard of the upload) is in the CLI and has no test.
+      CLAUDE.md requires tests for all functionality. Read from the code, not tried. Done:
+      a test where a thumbnail is missing, either for a function in `gallery_index.py` that
+      the CLI calls or for the CLI itself run as a subprocess.
+- [ ] R4 CONSIDER `site_2024/fwww/site_app.py:17`: since Tom's move (`d21cee0`), the
+      pictures sit below Provided Docs and not directly under the answer. The name
+      `PICTURES_UNDER_ANSWER` and its comment ("thumbnails shown under an answer") still
+      hold loosely, but a name like `PICTURES_ON_RESULTS_PAGE` would fit the page as it is
+      now. Read from the code.
+
+For Architect: nothing. The D55 amendment is already in the Programmer's note in
+`architect_todo.md`.
+
 ### Reference links: the trial (repo: `../site_2024/`)
 
 Plan: "4.1 Reference links inside answers", 4.1a. Read all of 4.1; the tests are listed there.
