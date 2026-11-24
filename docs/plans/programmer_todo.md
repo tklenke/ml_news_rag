@@ -598,7 +598,10 @@ Tasks:
         and Chrome versions differ; the debug port is not open; not signed in (what the
         fetched page then holds); Google slows or blocks the fetch; a thread that fails.
         Where a case has not been seen, say so instead of guessing its message.
-- [ ] YU3 `imageGetter`: the section "Yearly Update" made complete in itself, on the same
+- [~] YU3 `imageGetter`: the section "Yearly Update" made complete in itself, on the same
+      2026-11-24: written, at the top of `imageGetter/README.md`, with the upload as step 9;
+      the older sections follow under "Reference". "Prerequisites" (PowerShell, `C:\chrome-debug`)
+      is replaced by the cmd way settled in YU1. Waits for Tom's reading, then YU4.
       pattern. Keep the seven steps and add at least:
       - That it starts only after the messages are in `data/msgs_md`, and how to check that.
       - For each step: where it is run (WSL or Windows PowerShell), the command with the
