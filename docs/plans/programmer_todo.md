@@ -32,6 +32,9 @@ Still useful:
 
 - The server runs Docker 29.10.0 and Compose 5.8.0; the local rehearsals used 28.3.2 and 2.39.1.
 - The server has a 2 GB swap file, and gunicorn runs 2 workers.
+- Rebooted 2026-11-24: Docker is enabled, the four containers come up on their own, nginx
+  finds `flask` without a restart, and the swap file is in `/etc/fstab`. `swapon` is in
+  `/sbin`, not on `admin`'s path; `free -h` shows the swap.
 - `python-dotenv` stays in `requirements.txt` because `pydantic-settings` requires it.
 - Known log warnings: gunicorn wants its config file to have a `.py` extension; Ollama reports
   the requested context (8192) exceeds the embedding model's 2048. Neither investigated.
