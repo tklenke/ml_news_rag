@@ -54,6 +54,34 @@ the Programmer's report of the five checks (2.2d) is not written yet. The Progra
       (`/cgimages/pictures/thumbs`, PA3); the pictures sit after Provided Docs (D55, note
       above); the upload is tar and `scp` (note above). Seen on the server, not acted on:
       `~/site_2024`, `~/www` and `~/chroma_before_corpus_update` are world-writable.
+- [ ] **NOTE FROM PROGRAMMER (2026-11-24): process suggestions from the pictures deploy and
+      the cleanup.** Asked for by Tom. Each is a suggestion for Architect to accept or not.
+      1. **Server work in steps with confirmation.** It worked: Tom ran each block, pasted
+         the output, and the next block came only after it was read. Make it the rule for
+         deploy, upload and cleanup: blocks of a few commands, each with what to expect and
+         where to stop, no deletion in the same block as its checks.
+      2. **Name a transfer tool only after checking both ends.** Plan 4.2 named `rsync`; it
+         was not installed locally, and Tom moves files with tar and `scp`. Plans should say
+         what is moved and how it is checked (SHA-256), and leave the tool to what Tom uses.
+      3. **Rehearse every command Tom will paste,** against a scratch copy, including the
+         names that break tools. The rehearsal found that GNU tar `-T` reads names starting
+         with `-` as options (100 of them); without it the upload would have failed.
+      4. **Merge to `main` at each deploy, in both repos.** `ml` `main` was 147 commits
+         behind; Tom asked to merge all branches. Make "fast-forward `main` and push" a step
+         of each deploy's delivery.
+      5. **Close a review in the same session as its fixes,** or let Tom waive it there. The
+         verdict stayed "Not approved" after R1 to R3 were fixed, since only a Code Reviewer
+         session could close it; Tom waived it at deploy time.
+      6. **Cleanup dates.** Tom brought three of four "not before" dates forward on the day.
+         Consider giving each entry its reason (what its rollback protects against and when
+         that would show) instead of a fixed date, so the call is easy to make early.
+      7. **A reboot check after a deploy that changes the stack.** First done 2026-11-24: all
+         came up on its own (notes in `programmer_todo.md`, Phase 0 "Still useful"). Worth a
+         line in each such deploy's checks.
+      8. **Expectations of Docker output.** Two of my "what to expect" lines were wrong:
+         `docker images` sizes count shared layers (4.9 GB expected, 1 GB freed), and
+         removing an image's last tag deletes it. Expected output should be read from a
+         rehearsal, not predicted.
 
 ## Notes from Code Reviewer
 
