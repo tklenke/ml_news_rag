@@ -42,40 +42,16 @@ Still useful:
 Leftovers kept on the server as the rollback for each deploy. Add to this list whenever a deploy
 leaves something behind. Until an entry is done, no `docker system prune` on the server.
 
-- [ ] **From the Phase 0 deploy (2026-11-21).** Not before 2026-11-28, and only if Tom says the
-      site has run well. Ends the rollback to the stack before Phase 0. Check first:
+- [x] **From the Phase 0 deploy (2026-11-21).** Done 2026-11-24, early at Tom's word: stash
+      `906ffd8` dropped; images `old-stack` (flask, ollama), `chromadb/chroma:1.1.1`,
+      `nginx:latest` removed; `~/site_backup_2026-11-21` and `~/deploy_logs.txt` deleted. Four
+      containers up, site answers; free space 27 to 28 GB (shared layers). Kept:
+      `certbot/certbot:latest` (renewal uses it), the exited `hello-world` container. Still Tom's
+      choice: `server/old.nginx_all_apps.conf`, `server/certbot/conf/live/m24tom.old`,
+      `~/project.tar.gz`, `~/certbot_bu.tar`.
 
-          cd ~/site_2024
-          git stash list
-          docker ps -a
-          docker images
-          ls -la ~/site_backup_2026-11-21
-
-      Expect one stash, `WIP on main: 906ffd8`, and no container using the images below. If
-      a later deploy added a stash, use the number of the `906ffd8` one in the first command.
-
-          git stash drop 'stash@{0}'
-          docker image rm site_2024-flask:old-stack
-          docker image rm site_2024-ollama-rag:old-stack
-          docker image rm chromadb/chroma:1.1.1
-          docker image rm nginx:latest
-          sudo rm -r ~/site_backup_2026-11-21
-          rm ~/deploy_logs.txt
-
-      The backup directory holds the Chroma data from before the upgrade, the certbot
-      directory with the private key, and the server's earlier `exclude_from_tar.txt` and
-      `sudo_renew_cert.sh`. Afterwards `docker compose ps` lists the same four containers and a
-      question is answered.
-
-      Tom's choice, not part of the rollback: the untracked `server/old.nginx_all_apps.conf`,
-      `server/certbot/conf/live/m24tom.old`, and the two untagged images from before Phase 0.
-
-- [ ] **From the Phase 1 deploy (2026-11-21).** Not before 2026-11-28, and only if Tom says the
-      site has run well. Ends the rollback to `bed83f4` given below. The directory holds the keys.
-      Expect one file, `site.ini`:
-
-          ls -la ~/site_ini_before_s10
-          rm -r ~/site_ini_before_s10
+- [x] **From the Phase 1 deploy (2026-11-21).** Done 2026-11-24, early at Tom's word:
+      `~/site_ini_before_s10` (one file, `site.ini`) deleted.
 
 - [ ] **From the deploy of the answer display and the corpus update (2026-11-22).** Not before 2026-11-28,
       and only if Tom says the site has run well. Ends both rollbacks
@@ -105,18 +81,14 @@ leaves something behind. Until an entry is done, no `docker system prune` on the
           docker compose up -d
           docker compose restart nginx
 
-      Local leftovers, Tom's choice: `~/chroma_deploy`,
-      `site_2024/data/chroma_before_corpus_update`, and `refetch_backup` on Windows.
+      Local leftover, Tom's choice (root's, needs `sudo`):
+      `site_2024/data/chroma_before_corpus_update`. `~/chroma_deploy` and `refetch_backup`
+      deleted 2026-11-24.
 
-- [ ] **From the deploy of the pictures of an answer (2026-11-24, PA8 and PA9).** Not before
-      2026-12-01, and only if Tom says the site has run well. Ends the rollback of the code
-      (in PA9). The thumbnails and the index stay; `~/pictures_deploy` is the upload copy.
-
-          cd ~/site_2024
-          docker image rm site_2024-flask:775692d
-          rm -r ~/pictures_deploy
-
-      Local leftover, Tom's choice: `~/pictures_deploy`.
+- [x] **From the deploy of the pictures of an answer (2026-11-24, PA8 and PA9).** Done
+      2026-11-24, early at Tom's word: image `site_2024-flask:775692d` and `~/pictures_deploy`
+      removed on the server, `~/pictures_deploy` locally. Rollback of the code now needs a
+      rebuild of `775692d`.
 
 ## Phase 1 code change and site fixes (repo: `../site_2024/`, one deploy)
 
