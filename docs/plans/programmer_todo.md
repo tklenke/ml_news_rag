@@ -538,7 +538,8 @@ Tasks:
       `site_2024`'s README, data uploads in `ml`). `get_msg_ids.py` takes the two values of
       the Windows clone's run: `startDate = '2026-11-20'`, `nMaxSequentialDupePages = 20`.
       Tom deletes the Windows clone once all is confirmed; nothing else of it is kept.
-      Still to do: the trial with Tom of the fetch from the WSL directory (one thread).
+      Still to do: the trial with Tom of the fetch from the WSL directory (one thread), set up
+      and written in `docs/plans/yu1_fetch_trial.md` (how to undo it is there too).
       a. **Where the commands are run from.** The image download of 2026 ran with the
          Windows Python from the WSL directory (`\\wsl.localhost\...`). The message fetch
          of 2026 ran in the Windows clone (`C:\Users\tom\Documents\projects\ml`), an older
