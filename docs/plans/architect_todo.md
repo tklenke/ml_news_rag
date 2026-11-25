@@ -8,18 +8,37 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-24, last the twentieth revision (D60, below; eighteenth: the pictures of an answer, 4.2, recorded as
-deployed, D55 amended; the yearly update recorded, D57). Everything through the pictures of an
-answer is deployed (`site_2024` `4f85f9e`, `ml` `72957f4`) and `main` is level with
-`wip/annual-refresh` in both repos. The overnight embedding finished all five variants on
-2026-11-23 21:57 (read from `queue.log`); the Programmer's report of the five checks (2.2d) is
-not written yet. The Programmer's next tasks are 2.2d and then "Collapsed posts" (CP1 to CP8, D58, nineteenth
-revision); the reference links (RL1 to RL8) follow. The 60 unfetched threads join the refetch and the world-writable directories wait for the
-server cleanup (D59). Tom decided on 2026-11-24 that the citations are built, by the most
-reliable way (D60, twentieth revision): the model cites chunks, the page shows one number per
-source, the run on the 30 questions checks the form only, and Tom's rating page is dropped.
-The probes that led there are in the git history: `docs/notes/citation_probe/` at commit
-`342be36`, deleted in the commit after it. The Programmer has RL1 to RL8 after "Collapsed posts". No decision waits for Tom.
+The plan is at its twentieth revision (2026-11-24), decisions D1 to D60. Everything through
+the pictures of an answer is deployed (`site_2024` `4f85f9e`, `ml` `72957f4`). No decision
+waits for Tom and nothing waits to be designed. The Programmer's order: the report on the
+chunk experiment's embedding (2.2d), the collapsed posts (CP1 to CP8, D58, with the 60
+unfetched threads, D59), the reference links (RL1 to RL8, D60), then the rest of Phase 2.
+Architect's next work is reading the Programmer's reports, listed under "Open".
+
+The citations were decided after a probe by Architect. Its scripts, records and pages are in
+the git history: `docs/notes/citation_probe/` at commit `342be36`, deleted in the commit
+after it.
+
+## Open
+
+- [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
+      whether the five collections are fit for the labelling (2.3).
+- [ ] Read the Programmer's report of the cause of the collapsed posts (CP2), if the
+      Programmer stops there, and the closing report (CP8); record both in the plan.
+- [ ] Read the Programmer's report of the citation run (RL4), read the answers without a
+      number, apply the rule of 4.1a (form only, D60) and record in the plan whether the
+      setting may be switched on. Then read the report of the deploy (RL8).
+
+## Notes from Programmer
+
+None open. Closed on 2026-11-24 (in the git history of this file): the process suggestions
+(1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
+posts (D58), the 60 unfetched threads (D59), and the awkward yearly steps (logged in
+`docs/notes/opportunities_for_improvement.md`, "ml: yearly update").
+
+## Notes from Code Reviewer
+
+None open.
 
 ## For the yearly update of 2027
 
@@ -40,49 +59,6 @@ Read this before planning the next update.
 - The fetch had saved posts collapsed (D58). Check that the yearly steps still hold the
   check for collapsed posts, and run it on the new threads before anything is embedded.
 - The server rules are in `CLAUDE.md`, "Deploys and server work".
-
-## Open
-
-- [x] Read the Programmer's report of the pictures of an answer (PA9). Recorded in plan 4.2,
-      "Result" (2026-11-24).
-- [ ] Read the Programmer's report of the citation run (RL4), read the answers without a
-      number, apply the rule of 4.1a (form only, D60) and record in the plan whether the
-      setting may be switched on. Then read the report of the deploy (RL8).
-- [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
-      whether the five collections are fit for the labelling (2.3).
-- [x] Collapsed posts designed (plan "Collapsed posts", D58) and handed over (CP1 to CP8).
-- [ ] Read the Programmer's report of the cause of the collapsed posts (CP2), if the
-      Programmer stops there, and the closing report (CP8); record both in the plan.
-- [x] Process suggestions and YU5 scripts: decided by Tom 2026-11-24 ("Notes from
-      Programmer").
-
-## Notes from Programmer
-
-Recorded in the plan on 2026-11-24 and closed (the notes are in the git history of this
-file): D55 amended at PA7, the upload by tar and `scp` (PA8), the report of the deploy
-(PA9), the hand-off note, and the yearly update as written (D57).
-
-Decided by Tom on 2026-11-24 and closed (the notes are in the git history of this file):
-
-- Process suggestions 1, 2, 3, 4, 7 and 8 accepted; they are in `CLAUDE.md`, "Deploys and
-  server work". Suggestion 5 accepted; it is in `CLAUDE.md`, "Code Review Hand-off",
-  "Closing".
-- The collapsed posts (D58) and the 60 unfetched threads (D59).
-- The awkward yearly steps (YU5): none built; logged in
-  `docs/notes/opportunities_for_improvement.md`, "ml: yearly update".
-
-- Process suggestion 6 (a reason in place of the "not before" date of a cleanup entry): not
-  taken. Tom, 2026-11-24: waiting a week before a cleanup is wise; faults show when the
-  visitors use the site. The dates stay.
-
-## Notes from Code Reviewer
-
-None open (R4 and R5 of 2026-11-22 are D33 and D34 in the plan).
-
-## Completed
-
-Everything through the eighteenth plan revision (2026-11-24) and decisions D1 to D59. The item
-list is in the git history of this file.
 
 ## Facts worth keeping
 
