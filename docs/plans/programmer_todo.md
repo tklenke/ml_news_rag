@@ -149,6 +149,13 @@ done.
       `SVdmlqx3aco#1` at rank 5, text the old copy did not have. The 33 gained 29,993 words.
       Server step 3's heredoc got stuck in Tom's paste (wrapped lines indent the closing
       `PY`); a one-line `python -c` worked. To correct in the README in CP7.
+**Tom, 2026-11-25: CP7 and CP8 wait until the citations (RL1 to RL8) are done.** Until
+then the local collection (`42577 4e273635...`) is ahead of the server's (`42276
+92d43eed...`, `~/update_records/before.txt`). At the deploy, step 3 compares the server with
+`before.txt`, not with the local collection, which has changed on purpose. Do not embed
+into the local collection or reset it before then. The evaluation's 30 saved prompts name
+none of the 33 refetched threads, so RL2 is not affected by the deleted chunks.
+
 - [ ] CP7 Code review, then the deploy with Tom by the top-level `README.md` (steps 3 and 5
       to 8). Correct the README wherever a step does not work as written.
 - [ ] CP8 `msgGetter/README.md` step 8 and troubleshooting say what the fetch does now; the
