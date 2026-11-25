@@ -77,9 +77,17 @@ Plan: "Collapsed posts (D58)". Read all of it; the numbers and the hypothesis ar
 `data/msgs` or `data/msgs_md`: set it aside. Nothing is fetched into `data` before CP3 is
 done.
 
-- [ ] CP1 The cause, with Tom at Chrome on Windows. Reproduce into a scratch directory; show
+- [~] CP1 The cause, with Tom at Chrome on Windows. Reproduce into a scratch directory; show
       what the page held when it was read and why; look at three of the older single-post
       files in a browser. No fix yet.
+      Found so far (2026-11-24, from the files): the check of README step 8 flags 15 files
+      falsely. Its `### ` line at the start of a line is also a heading inside a post: all
+      13 older files, and `sklLflSc-Q8` and `Lyutjnqv9K0` of 2026. In the format of 2026 a
+      collapsed post's `### name` line is followed straight by the date; an expanded one's
+      by `<address>`. Counted that way: 25 threads of 2026 affected, none older. In all 25
+      the collapsed posts come before the expanded ones. The probe for Tom is
+      `data/collapsed_probe/probe_collapsed.py` (git-ignored); it writes only into
+      `data/collapsed_probe/out`.
 - [ ] CP2 Report the cause in a note in `architect_todo.md` and tell Tom. Go on to CP3 if the
       cause is one of timing and the plan's points for the fix fit it; otherwise stop for
       Architect.
