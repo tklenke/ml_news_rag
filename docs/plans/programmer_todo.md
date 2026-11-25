@@ -113,13 +113,20 @@ done.
       collapsed post gets no `.txt`. 15 tests on five shortened real threads. The waiting
       itself is not tested (needs Google's page): CP4 is its check. README step 6 says to
       keep Chrome on screen; step 8 runs the command.
-- [ ] CP4 The refetch with Tom (`msgGetter/README.md` steps 5 to 7; you supply the id file).
+- [x] CP4 The refetch with Tom (`msgGetter/README.md` steps 5 to 7; you supply the id file).
       Take a thread over only if its new copy has no collapsed post and at least as many
       posts. Report the threads not taken over. Pass mark: none of 2026 left collapsed.
       In the same run the 60 ids of 2024-25 that were never fetched (D59; plan, step 4),
       from an id file of their own in `data`. They go through CP5 and CP6 as new threads.
       When the 60 are fetched, `git rm msgGetter/msgids_2024-09-03_2025-10-02.txt` (Tom
       approved 2026-11-24) and take its paragraph out of `msgGetter/README.md`.
+      Done 2026-11-25. Tom ran the fetch of 93 ids (33 set aside in
+      `data/collapsed_backup`, ids in `data/collapsed_ids.txt`; 60 from
+      `data/msgids_never_fetched_2024-09-03_2025-10-02.txt`), Chrome on screen: 93 saved, 0
+      not saved, 391 s. All 33 taken over: no collapsed post and the same number of posts as
+      the old copy, each of them. All 60 came back as threads with a title; 15 printed "no
+      exapansion found", all single-post threads (no button). `f_collapsed.py`: 0 left.
+      Pass mark met. The msgGetter copy of the id file removed from git.
 - [ ] CP5 The pictures: the index built again; if it names pictures not on disk, the download
       and Tom's review, the gallery index and the thumbnails. Say which it was.
 - [ ] CP6 The embedding into the production collection (`embedder/README.md`) and the three

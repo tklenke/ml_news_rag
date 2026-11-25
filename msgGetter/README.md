@@ -134,8 +134,7 @@ python get_msg_ids.py
   `n` was 237. How long it took was not written down.
 
 The file is written into `msgGetter`, but the next step reads it from `data`. Move it, by the
-name the last line printed (do not move the older `msgids_2024-09-03_2025-10-02.txt` that is
-kept in `msgGetter` in git):
+name the last line printed:
 
 ```
 move msgids_2026-11-20_2027-11-25.txt ..\data\
@@ -312,9 +311,6 @@ collection, then the embedding (`embedder`), which needs `data/refetch_ids.txt` 
 
 - `move_txt_files.py` moves every `.txt` out of `data/msgs` into `data/msgs_filtered`. Do not
   run it: the embedder reads `data/msgs`.
-- `msgids_2024-09-03_2025-10-02.txt` in this folder is not used: the fetch reads the id files
-  in `data`. It is not the same as the file of that name in `data` (found 2026-11-24: it holds
-  60 ids that are in no file in `data` and were never fetched); reported, not settled.
 
 ### Troubleshooting
 
