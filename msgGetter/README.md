@@ -76,11 +76,12 @@ Close **every** Chrome window first (also in the system tray); otherwise the new
 the running one and the port does not open. Then open a cmd window:
 
 ```
-pushd \\wsl.localhost\Debian\home\tom\projects\ml\msgGetter
+pushd \\wsl.localhost\Debian\home\tom\projects\ml
 chrome_with_debug.bat
 ```
 
-- After `pushd` the prompt is a drive letter, like `Z:\home\tom\projects\ml\msgGetter>`.
+- `chrome_with_debug.bat` is at the top of the repo because `imageGetter` uses it too.
+- After `pushd` the prompt is a drive letter, like `Z:\home\tom\projects\ml>`.
 - Chrome opens with its own profile, `C:\selenum\ChromeProfile` (Chrome does not open the
   debug port on your normal profile). The cmd window may stay busy while Chrome runs. Leave it.
 - In that Chrome, open https://groups.google.com/g/cozy_builders and check you are signed in
