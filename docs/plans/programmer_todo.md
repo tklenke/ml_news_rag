@@ -127,8 +127,15 @@ done.
       the old copy, each of them. All 60 came back as threads with a title; 15 printed "no
       exapansion found", all single-post threads (no button). `f_collapsed.py`: 0 left.
       Pass mark met. The msgGetter copy of the id file removed from git.
-- [ ] CP5 The pictures: the index built again; if it names pictures not on disk, the download
+- [x] CP5 The pictures: the index built again; if it names pictures not on disk, the download
       and Tom's review, the gallery index and the thumbnails. Say which it was.
+      Done 2026-11-25: the index (`index261125103303.idx`) named 152 pictures not on disk, all
+      from 42 of the 93 threads (69 of them in 19 of the 33 collapsed ones). Tom downloaded
+      them (0 failed) and reviewed 129 new contents, all kept (`40d5b29`). 152 thumbnails
+      made; 1 fails, `eJJziZ0ar3U_..._Ahaa.jpg` of 2025, truncated, in neither gallery: not
+      this work. `gallery261125.idx`: 2,407 threads, 5,795 pictures (was 2,368 and 5,661);
+      `thumbs261125.txt`: 5,795, 56.2 MB. Both go up in CP7. The review tool's port 8765 was
+      taken by another project; it ran with `--port 8790`.
 - [ ] CP6 The embedding into the production collection (`embedder/README.md`) and the three
       local checks of the plan, step 6. Not the chunk experiment's collections.
 - [ ] CP7 Code review, then the deploy with Tom by the top-level `README.md` (steps 3 and 5
