@@ -195,11 +195,19 @@ In the second cmd window (Chrome still running from step 1):
 python process_message.py
 ```
 
+**Keep the debug Chrome on screen, not minimized, until the run ends.** While it is
+minimized, "Expand all" does nothing: the posts stay collapsed and the threads are not saved
+(seen 2026-11-25). Whether a window that is only covered by others works was not tried.
+
 - First lines: `reading ids from ...` for each id file, then `Ids:`, `Msgs already
   filtered:` and `Net to complete: <k>`. `k` is the new threads plus the ones set aside.
 - Then `fetching id: <id>` for each, in random order, and every 5 a `Progress` line. Chrome
   shows each thread as it is read.
-- The end: `----STATS-----` and `Msgs Processed: <k>`.
+- A thread that still shows a collapsed post 15 s after the click is not saved:
+  `Id <id> has <n> collapsed posts, not saved`. The run goes on.
+- The end: `----STATS-----`, `Msgs Processed: <k>` and `Not saved, a post still collapsed:
+  <n>` with their ids. If `n` is not 0, check Chrome is on screen and run step 6 again:
+  a thread without a `.txt` is fetched again.
 - About 7.5 s a thread (one thread, 2026-11-24): about half an hour for 237.
 - It can be stopped (Ctrl+C) and run again: a thread with a `.txt` is skipped, so it goes on
   with what is left. An error in one thread stops the whole run (read from the code, not
@@ -246,29 +254,17 @@ echo checked
 
 Expect only `checked`. A missing one: run step 6 again.
 
-**No post saved collapsed.** Known fault (2026-11-24): the fetch sometimes saves a post as
-Google's one-line preview, cut off, although it clicked "Expand all". In 2026, 27 of the 237
-threads have such posts. This lists the threads that have one:
+**No post saved collapsed.** The fetch saves no thread with a collapsed post (Google's
+one-line preview, cut off), but files from before 2026-11-25 can have them. This lists the
+threads of `data/msgs_md` that have one:
 
 ```
-venv/bin/python - <<'EOF'
-import os
-n = 0
-for root, _, files in os.walk('data/msgs_md'):
-    for f in files:
-        lines = open(os.path.join(root, f), encoding='utf-8').read().split('\n')
-        for k, line in enumerate(lines):
-            nxt = next((x for x in lines[k+1:] if x.strip()), '')
-            if line.startswith('### ') and not nxt.lstrip().startswith('<'):
-                print(f[:-3]); n += 1; break
-print(n, 'threads with a collapsed post')
-EOF
+venv/bin/python msgGetter/f_collapsed.py
 ```
 
-- On 2026-11-24 it printed 40 (all years). A number above last year's means new ones. If the
-  fault has been fixed by the time you read this, the fix says what to do; if not, a thread
-  can be fetched again the way of step 5, putting its id in `data/refetch_ids.txt` (whether a
-  second fetch comes back whole has not been tried).
+- Expect only `0 threads with a collapsed post`. Before the refetch of 2026-11 it was 33.
+- A thread listed: set its two files aside and fetch it again the way of step 5, putting its
+  id in `data/refetch_ids.txt`, with Chrome on screen.
 
 **Look at two or three new threads** by eye, in `\\wsl.localhost\Debian\home\tom\projects\ml\data\msgs_md`.
 A good one starts with `[Original Message ID:<id>](https://groups.google.com/g/cozy_builders/c/<id>)`,
@@ -339,7 +335,8 @@ Each case says whether it was seen.
   in this year's id file), and run step 6 again.
 - **Google slows down or blocks the fetch** (not seen): pages stop loading or Chrome shows a
   check. Stop with Ctrl+C, wait an hour, run again; it goes on where it stopped.
-- **Posts saved collapsed** (seen 2026-11-24): see step 8.
+- **Threads not saved, a post still collapsed** (seen 2026-11-25 with Chrome minimized):
+  the debug Chrome was minimized. Bring it on screen and run step 6 again. See also step 8.
 
 ## Background notes (2024 and 2025)
 
