@@ -14,7 +14,8 @@ answer is deployed (`site_2024` `4f85f9e`, `ml` `72957f4`) and `main` is level w
 `wip/annual-refresh` in both repos. The overnight embedding finished all five variants on
 2026-11-23 21:57 (read from `queue.log`); the Programmer's report of the five checks (2.2d) is
 not written yet. The Programmer's next tasks are 2.2d and then "Collapsed posts" (CP1 to CP8, D58, nineteenth
-revision); the citation trial (RL1) follows. Three questions wait for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
+revision); the citation trial (RL1) follows. The 60 unfetched threads join the refetch and the world-writable directories wait for the
+server cleanup (D59). One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
 be designed or handed to the Programmer on them until he has answered.
 
 ## Open
@@ -30,8 +31,7 @@ be designed or handed to the Programmer on them until he has answered.
 - [ ] Read the Programmer's report of the cause of the collapsed posts (CP2), if the
       Programmer stops there, and the closing report (CP8); record both in the plan.
 - [ ] After Tom's answers (`required_from_tom.md`, "Waiting for a decision"): schedule what
-      he decides on the 60 unfetched threads (they would join CP4), the process suggestions
-      with the YU5 scripts, and the world-writable directories.
+      he decides on the process suggestions with the YU5 scripts.
 
 ## Notes from Programmer
 
@@ -122,7 +122,7 @@ None open (R4 and R5 of 2026-11-22 are D33 and D34 in the plan).
 
 ## Completed
 
-Everything through the eighteenth plan revision (2026-11-24) and decisions D1 to D57. The item
+Everything through the eighteenth plan revision (2026-11-24) and decisions D1 to D59. The item
 list is in the git history of this file.
 
 ## Facts worth keeping

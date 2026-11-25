@@ -216,6 +216,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D56 | (2026-11-23) Reference links in answers are built in two steps: a trial of numbered sources on the rated questions, then the display, only if the trial passes (4.1). The pictures of an answer (4.2) are built first. |
 | D57 | (2026-11-24) Tom runs the yearly update himself from written steps. The work on his machine is in each module's README; the order and everything that touches the server are in the top-level `README.md`, and the server work is one deploy at the end. The getters run from the WSL folder; the Windows clone is deleted ("Yearly update"). |
 | D58 | (2026-11-24) The cause of the posts saved collapsed is found now and the fetch is fixed. The threads that hold such posts are fetched again, embedded and deployed, before the citation trial ("Collapsed posts"). |
+| D59 | (2026-11-24) The up to 60 threads of 2024-25 that were never fetched are fetched in the same pass as the collapsed posts ("Collapsed posts", step 4). The world-writable directories on the server are looked at with the full server cleanup, after the server has run for a week. |
 
 ## Two repositories
 
@@ -1968,6 +1969,15 @@ Architect reading the code and the files; it has not been tried in Chrome.
    its new copy has no collapsed post and at least as many posts as the old one;
    otherwise the old copy stays and the thread is reported. Pass mark: no thread of 2026
    with a collapsed post. The older ones as the cause decided.
+
+   **The 60 threads never fetched (D59)** go in the same run. They are the ids that are
+   in `msgGetter/msgids_2024-09-03_2025-10-02.txt` and in no id file of `data`, and that
+   have no `.txt` (the Programmer's count, 2026-11-24: 60). The Programmer writes them to
+   an id file of their own in `data`, so that the fetch reads them and the record shows
+   where they came from. They are new threads: nothing is set aside for them, and they
+   pass through steps 5 and 6 like the threads of a yearly update. Reported: how many
+   came back as threads, and any id that Google no longer has. The copy of the id file
+   in `msgGetter` is then of no use; it is removed from the repo only on Tom's word.
 5. **The pictures.** A collapsed post may have hidden attachments. The index is built
    again from `data/msgs_md` (`imageGetter/README.md`); if it names pictures that are not
    on disk, Tom downloads and reviews them and the gallery index and thumbnails are made
@@ -1991,13 +2001,12 @@ the current files in any case. The repaired threads are 27 of 11,388 sources. Th
 labelling (2.3) shows excerpts of the variants' own chunks; a cut-off post there is
 labelled as it reads.
 
-**Not decided.** The up to 60 threads of 2024-25 that may never have been fetched
-(`architect_todo.md`). If Tom wants them, they join step 4 and need no second pass.
-
 **Not known.** Whether a second fetch of a collapsed thread comes back whole: the one
 tried on 2026-11-24 did not. How many posts fetched before 2026 are collapsed without
-the check seeing it. How long Google lets 40 threads be fetched in a row; the yearly
-run did 237.
+the check seeing it. Why two searches over the same dates of 2024-25 gave different ids
+(60 only in one list, 29 only in the other), and so whether other threads of other years
+were missed by a search; this is not looked into here. How long Google lets 40 threads be fetched in a row; the yearly
+run did 237, and this one is about 100.
 
 ---
 

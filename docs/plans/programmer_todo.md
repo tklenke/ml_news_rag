@@ -85,6 +85,11 @@ schedule: `server/old.nginx_all_apps.conf`, `server/certbot/conf/live/m24tom.old
 
       The local leftovers of this deploy were deleted 2026-11-24.
 
+- [ ] **World-writable directories (D59).** With the full cleanup, after the server has run
+      for a week: `~/site_2024`, `~/www` and `~/chroma_before_corpus_update` are
+      world-writable. First a read-only step that shows why (who owns them, which user the
+      containers write as); change nothing before Tom and Architect have seen it.
+
 - [x] **From the deploy of the pictures of an answer (2026-11-24, PA8 and PA9).** Done
       2026-11-24, early at Tom's word: image `site_2024-flask:775692d` and `~/pictures_deploy`
       removed on the server, `~/pictures_deploy` locally. Rollback of the code now needs a
@@ -298,6 +303,9 @@ done.
 - [ ] CP4 The refetch with Tom (`msgGetter/README.md` steps 5 to 7; you supply the id file).
       Take a thread over only if its new copy has no collapsed post and at least as many
       posts. Report the threads not taken over. Pass mark: none of 2026 left collapsed.
+      In the same run the 60 ids of 2024-25 that were never fetched (D59; plan, step 4),
+      from an id file of their own in `data`. They go through CP5 and CP6 as new threads.
+      Do not remove `msgGetter/msgids_2024-09-03_2025-10-02.txt` without Tom's word.
 - [ ] CP5 The pictures: the index built again; if it names pictures not on disk, the download
       and Tom's review, the gallery index and the thumbnails. Say which it was.
 - [ ] CP6 The embedding into the production collection (`embedder/README.md`) and the three

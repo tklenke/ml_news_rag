@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-Decided: D1 to D57 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
+Decided: D1 to D59 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -15,12 +15,13 @@ finished work items are in the git history of this file.
 Details of each are in `architect_todo.md`, "Notes from Programmer".
 
 - [x] **Collapsed posts.** Decided 2026-11-24: found, fixed and deployed now (D58).
-- [ ] **Up to 60 threads of 2024-25 never fetched.** Fetch them, and if so in the same pass
-      as the collapsed posts?
+- [x] **Up to 60 threads of 2024-25 never fetched.** Decided 2026-11-24: fetched in the same
+      pass as the collapsed posts (D59).
 - [ ] **Process suggestions (8) and the yearly steps that could be small tested scripts
       (4).** Which to take up, and when.
-- [ ] **World-writable directories on the server** (`~/site_2024`, `~/www`,
-      `~/chroma_before_corpus_update`). Look into why and tighten, or leave.
+- [x] **World-writable directories on the server.** Decided 2026-11-24: with the full server
+      cleanup, after the server has run for a week (D59; `programmer_todo.md`, "Server
+      cleanup").
 
 ## Work items
 
