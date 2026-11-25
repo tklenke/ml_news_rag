@@ -19,8 +19,7 @@ server cleanup (D59). Tom decided on 2026-11-24 that the citations are built, by
 reliable way (D60, twentieth revision): the model cites chunks, the page shows one number per
 source, the run on the 30 questions checks the form only, and Tom's rating page is dropped.
 The probes that led there are in the git history: `docs/notes/citation_probe/` at commit
-`342be36`, deleted in the commit after it. The Programmer has RL1 to RL8 after "Collapsed posts". One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
-be designed or handed to the Programmer on them until he has answered.
+`342be36`, deleted in the commit after it. The Programmer has RL1 to RL8 after "Collapsed posts". No decision waits for Tom.
 
 ## For the yearly update of 2027
 
@@ -55,7 +54,7 @@ Read this before planning the next update.
 - [ ] Read the Programmer's report of the cause of the collapsed posts (CP2), if the
       Programmer stops there, and the closing report (CP8); record both in the plan.
 - [x] Process suggestions and YU5 scripts: decided by Tom 2026-11-24 ("Notes from
-      Programmer"). Suggestion 6 waits for him.
+      Programmer").
 
 ## Notes from Programmer
 
@@ -72,10 +71,9 @@ Decided by Tom on 2026-11-24 and closed (the notes are in the git history of thi
 - The awkward yearly steps (YU5): none built; logged in
   `docs/notes/opportunities_for_improvement.md`, "ml: yearly update".
 
-- [ ] **Process suggestion 6, open.** Tom asked for more information (given in the session
-      of 2026-11-24). The suggestion: an entry of "Server cleanup" carries the reason for
-      keeping its leftovers (what its rollback protects against, and when a fault would
-      show) and not a fixed "not before" date. Nothing changes until Tom answers.
+- Process suggestion 6 (a reason in place of the "not before" date of a cleanup entry): not
+  taken. Tom, 2026-11-24: waiting a week before a cleanup is wise; faults show when the
+  visitors use the site. The dates stay.
 
 ## Notes from Code Reviewer
 

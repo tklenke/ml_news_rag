@@ -21,8 +21,8 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
       (4).** Decided 2026-11-24: suggestions 1, 2, 3, 4, 5, 7 and 8 accepted (now in
       `CLAUDE.md`); the scripts are not built and are logged in
       `docs/notes/opportunities_for_improvement.md`.
-- [ ] **Process suggestion 6: cleanup entries with a reason, not a date.** You asked for
-      more information; Architect gave it on 2026-11-24. Yes or no.
+- [x] **Process suggestion 6: cleanup entries with a reason, not a date.** Decided
+      2026-11-24: no. A cleanup waits its week.
 - [x] **World-writable directories on the server.** Decided 2026-11-24: with the full server
       cleanup, after the server has run for a week (D59; `programmer_todo.md`, "Server
       cleanup").
