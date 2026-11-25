@@ -168,6 +168,34 @@ photo, which the sign missed. 33 threads are affected, 25 of 2026 and 8 older
 `jMGYLtzfQVc`, `pEDiRUafuWc`, `y9wntpms048`), all "every post but the last collapsed".
 They go into the refetch.
 
+**NOTE FROM PROGRAMMER (2026-11-25): the citation trial (plan 4.1a, RL2 to RL4).** For
+you to apply the rule; I have not. `site_2024` `2bd5cb1` (run), `7e60f08` (count). Answers
+and report in `site_2024/evaluation/output/cite_trial/` and `cite_trial_count.md`
+(git-ignored: the prompts can hold addresses).
+
+- **Left out: Q08.** Its chunk `x3XodjGpYTU1` is gone: the thread was refetched in the
+  corpus update of 2026-11-22 and stored under `x3XodjGpYTU#n`. The other 29 prompts,
+  rebuilt with numbering off from the saved ids, equal the saved prompts. 29 answered, 0
+  failed, $0.0209.
+- **Without a number (1): Q05**, the whole answer: "The provided context doesn't say where
+  Desser Monster retreads can be purchased." Yours to say whether it counts as "the
+  context does not cover the question".
+- **Numbers that name no chunk: 0. Other forms: 0. Lists of sources: 0.** No `[2, 5]`.
+- Per answer, numbers written / distinct chunks cited of 15 sent: from 1/1 (Q01, Q25) to
+  21/12 (Q32); Q41 18/7, Q47 18/9, Q28 15/9. Table in the report.
+- Medians, trial / rated (same 29): completion tokens 516 / 560, reasoning 253 / 324,
+  latency 4.81 / 5.39 s, cost $0.00073 / $0.00074.
+- **A reading of the plan to check:** "a bracket or parenthesis holding digits and other
+  text" taken literally lists every "(5.15 m)". The script lists a parenthesis only when it
+  holds only numbers, or a number with a word for a piece of context ("source", "piece",
+  "context", "chunk", "doc", "ref"). Every bracket of the 29 answers was also read by a
+  script: none outside `[n]`. Whether the cited chunks support the statements was not
+  looked at (D60: no rating).
+- The prompt: the wording goes before the `-----` of a first prompt, as the probe had it,
+  and at the end of the revise and follow-up instructions (RL1, `8ce8a30`).
+
+RL5 goes on without waiting.
+
 Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
 posts (D58), the 60 unfetched threads (D59), and the awkward yearly steps (logged in

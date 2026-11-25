@@ -200,10 +200,11 @@ off, and with it off every prompt is what it is today.
       it holds only numbers or a number with a word for a piece of context ("source",
       "piece", ...): taken literally, "digits and other text" would list every "(5.15 m)".
       Every bracket of the 29 answers was also read by a script: none outside `[n]`.
-- [ ] RL4 Report to Architect in a note in `architect_todo.md`: the counts, the questions left
+- [x] RL4 Report to Architect in a note in `architect_todo.md`: the counts, the questions left
       out, the answers without a number (by question id). Do not apply the rule yourself and
       do not change the wording of the prompt: both are Architect's. Go on with RL5 without
       waiting.
+      Done 2026-11-25: note in `architect_todo.md`.
 - [ ] RL5 The display (plan 4.1b), tests first, in the order of the plan's list of tests: the
       rows of the source list numbered by the code that reduces the record to one row per
       source; the renderer shows the row number of a chunk's source as a link; marks that
