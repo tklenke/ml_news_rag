@@ -154,10 +154,9 @@ after the click, so the page did not take the click at all. On screen it turns t
 all". Run in `data/collapsed_probe/out_minimized_switches`. Tom's normal Chrome was open too, and
 `chrome://version` was not checked.
 
-Rerun the same day with the debug Chrome the only Chrome, minimized: all 5 threads expanded
-by 2 s, the button read "Collapse all" each time (`out_minimized_switches_only_chrome`).
-Not yet known which made the difference, the switches or no other Chrome; a run without
-the switches and no other Chrome would tell.
+Rerun the same day with the debug Chrome the only Chrome: all 5 threads expanded by 2 s
+(`out_onscreen_switches_only_chrome`), but Chrome was left on screen, so it shows nothing
+new. A run minimized, with the switches and no other Chrome, is still to do.
 
 Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
