@@ -77,23 +77,23 @@ Plan: "Collapsed posts (D58)". Read all of it; the numbers and the hypothesis ar
 `data/msgs` or `data/msgs_md`: set it aside. Nothing is fetched into `data` before CP3 is
 done.
 
-- [~] CP1 The cause, with Tom at Chrome on Windows. Reproduce into a scratch directory; show
+- [x] CP1 The cause, with Tom at Chrome on Windows. Reproduce into a scratch directory; show
       what the page held when it was read and why; look at three of the older single-post
       files in a browser. No fix yet.
-      Found so far (2026-11-24, from the files): the check of README step 8 flags 15 files
-      falsely. Its `### ` line at the start of a line is also a heading inside a post: all
-      13 older files, and `sklLflSc-Q8` and `Lyutjnqv9K0` of 2026. In the format of 2026 a
-      collapsed post's `### name` line is followed straight by the date; an expanded one's
-      by `<address>`. Counted that way: 25 threads of 2026 affected, none older. In all 25
-      the collapsed posts come before the expanded ones. The probe for Tom is
-      `data/collapsed_probe/probe_collapsed.py` (git-ignored); it writes only into
-      `data/collapsed_probe/out`. Tom thinks the click comes too early (before 1 to 2 s);
-      the probe tries waits of 0.5, 1, 2 and 4 s before it. The random part of the wait
-      before the click is Tom's, to keep Google from taking the fetch for scraping: the fix
-      keeps a random pause and does not rely on it for the page being ready.
-- [ ] CP2 Report the cause in a note in `architect_todo.md` and tell Tom. Go on to CP3 if the
+      Done 2026-11-24: the "Expand all" click has no effect while Chrome is minimized (4 of 5
+      fetches stayed collapsed for 15 s; 47 fetches on screen, none). The wait before the
+      click is not a cause. The step 8 check flags headings inside posts: 25 threads of 2026
+      are affected, none older; the three older files are whole (each post has its address
+      line). The probe and its runs are in `data/collapsed_probe/` (git-ignored). The random
+      part of the wait before the click is Tom's, to keep Google from taking the fetch for
+      scraping: the fix keeps it. Tom did not say whether the older threads looked whole in
+      Chrome; the files were compared with the live post counts instead.
+- [x] CP2 Report the cause in a note in `architect_todo.md` and tell Tom. Go on to CP3 if the
       cause is one of timing and the plan's points for the fix fit it; otherwise stop for
       Architect.
+      Reported 2026-11-24. Not one of timing: waiting for the page does not help while the
+      window is minimized. **Stopped for Architect**, who chooses how the page is made to
+      expand (three options in the note). CP3 waits for that.
 - [ ] CP3 The fix, tests first (plan, step 3): a thread is saved only with no post collapsed;
       one that stays collapsed leaves no file, is printed and counted, and the run goes on;
       one function for the check, used by the fetch and by a command that lists the affected

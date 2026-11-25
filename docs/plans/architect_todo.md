@@ -88,6 +88,65 @@ embedder code are unchanged since the commit the queue ran (`50bf516`).
 **Also:** the GPU Ollama container (`chunk_experiment_ollama`) is removed (Tom, 2026-11-24).
 The experiment's Chroma stays for 2.3.
 
+**NOTE FROM PROGRAMMER (2026-11-24): the cause of the collapsed posts (CP2, plan "Collapsed
+posts" step 2). It is not one of timing, so I stopped before the fix, as step 2 says.**
+
+**Cause: the "Expand all" click has no effect while the Chrome window is minimized.** The
+click is found and raises no error, but the posts stay collapsed, also 15 seconds later.
+With the window on screen the same click opens every post at once.
+
+How it was shown (Tom ran a probe, `data/collapsed_probe/probe_collapsed.py`, git-ignored;
+the page was read at 0 to 15 s after the click, outputs in `data/collapsed_probe/out_*`):
+
+| Run | Wait before the click | Chrome | Fetches | Collapsed after the click |
+|---|---|---|---|---|
+| `out_random` | 1 to 3 s at random, as the fetch | on screen | 24 | 0 |
+| `out_fixed` | 0.5, 1, 2 and 4 s | on screen | 23 | 0 |
+| `out_minimized` | 2 s | minimized | 5 | 4, unchanged for 15 s |
+
+- The first fetch of the minimized run expanded; most likely Chrome was not yet minimized
+  (Tom minimized it as the run started). Not confirmed.
+- Before the click, every thread shows all posts but the last collapsed: the pattern of the
+  24 threads. So the saved files are the page before the click took effect; nothing was
+  lost on the way to markdown.
+- `QbzfRr94y7Y` (first 3 of 11 collapsed) fits a window brought back on screen part way
+  through the expansion. Read from the pattern, not tried.
+- The wait before the click is not a cause: Selenium's `driver.get` returns after the page
+  has loaded, and 0.5 s was enough in every fetch on screen. Tom's random wait is there to
+  pace the fetch so that Google does not take it for scraping; it stays.
+- Why Chrome does this: Chrome slows or stops the rendering of a window that is minimized or
+  covered, and the page's own code that opens the posts does not run. That is what Chrome is
+  known to do, not something I looked into in the page. A window covered by another, not
+  minimized, was not tried.
+
+**The count, corrected.** The check of `msgGetter/README.md` step 8 takes any line starting
+with `### ` for a post, and a heading inside a post looks the same. 15 of its 40 files are
+that: all 13 older ones, and `sklLflSc-Q8` and `Lyutjnqv9K0` of 2026. A collapsed post shows
+as a `### name` line followed straight by the date; an expanded one by its `<address>`
+line. Counted that way, **25 threads of 2026 are affected and none older**. The three older
+files of the plan (`1FZkFhlGOTU`, `EmgEPIPGuN8`, `y_XqX-aiid0`) hold an address line for
+each of the 6, 14 and 8 posts that the thread has now: they are whole.
+
+**For Architect: the plan's points for the fix do not fit as written.** Waiting for the
+state of the page does not help while the window is minimized: nothing changes. What does
+still fit: a thread saved only with no post collapsed, otherwise not saved, printed and
+counted; one function for the check (the sign above), used by the fetch and a command.
+What is open is how the page is made to expand. Options I see, none tried:
+
+1. Tom keeps the debug Chrome on screen during the fetch, written in the README; the check
+   catches a thread fetched while it was not. Costs no code beyond the check.
+2. `chrome_with_debug.bat` starts Chrome with the switches that stop it slowing hidden
+   windows (`--disable-backgrounding-occluded-windows`, `--disable-renderer-backgrounding`,
+   `--disable-background-timer-throttling`). Whether they make a minimized window expand is
+   not known; one short probe run would show it.
+3. The fetch brings the window to the front before each thread (Selenium can
+   `maximize_window`). Not known whether that is enough, and it takes the screen while Tom
+   works.
+
+With any of them, a thread still collapsed after a set time is left unsaved and the next run
+tries it again. My preference is 2 with the check, if a probe run shows the switches work,
+because it does not depend on Tom remembering; otherwise 1.
+
 Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
 posts (D58), the 60 unfetched threads (D59), and the awkward yearly steps (logged in
