@@ -216,11 +216,21 @@ off, and with it off every prompt is what it is today.
       outside code; the source list shows `[n]` before each row of a numbered answer. Tried
       on the trial's Q28 with its real sources: 15 chunks give rows 1 to 9, links open the
       threads. The rating page passes no citations, so its answers are shown as before.
-- [ ] RL6 The definition `[1]: https://...` no longer read by the answer renderer; check that
+- [x] RL6 The definition `[1]: https://...` no longer read by the answer renderer; check that
       none of the 90 archived answers is shown differently for it and report the number.
+      Done 2026-11-25 (`dbfa93b`): the renderer disables markdown-it's `reference` rule. The
+      90 answers of `evaluation/output/answers` rendered before and after: 0 differ. A
+      definition line is now shown as text, and in a numbered answer its `[1]` links to our
+      source like any other mark.
 - [ ] RL7 Show Tom the local site with the setting on: three first answers, a dig deeper and a
       follow-up (plan 4.1a, "Looked at by Tom"). Do not deploy before he has said yes and
       Architect has recorded that the rule holds.
+      Ready 2026-11-25: numbering on locally only, in the git-ignored `fwww/site_local.ini`
+      (`[PROMPTS] NUMBER_DOCS = True`, appended; the file before is kept in the session's
+      scratchpad), flask restarted. Smoke test: one first answer (`dlTmfeeRHN`), numbered,
+      `[5]` shown as `[4]` linking to `SVdmlqx3aco`, rows numbered. Waiting for Tom's look.
+      **Take the two lines out of `site_local.ini` after Tom's look** (the deploy switches it
+      on through `site.ini`).
 - [ ] RL8 Code review, then the deploy of the plan (4.1b, "Deploy") with Tom, in small blocks.
       Report to Architect in `architect_todo.md`.
 
