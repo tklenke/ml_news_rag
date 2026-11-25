@@ -205,11 +205,17 @@ off, and with it off every prompt is what it is today.
       do not change the wording of the prompt: both are Architect's. Go on with RL5 without
       waiting.
       Done 2026-11-25: note in `architect_todo.md`.
-- [ ] RL5 The display (plan 4.1b), tests first, in the order of the plan's list of tests: the
+- [x] RL5 The display (plan 4.1b), tests first, in the order of the plan's list of tests: the
       rows of the source list numbered by the code that reduces the record to one row per
       source; the renderer shows the row number of a chunk's source as a link; marks that
       follow each other shown once per source; a number that names no chunk left out; the
       stored answer unchanged.
+      Done 2026-11-25 in `site_2024` (`755027c`, `tests/test_citation_links.py`, 16 tests,
+      409 in all). `get_result_for_display` numbers the rows and gives `citations` (per chunk
+      sent: row number, address, label); `get_answer_html(text, citations)` links the marks
+      outside code; the source list shows `[n]` before each row of a numbered answer. Tried
+      on the trial's Q28 with its real sources: 15 chunks give rows 1 to 9, links open the
+      threads. The rating page passes no citations, so its answers are shown as before.
 - [ ] RL6 The definition `[1]: https://...` no longer read by the answer renderer; check that
       none of the 90 archived answers is shown differently for it and report the number.
 - [ ] RL7 Show Tom the local site with the setting on: three first answers, a dig deeper and a
