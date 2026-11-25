@@ -161,6 +161,13 @@ collapsed for 15 s, the button still "Expand all"; stopped there
 (`out_minimized_switches_only_chrome`). The switches do not help; they are taken out of
 `chrome_with_debug.bat` again. That leaves 1 (my preference) or 3 (not tried).
 
+**Tom decided 2026-11-25: option 1, and the work goes on without Architect.** Also a
+correction to the count above: older files put `### name` mid-line after the profile
+photo, which the sign missed. 33 threads are affected, 25 of 2026 and 8 older
+(`-dm26broaFA`, `4-7wA1kxJ9w`, `CFIdt9rCXvo`, `V_8WY-o-3EM`, `h6IeMxPM6wQ`,
+`jMGYLtzfQVc`, `pEDiRUafuWc`, `y9wntpms048`), all "every post but the last collapsed".
+They go into the refetch.
+
 Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
 posts (D58), the 60 unfetched threads (D59), and the awkward yearly steps (logged in

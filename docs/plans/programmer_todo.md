@@ -94,6 +94,15 @@ done.
       Reported 2026-11-24. Not one of timing: waiting for the page does not help while the
       window is minimized. **Stopped for Architect**, who chooses how the page is made to
       expand (three options in the note). CP3 waits for that.
+      **Tom decided 2026-11-25: option 1**, the debug Chrome stays on screen during the
+      fetch, written in the README; the check keeps a collapsed thread from being saved.
+      Architect not asked (Tom's waiver). Option 2, the switches, was tried and does not
+      work (note in `architect_todo.md`).
+      **Correction 2026-11-25:** "none older" in CP1 is wrong. Older files put `### name`
+      in the middle of a line, after the profile photo; the CP1 sign only looked at lines
+      that start with it. With the sign anywhere in a line: 33 threads, 25 of 2026 and 8
+      older, all in the pattern "every post but the last collapsed". None of the 214
+      collapsed posts has "Reply to author" in its preview.
 - [ ] CP3 The fix, tests first (plan, step 3): a thread is saved only with no post collapsed;
       one that stays collapsed leaves no file, is printed and counted, and the run goes on;
       one function for the check, used by the fetch and by a command that lists the affected
