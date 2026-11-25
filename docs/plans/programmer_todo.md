@@ -103,10 +103,16 @@ done.
       that start with it. With the sign anywhere in a line: 33 threads, 25 of 2026 and 8
       older, all in the pattern "every post but the last collapsed". None of the 214
       collapsed posts has "Reply to author" in its preview.
-- [ ] CP3 The fix, tests first (plan, step 3): a thread is saved only with no post collapsed;
+- [x] CP3 The fix, tests first (plan, step 3): a thread is saved only with no post collapsed;
       one that stays collapsed leaves no file, is printed and counted, and the run goes on;
       one function for the check, used by the fetch and by a command that lists the affected
       threads.
+      Done 2026-11-25 (`8748394`, `128734e`): `msgGetter/f_collapsed.py` (the check, and as a
+      command the list: 33 today); the fetch reads the page again for up to 15 s until no
+      post is collapsed, else does not save, prints and counts; a saved `.md` with a
+      collapsed post gets no `.txt`. 15 tests on five shortened real threads. The waiting
+      itself is not tested (needs Google's page): CP4 is its check. README step 6 says to
+      keep Chrome on screen; step 8 runs the command.
 - [ ] CP4 The refetch with Tom (`msgGetter/README.md` steps 5 to 7; you supply the id file).
       Take a thread over only if its new copy has no collapsed post and at least as many
       posts. Report the threads not taken over. Pass mark: none of 2026 left collapsed.
