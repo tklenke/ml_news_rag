@@ -156,7 +156,10 @@ all". Run in `data/collapsed_probe/out_minimized_switches`. Tom's normal Chrome 
 
 Rerun the same day with the debug Chrome the only Chrome: all 5 threads expanded by 2 s
 (`out_onscreen_switches_only_chrome`), but Chrome was left on screen, so it shows nothing
-new. A run minimized, with the switches and no other Chrome, is still to do.
+new. Then minimized, with the switches and no other Chrome: the first 4 threads stayed
+collapsed for 15 s, the button still "Expand all"; stopped there
+(`out_minimized_switches_only_chrome`). The switches do not help; they are taken out of
+`chrome_with_debug.bat` again. That leaves 1 (my preference) or 3 (not tried).
 
 Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
