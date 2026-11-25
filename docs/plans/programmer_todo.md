@@ -136,8 +136,19 @@ done.
       this work. `gallery261125.idx`: 2,407 threads, 5,795 pictures (was 2,368 and 5,661);
       `thumbs261125.txt`: 5,795, 56.2 MB. Both go up in CP7. The review tool's port 8765 was
       taken by another project; it ran with `--port 8790`.
-- [ ] CP6 The embedding into the production collection (`embedder/README.md`) and the three
+- [x] CP6 The embedding into the production collection (`embedder/README.md`) and the three
       local checks of the plan, step 6. Not the chunk experiment's collections.
+      Done 2026-11-25. Before: local and server both `42276 92d43eed...` (server read by Tom).
+      58 old chunks of the 33 deleted, 93 threads embedded, 359 chunks, 0 failed, 191 s.
+      After: `42577 4e273635c3dec63f1e61d6c3847619ef2950ad8e6d37e7ef93fc3bfff0a1d3a5`
+      (`~/update_records/after.txt`), 11,448 sources = files = `embedstatus.txt` lines.
+      (1) Every source's chunks are its file's chunks: missing 0, extra 0. (2) Top 15 of the
+      52 questions (`data/collapsed_update/before.json`, `after.json`): 4 questions changed,
+      5 chunks entered (3 refetched, 1 new of 2024-25, 1 other). (3) "On the N249PM test
+      flight, how did the plane behave at 3,000 AGL and what were the CHTs?" returns
+      `SVdmlqx3aco#1` at rank 5, text the old copy did not have. The 33 gained 29,993 words.
+      Server step 3's heredoc got stuck in Tom's paste (wrapped lines indent the closing
+      `PY`); a one-line `python -c` worked. To correct in the README in CP7.
 - [ ] CP7 Code review, then the deploy with Tom by the top-level `README.md` (steps 3 and 5
       to 8). Correct the README wherever a step does not work as written.
 - [ ] CP8 `msgGetter/README.md` step 8 and troubleshooting say what the fetch does now; the
