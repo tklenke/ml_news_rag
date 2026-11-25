@@ -18,8 +18,8 @@ revision); the reference links (RL1 to RL8) follow. The 60 unfetched threads joi
 server cleanup (D59). Tom decided on 2026-11-24 that the citations are built, by the most
 reliable way (D60, twentieth revision): the model cites chunks, the page shows one number per
 source, the run on the 30 questions checks the form only, and Tom's rating page is dropped.
-The probes that led there are in `ml/docs/notes/citation_probe/` (untracked; Tom has not
-said to commit it). The Programmer has RL1 to RL8 after "Collapsed posts". One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
+The probes that led there are in the git history: `docs/notes/citation_probe/` at commit
+`342be36`, deleted in the commit after it. The Programmer has RL1 to RL8 after "Collapsed posts". One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
 be designed or handed to the Programmer on them until he has answered.
 
 ## Open
