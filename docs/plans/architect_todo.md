@@ -147,6 +147,13 @@ With any of them, a thread still collapsed after a set time is left unsaved and 
 tries it again. My preference is 2 with the check, if a probe run shows the switches work,
 because it does not depend on Tom remembering; otherwise 1.
 
+**Option 2 tried (2026-11-25): the switches do not help.** Chrome started by
+`chrome_with_debug.bat` with the three switches (`ac01080`), minimized, probe `short`: all 5
+threads stayed collapsed for 15 s, the first one too. The button still read "Expand all"
+after the click, so the page did not take the click at all. On screen it turns to "Collapse
+all". Run in `data/collapsed_probe/out_minimized_switches`. That leaves 1 (my preference
+now) or 3 (not tried).
+
 Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
 posts (D58), the 60 unfetched threads (D59), and the awkward yearly steps (logged in
