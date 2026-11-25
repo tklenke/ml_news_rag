@@ -1558,7 +1558,7 @@ wanted to see what `gpt-6-luna` does with the wording below on three questions, 
 little code as possible. Architect ran it on 2026-11-24 with a script of its own that is
 not site code: Q03, Q28 and Q05, the chunks of the rated answers, the wording put before
 the context. The script, the three records and the page for Tom are in the git-ignored
-`site_2024/evaluation/output/citation_probe/` (`probe.md`). Seen by a script: every
+`ml/data/citation_probe/` (`probe.md`). Seen by a script: every
 number written names a chunk; the form is the one asked for; no list of sources. Q03
 cites 2 of 15 chunks, Q28 7 of 15, and Q05, whose answer is that the context does not
 say, cites none. Whether the cited chunks support the statements is Tom's reading of
