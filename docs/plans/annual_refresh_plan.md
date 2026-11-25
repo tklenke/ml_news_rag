@@ -13,7 +13,8 @@
   cause of the collapsed posts is a minimized Chrome window, not timing; Tom decided the
   fix with the Programmer (D61) and that its deploy waits for the citations (D62). 33
   threads were repaired and 60 fetched for the first time ("Collapsed posts", "As
-  found and built").
+  found and built"). Tom decided the same day that the citations and the repaired
+  collection go to the server in one deploy (D63; 4.1b, "Deploy").
 - **2026-11-24 (twentieth revision):** Tom decided that the site moves to citations, and
   left the way of building them to Architect with one aim: the most reliable (D60). He
   decided after a probe of eleven questions and one more question asked with and without
@@ -237,6 +238,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D60 | (2026-11-24) The site moves to citations in answers. How they are built is Architect's choice, for reliability: the model cites numbered chunks, the site shows one number per source and makes the links, and the form is checked on the 30 questions before the deploy (4.1). Tom's rating of numbered answers is not a condition any more. |
 | D61 | (2026-11-25) Collapsed posts: the debug Chrome stays on screen during a fetch, as a step of the README, and the fetch saves no thread that still holds a collapsed post. Decided with the Programmer, without Architect ("Collapsed posts", "As found and built"). |
 | D62 | (2026-11-25) The deploy of the repaired collection and its report (CP7, CP8) wait until the citations are done. Until then the local collection is ahead of the server's. |
+| D63 | (2026-11-25) The citations and the repaired collection, with its thumbnails and gallery index, go to the server in one deploy, by the top-level `README.md` (4.1b, "Deploy"). |
 
 ## Two repositories
 
@@ -1824,6 +1826,27 @@ deeper and a follow-up each show links that open; a stored answer from before th
 looks as before; the pictures still show. Rollback: the setting off (a revert and a
 `git pull`); answers made while it was on keep their links.
 
+**[REVISED - 2026-11-25] One deploy with the repaired collection (D63).** The paragraph
+above gave the citations a deploy of their own. Tom decided that they go out with the
+collection, the thumbnails and the gallery index of "Collapsed posts", by the top-level
+`README.md`, steps 3 and 5 to 8, with the code in step 6d. It is the first run of that
+combined deploy in one session; where a step does not work as written, the README is
+corrected.
+
+- Before it: Tom's yes after his look at the local site; one code review of the
+  `site_2024` commits after `4f85f9e` and of the `ml` commits of the collapsed posts;
+  the setting switched on in the tracked `site.ini`; both repos merged to `main` and
+  pushed.
+- Step 3 compares the server with `~/update_records/before.txt` (`42276 92d43eed...`),
+  not with the local collection, which was changed on purpose.
+- Checks: those of README step 7, and those of the paragraph above. The question of
+  step 7 that lists a new thread is one of "Collapsed posts", step 6.
+- The ways back are those of the README, one part at a time. For the citations alone
+  the setting off is enough, as above. A way back of the code by the kept image also
+  takes the citations away.
+- Accepted by Tom: if answers get worse, the deploy does not show whether the numbering
+  or the chunks caused it. Going back on one of them does.
+
 **To watch afterwards.** The share of `not_good` ratings on the site before and after,
 told apart by the date of the job.
 
@@ -2137,7 +2160,8 @@ Architect reading the code and the files; it has not been tried in Chrome.
    checks as for the corpus update: every source's chunks hold the words of its file;
    top 15 of the 52 questions before and after, reported with no pass mark; a question
    about one of the repaired threads returns text that was cut off before.
-7. **The deploy,** by the top-level `README.md` steps 3 and 5 to 8, run by Tom with the
+7. **[REVISED - 2026-11-25]** One deploy with the citations (D63); see 4.1b, "Deploy".
+   As first written: **The deploy,** by the top-level `README.md` steps 3 and 5 to 8, run by Tom with the
    Programmer reading: the collection, and the thumbnails and gallery index only if step
    5 changed them. No change of the site's code is expected. It is the first time those
    steps are run as written; where they fail, the README is corrected. Code review of

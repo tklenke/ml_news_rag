@@ -8,18 +8,18 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-The plan is at its twenty-first revision (2026-11-25), decisions D1 to D62. The server runs
+The plan is at its twenty-first revision (2026-11-25), decisions D1 to D63. The server runs
 `site_2024` `4f85f9e` and `ml` `72957f4`. Three reports of the Programmer were read on
 2026-11-25 and are recorded in the plan: the citation trial passed its rule (4.1a,
 "Result"), the five collections of the chunk experiment are fit for the labelling (2.2a,
 "Result"), and the collapsed posts are repaired locally ("Collapsed posts", "As found and
 built"). Nothing waits to be designed.
 
-Where the Programmer is: RL7, Tom's look at the local site with numbering on. Then RL8 (the
-deploy of the citations), CP7 and CP8 (the deploy of the repaired collection, D62), then
-2.3. The local collection is ahead of the server's until CP7.
-
-Asked of Tom on 2026-11-25, not answered yet: whether RL8 and CP7 are one deploy or two.
+Where the Programmer is: RL7, Tom's look at the local site with numbering on. Then RL8 and CP7
+as one deploy (D63: the citations with the repaired collection, by the top-level
+`README.md`), CP8, then 2.3. The local collection is ahead of the server's until that
+deploy. It is the first run of the combined deploy in one session; read in the reports what
+the README needed corrected.
 
 ## Open
 
@@ -105,7 +105,7 @@ Read this before planning the next update.
   Windows Python from cmd in the WSL folder, and fetches arrive in `ml/data` (D57).
 - The server's collection holds 42,276 chunks of 11,388 sources (2026-11-22, after the
   corpus update). The local one holds 42,577 of 11,448 since 2026-11-25 (the collapsed
-  posts and the 60 threads of D59) and is not deployed yet (D62).
+  posts and the 60 threads of D59) and is not deployed yet (D62, D63).
 - `ml/docker-compose.yaml` mounts `../site_2024/data/chroma`, the same directory the
   site's Chroma uses locally. Both compose files must name the same Chroma version.
 - Local Chroma data has been opened by 1.5.9. The 1.1.1 backup is

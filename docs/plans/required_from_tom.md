@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-Decided: D1 to D62 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
+Decided: D1 to D63 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -27,12 +27,10 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
       cleanup, after the server has run for a week (D59; `programmer_todo.md`, "Server
       cleanup").
 
-### Waiting for a decision (asked by Architect 2026-11-25)
+### Asked by Architect 2026-11-25
 
-- [ ] **One deploy or two.** The citations (RL8: code and a setting) and the repaired
-      collection (CP7: collection, thumbnails, gallery index) can go to the server
-      together by the top-level `README.md`, or one after the other as the todo has them
-      now.
+- [x] **One deploy or two.** Decided 2026-11-25: one. The citations (RL8) and the repaired
+      collection (CP7) go to the server together by the top-level `README.md` (D63).
 
 ## Work items
 
@@ -69,7 +67,8 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
 - [ ] Reference links (plan 4.1, D60): no rating page any more. When the Programmer shows the
       local site with numbers on (RL7), look at three first answers, a dig deeper and a
       follow-up, one of them on a question you know well, click some numbers, and say
-      whether anything stops the deploy. Then the deploy with the Programmer.
+      whether anything stops the deploy. Then the deploy with the Programmer, which also
+      carries the repaired collection (D63).
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 

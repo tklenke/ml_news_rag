@@ -12,8 +12,9 @@ task, every session. The tasks below are only a checklist; section numbers refer
 **Order:**
 
 1. 2.2d, the report on the chunk experiment's embedding ("Phase 2").
-2. "Collapsed posts" (CP1 to CP8, D58).
-3. "Reference links" (RL1 to RL8, D60).
+2. "Collapsed posts" (CP1 to CP6 done, D58).
+3. "Reference links": RL7, then RL8, which is one deploy with CP7 (D63, 2026-11-25),
+   then CP8.
 4. The rest of Phase 2 (2.3 to 2.5, D41).
 
 "Server cleanup" is done with Tom from 2026-11-28. One session per group; start each session
@@ -160,6 +161,8 @@ none of the 33 refetched threads, so RL2 is not affected by the deleted chunks.
 
 - [ ] CP7 Code review, then the deploy with Tom by the top-level `README.md` (steps 3 and 5
       to 8). Correct the README wherever a step does not work as written.
+      **Tom, 2026-11-25 (D63): one deploy with RL8.** Do CP7 and RL8 together, as plan
+      4.1b, "Deploy", the paragraph of 2026-11-25, says.
 - [ ] CP8 `msgGetter/README.md` step 8 and troubleshooting say what the fetch does now; the
       note in `docs/notes/opportunities_for_improvement.md` if anything is left. Report to
       Architect: the cause, the threads repaired and not, pictures gained, chunks before and
@@ -238,6 +241,12 @@ off, and with it off every prompt is what it is today.
       for the deploy, only Tom's yes is open.
 - [ ] RL8 Code review, then the deploy of the plan (4.1b, "Deploy") with Tom, in small blocks.
       Report to Architect in `architect_todo.md`.
+      **One deploy with CP7 (D63, 2026-11-25).** One code review for both: the `site_2024`
+      commits after `4f85f9e` and the `ml` commits of the collapsed posts. Before the merge,
+      `NUMBER_DOCS = True` in the tracked `site.ini`, only after Tom's yes at RL7. The
+      deploy is the top-level `README.md`, steps 3 and 5 to 8, with the code in 6d; its
+      checks are those of README step 7 and of plan 4.1b. One report covers RL8; CP8 keeps
+      its own.
 
 ## Server cleanup (with Tom)
 
