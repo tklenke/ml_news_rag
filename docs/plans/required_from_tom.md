@@ -14,10 +14,7 @@ finished work items are in the git history of this file.
 
 Details of each are in `architect_todo.md`, "Notes from Programmer".
 
-- [ ] **Collapsed posts.** 40 threads in the corpus hold posts cut off by the fetch, 27 of
-      them among the 237 threads of 2026; they are on the site that way. Find the cause and
-      fix the fetch now, with a refetch of the 40 and a deploy of the collection, or leave
-      it to the yearly update of 2027?
+- [x] **Collapsed posts.** Decided 2026-11-24: found, fixed and deployed now (D58).
 - [ ] **Up to 60 threads of 2024-25 never fetched.** Fetch them, and if so in the same pass
       as the collapsed posts?
 - [ ] **Process suggestions (8) and the yearly steps that could be small tested scripts
@@ -54,6 +51,9 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
       (PA7); at the deploy, upload the thumbnails and the index (under 100 MB; the Programmer
       supplies the commands) and do the browser checks, one of them in a browser that is not
       signed in to Google.
+- [ ] Collapsed posts (D58): be at Chrome on Windows while the Programmer finds the cause;
+      fetch the affected threads again; download and review pictures if the repaired threads
+      bring new ones; run the deploy of the collection from the top-level `README.md`.
 - [ ] Reference links, the trial (plan 4.1a): on the local page the Programmer shows, rate the
       10 answers of batch 1 and mark up to 50 citations `yes` / `no` (does the chunk support
       the sentence). A second batch only if the result is on the line.

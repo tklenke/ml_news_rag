@@ -1,11 +1,18 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-24 (eighteenth revision); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
+**Status:** Revised 2026-11-24 (nineteenth revision); the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citation trial ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-24 (nineteenth revision):** The fetch saves some posts as Google's cut-off
+  preview, and 27 of the 237 threads of 2026 are on the site that way. Tom decided that
+  the cause is found now, the fetch is fixed, the threads are fetched again and the
+  collection is deployed again (D58; "Collapsed posts"). It comes before the citation
+  trial. Architect measured which posts are cut off: in 24 of the 27 threads it is every
+  post but the last, which is how Google shows a thread before "Expand all". The cause is
+  not known; the Programmer finds it before anything is changed.
 - **2026-11-24 (eighteenth revision):** The pictures of an answer (4.2) are deployed and
   recorded as they were built. Three points differ from the design. Tom moved the pictures
   from under the answer to after Provided Docs when he saw the local site (amends D55).
@@ -208,6 +215,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D55 | (2026-11-23) The thumbnails are directly under the answer and its short disclaimer, above the feedback buttons. At most 12 are shown there. A dig deeper or a follow-up has no rule of its own: its thumbnails follow its provided documents (4.2). Amended the same day, when Tom saw the local site: the pictures are not under the answer but after Provided Docs, below the actions (ask another, dig deeper, follow-up). The limit of 12 stands. |
 | D56 | (2026-11-23) Reference links in answers are built in two steps: a trial of numbered sources on the rated questions, then the display, only if the trial passes (4.1). The pictures of an answer (4.2) are built first. |
 | D57 | (2026-11-24) Tom runs the yearly update himself from written steps. The work on his machine is in each module's README; the order and everything that touches the server are in the top-level `README.md`, and the server work is one deploy at the end. The getters run from the WSL folder; the Windows clone is deleted ("Yearly update"). |
+| D58 | (2026-11-24) The cause of the posts saved collapsed is found now and the fetch is fixed. The threads that hold such posts are fetched again, embedded and deployed, before the citation trial ("Collapsed posts"). |
 
 ## Two repositories
 
@@ -246,7 +254,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    (4.2), then reference links (4.1) (D41). 4.0 is done (2026-11-23); 4.2 is designed
    and decided (D52 to D55) and is built first; 4.1 is designed (D56): a trial, then the
    display if the trial passes. **[REVISED - 2026-11-24]** 4.2 is deployed (`4f85f9e`);
-   the trial of 4.1 is next.
+   the trial of 4.1 is next. **[REVISED - 2026-11-24] (nineteenth revision)** "Collapsed
+   posts" (D58) comes before the trial.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
@@ -1889,6 +1898,106 @@ and Tom approved it (2026-11-24); Architect designed none of it.
 - **Open, with Architect:** the fetch saves some posts cut off, and up to 60 threads of
   2024-25 may never have been fetched (`architect_todo.md`). The steps that are Python
   pasted from a README, and could be small tested scripts, are listed there too.
+
+## Collapsed posts (D58)
+
+**[REVISED - 2026-11-24] (nineteenth revision)** New. Repo `ml/`, module `msgGetter/`, then
+the pictures, the embedding and a deploy of the collection. Before the citation trial.
+
+**The fault.** `process_message.py` opens a thread, clicks "Expand all", waits 2 seconds
+and saves what the page shows. Some posts are saved as Google's one-line preview: no
+`<address>` line, the text cut off. Found by the Programmer on 2026-11-24, when a thread
+of 3 posts came back with 2 of them cut off (`yu1_fetch_trial.md`, "Result").
+
+**What was measured** (Architect, 2026-11-24, read-only, `data/msgs_md`; a post counts as
+collapsed when its `### name` line is not followed by an `<address>` line, the check of
+`msgGetter/README.md` step 8):
+
+- 40 of the markdown files hold a collapsed post. 27 are among the 237 threads of 2026;
+  182 of those 237 have more than one post, so about one in seven of them is affected.
+- Of the 27: in 24 every post but the last is collapsed, which is the state of the page
+  before "Expand all" (2 to 16 posts). In 3 the collapsed posts are among expanded ones:
+  the first 3 of 11 (`QbzfRr94y7Y`), the 12th of 13 (`sklLflSc-Q8`), the 28th and 29th of
+  37 (`Lyutjnqv9K0`).
+- Of the 13 older files: 10 have a single post and 2 have two, all of them collapsed; one
+  has the 5th of 7 collapsed (`1abgR9ndFa0`). This is another pattern. Whether it is the
+  same fault, or posts that the check takes for collapsed and are not, is not known.
+- Posts fetched before 2026 may be collapsed without being counted: the older files hold
+  fewer `###` lines (the Programmer's remark, not measured).
+- The trial of 2026-11-24 printed no "no exapansion found", so the button was found and
+  the click raised no error.
+
+**Hypothesis, not shown.** The page is read before the expansion has happened: the click
+comes before the page reacts to it, or the 2 seconds end before the posts have loaded.
+The 24 threads fit a click without effect, the 3 a read part way through. The script
+never looks whether a post is still collapsed, so either goes unnoticed. This is
+Architect reading the code and the files; it has not been tried in Chrome.
+
+**Order of the work.**
+
+1. **The report of the overnight embedding first (2.2d).** Its first check compares each
+   variant with the chunks the chunker makes of the files, and the refetch changes files.
+   After the refetch that check can no longer be made.
+2. **The cause** (Programmer, with Tom at Chrome on Windows; the debugging process of
+   `CLAUDE.md`). Reproduce it first: fetch a few of the 27 into a scratch directory, not
+   into `data`, until one comes back collapsed, and see how often. Then show what the
+   page held when it was read (collapsed posts in the page itself, or lost on the way to
+   markdown) and why. Look at three of the older single-post files in a browser and say
+   whether they are the same fault. The cause is reported to Architect before the fix is
+   written. If it is not one of timing, or the older files turn out to be right as they
+   are, the points below are looked at again first.
+3. **The fix,** under TDD where it can be tested:
+   - The fetch saves a thread only when no post of it is collapsed. How it gets there
+     (waiting for a state of the page and not for a number of seconds, clicking again)
+     follows from the cause. It gives up after a fixed time.
+   - A thread that is still collapsed then is not saved, neither `.md` nor `.txt`. Its id
+     is printed and counted in the closing statistics, and the run goes on. The next run
+     tries it again, since a thread without a `.txt` is fetched.
+   - One function says whether a saved thread holds a collapsed post. The fetch uses it,
+     and so does a small command that lists the affected threads of `data/msgs_md`; that
+     command replaces the Python pasted into step 8 of the README. If the cause shows a
+     surer sign in the page than the missing `<address>` line, the function uses that.
+   - Tests: the function on real saved threads, one collapsed in each of the three
+     patterns above and one whole, as small files of the tests' own; a thread that stays
+     collapsed leaves no file and is counted. What needs Google's page (the waiting
+     itself) is not tested by a mock: the refetch below is its check, and that is said
+     in the test file.
+4. **The refetch** (Tom on Windows, by `msgGetter/README.md` steps 5 to 7, the ids being
+   the affected threads; the Programmer supplies the id file and reads the output). The
+   copies now in `data` are set aside and kept, not deleted. A thread is taken over when
+   its new copy has no collapsed post and at least as many posts as the old one;
+   otherwise the old copy stays and the thread is reported. Pass mark: no thread of 2026
+   with a collapsed post. The older ones as the cause decided.
+5. **The pictures.** A collapsed post may have hidden attachments. The index is built
+   again from `data/msgs_md` (`imageGetter/README.md`); if it names pictures that are not
+   on disk, Tom downloads and reviews them and the gallery index and thumbnails are made
+   again. If it names none, the gallery stays as it is and nothing of it is deployed.
+6. **The embedding** (`embedder/README.md`): the chunks of the refetched threads are
+   deleted and the threads embedded again, into the production collection only. Local
+   checks as for the corpus update: every source's chunks hold the words of its file;
+   top 15 of the 52 questions before and after, reported with no pass mark; a question
+   about one of the repaired threads returns text that was cut off before.
+7. **The deploy,** by the top-level `README.md` steps 3 and 5 to 8, run by Tom with the
+   Programmer reading: the collection, and the thumbnails and gallery index only if step
+   5 changed them. No change of the site's code is expected. It is the first time those
+   steps are run as written; where they fail, the README is corrected. Code review of
+   the `ml` commits before it.
+8. **Afterwards:** step 8 and the troubleshooting of `msgGetter/README.md` say what the
+   fetch now does; the line "seen, not fixed" goes.
+
+**The chunk experiment is not embedded again.** The five variants were made from the
+same files, so they still compare like with like, and a winner would be embedded from
+the current files in any case. The repaired threads are 27 of 11,388 sources. The
+labelling (2.3) shows excerpts of the variants' own chunks; a cut-off post there is
+labelled as it reads.
+
+**Not decided.** The up to 60 threads of 2024-25 that may never have been fetched
+(`architect_todo.md`). If Tom wants them, they join step 4 and need no second pass.
+
+**Not known.** Whether a second fetch of a collapsed thread comes back whole: the one
+tried on 2026-11-24 did not. How many posts fetched before 2026 are collapsed without
+the check seeing it. How long Google lets 40 threads be fetched in a row; the yearly
+run did 237.
 
 ---
 

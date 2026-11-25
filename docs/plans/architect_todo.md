@@ -13,8 +13,8 @@ deployed, D55 amended; the yearly update recorded, D57). Everything through the 
 answer is deployed (`site_2024` `4f85f9e`, `ml` `72957f4`) and `main` is level with
 `wip/annual-refresh` in both repos. The overnight embedding finished all five variants on
 2026-11-23 21:57 (read from `queue.log`); the Programmer's report of the five checks (2.2d) is
-not written yet. The Programmer's next task is the citation trial (RL1). No design is open.
-Four questions wait for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
+not written yet. The Programmer's next tasks are 2.2d and then "Collapsed posts" (CP1 to CP8, D58, nineteenth
+revision); the citation trial (RL1) follows. Three questions wait for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
 be designed or handed to the Programmer on them until he has answered.
 
 ## Open
@@ -26,11 +26,12 @@ be designed or handed to the Programmer on them until he has answered.
       Programmer's tasks for the display (4.1b).
 - [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
       whether the five collections are fit for the labelling (2.3).
-- [ ] After Tom's answers (`required_from_tom.md`, "Waiting for a decision"): design or
-      schedule what he decides on the collapsed posts, the 60 unfetched threads, the process
-      suggestions with the YU5 scripts, and the world-writable directories. Note for the
-      design of the first two: a refetch changes files the Phase 2 variants were embedded
-      from.
+- [x] Collapsed posts designed (plan "Collapsed posts", D58) and handed over (CP1 to CP8).
+- [ ] Read the Programmer's report of the cause of the collapsed posts (CP2), if the
+      Programmer stops there, and the closing report (CP8); record both in the plan.
+- [ ] After Tom's answers (`required_from_tom.md`, "Waiting for a decision"): schedule what
+      he decides on the 60 unfetched threads (they would join CP4), the process suggestions
+      with the YU5 scripts, and the world-writable directories.
 
 ## Notes from Programmer
 

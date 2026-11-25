@@ -11,9 +11,9 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Order:** everything through the answer display, the corpus update and the model change is
 deployed (`775692d`); the image update is done; "Pictures of an answer" is deployed
-(`4f85f9e`); the yearly update instructions are written and approved. **Now: "Reference
-links: the trial" (RL1 to RL5)** under Phase 4. Beside it: 2.2d when the overnight embedding
-has run all five variants. The rest of Phase 2 follows Phase 4 (D41). One session per group;
+(`4f85f9e`); the yearly update instructions are written and approved. **Now: 2.2d (all five
+variants have run, 2026-11-23 21:57), then "Collapsed posts" (CP1 to CP8, D58), both before
+anything else.** After them "Reference links: the trial" (RL1 to RL5) under Phase 4. The rest of Phase 2 follows Phase 4 (D41). One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
 **The yearly update** (fetch, pictures, embedding, deploy) is in the top-level `README.md`.
@@ -277,6 +277,37 @@ A stop writes `STOPPED by the stop command` to the log.
 - [ ] 2.5 Question set is the three batches plus the `chunk_only` rows of
       `refresh_questions.csv` (40 questions, plan 2.3). `reserve` rows are not used unless
       Architect says so.
+
+## Collapsed posts (repo: `ml/`, D58)
+
+Plan: "Collapsed posts (D58)". Read all of it; the numbers and the hypothesis are there. Do
+2.2d first: the refetch changes files its first check reads. Never delete a file of
+`data/msgs` or `data/msgs_md`: set it aside. Nothing is fetched into `data` before CP3 is
+done.
+
+- [ ] CP1 The cause, with Tom at Chrome on Windows. Reproduce into a scratch directory; show
+      what the page held when it was read and why; look at three of the older single-post
+      files in a browser. No fix yet.
+- [ ] CP2 Report the cause in a note in `architect_todo.md` and tell Tom. Go on to CP3 if the
+      cause is one of timing and the plan's points for the fix fit it; otherwise stop for
+      Architect.
+- [ ] CP3 The fix, tests first (plan, step 3): a thread is saved only with no post collapsed;
+      one that stays collapsed leaves no file, is printed and counted, and the run goes on;
+      one function for the check, used by the fetch and by a command that lists the affected
+      threads.
+- [ ] CP4 The refetch with Tom (`msgGetter/README.md` steps 5 to 7; you supply the id file).
+      Take a thread over only if its new copy has no collapsed post and at least as many
+      posts. Report the threads not taken over. Pass mark: none of 2026 left collapsed.
+- [ ] CP5 The pictures: the index built again; if it names pictures not on disk, the download
+      and Tom's review, the gallery index and the thumbnails. Say which it was.
+- [ ] CP6 The embedding into the production collection (`embedder/README.md`) and the three
+      local checks of the plan, step 6. Not the chunk experiment's collections.
+- [ ] CP7 Code review, then the deploy with Tom by the top-level `README.md` (steps 3 and 5
+      to 8). Correct the README wherever a step does not work as written.
+- [ ] CP8 `msgGetter/README.md` step 8 and troubleshooting say what the fetch does now; the
+      note in `docs/notes/opportunities_for_improvement.md` if anything is left. Report to
+      Architect: the cause, the threads repaired and not, pictures gained, chunks before and
+      after, what the deploy steps needed corrected.
 
 ## Phase 4
 
