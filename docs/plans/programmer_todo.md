@@ -13,7 +13,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 deployed (`775692d`); the image update is done; "Pictures of an answer" is deployed
 (`4f85f9e`); the yearly update instructions are written and approved. **Now: 2.2d (all five
 variants have run, 2026-11-23 21:57), then "Collapsed posts" (CP1 to CP8, D58), both before
-anything else.** After them "Reference links: the trial" (RL1 to RL5) under Phase 4. The rest of Phase 2 follows Phase 4 (D41). One session per group;
+anything else.** After them "Reference links" (RL1 to RL8) under Phase 4 (built, D60). The rest of Phase 2 follows Phase 4 (D41). One session per group;
 start each session fresh. Code review happens once per deploy, not per commit.
 
 **The yearly update** (fetch, pictures, embedding, deploy) is in the top-level `README.md`.
@@ -321,7 +321,7 @@ done.
 ## Phase 4
 
 The image update (plan 4.0) is done. Next, in this order (Tom, 2026-11-23): "Pictures of an
-answer" (plan 4.2), then "Reference links: the trial" (plan 4.1a). "Yearly update
+answer" (plan 4.2), then "Reference links" (plan 4.1). "Yearly update
 instructions" has no place in that order yet: ask Tom when he wants it. All three are at the
 end of this section. S3 is done by "Answer display".
 
@@ -369,14 +369,13 @@ sign-in page (D53, accepted). Tom waived the rest of the code review; R4 dropped
 Upload by tar, SHA-256 and `scp` (not `rsync`). Task details are in the git history of this
 file; the yearly upload is in the top-level `README.md`.
 
-### Reference links: the trial (repo: `../site_2024/`)
+### Reference links (repo: `../site_2024/`)
 
-Plan: "4.1 Reference links inside answers", 4.1a. Read all of 4.1; the tests are listed there.
-After "Collapsed posts". **Do not start RL1 until Architect says so:** Tom is reading a
-probe of three questions first (plan 4.1a, first paragraph) and the trial may change.
-Nothing of this is deployed with numbering on: the setting stays
-off, and with it off every prompt is what it is today. The display (4.1b) has no tasks yet;
-do not start it.
+Plan: "4.1 Reference links inside answers". Read all of 4.1, with the paragraphs marked
+twentieth revision; the tests are listed there. After "Collapsed posts". Tom has decided
+that the citations are built (D60), so the run below does not decide whether the display is
+built, only whether the setting is switched on at the deploy. Until then the setting stays
+off, and with it off every prompt is what it is today.
 
 - [ ] RL1 `build_prompt` numbers the chunks when told to, with the plan's wording, for all
       three kinds of prompt; the setting in `site.ini`, off; the record says whether an answer
@@ -388,14 +387,22 @@ do not start it.
       does not and leave them out. Answers into a directory of their own. Then the paid run
       (about 3 cents); tell Tom before it starts.
 - [ ] RL3 The counting script of the plan, tests first, and its output for the run.
-- [ ] RL4 The page for Tom: batch 1, the rating of each answer as in the evaluation, and up to
-      5 citations of each answer, chosen at random, the sentence beside the text of its chunk,
-      `yes` or `no`. Each click saved at once. Show it to Tom on two answers before he does
-      the ten.
-- [ ] RL5 Report to Architect in a note in `architect_todo.md`: the counts, Tom's ratings
-      beside his ratings of the `gpt-6-luna` answers to the same questions, his `yes` and `no`,
-      the questions left out, the answers without a number (by question id). Do not apply the
-      rule yourself and do not change the wording of the prompt: both are Architect's.
+- [ ] RL4 Report to Architect in a note in `architect_todo.md`: the counts, the questions left
+      out, the answers without a number (by question id). Do not apply the rule yourself and
+      do not change the wording of the prompt: both are Architect's. Go on with RL5 without
+      waiting.
+- [ ] RL5 The display (plan 4.1b), tests first, in the order of the plan's list of tests: the
+      rows of the source list numbered by the code that reduces the record to one row per
+      source; the renderer shows the row number of a chunk's source as a link; marks that
+      follow each other shown once per source; a number that names no chunk left out; the
+      stored answer unchanged.
+- [ ] RL6 The definition `[1]: https://...` no longer read by the answer renderer; check that
+      none of the 90 archived answers is shown differently for it and report the number.
+- [ ] RL7 Show Tom the local site with the setting on: three first answers, a dig deeper and a
+      follow-up (plan 4.1a, "Looked at by Tom"). Do not deploy before he has said yes and
+      Architect has recorded that the rule holds.
+- [ ] RL8 Code review, then the deploy of the plan (4.1b, "Deploy") with Tom, in small blocks.
+      Report to Architect in `architect_todo.md`.
 
 ### Yearly update instructions (done)
 

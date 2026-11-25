@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-Decided: D1 to D59 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
+Decided: D1 to D60 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -55,9 +55,10 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
 - [ ] Collapsed posts (D58): be at Chrome on Windows while the Programmer finds the cause;
       fetch the affected threads again; download and review pictures if the repaired threads
       bring new ones; run the deploy of the collection from the top-level `README.md`.
-- [ ] Reference links, the trial (plan 4.1a): on the local page the Programmer shows, rate the
-      10 answers of batch 1 and mark up to 50 citations `yes` / `no` (does the chunk support
-      the sentence). A second batch only if the result is on the line.
+- [ ] Reference links (plan 4.1, D60): no rating page any more. When the Programmer shows the
+      local site with numbers on (RL7), look at three first answers, a dig deeper and a
+      follow-up, one of them on a question you know well, click some numbers, and say
+      whether anything stops the deploy. Then the deploy with the Programmer.
 - [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
       rows per batch (Phase 2.3)
 

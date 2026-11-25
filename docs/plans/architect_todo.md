@@ -8,25 +8,27 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-Plan revised on 2026-11-24 (eighteenth revision: the pictures of an answer, 4.2, recorded as
+Plan revised on 2026-11-24, last the twentieth revision (D60, below; eighteenth: the pictures of an answer, 4.2, recorded as
 deployed, D55 amended; the yearly update recorded, D57). Everything through the pictures of an
 answer is deployed (`site_2024` `4f85f9e`, `ml` `72957f4`) and `main` is level with
 `wip/annual-refresh` in both repos. The overnight embedding finished all five variants on
 2026-11-23 21:57 (read from `queue.log`); the Programmer's report of the five checks (2.2d) is
 not written yet. The Programmer's next tasks are 2.2d and then "Collapsed posts" (CP1 to CP8, D58, nineteenth
-revision); the citation trial (RL1) follows. The 60 unfetched threads join the refetch and the world-writable directories wait for the
-server cleanup (D59). A probe of the citations on three questions is with Tom to read
-(`ml/docs/notes/citation_probe/probe.md`; plan 4.1a); the trial (RL1) is held
-until he has said how to go on. One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
+revision); the reference links (RL1 to RL8) follow. The 60 unfetched threads join the refetch and the world-writable directories wait for the
+server cleanup (D59). Tom decided on 2026-11-24 that the citations are built, by the most
+reliable way (D60, twentieth revision): the model cites chunks, the page shows one number per
+source, the run on the 30 questions checks the form only, and Tom's rating page is dropped.
+The probes that led there are in `ml/docs/notes/citation_probe/` (untracked; Tom has not
+said to commit it). The Programmer has RL1 to RL8 after "Collapsed posts". One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
 be designed or handed to the Programmer on them until he has answered.
 
 ## Open
 
 - [x] Read the Programmer's report of the pictures of an answer (PA9). Recorded in plan 4.2,
       "Result" (2026-11-24).
-- [ ] Read the Programmer's report of the citation trial (RL5), read the answers without a
-      number, apply the rule of 4.1a and record the result in the plan. Only then write the
-      Programmer's tasks for the display (4.1b).
+- [ ] Read the Programmer's report of the citation run (RL4), read the answers without a
+      number, apply the rule of 4.1a (form only, D60) and record in the plan whether the
+      setting may be switched on. Then read the report of the deploy (RL8).
 - [ ] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
       whether the five collections are fit for the labelling (2.3).
 - [x] Collapsed posts designed (plan "Collapsed posts", D58) and handed over (CP1 to CP8).

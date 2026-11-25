@@ -1,11 +1,20 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-24 (nineteenth revision); the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citation trial ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
+**Status:** Revised 2026-11-24 (twentieth revision); the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-24 (twentieth revision):** Tom decided that the site moves to citations, and
+  left the way of building them to Architect with one aim: the most reliable (D60). He
+  decided after a probe of eleven questions and one more question asked with and without
+  numbers (4.1a). The model goes on citing chunks, which is the form the probe tested;
+  the page shows one number per source, worked out by the site (4.1b). The trial is no
+  longer a decision whether to build: it is cut down to a check of the form on the 30
+  questions, counted by a script. Tom's rating page and its rule are dropped; he looks at
+  the local site before the deploy. The setting that switches numbering off stays as the
+  way back.
 - **2026-11-24 (nineteenth revision):** The fetch saves some posts as Google's cut-off
   preview, and 27 of the 237 threads of 2026 are on the site that way. Tom decided that
   the cause is found now, the fetch is fixed, the threads are fetched again and the
@@ -217,6 +226,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D57 | (2026-11-24) Tom runs the yearly update himself from written steps. The work on his machine is in each module's README; the order and everything that touches the server are in the top-level `README.md`, and the server work is one deploy at the end. The getters run from the WSL folder; the Windows clone is deleted ("Yearly update"). |
 | D58 | (2026-11-24) The cause of the posts saved collapsed is found now and the fetch is fixed. The threads that hold such posts are fetched again, embedded and deployed, before the citation trial ("Collapsed posts"). |
 | D59 | (2026-11-24) The up to 60 threads of 2024-25 that were never fetched are fetched in the same pass as the collapsed posts ("Collapsed posts", step 4). The world-writable directories on the server are looked at with the full server cleanup, after the server has run for a week. |
+| D60 | (2026-11-24) The site moves to citations in answers. How they are built is Architect's choice, for reliability: the model cites numbered chunks, the site shows one number per source and makes the links, and the form is checked on the 30 questions before the deploy (4.1). Tom's rating of numbered answers is not a condition any more. |
 
 ## Two repositories
 
@@ -256,7 +266,8 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    and decided (D52 to D55) and is built first; 4.1 is designed (D56): a trial, then the
    display if the trial passes. **[REVISED - 2026-11-24]** 4.2 is deployed (`4f85f9e`);
    the trial of 4.1 is next. **[REVISED - 2026-11-24] (nineteenth revision)** "Collapsed
-   posts" (D58) comes before the trial.
+   posts" (D58) comes before the trial. **[REVISED - 2026-11-24] (twentieth revision)** 4.1
+   is built (D60): the run that checks the form, then the display.
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
 
@@ -1547,6 +1558,14 @@ not proof that none exists.
 - Whether the answers stay as good. The prompt changes, so the answers are no longer the
   ones Tom rated, and `gpt-6-luna` passed that rating with 14 `perfect` against 17.
 
+**[REVISED - 2026-11-24] (twentieth revision) Decided: it is built (D60).** Tom decided
+after the probe (4.1a). What the probe showed on the two points above: the form was right
+in all twelve numbered answers and no number named a missing chunk; the numbered answers
+keep closer to the chunks and leave out advice the model adds from its own knowledge. Tom
+did not rate them. A citation can still match the words of a chunk and miss its meaning
+(the clear tubing of 4.1a); a link lets the visitor see that, and nothing in this design
+prevents it.
+
 **A limit to expect.** A link goes to the thread, the newsletter or the page, never to the
 post or the passage; in a long thread the visitor still has to look. Showing the text the
 model read is not part of this.
@@ -1564,7 +1583,8 @@ cites 2 of 15 chunks, Q28 7 of 15, and Q05, whose answer is that the context doe
 say, cites none. Whether the cited chunks support the statements is Tom's reading of
 `probe.md`; Architect checked six figures of Q03 and Q28 against their chunks and found
 each in the chunk cited. Three questions show nothing about how often it goes wrong. The
-trial below is not started until Tom has read the probe and said how to go on.
+trial below is not started until Tom has read the probe and said how to go on. (He has:
+D60, and the revised rule below.)
 
 **[REVISED - 2026-11-24] The probe on all of batch 1 (Tom).** The other eight questions of
 batch 1 were run the same way (`probe_batch1.md` in the same folder), and Architect read
@@ -1587,11 +1607,32 @@ reading, not Tom's judgement, and no answer was rated.
 - Q35 took 1,498 completion tokens (1,167 of them reasoning) and 12.2 s, against 1,038
   and 8.9 s for the rated answer. One answer; not known whether the numbering causes it.
 
+**[REVISED - 2026-11-24] One question asked with and without numbers (Tom).** Q35 had
+changed from a procedure to a digest. Tom had the question asked again as "what is the
+preferred procedure for bleeding matco brakes and any hints", retrieved as the site does
+(15 chunks), once as the site asks today and once numbered (`probe_Q35_variation.md`, and
+`probe_Q35_variation_why.md` for the model's own account).
+
+- The numbered answer gives a procedure. The digest of Q35 followed at least partly from
+  the wording of that question.
+- The answer without numbers has three hints the numbered one lacks: a spacer between the
+  pads, air drawn past the bleeder threads under vacuum, tapping the caliper. Architect
+  searched the 15 chunks: none holds any of the three. They are the model's own advice.
+- Both answers turn one forum hint into another. Chunk 10 advises clear tubing for the
+  brake line in the plane, so that bubbles show at its high point. Both answers speak of
+  a clear hose on the bleeding equipment; the numbered one cites `[10]` for it. Architect
+  had passed that citation, having matched the words and not the meaning. The count of
+  62 supported marks above was made the same way and is probably too high.
+- Tom read the hints first, because he knew the procedure. In the answer without numbers
+  they are a list; in the numbered one they are a paragraph and one sits in a step. One
+  answer; the instruction says nothing about layout.
+- The numbered answer used 1,024 reasoning tokens against 512, and 9.9 s against 8.2 s.
+
 **The prompt.**
 
 - `build_prompt` can number the chunks. Whether it does is one setting in `site.ini`, off
-  until the trial has passed. The trial calls the same function with numbering on, so it
-  measures what production would send; switching it on later is a commit, and a revert
+  until the check of the form has passed and the display is deployed. The trial calls the
+  same function with numbering on, so it measures what production would send; switching it on later is a commit, and a revert
   switches it off.
 - A numbered chunk is `[n] ` followed by its text; the chunks are separated as today.
 - With numbering on, the instruction of each of the three prompts gains this text, fixed
@@ -1632,35 +1673,26 @@ reading, not Tom's judgement, and no answer was rated.
   parenthesis holding digits and other text, a list of sources at the end), listed;
 - median tokens, reasoning tokens, latency and cost beside those of the rated run.
 
-**Checked by Tom,** on batch 1 (10 questions), on a local page like the rating page:
+**[REVISED - 2026-11-24] (twentieth revision) No rating by Tom, and a rule on the form
+only (D60).** The design had Tom rate the 10 answers of batch 1 and judge up to 50
+citations on a page built for it, and a rule of three conditions that decided whether the
+display was built. Tom has decided that it is built, so the page and two of the conditions
+are dropped. What is left guards against the one fault the site cannot repair by itself:
+answers that come without numbers or in another form.
 
-1. He rates each of the 10 answers `perfect` / `ok` / `not_good` and notes factual errors,
-   as in 1.4. The numbers are shown as written. This is not blind: there is one answer
-   per question.
-2. For up to 5 citations of each answer, chosen at random by the page, he sees the
-   sentence with its number beside the text of the chunk, and marks whether the chunk
-   supports the sentence: `yes` or `no`. At most 50 judgements.
+**The rule, fixed before the run.** The setting is switched on at the deploy if, of the
+answers of the run, at most 1 holds a number that names no chunk, at least 9 in 10 hold a
+number, and none has a list of sources or a citation in another form. An answer that says
+the context does not cover the question is not counted as missing a number; Architect
+reads the answers without one and says which they are. If the rule fails, the wording
+above is changed once and the run repeated. If it fails again it goes to Tom.
 
-**The rule, fixed before the run.** The display is built if all three hold:
-
-- Of the 30 answers at most 1 holds a number that names no chunk, and at least 27 hold a
-  number. An answer that says the context does not cover the question is not counted as
-  missing one; Architect reads the answers without a number and says which they are.
-- At least 9 of 10 of the citations Tom judged are `yes`.
-- On the 10 questions the answers have no more `not_good` and no more factual errors than
-  the rated `gpt-6-luna` answers to the same questions.
-
-If the second or third is within one judgement of the line, batch 2 is checked the same
-way before deciding. If the trial fails on the form of the citations only, the wording
-above is changed once and the run repeated. Any other failure goes to Tom: not built,
-or tried with `gpt-6.1-terra` at eight times the cost per answer.
-
-Ten questions and 50 citations are a small sample. That is accepted, as in 1.5: the
-feature is one setting and can be switched off in minutes.
+**Looked at by Tom,** on the local site before the deploy, with the display built: three
+first answers, a dig deeper and a follow-up, among them one question he knows well. He
+clicks some numbers and says whether anything stops the deploy.
 
 **Not in the trial.** A dig deeper and a follow-up. `gpt-6.2-sol` was never evaluated
-(D35), and it is not evaluated here. Before the deploy Tom looks at three of them on the
-local site.
+(D35), and it is not evaluated here. Tom sees one of each on the local site (above).
 
 **Tests** (4.1a): the prompts with numbering off are unchanged; a numbered first prompt,
 revise and follow-up, with the follow-up's additional content counting on from the
@@ -1670,22 +1702,37 @@ a number too high, one with none, one with `(3)` and one with a list of sources.
 
 #### 4.1b The display
 
-Built only after Architect has recorded that the trial passed.
+**[REVISED - 2026-11-24] (twentieth revision)** Built after the run of 4.1a, whatever its
+result; the setting is switched on only if the rule of 4.1a holds. The numbers on the
+page are numbers of sources, not of chunks (D60). The model's numbers are not shown.
+
+**Why one number per source.** In the probe several cited chunks were often one source (7
+chunks were 4 threads in Q28). Chunk numbers would show `[2][5][9]` where there is one
+thread to open, and a visitor cannot tell a chunk from a source. Asking the model to cite
+sources instead was not chosen: it is a prompt that was never tried, and the record would
+lose which chunk a statement was taken from.
 
 - **One place.** The function that gives the HTML of an answer (`answer_html.py`) also
-  takes the sources of the numbered chunks. A rule added to the renderer works on the
-  text of the parsed answer, not on the finished HTML, and not inside code. It makes a
-  link of `[3]`, and of each number of `[2, 5]`, if the model writes that form.
-- The link shows the number as written, leads to the address the source list already
-  uses for that source (`url_from_source`), and carries the source's label as its title.
-  It opens in a new tab.
-- A number that names no chunk, or a chunk whose source has no address, stays text.
-- An answer whose record does not say it was numbered gets no links.
-- **The numbers come from the record before it is reduced** to one row per source for the
-  page (1.1 item 6): several chunks of one source have different numbers and the same
-  link.
-- **The source list** under the answer shows, for each source, the numbers of its chunks,
-  so that a visitor can go from a number to its row and back.
+  takes, for each numbered chunk, its source. A rule added to the renderer works on the
+  text of the parsed answer, not on the finished HTML, and not inside code. It reads
+  `[3]`, and each number of `[2, 5]`, if the model writes that form.
+- **The number shown** is the number of the row that the chunk's source has in the source
+  list under the answer, counted from 1 in the order of that list. Marks that follow each
+  other with nothing but spaces between them are shown once per source, in the order
+  written: `[2][5][9]` from two sources is two numbers.
+- The link shows that number in square brackets, leads to the address the source list
+  already uses for that source (`url_from_source`), and carries the source's label as its
+  title. It opens in a new tab.
+- A number that names no chunk is left out of the page. A source that has no address has
+  its number shown without a link.
+- An answer whose record does not say it was numbered is not touched: a `[1]` in it stays
+  as it is.
+- **The mapping comes from the record before it is reduced** to one row per source for the
+  page (1.1 item 6), and the rows are numbered by the same code that reduces it, so the
+  number in the answer and the number of the row cannot differ.
+- **The source list** shows the number of each row.
+- The record keeps the answer as the model wrote it, with chunk numbers. Nothing is
+  rewritten in what is stored.
 - **A link the model defines itself.** Markdown lets a text define what `[1]` links to
   (`[1]: https://...`). The answer renderer no longer reads such definitions, so a number
   can only lead to our source. Checked when this is built: that none of the 90 archived
@@ -1694,17 +1741,20 @@ Built only after Architect has recorded that the trial passed.
 - With the pictures (4.2) there is nothing to settle: both read the same documents of the
   record and neither changes the other.
 
-**Tests** (4.1b), through the results page where the page is the subject: a numbered
-answer has a link to the source of chunk 3 at `[3]`; `[2, 5]` gives two links; a number
-too high, and a number in a code span, stay text; an answer that is not numbered and
-holds `[1]` has no link; two chunks of one source link to the same address and the
-source row shows both numbers; a definition `[1]: https://example.com` in an answer does
+**Tests** (4.1b), through the results page where the page is the subject: with chunks 1
+and 2 of the first source and chunk 3 of the second, `[3]` is shown as a link `[2]` to
+the second source and the second row is numbered 2; `[1][2]` is shown as one `[1]`;
+`[1][3]` and `[1, 3]` as `[1][2]`; `[1]` in two different sentences is shown in both; a
+number too high is not on the page and the sentence around it is whole; a number in a
+code span stays as written; a source without an address has a number and no link; an
+answer that is not numbered and holds `[1]` has no link; the stored answer is unchanged;
+a definition `[1]: https://example.com` in an answer does
 not change where `[1]` leads; hostile text as in "Answer display" still gives no tag and
 no `javascript:` link; a revise and a follow-up record link by their own lists.
 
 **Deploy.** Code review, merge with Tom's approval, `git pull`, rebuild, start, restart
 nginx; the setting on in the same deploy. Checks: a question whose answer has numbers,
-and a click on one opens the source; the number is in the row of that source; a dig
+and a click on one opens the source; the number is that of the row of that source; a dig
 deeper and a follow-up each show links that open; a stored answer from before the deploy
 looks as before; the pictures still show. Rollback: the setting off (a revert and a
 `git pull`); answers made while it was on keep their links.
