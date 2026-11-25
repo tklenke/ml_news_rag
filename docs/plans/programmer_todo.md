@@ -87,7 +87,10 @@ done.
       by `<address>`. Counted that way: 25 threads of 2026 affected, none older. In all 25
       the collapsed posts come before the expanded ones. The probe for Tom is
       `data/collapsed_probe/probe_collapsed.py` (git-ignored); it writes only into
-      `data/collapsed_probe/out`.
+      `data/collapsed_probe/out`. Tom thinks the click comes too early (before 1 to 2 s);
+      the probe tries waits of 0.5, 1, 2 and 4 s before it. The random part of the wait
+      before the click is Tom's, to keep Google from taking the fetch for scraping: the fix
+      keeps a random pause and does not rely on it for the page being ready.
 - [ ] CP2 Report the cause in a note in `architect_todo.md` and tell Tom. Go on to CP3 if the
       cause is one of timing and the plan's points for the fix fit it; otherwise stop for
       Architect.
