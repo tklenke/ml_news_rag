@@ -1,12 +1,12 @@
 # Required From Tom
 
-**Last Updated:** 2026-11-24
+**Last Updated:** 2026-11-25
 
 Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-Decided: D1 to D60 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
+Decided: D1 to D62 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -26,6 +26,13 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
 - [x] **World-writable directories on the server.** Decided 2026-11-24: with the full server
       cleanup, after the server has run for a week (D59; `programmer_todo.md`, "Server
       cleanup").
+
+### Waiting for a decision (asked by Architect 2026-11-25)
+
+- [ ] **One deploy or two.** The citations (RL8: code and a setting) and the repaired
+      collection (CP7: collection, thumbnails, gallery index) can go to the server
+      together by the top-level `README.md`, or one after the other as the todo has them
+      now.
 
 ## Work items
 

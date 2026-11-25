@@ -1,6 +1,6 @@
 # Programmer Todo
 
-**Last Updated:** 2026-11-24
+**Last Updated:** 2026-11-25
 
 # ACTIVE: Annual RAG / Website Refresh
 
@@ -43,6 +43,8 @@ Do not write to the Chroma on port 8000 and do not stop or change a container of
 - [x] 2.2d The five checks of plan 2.2a, reported in a note in `architect_todo.md`
       (2026-11-24, `7ebd92d`): every check passed. Tom removed the GPU Ollama container
       (`chunk_experiment_ollama`) the same day; the experiment's Chroma stays for 2.3.
+      Architect, 2026-11-25: the five collections are fit for the labelling (plan 2.2a,
+      "Result"). 2.3 may start when its turn comes.
 - [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom, one batch of 10 questions at a time (plan 2.3)
 - [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
       each batch (plan 2.4)
@@ -231,6 +233,9 @@ off, and with it off every prompt is what it is today.
       `[5]` shown as `[4]` linking to `SVdmlqx3aco`, rows numbered. Waiting for Tom's look.
       **Take the two lines out of `site_local.ini` after Tom's look** (the deploy switches it
       on through `site.ini`).
+      Architect, 2026-11-25: the rule of 4.1a holds and is recorded in the plan (4.1a,
+      "Result"); the reading of "another form" in RL3 is accepted. Of the two conditions
+      for the deploy, only Tom's yes is open.
 - [ ] RL8 Code review, then the deploy of the plan (4.1b, "Deploy") with Tom, in small blocks.
       Report to Architect in `architect_todo.md`.
 

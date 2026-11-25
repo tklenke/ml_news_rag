@@ -1,11 +1,19 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-24 (twentieth revision); the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
+**Status:** Revised 2026-11-25 (twenty-first revision); the citation trial passed its rule and the setting may be switched on at the deploy once Tom has looked at the local site (4.1a); the five collections of the chunk experiment are fit for the labelling (2.2a); the collapsed posts are repaired locally and not deployed yet ("Collapsed posts"). Before that, 2026-11-24 (twentieth revision): the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-25 (twenty-first revision):** Three reports of the Programmer are read and
+  recorded; no design changed by Architect. The citation trial passed the rule of 4.1a
+  on 29 answers, so the setting may be switched on at the deploy. The five collections
+  of the chunk experiment passed their checks and are fit for the labelling (2.2a). The
+  cause of the collapsed posts is a minimized Chrome window, not timing; Tom decided the
+  fix with the Programmer (D61) and that its deploy waits for the citations (D62). 33
+  threads were repaired and 60 fetched for the first time ("Collapsed posts", "As
+  found and built").
 - **2026-11-24 (twentieth revision):** Tom decided that the site moves to citations, and
   left the way of building them to Architect with one aim: the most reliable (D60). He
   decided after a probe of eleven questions and one more question asked with and without
@@ -227,6 +235,8 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D58 | (2026-11-24) The cause of the posts saved collapsed is found now and the fetch is fixed. The threads that hold such posts are fetched again, embedded and deployed, before the citation trial ("Collapsed posts"). |
 | D59 | (2026-11-24) The up to 60 threads of 2024-25 that were never fetched are fetched in the same pass as the collapsed posts ("Collapsed posts", step 4). The world-writable directories on the server are looked at with the full server cleanup, after the server has run for a week. |
 | D60 | (2026-11-24) The site moves to citations in answers. How they are built is Architect's choice, for reliability: the model cites numbered chunks, the site shows one number per source and makes the links, and the form is checked on the 30 questions before the deploy (4.1). Tom's rating of numbered answers is not a condition any more. |
+| D61 | (2026-11-25) Collapsed posts: the debug Chrome stays on screen during a fetch, as a step of the README, and the fetch saves no thread that still holds a collapsed post. Decided with the Programmer, without Architect ("Collapsed posts", "As found and built"). |
+| D62 | (2026-11-25) The deploy of the repaired collection and its report (CP7, CP8) wait until the citations are done. Until then the local collection is ahead of the server's. |
 
 ## Two repositories
 
@@ -820,6 +830,31 @@ morning and continued each evening, until the five variants are done (about two 
 
 **Not known.** Whether the machine stays awake all night: if Windows sleeps or restarts,
 the run stops and is continued with the same command as in the evening.
+
+**[REVISED - 2026-11-25] Result: fit for the labelling (Architect).** The Programmer's
+report of 2026-11-24 (in the git history of `architect_todo.md`, commit `7ebd92d`; full
+output in `data/chunk_experiment/checks.json`):
+
+1. Every collection holds exactly the chunks the chunker makes of the 11,388 files, id
+   for id and text for text, and each count is that of the table above. Architect read
+   the five counts from the experiment's Chroma again on 2026-11-25: the same.
+2. No file failed and none is left undone.
+3. A against production: 100 of 100 chunks found, lowest cosine 0.999992.
+4. Over 6,000 characters: none in A, B and D, 2 each in C and E. Of the 20 longest of
+   each variant, 3 are at 2,048 tokens and so cut, in B as well. They are chunks of two
+   PDFs full of form lines (`cb__docs_-_Cozy-MKIV_Flight_Test_Protocol___pdf`, and
+   `cb__ref_info_-_Pro-set_125_MSDS___pdf` in C).
+5. About 14.5 hours against 13.3 planned, which left out storing.
+
+The queue was stopped three times, not twice; who started the session of 2026-11-23
+10:57 is not in the log. Checks 1 and 2 show that the stops lost and doubled nothing.
+
+Accepted, not measured: how many chunks in all are cut at 2,048 tokens. The mark of
+6,000 characters does not find them (a chunk of 2,983 characters was cut). A cut changes
+the vector of a chunk and not its text, and it comes from text that splits into many
+tokens (form lines), which every variant was given. It is part of what a variant
+delivers on this Ollama, so it is measured with the rest and no variant is embedded
+again for it.
 
 ### 2.3 Questions and labelling (needs Tom)
 
@@ -1688,6 +1723,35 @@ the context does not cover the question is not counted as missing a number; Arch
 reads the answers without one and says which they are. If the rule fails, the wording
 above is changed once and the run repeated. If it fails again it goes to Tom.
 
+**[REVISED - 2026-11-25] Result: the rule holds (Architect).** The setting may be
+switched on at the deploy, once Tom has looked at the local site (below). The run is
+`site_2024` `2bd5cb1`, the count `7e60f08`; answers and report are in
+`site_2024/evaluation/output/cite_trial/` and `cite_trial_count.md` (git-ignored).
+
+- 29 answers, not 30. Q08 was left out as the plan says: its prompt could not be
+  rebuilt, because its thread was fetched again in the corpus update and its chunk ids
+  changed. The other 29 prompts, built with numbering off, equal the saved ones.
+- Numbers that name no chunk: 0 (at most 1 allowed). Lists of sources: 0. Citations in
+  another form: 0. 216 marks in all, every one `[n]`.
+- Answers with a number: 28 of 29. The one without is Q05: "The provided context
+  doesn't say where Desser Monster retreads can be purchased." Architect read its five
+  chunks: none names Desser or a seller of tyres. It is an answer that the context does
+  not cover the question and is not counted as missing a number. Counted against the
+  rule all the same, 28 of 29 is still over 9 in 10.
+- Architect counted the 29 answers again with a script of its own, apart from the
+  Programmer's: the same figures.
+- Medians, trial against rated, same 29 questions: completion tokens 516 / 560,
+  reasoning tokens 253 / 324, latency 4.81 / 5.39 s, cost $0.00073 / $0.00074. The
+  longer reasoning of the probe's Q35 is not the rule.
+- "A bracket or parenthesis holding digits and other text" above is read as the
+  Programmer built it: a parenthesis counts as another form only when it holds only
+  numbers, or a number with a word for a piece of context ("source", "piece", "context",
+  "chunk", "doc", "ref"). Taken by the letter it would list every "(202.8 in)".
+  Architect agrees; every square bracket is still listed unless it is `[n]`.
+- Not shown by this run: whether a cited chunk supports its statement (D60: no rating),
+  and what `gpt-6.2-sol` writes in a dig deeper or a follow-up. Tom's look is the only
+  check of the second before the deploy.
+
 **Looked at by Tom,** on the local site before the deploy, with the display built: three
 first answers, a dig deeper and a follow-up, among them one question he knows well. He
 clicks some numbers and says whether anything stops the deploy.
@@ -2081,7 +2145,46 @@ Architect reading the code and the files; it has not been tried in Chrome.
 8. **Afterwards:** step 8 and the troubleshooting of `msgGetter/README.md` say what the
    fetch now does; the line "seen, not fixed" goes.
 
-**The chunk experiment is not embedded again.** The five variants were made from the
+**[REVISED - 2026-11-25] As found and built** (the Programmer's reports of 2026-11-24 and
+2026-11-25, in the git history of `architect_todo.md`; details in `programmer_todo.md`,
+CP1 to CP6). The hypothesis above was wrong, and steps 2 to 6 are done. Step 7 waits for
+the citations (D62).
+
+- **Cause.** The "Expand all" click has no effect while the Chrome window is minimized:
+  the button is found, the click raises no error, and the posts stay collapsed, also 15
+  seconds later. On screen the same click opened every post in 47 fetches of 47. The
+  wait before the click is not a cause. A window covered by another and not minimized
+  was not tried. Why Chrome does this was not looked into in the page.
+- **The fix (D61).** Tom chose it with the Programmer; Architect was not asked. The debug
+  Chrome stays on screen during a fetch (`msgGetter/README.md`, step 6). The fetch reads
+  the page again for up to 15 seconds until no post is collapsed; a thread that is still
+  collapsed is not saved, is printed and counted, and the run goes on. Tried and dropped:
+  three Chrome switches against the slowing of hidden windows, which changed nothing.
+  Not tried: bringing the window to the front before each thread.
+- **The check** is `msgGetter/f_collapsed.py`, one function used by the fetch and by the
+  command of step 8. Its sign: a `### name` anywhere in a line, followed by a line that
+  starts with the date and not by the author's address. The sign of "What was measured"
+  above counted a heading inside a post as a post and missed the older files, which put
+  `### name` after the profile photo.
+- **The count, corrected:** 33 threads, 25 of 2026 and 8 older, every one with all posts
+  but the last collapsed. The 40, the 27 and the three patterns above were artefacts of
+  the first sign.
+- **The refetch** (Tom, Chrome on screen): 93 ids, 93 saved, none left unsaved. All 33
+  were taken over, each with no collapsed post and as many posts as its old copy; they
+  gained 29,993 words. All 60 of D59 came back as threads. The check lists none now.
+- **The pictures:** the new index named 152 pictures not on disk, from 42 of the 93
+  threads. Tom downloaded them and kept all 129 new contents. `gallery261125.idx` has
+  2,407 threads and 5,795 pictures (before: 2,368 and 5,661).
+- **The embedding:** the local production collection has 42,577 chunks of 11,448 sources
+  (before: 42,276 of 11,388, which is what the server still has). The three checks of
+  step 6 passed; of the 52 questions, 4 changed in their top 15.
+- **Still not known.** Whether older threads hold collapsed posts in a form the sign does
+  not find; the sign was already wrong once for the older files. The waiting in the
+  fetch has no test; the refetch was its check.
+
+**The chunk experiment is not embedded again.** **[REVISED - 2026-11-25]** It was made
+before the refetch, so it lacks the 60 new threads and has the 33 as they were: 93 of
+11,448 sources. The reasoning below stands. The five variants were made from the
 same files, so they still compare like with like, and a winner would be embedded from
 the current files in any case. The repaired threads are 27 of 11,388 sources. The
 labelling (2.3) shows excerpts of the variants' own chunks; a cut-off post there is
