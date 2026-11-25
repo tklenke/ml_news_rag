@@ -31,7 +31,65 @@ after it.
 
 ## Notes from Programmer
 
-None open. Closed on 2026-11-24 (in the git history of this file): the process suggestions
+**NOTE FROM PROGRAMMER (2026-11-24): the five checks of the overnight embedding (plan 2.2a,
+2.2d).** Every check passed; nothing to explain away. Read only: the script is
+`data/chunk_experiment/check_variants.py` (git-ignored), its full output
+`data/chunk_experiment/checks.json`, run from `embedder/` against the 11,388 files. No source
+file changed after the run started (none newer than 2026-11-22 18:25), and the chunker and
+embedder code are unchanged since the commit the queue ran (`50bf516`).
+
+1. **Counts.** Each collection holds exactly the chunks the chunker makes of the files: the
+   same ids and, id for id, the same text; every `source` matches its id. Each count equals
+   the plan's table.
+
+   | Variant | Collection | Plan | Chunker | Collection |
+   |---|---|---|---|---|
+   | A | `words250_overlap0` | 42,234 | 42,234 | 42,234 |
+   | B | `words150_overlap0` | 65,877 | 65,877 | 65,877 |
+   | C | `words400_overlap0` | 29,054 | 29,054 | 29,054 |
+   | D | `words250_overlap50` | 48,982 | 48,982 | 48,982 |
+   | E | `words400_overlap80` | 32,718 | 32,718 | 32,718 |
+
+2. **Failed and not done.** No `FAILED` line in the log and `Failed: 0` in every closing
+   statistic. Every progress file lists all 11,388 files once and nothing else.
+3. **A against production.** 100 random chunks of A (fixed seed), each found by its text
+   among the production chunks of the same source: all 100 found, lowest cosine 0.999992.
+   None of the 100 drawn was over 512 tokens, so none was passed over.
+4. **Long chunks.** Over 6,000 characters: A 0, B 0, C 2, D 0, E 2. Of the 20 longest (by
+   characters) in each variant, 3 are at 2,048 tokens, so cut, in every variant, B included.
+   All of them are chunks of `cb__docs_-_Cozy-MKIV_Flight_Test_Protocol___pdf`, except one of
+   C, `cb__ref_info_-_Pro-set_125_MSDS___pdf#2`. These are PDF text full of form lines; a
+   chunk of 2,983 characters (B) is already over 2,048 tokens, so the 6,000-character mark
+   does not find every cut chunk. How many chunks in all are cut was not measured: it needs
+   one call per chunk.
+5. **Hours.** Wall clock from the queue log; seconds per chunk include storing.
+
+   | Variant | Sessions | Hours | Plan | s per chunk |
+   |---|---|---|---|---|
+   | A | 11-22 18:25 to about 20:37, 21:48 to 22:23 | about 2.77 | 2.6 | 0.236 |
+   | C | 11-22 22:23 to 11-23 00:55 | 2.53 | 2.3 | 0.313 |
+   | B | 11-23 00:55 to 03:52 | 2.96 | 2.8 | 0.162 |
+   | D | 11-23 03:52 to 07:10 | 3.29 | 3.0 | 0.242 |
+   | E | 11-23 07:10 to about 08:25, 10:57 to 11:47, 21:02 to 21:57 | about 2.99 | 2.6 | 0.329 |
+
+   About 14.5 hours in all against the plan's 13.3, which left out storing. The plan's rates
+   were 0.153, 0.220 and 0.288 s at 150, 250 and 400 words.
+
+**The stops, as the log shows them.** Three, not two as `programmer_todo.md` had it:
+
+- About 20:37 on 11-22, during A, and about 08:25 on 11-23, during E: no line in the log. The
+  stop command wrote nothing to the log until `eb6a66f` (11-23 08:51), after both. The times
+  are Tom's; the embedder's own figures agree (A had 33,296 chunks at 0.2356 s, which is
+  2.18 hours from 18:25; E 13,727 chunks at 0.3298 s, 1.26 hours from 07:10).
+- 11-23 10:57 to 11:47: the queue was started, passed over A to D, embedded 3,176 files of
+  E (4,647 to 7,823), and was ended by the stop command (logged). This session was not in
+  the todo; who started it is not in the log. The evening run at 21:02 went on from 7,823.
+
+**Also:** the GPU Ollama container (`chunk_experiment_ollama`) is still running. Its removal
+was refused by my session's permission check, so it waits for Tom. The experiment's Chroma
+stays for 2.3.
+
+Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
 posts (D58), the 60 unfetched threads (D59), and the awkward yearly steps (logged in
 `docs/notes/opportunities_for_improvement.md`, "ml: yearly update").
