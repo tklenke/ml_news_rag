@@ -85,9 +85,8 @@ embedder code are unchanged since the commit the queue ran (`50bf516`).
   E (4,647 to 7,823), and was ended by the stop command (logged). This session was not in
   the todo; who started it is not in the log. The evening run at 21:02 went on from 7,823.
 
-**Also:** the GPU Ollama container (`chunk_experiment_ollama`) is still running. Its removal
-was refused by my session's permission check, so it waits for Tom. The experiment's Chroma
-stays for 2.3.
+**Also:** the GPU Ollama container (`chunk_experiment_ollama`) is removed (Tom, 2026-11-24).
+The experiment's Chroma stays for 2.3.
 
 Closed on 2026-11-24 (in the git history of this file): the process suggestions
 (1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed

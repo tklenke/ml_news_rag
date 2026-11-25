@@ -40,10 +40,9 @@ Plan 2.1 to 2.4. 2.1a to 2.2c are done; all five variants had run on 2026-11-23 
 
 Do not write to the Chroma on port 8000 and do not stop or change a container of `site_2024`.
 
-- [~] 2.2d The five checks of plan 2.2a, reported in a note in `architect_todo.md`. Then stop
-      and remove the GPU Ollama container (`chunk_experiment_ollama`); the experiment's
-      Chroma stays for 2.3. The report is written (2026-11-24): every check passed. Left:
-      the container is still running; my session was not permitted to remove it.
+- [x] 2.2d The five checks of plan 2.2a, reported in a note in `architect_todo.md`
+      (2026-11-24, `7ebd92d`): every check passed. Tom removed the GPU Ollama container
+      (`chunk_experiment_ollama`) the same day; the experiment's Chroma stays for 2.3.
 - [ ] 2.3 Pooling: write `chunk_labels.csv` for Tom, one batch of 10 questions at a time (plan 2.3)
 - [ ] 2.4 Scoring: compute the four metrics per variant from Tom's labels, rerun after
       each batch (plan 2.4)
