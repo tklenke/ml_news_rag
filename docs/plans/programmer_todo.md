@@ -180,11 +180,16 @@ off, and with it off every prompt is what it is today.
       record. The wording sits before the `-----` of a first prompt (as the probe had it)
       and at the end of the revise and follow-up instructions. A test pins the three
       prompts of today character for character. 366 tests pass.
-- [ ] RL2 The run: the 30 questions, `gpt-6-luna`, the chunks fetched by the ids saved with the
+- [x] RL2 The run: the 30 questions, `gpt-6-luna`, the chunks fetched by the ids saved with the
       evaluation's prompts. Before any paid call: with numbering off, the prompt built from
       the fetched chunks equals the saved prompt, for each question; report those where it
       does not and leave them out. Answers into a directory of their own. Then the paid run
       (about 3 cents); tell Tom before it starts.
+      Done 2026-11-25 in `site_2024` (`2bd5cb1`, `evaluation/cite_trial.py`, 6 tests). Check:
+      29 of 30 prompts rebuilt equal; Q08 left out, its chunk `x3XodjGpYTU1` is gone (the
+      thread was refetched in the corpus update, new ids `x3XodjGpYTU#n`). Paid run (Tom's
+      go): 29 answered, 0 failed, $0.0209, into `evaluation/output/cite_trial/` (git-ignored),
+      log `evaluation/output/cite_trial_run.log`.
 - [ ] RL3 The counting script of the plan, tests first, and its output for the run.
 - [ ] RL4 Report to Architect in a note in `architect_todo.md`: the counts, the questions left
       out, the answers without a number (by question id). Do not apply the rule yourself and
