@@ -190,7 +190,16 @@ off, and with it off every prompt is what it is today.
       thread was refetched in the corpus update, new ids `x3XodjGpYTU#n`). Paid run (Tom's
       go): 29 answered, 0 failed, $0.0209, into `evaluation/output/cite_trial/` (git-ignored),
       log `evaluation/output/cite_trial_run.log`.
-- [ ] RL3 The counting script of the plan, tests first, and its output for the run.
+- [x] RL3 The counting script of the plan, tests first, and its output for the run.
+      Done 2026-11-25 in `site_2024` (`7e60f08`, `evaluation/count_citations.py`, 21 tests).
+      Report in `evaluation/output/cite_trial_count.md` (git-ignored). Of 29: without a number
+      1 (Q05: "The provided context doesn't say where Desser Monster retreads can be
+      purchased."); numbers naming no chunk 0; other forms 0; lists of sources 0; no `[2, 5]`
+      form. Medians trial / rated: completion tokens 516 / 560, reasoning 253 / 324, latency
+      4.81 / 5.39 s, cost $0.00073 / $0.00074. A parenthesis counts as another form only when
+      it holds only numbers or a number with a word for a piece of context ("source",
+      "piece", ...): taken literally, "digits and other text" would list every "(5.15 m)".
+      Every bracket of the 29 answers was also read by a script: none outside `[n]`.
 - [ ] RL4 Report to Architect in a note in `architect_todo.md`: the counts, the questions left
       out, the answers without a number (by question id). Do not apply the rule yourself and
       do not change the wording of the prompt: both are Architect's. Go on with RL5 without
