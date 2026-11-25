@@ -1553,6 +1553,19 @@ model read is not part of this.
 
 #### 4.1a The trial
 
+**[REVISED - 2026-11-24] A probe before the trial (Tom).** Before the trial is built, Tom
+wanted to see what `gpt-6-luna` does with the wording below on three questions, with as
+little code as possible. Architect ran it on 2026-11-24 with a script of its own that is
+not site code: Q03, Q28 and Q05, the chunks of the rated answers, the wording put before
+the context. The script, the three records and the page for Tom are in the git-ignored
+`site_2024/evaluation/output/citation_probe/` (`probe.md`). Seen by a script: every
+number written names a chunk; the form is the one asked for; no list of sources. Q03
+cites 2 of 15 chunks, Q28 7 of 15, and Q05, whose answer is that the context does not
+say, cites none. Whether the cited chunks support the statements is Tom's reading of
+`probe.md`; Architect checked six figures of Q03 and Q28 against their chunks and found
+each in the chunk cited. Three questions show nothing about how often it goes wrong. The
+trial below is not started until Tom has read the probe and said how to go on.
+
 **The prompt.**
 
 - `build_prompt` can number the chunks. Whether it does is one setting in `site.ini`, off
@@ -1977,7 +1990,8 @@ Architect reading the code and the files; it has not been tried in Chrome.
    where they came from. They are new threads: nothing is set aside for them, and they
    pass through steps 5 and 6 like the threads of a yearly update. Reported: how many
    came back as threads, and any id that Google no longer has. The copy of the id file
-   in `msgGetter` is then of no use; it is removed from the repo only on Tom's word.
+   in `msgGetter` is then of no use. Tom approved on 2026-11-24 that it is removed from
+   the repo once the 60 are fetched.
 5. **The pictures.** A collapsed post may have hidden attachments. The index is built
    again from `data/msgs_md` (`imageGetter/README.md`); if it names pictures that are not
    on disk, Tom downloads and reviews them and the gallery index and thumbnails are made

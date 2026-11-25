@@ -305,7 +305,8 @@ done.
       posts. Report the threads not taken over. Pass mark: none of 2026 left collapsed.
       In the same run the 60 ids of 2024-25 that were never fetched (D59; plan, step 4),
       from an id file of their own in `data`. They go through CP5 and CP6 as new threads.
-      Do not remove `msgGetter/msgids_2024-09-03_2025-10-02.txt` without Tom's word.
+      When the 60 are fetched, `git rm msgGetter/msgids_2024-09-03_2025-10-02.txt` (Tom
+      approved 2026-11-24) and take its paragraph out of `msgGetter/README.md`.
 - [ ] CP5 The pictures: the index built again; if it names pictures not on disk, the download
       and Tom's review, the gallery index and the thumbnails. Say which it was.
 - [ ] CP6 The embedding into the production collection (`embedder/README.md`) and the three
@@ -371,7 +372,9 @@ file; the yearly upload is in the top-level `README.md`.
 ### Reference links: the trial (repo: `../site_2024/`)
 
 Plan: "4.1 Reference links inside answers", 4.1a. Read all of 4.1; the tests are listed there.
-After "Pictures of an answer". Nothing of this is deployed with numbering on: the setting stays
+After "Collapsed posts". **Do not start RL1 until Architect says so:** Tom is reading a
+probe of three questions first (plan 4.1a, first paragraph) and the trial may change.
+Nothing of this is deployed with numbering on: the setting stays
 off, and with it off every prompt is what it is today. The display (4.1b) has no tasks yet;
 do not start it.
 

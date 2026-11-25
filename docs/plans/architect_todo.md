@@ -15,7 +15,9 @@ answer is deployed (`site_2024` `4f85f9e`, `ml` `72957f4`) and `main` is level w
 2026-11-23 21:57 (read from `queue.log`); the Programmer's report of the five checks (2.2d) is
 not written yet. The Programmer's next tasks are 2.2d and then "Collapsed posts" (CP1 to CP8, D58, nineteenth
 revision); the citation trial (RL1) follows. The 60 unfetched threads join the refetch and the world-writable directories wait for the
-server cleanup (D59). One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
+server cleanup (D59). A probe of the citations on three questions is with Tom to read
+(`site_2024/evaluation/output/citation_probe/probe.md`; plan 4.1a); the trial (RL1) is held
+until he has said how to go on. One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
 be designed or handed to the Programmer on them until he has answered.
 
 ## Open
