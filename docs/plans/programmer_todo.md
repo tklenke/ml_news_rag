@@ -175,7 +175,7 @@ off, and with it off every prompt is what it is today.
       three kinds of prompt; the setting in `site.ini`, off; the record says whether an answer
       was numbered. Tests first, the first of them that the prompts with numbering off are
       unchanged.
-      Done 2026-11-25 in `site_2024` (`8ce8a30`, then the setting): `build_prompt(...,
+      Done 2026-11-25 in `site_2024` (`8ce8a30`, `cf29c7f`): `build_prompt(...,
       numbered=)`; `[PROMPTS] NUMBER_DOCS = False` in `site.ini`; `numbered_docs` in every
       record. The wording sits before the `-----` of a first prompt (as the probe had it)
       and at the end of the revise and follow-up instructions. A test pins the three
