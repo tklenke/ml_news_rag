@@ -1,3 +1,5 @@
+# ABOUTME: Fetches the threads of the id files in data from Google Groups and saves each as
+# ABOUTME: markdown and as filtered text; a thread with a collapsed post is not saved
 #get message text v1
 # this program will require that an instance of Chrome has been
 # started with a debug port available.  See chrome_with_debug.bat
@@ -9,6 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from f_filter import elements_to_html, elements_to_markdown, filter_markdown
+from f_collapsed import count_collapsed_posts
 
 import os
 
@@ -28,6 +31,8 @@ SAVE_FILTERED_MD = True
 EXIT_IF_NO_PREVIOUS = True
 MIN_PAUSE = 0
 LOAD_PAUSE = 1
+# Seconds after the "Expand all" click until a thread that still shows a collapsed post is given up
+EXPAND_SECONDS = 15
 EXE_PATH = '..\\..\\chromedriver-win64\\chromedriver.exe'
 BASE_URL = 'https://groups.google.com/g/cozy_builders/c/'
 LLMMODEL = "llama3.2:3b"
@@ -37,7 +42,8 @@ CHROMAHOST = "chroma-rag"
 OLLAMAHOST = "http://ollama-rag:11434"
 
 # Function to scrape a message page
-def get_message_elements(id):
+# Reads the page again until no post shows collapsed or EXPAND_SECONDS have passed
+def get_message_elements(driver, id):
     url = BASE_URL + id
     r = []  #return array of elements
 
@@ -51,19 +57,20 @@ def get_message_elements(id):
         element.click()
     except Exception as e:
        print(f"Id {id} no exapansion found")
-    #wait a second to load jic
-    time.sleep(2)
+    tGiveUp = time.time() + EXPAND_SECONDS
+    while True:
+        time.sleep(1)
 
-    elements_title = driver.find_elements(By.XPATH, "//div[@class='ThqSJd']")
+        elements_title = driver.find_elements(By.XPATH, "//div[@class='ThqSJd']")
 
-    # Find all elements with the 'aria-tag' attribute having the value 'digest'
-    elements_digest = driver.find_elements(By.XPATH, "//div[@role='list']")
+        # Find all elements with the 'aria-tag' attribute having the value 'digest'
+        elements_digest = driver.find_elements(By.XPATH, "//div[@role='list']")
 
-    #put elements in to result array
-    r += elements_title
-    r += elements_digest
+        #put elements in to result array
+        r = elements_title + elements_digest
 
-    return r
+        if not count_collapsed_posts(elements_to_markdown(r)) or time.time() > tGiveUp:
+            return r
 
 #Reads ids from a file into a list, removing trailing carriage returns and linefeeds.
 #Args:    filename: The name of the file to read.
@@ -120,21 +127,39 @@ def save_text_to_file(dir, id, txt, ext=".txt"):
     with open(filename, "w", encoding='utf-8') as f:
         f.write(txt)
 
-def process_id(msgid):
+# Saves a thread only when none of its posts is collapsed: the markdown if it was fetched,
+# and the filtered text. Returns whether it was saved.
+def save_thread(msgid, msgtxt, fetched):
+    nCollapsed = count_collapsed_posts(msgtxt)
+    if nCollapsed:
+        print(f"Id {msgid} has {nCollapsed} collapsed posts, not saved")
+        return False
+    if fetched and SAVE_RAW_MD:
+        save_text_to_file(MESSAGE_MD_DIR,msgid,msgtxt,".md")
+
+    #filter markdown for embedding and save
+    embedtxt = filter_markdown(msgtxt)
+    if SAVE_FILTERED_MD:
+        save_text_to_file(MESSAGE_FILTERED_DIR,msgid,embedtxt,".txt")
+    return True
+
+# Returns whether the thread is saved
+def process_id(driver, msgid):
     #look for txt file, if exists done
     txtfile = get_filename(MESSAGE_FILTERED_DIR,msgid,".txt")
     if os.path.exists(txtfile):
         print(f"{txtfile} exists, skipping")
-        return
+        return True
     #look for md file, if exists read
     mdfile = get_filename(MESSAGE_MD_DIR,msgid,".md")
     if os.path.exists(mdfile):
         print(f"{mdfile} exists, reading")
         with open(mdfile, 'r', encoding='utf-8') as f:
             msgtxt = f.read()
+        fetched = False
     else:
         #get raw html chunks and save
-        elements = get_message_elements(msgid)
+        elements = get_message_elements(driver, msgid)
         msghtml = elements_to_html(elements)
         if SAVE_RAW_HTML:
             save_text_to_file(MESSAGE_HTM_DIR,msgid,msghtml,".htm")
@@ -144,13 +169,9 @@ def process_id(msgid):
         msgtxt = elements_to_markdown(elements)
         # add link to original message in first line
         msgtxt = f"[Original Message ID:{msgid}]({BASE_URL + msgid})\n" + msgtxt
-        if SAVE_RAW_MD:
-            save_text_to_file(MESSAGE_MD_DIR,msgid,msgtxt,".md")
+        fetched = True
 
-    #filter markdown for embedding and save
-    embedtxt = filter_markdown(msgtxt)
-    if SAVE_FILTERED_MD:
-        save_text_to_file(MESSAGE_FILTERED_DIR,msgid,embedtxt,".txt")
+    return save_thread(msgid, msgtxt, fetched)
 
     # embed text in chromadb
 
@@ -163,65 +184,73 @@ def process_id(msgid):
 ##  MAIN
 ######################
 
-#set up some stats
-nTotalSavedThisSession = 0
-tTotal = 0
-aIds = []
+def main():
+    #set up some stats
+    nTotalSavedThisSession = 0
+    tTotal = 0
+    aIds = []
+    aNotSaved = []
 
-#connect chromedriver
-service = Service(executable_path=EXE_PATH)
-options = webdriver.ChromeOptions()
-options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-driver = webdriver.Chrome(service=service, options=options)
+    #connect chromedriver
+    service = Service(executable_path=EXE_PATH)
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+    driver = webdriver.Chrome(service=service, options=options)
 
-# get the full list of message ids
-for idFile in get_msgids_list_files():
-    aIds.extend(read_ids_from_file(idFile))
-print(f"Ids: {len(aIds)}")
+    # get the full list of message ids
+    for idFile in get_msgids_list_files():
+        aIds.extend(read_ids_from_file(idFile))
+    print(f"Ids: {len(aIds)}")
 
-# get list of message ids that have been saved
-ids_saved = get_txt_filenames(MESSAGE_FILTERED_DIR)
-print(f"Msgs already filtered: {len(ids_saved)}")
+    # get list of message ids that have been saved
+    ids_saved = get_txt_filenames(MESSAGE_FILTERED_DIR)
+    print(f"Msgs already filtered: {len(ids_saved)}")
 
-#remove the ids that have been saved from the ids
-aIds[:] = [x for x in aIds if x not in ids_saved]
-print(f"Net to complete: {len(aIds)}")
+    #remove the ids that have been saved from the ids
+    aIds[:] = [x for x in aIds if x not in ids_saved]
+    print(f"Net to complete: {len(aIds)}")
 
-# loop on the following
-#   select a random message id and check that it has not been saved
-#       if has been processed, remove from list and select another 
-#           (NR - cleaned list above)
-#       if the list is empty we are done (see while conditional)
-#   get the message text and save it
-#       remove from the list and select another
-#   print out some stats
+    # loop on the following
+    #   select a random message id and check that it has not been saved
+    #       if has been processed, remove from list and select another 
+    #           (NR - cleaned list above)
+    #       if the list is empty we are done (see while conditional)
+    #   get the message text and save it
+    #       remove from the list and select another
+    #   print out some stats
 
-while (len(aIds) > 0) & (nTotalSavedThisSession < NMAX):
-    random_index = random.randint(0, len(aIds) - 1)
-    random_id = aIds.pop(random_index)
-    t0 = time.time()
+    while (len(aIds) > 0) & (nTotalSavedThisSession < NMAX):
+        random_index = random.randint(0, len(aIds) - 1)
+        random_id = aIds.pop(random_index)
+        t0 = time.time()
 
-    print(f"fetching id: {random_id}")
-    process_id(random_id)
+        print(f"fetching id: {random_id}")
+        if not process_id(driver, random_id):
+            aNotSaved.append(random_id)
 
-    # wait enough time
-    t1 = time.time() - t0
-    tTotal += t1
-    if t1 < MIN_PAUSE:
-        time.sleep(random.random()*MIN_PAUSE/(t1+1))
+        # wait enough time
+        t1 = time.time() - t0
+        tTotal += t1
+        if t1 < MIN_PAUSE:
+            time.sleep(random.random()*MIN_PAUSE/(t1+1))
 
-    # stats
-    nTotalSavedThisSession += 1
-    if nTotalSavedThisSession % 5 == 0:
-       print(f"Progress This session: {nTotalSavedThisSession} To Go: {len(aIds)} \
-             Average Processing Time: {tTotal/float(nTotalSavedThisSession):.1f}")
+        # stats
+        nTotalSavedThisSession += 1
+        if nTotalSavedThisSession % 5 == 0:
+           print(f"Progress This session: {nTotalSavedThisSession} To Go: {len(aIds)} \
+                 Average Processing Time: {tTotal/float(nTotalSavedThisSession):.1f}")
 
-# print out some stats
-if nTotalSavedThisSession:
-    print(f"----STATS-----")
-    print(f"Msgs Processed: {nTotalSavedThisSession:.1f}")
-    print(f"Total Processing Time: {tTotal:.1f}")
-    print(f"Average Processing Time: {tTotal/float(nTotalSavedThisSession):.1f}")
+    # print out some stats
+    if nTotalSavedThisSession:
+        print(f"----STATS-----")
+        print(f"Msgs Processed: {nTotalSavedThisSession:.1f}")
+        print(f"Total Processing Time: {tTotal:.1f}")
+        print(f"Average Processing Time: {tTotal/float(nTotalSavedThisSession):.1f}")
+        print(f"Not saved, a post still collapsed: {len(aNotSaved)} {' '.join(aNotSaved)}")
 
-# Close the browser
-driver.quit()
+    # Close the browser
+    driver.quit()
+
+
+if __name__ == '__main__':
+    main()
