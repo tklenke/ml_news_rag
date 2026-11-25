@@ -41,3 +41,21 @@ Works at current volume (about 850 jobs). Revisit if answers stall or pages slow
   questions, so they are left. A full re-embed removes them.
 - `process_message.py` skips a thread that has a `.txt`, so replies to a known thread are
   not fetched at the next update unless its `.txt` and `.md` are moved aside first.
+
+## ml: yearly update (logged 2026-11-24, Programmer's report YU5)
+
+Steps Tom does by hand each year from the READMEs. None is built; Tom decided on
+2026-11-24 to leave them here. They work as written.
+
+- `get_msg_ids.py`: the start date is a constant to edit, and the id file is written into
+  `msgGetter` and must be moved to `data` by hand.
+- ChromeDriver's path is written into both `msgGetter` scripts as a relative path;
+  `imageGetter` takes `--chromedriver`. One option in all three would remove the rule that
+  ChromeDriver must sit in `/home/tom/projects`.
+- Python pasted from the READMEs, each of which could be a small command with tests: the
+  older threads with new replies (set aside, fetch again, keep the longer copy), the
+  deletion of their chunks, the rebuild of `.txt` from `.md`, the count and hash of the
+  collection. The check for collapsed posts was on this list and is built with D58.
+- The index, gallery and list names carry a date that the steps keep in shell variables
+  (`$IDX`, `$G`, `$L`); a new terminal means setting them again.
+- `webGetter` has no yearly instructions; it was not run in 2026.

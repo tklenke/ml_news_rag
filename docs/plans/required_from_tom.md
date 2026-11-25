@@ -17,8 +17,12 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
 - [x] **Collapsed posts.** Decided 2026-11-24: found, fixed and deployed now (D58).
 - [x] **Up to 60 threads of 2024-25 never fetched.** Decided 2026-11-24: fetched in the same
       pass as the collapsed posts (D59).
-- [ ] **Process suggestions (8) and the yearly steps that could be small tested scripts
-      (4).** Which to take up, and when.
+- [x] **Process suggestions (8) and the yearly steps that could be small tested scripts
+      (4).** Decided 2026-11-24: suggestions 1, 2, 3, 4, 5, 7 and 8 accepted (now in
+      `CLAUDE.md`); the scripts are not built and are logged in
+      `docs/notes/opportunities_for_improvement.md`.
+- [ ] **Process suggestion 6: cleanup entries with a reason, not a date.** You asked for
+      more information; Architect gave it on 2026-11-24. Yes or no.
 - [x] **World-writable directories on the server.** Decided 2026-11-24: with the full server
       cleanup, after the server has run for a week (D59; `programmer_todo.md`, "Server
       cleanup").

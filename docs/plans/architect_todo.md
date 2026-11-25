@@ -22,6 +22,26 @@ The probes that led there are in the git history: `docs/notes/citation_probe/` a
 `342be36`, deleted in the commit after it. The Programmer has RL1 to RL8 after "Collapsed posts". One question waits for Tom (`required_from_tom.md`, "Waiting for a decision"); nothing is to
 be designed or handed to the Programmer on them until he has answered.
 
+## For the yearly update of 2027
+
+Read this before planning the next update.
+
+- Tom runs the update himself from the READMEs (D57): "Yearly Update" in `msgGetter`,
+  `imageGetter` and `embedder`, the order and all server work in the top-level `README.md`.
+  Start there, not from this plan.
+- Before he starts, read `docs/notes/opportunities_for_improvement.md`, "ml: yearly update",
+  and ask Tom which of the hand steps he wants made into tested commands first. He put
+  them off in 2026 because the steps worked and the next run was a year away. The time to
+  build them is before the run, not during it.
+- Three things were not proven in 2026, as far as this file knew on 2026-11-24: `webGetter`
+  has no instructions; the Chroma upload in the top-level `README.md` (steps 5 to 7) was
+  written from a rehearsal; the deploy of everything in one session had not been run. The
+  deploy of the collapsed posts (D58) was to be the first real run of the last two; read
+  its report (CP8) in the plan to see what it showed.
+- The fetch had saved posts collapsed (D58). Check that the yearly steps still hold the
+  check for collapsed posts, and run it on the new threads before anything is embedded.
+- The server rules are in `CLAUDE.md`, "Deploys and server work".
+
 ## Open
 
 - [x] Read the Programmer's report of the pictures of an answer (PA9). Recorded in plan 4.2,
@@ -34,8 +54,8 @@ be designed or handed to the Programmer on them until he has answered.
 - [x] Collapsed posts designed (plan "Collapsed posts", D58) and handed over (CP1 to CP8).
 - [ ] Read the Programmer's report of the cause of the collapsed posts (CP2), if the
       Programmer stops there, and the closing report (CP8); record both in the plan.
-- [ ] After Tom's answers (`required_from_tom.md`, "Waiting for a decision"): schedule what
-      he decides on the process suggestions with the YU5 scripts.
+- [x] Process suggestions and YU5 scripts: decided by Tom 2026-11-24 ("Notes from
+      Programmer"). Suggestion 6 waits for him.
 
 ## Notes from Programmer
 
@@ -43,82 +63,19 @@ Recorded in the plan on 2026-11-24 and closed (the notes are in the git history 
 file): D55 amended at PA7, the upload by tar and `scp` (PA8), the report of the deploy
 (PA9), the hand-off note, and the yearly update as written (D57).
 
-- [ ] **NOTE FROM PROGRAMMER (2026-11-24): process suggestions from the pictures deploy and
-      the cleanup.** Asked for by Tom. Each is a suggestion for Architect to accept or not.
-      1. **Server work in steps with confirmation.** It worked: Tom ran each block, pasted
-         the output, and the next block came only after it was read. Make it the rule for
-         deploy, upload and cleanup: blocks of a few commands, each with what to expect and
-         where to stop, no deletion in the same block as its checks.
-      2. **Name a transfer tool only after checking both ends.** Plan 4.2 named `rsync`; it
-         was not installed locally, and Tom moves files with tar and `scp`. Plans should say
-         what is moved and how it is checked (SHA-256), and leave the tool to what Tom uses.
-      3. **Rehearse every command Tom will paste,** against a scratch copy, including the
-         names that break tools. The rehearsal found that GNU tar `-T` reads names starting
-         with `-` as options (100 of them); without it the upload would have failed.
-      4. **Merge to `main` at each deploy, in both repos.** `ml` `main` was 147 commits
-         behind; Tom asked to merge all branches. Make "fast-forward `main` and push" a step
-         of each deploy's delivery.
-      5. **Close a review in the same session as its fixes,** or let Tom waive it there. The
-         verdict stayed "Not approved" after R1 to R3 were fixed, since only a Code Reviewer
-         session could close it; Tom waived it at deploy time.
-      6. **Cleanup dates.** Tom brought three of four "not before" dates forward on the day.
-         Consider giving each entry its reason (what its rollback protects against and when
-         that would show) instead of a fixed date, so the call is easy to make early.
-      7. **A reboot check after a deploy that changes the stack.** First done 2026-11-24: all
-         came up on its own (notes in `programmer_todo.md`, Phase 0 "Still useful"). Worth a
-         line in each such deploy's checks.
-      8. **Expectations of Docker output.** Two of my "what to expect" lines were wrong:
-         `docker images` sizes count shared layers (4.9 GB expected, 1 GB freed), and
-         removing an image's last tag deletes it. Expected output should be read from a
-         rehearsal, not predicted.
+Decided by Tom on 2026-11-24 and closed (the notes are in the git history of this file):
 
-- [ ] **NOTE FROM PROGRAMMER (2026-11-24): the message fetch saves some posts collapsed
-      (YU1 trial).** A refetch of `XxpI4Rhe3vY` saved 2 of its 3 posts as Google's cut-off
-      preview, although "Expand all" was found and clicked. In the corpus, 40 markdown files
-      hold such posts (164 posts), 27 of them among the 237 threads of 2026; they are embedded
-      and on the site cut off. Details and examples: `docs/plans/yu1_fetch_trial.md`, "Result".
-      Cause not investigated. Needs a decision: whether and when to find the cause and fix
-      `process_message.py` (a check for a collapsed post would also catch it), and whether to
-      refetch the 40 threads. The yearly instructions (YU2) will name the check either way.
+- Process suggestions 1, 2, 3, 4, 7 and 8 accepted; they are in `CLAUDE.md`, "Deploys and
+  server work". Suggestion 5 accepted; it is in `CLAUDE.md`, "Code Review Hand-off",
+  "Closing".
+- The collapsed posts (D58) and the 60 unfetched threads (D59).
+- The awkward yearly steps (YU5): none built; logged in
+  `docs/notes/opportunities_for_improvement.md`, "ml: yearly update".
 
-- [ ] **NOTE FROM PROGRAMMER (2026-11-24): up to 60 threads of 2024-25 may never have been
-      fetched (found writing YU2).** `msgGetter/msgids_2024-09-03_2025-10-02.txt` (in git since
-      `a405976`, 328 lines) differs from `data/msgids_2024-09-03_2025-10-02.txt` (327 lines, the
-      one the fetch reads): 60 ids are only in the `msgGetter` copy, are in no id file in `data`
-      and have no `.txt`; 29 ids are only in the `data` copy. Probably two runs of the id search
-      over the same dates. Not looked into further. Needs a decision: whether to fetch the 60
-      (a fetch with that file in `data` would get them) and what to do with the `msgGetter`
-      copy. The README says it is not used.
-
-- [ ] **NOTE FROM PROGRAMMER (2026-11-24): the yearly update instructions (YU5 report).**
-      Written: `msgGetter/README.md`, `imageGetter/README.md`, `embedder/README.md` ("Yearly
-      Update" in each), the order in the top-level `README.md`, and "Deploy a change of the
-      code" in `site_2024`'s README. Approved by Tom 2026-11-24 (YU4).
-      **Settled in YU1 with Tom:** Windows Python from cmd, not PowerShell, in the WSL folder
-      by `pushd`; Chrome by `msgGetter/chrome_with_debug.bat` (profile `C:\selenum\ChromeProfile`)
-      for both modules; ChromeDriver in `/home/tom/projects/chromedriver-win64`; start date a
-      day before the last end; Tom deletes the Windows clone once all is confirmed. Tom
-      widened the task to the embedding and the deploy.
-      **Awkward in the code, for Tom to do by hand each year** (code changes, not made):
-      1. `get_msg_ids.py`: the start date is a constant to edit (step 3), and the id file is
-         written into `msgGetter` and must be moved to `data` by hand (step 4).
-      2. ChromeDriver's path is written into both `msgGetter` scripts as a relative path;
-         `imageGetter` takes `--chromedriver`. One option in all three would remove the rule
-         "ChromeDriver must sit in `/home/tom/projects`".
-      3. The older threads with new replies (set aside, refetch, keep the longer copy), the
-         deletion of their chunks, the collapsed-post check, the rebuild of `.txt` from `.md`
-         and the count and hash of the collection are Python pasted from the READMEs. Each
-         could be a small CLI with tests.
-      4. The index, gallery and list names carry a date the steps carry in shell variables
-         (`$IDX`, `$G`, `$L`); a new terminal means setting them again.
-      **Later steps without instructions he could follow:** `webGetter` (not run in 2026; the
-      top README says so). The Chroma upload was never written down in 2026 (given in chat);
-      the top-level `README.md` steps 5 to 7 follow the plan and a local rehearsal, not a record.
-      At Tom's request every server step is in the top-level `README.md` and done in one
-      deploy (collection, thumbnails, gallery index, code); that combined deploy has not been
-      run as one session.
-      **Faults found and reported separately:** collapsed posts (note above), the 60 unfetched
-      ids of 2024-25 (note above).
+- [ ] **Process suggestion 6, open.** Tom asked for more information (given in the session
+      of 2026-11-24). The suggestion: an entry of "Server cleanup" carries the reason for
+      keeping its leftovers (what its rollback protects against, and when a fault would
+      show) and not a fixed "not before" date. Nothing changes until Tom answers.
 
 ## Notes from Code Reviewer
 

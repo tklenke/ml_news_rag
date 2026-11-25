@@ -189,8 +189,26 @@ Applies to Code Reviewer, Programmer and Architect.
 
 **Closing:**
 - Code Reviewer checks each fixed MUST FIX finding, then updates the verdict.
+- A review is closed in the session that fixed its findings. When the fixes are committed,
+  the Programmer asks Tom to choose: switch to the Code Reviewer role there to check the
+  fixed MUST FIX findings and update the verdict, or waive the rest of the review.
 - Only Tom grants an exception or waives a review. Record it with the date.
 - After the deploy, Programmer removes the section; it stays in the git history.
+
+## Deploys and server work
+
+Applies to Architect and Programmer.
+
+- Tom runs the commands on the server. Give them in blocks of a few commands, each with
+  what to expect and where to stop. Read his output before giving the next block. A
+  deletion is never in the same block as the check that allows it.
+- A plan says what is moved and how the copy is checked (SHA-256). It names a tool only
+  after checking that both ends have it; Tom moves files with tar and `scp`.
+- Every command Tom will paste is first run against a scratch copy, with the real file
+  names. The expected output written for Tom is read from that run, not predicted.
+- Each deploy ends with `main` fast-forwarded and pushed, in every repo it touched.
+- A deploy that changes the stack (compose, images, services) has a reboot in its checks:
+  everything comes up on its own.
 
 ## Issue tracking
 
