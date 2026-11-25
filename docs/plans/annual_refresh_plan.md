@@ -1566,6 +1566,27 @@ say, cites none. Whether the cited chunks support the statements is Tom's readin
 each in the chunk cited. Three questions show nothing about how often it goes wrong. The
 trial below is not started until Tom has read the probe and said how to go on.
 
+**[REVISED - 2026-11-24] The probe on all of batch 1 (Tom).** The other eight questions of
+batch 1 were run the same way (`probe_batch1.md` in the same folder), and Architect read
+every citation of the ten answers against the text of its chunk. This is Architect's
+reading, not Tom's judgement, and no answer was rated.
+
+- All 10 answers hold numbers; no number names a chunk that was not sent; the form is the
+  one asked for throughout; no list of sources.
+- About 64 citation marks. 62 are supported by the chunk cited. One is not: in Q35 the
+  advice to bleed in reverse is marked `[1][2]`, and only `[1]` says it. One is weak: in
+  Q41 a closing general sentence is marked `[8][14]`, and `[14]` is an introduction that
+  says nothing so specific. No mark gives a figure to a chunk that does not hold it.
+- The answers lean more on the context than the rated ones. General advice from no chunk
+  is mostly gone (Q28, Q35, Q10). In Q14 and Q26 details the rated answers had from the
+  context are also gone (the two tolerances and the 20 degrees; the out-of-round
+  complaint). Whether the answers are as good is Tom's rating and is not known.
+- Several cited chunks are often one source: 7 chunks are 4 threads in Q28, and 9 are 5
+  sources in Q41. For the display (4.1b) this argues for one number per source on the
+  page.
+- Q35 took 1,498 completion tokens (1,167 of them reasoning) and 12.2 s, against 1,038
+  and 8.9 s for the rated answer. One answer; not known whether the numbering causes it.
+
 **The prompt.**
 
 - `build_prompt` can number the chunks. Whether it does is one setting in `site.ini`, off
