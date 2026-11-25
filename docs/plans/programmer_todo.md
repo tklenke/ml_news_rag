@@ -171,10 +171,15 @@ that the citations are built (D60), so the run below does not decide whether the
 built, only whether the setting is switched on at the deploy. Until then the setting stays
 off, and with it off every prompt is what it is today.
 
-- [ ] RL1 `build_prompt` numbers the chunks when told to, with the plan's wording, for all
+- [x] RL1 `build_prompt` numbers the chunks when told to, with the plan's wording, for all
       three kinds of prompt; the setting in `site.ini`, off; the record says whether an answer
       was numbered. Tests first, the first of them that the prompts with numbering off are
       unchanged.
+      Done 2026-11-25 in `site_2024` (`8ce8a30`, then the setting): `build_prompt(...,
+      numbered=)`; `[PROMPTS] NUMBER_DOCS = False` in `site.ini`; `numbered_docs` in every
+      record. The wording sits before the `-----` of a first prompt (as the probe had it)
+      and at the end of the revise and follow-up instructions. A test pins the three
+      prompts of today character for character. 366 tests pass.
 - [ ] RL2 The run: the 30 questions, `gpt-6-luna`, the chunks fetched by the ids saved with the
       evaluation's prompts. Before any paid call: with numbering off, the prompt built from
       the fetched chunks equals the saved prompt, for each question; report those where it
