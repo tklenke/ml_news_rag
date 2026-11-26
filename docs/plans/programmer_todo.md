@@ -9,6 +9,20 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Branches:** `wip/annual-refresh` in `ml/` and in `../site_2024/`.
 
+**Stopped for this year (Tom, 2026-11-26).** Both repos are merged to `main` and pushed
+(`ml` `1784972`, `site_2024` `4bcdd79`). Three groups below are still open. For each, Tom
+has not yet decided whether it is finished, dropped or deferred to 2027; ask him before
+starting any of them:
+
+1. CP8 is not done. `msgGetter/README.md` step 8 and its troubleshooting do not yet say
+   what the fetch does now, and the report to Architect is not written. The yearly update
+   of 2027 runs from that README.
+2. Phase 2 stops before the labelling (2.3). The five collections stay in
+   `data/chunk_experiment/`.
+3. Server cleanup is not done. The rollback copies stay on the server, and the check of the
+   world-writable directories (D59) has not been made. Until each entry is done, no
+   `docker system prune` on the server.
+
 **Order:**
 
 1. CP8, the closing report of the collapsed posts.
