@@ -1,7 +1,7 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-26 (twenty-third revision); Phase 2 goes on by a blind look at answers first (2.6, D65). Before that, 2026-11-26 (twenty-second revision); the citations and the repaired collection are deployed in one session by the top-level `README.md` (`site_2024` `4bcdd79`; 4.1b, "Deploy", "As run"); the refresh stops for this year with Phase 2 from 2.3 and the server cleanup open (D64; CP8 closed the same day). Before that, 2026-11-25 (twenty-first revision); the citation trial passed its rule and the setting may be switched on at the deploy once Tom has looked at the local site (4.1a); the five collections of the chunk experiment are fit for the labelling (2.2a); the collapsed posts are repaired locally and not deployed yet ("Collapsed posts"). Before that, 2026-11-24 (twentieth revision): the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
+**Status:** Revised 2026-11-26 (twenty-third revision); Phase 2 went on by a blind look at answers (2.6, D65) and closed the same day: no variant is a candidate, chunking stays as it is. Before that, 2026-11-26 (twenty-second revision); the citations and the repaired collection are deployed in one session by the top-level `README.md` (`site_2024` `4bcdd79`; 4.1b, "Deploy", "As run"); the refresh stops for this year with Phase 2 from 2.3 and the server cleanup open (D64; CP8 closed the same day). Before that, 2026-11-25 (twenty-first revision); the citation trial passed its rule and the setting may be switched on at the deploy once Tom has looked at the local site (4.1a); the five collections of the chunk experiment are fit for the labelling (2.2a); the collapsed posts are repaired locally and not deployed yet ("Collapsed posts"). Before that, 2026-11-24 (twentieth revision): the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
@@ -10,6 +10,8 @@
   Claude looks at the answers `gpt-6-luna` gives from each variant on 5 questions, with
   the same number of words of text for each, judged blind against a rule fixed here
   (2.6, D65). The labelling of 2.3 to 2.5 is run only for a variant this look sends on.
+  Run the same day: no variant is a candidate, so chunking stays as it is and Phase 2
+  closes (2.6, "Result").
 - **2026-11-26 (twenty-second revision):** The Programmer's report of the deploy (DP6) is
   read and recorded; no design changed by Architect. The citations and the repaired
   collection went to the server in one session by the top-level `README.md`, the first
@@ -1003,6 +1005,15 @@ cents at the price of 2026-11-22.
 cite trial (one function selects the chunks within the budget, one makes the blind
 sheets); its output in `evaluation/output/chunk_answers/` (git-ignored, as the prompts
 can hold email addresses). The scores and the report go to `ml/docs/notes/`.
+
+**[REVISED - 2026-11-26] Result: no candidate; chunking stays as it is and Phase 2 closes.**
+Run and judged the same day (`docs/notes/phase2_answer_look.md`; scores committed before the
+key was opened, `phase2_answer_scores.md`). Totals of 30: A 27 and 26 when asked again, B 26,
+C 26, D 27, E 27. One variant was clearly better than A on one question (D on Q13, where only
+B's and D's text held the one line that answers it); the rule asks for 3 of 5. The two
+answers of A differed by 1 point on one question. With equal text, speed and cost differ only
+by the length of the answer, and by no more than A differs from itself. 2.3 to 2.5 are not
+run. The five collections and the experiment's Chroma (port 8010) are still on disk.
 
 ---
 

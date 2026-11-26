@@ -13,7 +13,7 @@ runs `site_2024` `4bcdd79` and `ml` `247b98b`; the local collection and the serv
 the same again. Nothing waits to be designed.
 
 The refresh is stopped for this year (D64), with two exceptions. CP8 is closed. Phase 2
-goes on by the look at answers of plan 2.6 (D65), done by Claude in this session. The
+went on by the look at answers of plan 2.6 (D65) and closed: chunking stays as it is. The
 server cleanup waits for Tom: finished, dropped or deferred to 2027.
 
 ## Open
@@ -26,8 +26,9 @@ server cleanup waits for Tom: finished, dropped or deferred to 2027.
       for improvement.
 - [x] Design the look at answers that comes before the labelling (plan 2.6, D65). Done
       2026-11-26.
-- [ ] Read the report of 2.6 and apply its rule. Only if a variant is a candidate: the
-      labelling of 2.3 to 2.5, for it alone, as Tom decides.
+- [x] Read the report of 2.6 and apply its rule. Done 2026-11-26: no candidate; chunking
+      stays as it is, Phase 2 closes (plan 2.6, "Result"). Open with Tom: whether the five
+      collections and the experiment's Chroma are kept.
 
 ## Notes from Programmer
 

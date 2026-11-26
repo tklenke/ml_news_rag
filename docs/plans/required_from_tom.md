@@ -74,8 +74,8 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
       follow-up, one of them on a question you know well, click some numbers, and say
       whether anything stops the deploy. Then the deploy with the Programmer, which also
       carries the repaired collection (D63).
-- [ ] Label pooled retrieval candidates `y` / `n` in batches of 10 questions, 150 to 250
-      rows per batch (Phase 2.3)
+- [x] (Not needed: Phase 2 closed by plan 2.6 on 2026-11-26.) Label pooled retrieval
+      candidates `y` / `n` in batches of 10 questions, 150 to 250 rows per batch (Phase 2.3)
 
 ## Still true
 
