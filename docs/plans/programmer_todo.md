@@ -59,8 +59,9 @@ Until it is done: do not embed into the local production collection and do not r
 is ahead of the server's on purpose (local `42577 4e273635...`, in
 `~/update_records/after.txt`; server `42276 92d43eed...`, in `~/update_records/before.txt`).
 
-- [ ] DP1 One code review for both: the `site_2024` commits after `4f85f9e` and the `ml`
+- [x] DP1 One code review for both: the `site_2024` commits after `4f85f9e` and the `ml`
       commits of the collapsed posts. Results by "Code Review Hand-off" in `CLAUDE.md`.
+      Done 2026-11-26: Not approved, see "Code review results (2026-11-26)" below.
 - [ ] DP2 `NUMBER_DOCS = True` in the tracked `site.ini`; both repos merged to `main` with
       Tom's approval and pushed.
 - [ ] DP3 The deploy with Tom by the top-level `README.md`, steps 3 and 5 to 8, with the code
@@ -76,6 +77,54 @@ is ahead of the server's on purpose (local `42577 4e273635...`, in
 - [ ] DP6 Report to Architect in a note in `architect_todo.md`: what was deployed, each check
       as Tom saw it, what the README needed corrected. Add what the deploy left on the server
       to "Server cleanup".
+
+### Code review results (2026-11-26)
+
+DP1. Reviewed: `site_2024` `4f85f9e..dbfa93b` (all files) and `ml` `72957f4..ce59a68`: the code
+of the collapsed posts (`msgGetter/f_collapsed.py`, `process_message.py`, `get_msg_ids.py`,
+their tests) and the top-level `README.md` steps 3 and 5 to 8, which the deploy runs.
+Not reviewed line by line: the evaluation scripts `cite_trial.py` and `count_citations.py`
+(not used by the site, already run) and the `msgGetter` README (CP8 rewrites it).
+Tests: `site_2024` 411 passed, `ml` 307 passed and 19 skipped (archived tests that need
+Ollama); output clean. Done in the Code Reviewer role in the same session as RL7, at
+Tom's request.
+
+**Verdict: Not approved** (R1 open).
+
+Sound, checked: the prompt and the record number the chunks from the same filtered lists
+in a first answer, a revise and a follow-up; each provided chunk's source is among the rows,
+so `get_citations` cannot miss; the title of a link is escaped (tried with a `"`); marks in
+headings, tables, bold and code behave as the plan says; with numbering off the three
+prompts are pinned character for character.
+
+- [ ] R1 MUST FIX `README.md:262` (step 8, server cleanup). The `ls -d` check and the
+      deletions it allows (`docker image rm`, `sudo rm -r ~/chroma_before_$D`, ...) are one
+      block. `CLAUDE.md`, "Deploys and server work": a deletion is never in the same block
+      as the check that allows it. Read from the README, not run. Done: the check is a
+      block of its own with what to expect, and the deletions follow in a later block. It
+      blocks no step of the deploy itself; it is fixed by DP5 at the latest.
+- [ ] R2 SHOULD FIX `site_2024/fwww/src/answer_html.py:44` (`link_citations`). A mark
+      inside the text of a link the model writes itself becomes a link inside a link:
+      `see [the doc [1]](https://x.example)` gives `<a href="https://x.example">the doc
+      <a href="https://groups...">[1]</a></a>`, which is not valid HTML. Reproduced by
+      calling `get_answer_html`. Not seen in the trial (216 marks, all `[n]`, no links).
+      Done: a mark inside a link is left as written, as one in code is, with a test.
+- [ ] R3 SHOULD FIX `ml/msgGetter/process_message.py` (whole file). `8748394` changed its
+      line endings from CRLF to LF together with the fix, so every line shows as changed
+      (483 lines; 191 without line endings and indentation). `CLAUDE.md`: no whitespace
+      changes by hand. The directory is mixed already (`get_msg_ids.py` CRLF, `f_filter.py`
+      LF) and Python on Windows reads both. Read from git, not tried. Done: Tom accepts it
+      (recorded here with the date), or the endings are restored in a commit of their own.
+- [ ] R4 CONSIDER `ml/msgGetter/process_message.py:156` and `:135`. A thread whose `.md`
+      exists is read from disk, not fetched. If that `.md` holds a collapsed post, the run
+      prints "not saved" and the next run reads the same `.md` again: it is never fetched
+      again, which the plan's step 3 ("the next run tries it again") assumes. A new fetch
+      never saves such a `.md`, so only an old one (or a copy put back) does it. Read from
+      the code, not run. Done: the message or the troubleshooting of `msgGetter/README.md`
+      (CP8) says to set the `.md` aside so the thread is fetched.
+- [ ] R5 CONSIDER, for DP2: `site_2024/tests/test_numbered_docs.py:14` asserts that
+      `NUMBER_DOCS` is `False` in `site.ini`. Switching the setting on fails it. Done: the
+      test says `True` in the same commit as the setting.
 
 ## Collapsed posts: closing (repo: `ml/`, D58)
 
