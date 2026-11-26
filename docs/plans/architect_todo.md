@@ -28,8 +28,60 @@ local collection is ahead of the server's until that deploy.
 
 ## Notes from Programmer
 
-None open. Closed notes are in the git history of this file: those read on 2026-11-25 (the
+Closed notes are in the git history of this file: those read on 2026-11-25 (the
 embedding checks, the cause of the collapsed posts, the citation trial) at `9c7570b`.
+
+**NOTE FROM PROGRAMMER (2026-11-26): the deploy of the citations and the repaired
+collection (D63, DP6) is done.** Every check passed. Run by the top-level `README.md`,
+steps 3 and 5 to 8, in one session, Tom at the server.
+
+- **Before it.** RL7: Tom looked at the local site with numbering on and said "Looks good"
+  and "let's deploy all to the server". His only remark, thumbnails not showing, was local:
+  `site_local.ini` sends them to a server on port 8090 that was not running. DP1: one code
+  review of `site_2024` `4f85f9e..dbfa93b` and the `ml` commits of the collapsed posts,
+  done in the Code Reviewer role in the same session at Tom's request: Not approved on R1
+  (step 8 of the README put the check and the deletions in one block). R1 fixed (`ml`
+  `ac7f2bd`) and R2 fixed (`site_2024` `340d820`: a citation mark inside a link the answer
+  writes itself made a link inside a link; it now stays as written). Tom accepted R3 (the
+  line endings of `process_message.py` changed with the fix), R4 (an old `.md` with a
+  collapsed post is never fetched again; for CP8's troubleshooting) and R5, and waived
+  the check of R1.
+- **Deployed.** `site_2024` `4bcdd79` (`NUMBER_DOCS = True`), merged to `main` and pushed,
+  as is `ml` `247b98b`. The collection `42577 4e273635...` replaced `42276 92d43eed...`;
+  `gallery261125.idx` (5,795 pictures) replaced `gallery261123b.idx`; 5,795 thumbnails
+  unpacked beside the old ones (5,796 files).
+- **Checks, as Tom saw them.** Step 3: the server gave the line of `before.txt` exactly.
+  6a: four `OK`. 6b: `0` and `5796`. 6c: `main` at `4f85f9e`, its image kept under that
+  name. 6d: fast-forward to `4bcdd79`; the build was all cached (below). 6e: four
+  containers up. 7.1: the server gives the line of `after.txt`. 7.2: the gallery index
+  hash equals the upload's. 7.3: no "No pictures" line. 4.1b: Tom reported each check as
+  described, and I read the five pages on the live site: `GYOb5SZJF1` (first answer,
+  `gpt-6-luna`), `QIPIZxYf82` (dig deeper, `gpt-6.2-sol`), `X70oBbo4zq` (first answer),
+  `JySugRiWtU` (follow-up, `gpt-6.2-sol`), `N8XsIu8HGH` (N249PM). In each, every number
+  leads to the address of the row with that number (22 links), and no unlinked `[n]` is
+  left. `N8XsIu8HGH` lists `SVdmlqx3aco` as row 4 and cites it twice for the 3,000 AGL
+  and CHT statements; it shows 9 thumbnails. `40WsuWAocT` (2026-11-24) is unchanged: no
+  numbers, rows not numbered.
+- **What the README needed** (`ml`, DP5):
+  1. Step 3: both heredocs fail when pasted, and the cause is not wrapping, as the todo
+     said. Tom's paste puts two spaces before every line, so the closing `PY` never
+     matches, and Python sees an indented first line. Both blocks are now `python -c "if
+     1:` with an indented body, every line under 60 characters, rehearsed with and
+     without the two spaces.
+  2. 6d and step 8: `fwww` is mounted into the container, not built into the image. The
+     build changes the image only when the requirements or the dockerfile change; this
+     time `latest` kept the ID of `4f85f9e`, and the new code ran from the restart in 6e.
+     Step 8 said the IDs would differ.
+  3. The 2026 example values are those of this run, and step 7 records that the combined
+     deploy has now run.
+  Not run: the ways back.
+- **Left on the server**, in "Server cleanup", not before 2026-12-03:
+  `~/chroma_before_261126`, `~/gallery_before_261126.idx`, `~/update_deploy`, the image
+  name `site_2024-flask:4f85f9e`.
+- **Seen, not acted on:** in the source list, the links of the rows write a `&` in an
+  address bare (`2004_Forum_Q&A.htm`), while the citation links write `&amp;`. Browsers
+  read both the same way; the rows' code (`originid_anchor`) is as it was before the
+  citations.
 
 ## Notes from Code Reviewer
 

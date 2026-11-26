@@ -11,10 +11,10 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Order:**
 
-1. RL7, Tom's look at the local site with numbering on. Done 2026-11-26.
-2. "The deploy": the citations and the repaired collection together (D63).
-3. CP8, the closing report of the collapsed posts.
-4. Phase 2 (2.3 to 2.5, D41).
+1. CP8, the closing report of the collapsed posts.
+2. Phase 2 (2.3 to 2.5, D41).
+
+"The deploy" of the citations and the repaired collection (D63) is done (2026-11-26).
 
 "Server cleanup" is done with Tom from 2026-11-28. One session per group; start each session
 fresh. Code review happens once per deploy, not per commit.
@@ -24,116 +24,35 @@ fresh. Code review happens once per deploy, not per commit.
 code alone is in the `site_2024` README, "Deploy a change of the code". nginx looks up the
 name `flask` only when it starts: a deploy or rollback that recreates the flask container
 ends with `docker compose restart nginx`. Keep lines for the server short: a long line
-wrapped when pasted and broke a `grep` pattern. Print a line count beside any comparison of
-two outputs.
+wrapped when pasted and broke a `grep` pattern. Tom's paste puts two spaces before every
+line: a heredoc's closing word then never matches, and Python sent by `python -c` must start
+`"if 1:` with an indented body (top-level README, step 3). Print a line count beside any
+comparison of two outputs.
 
 All code tasks follow TDD. Escalate design questions to Architect; do not resolve them yourself.
 
-Everything finished (the server runs `site_2024` `4f85f9e`) is under "Done" at the end, with
+Everything finished (the server runs `site_2024` `4bcdd79`) is under "Done" at the end, with
 the facts still worth knowing. Task details of finished work are in the git history of this
-file (CP1 to CP6 and RL1 to RL6 at `4a1cf3a`). The finished image database tasks are in
+file (CP1 to CP6 and RL1 to RL6 at `4a1cf3a`, the deploy at `247b98b`). The finished image database tasks are in
 `docs/archive/programmer_todo_image_database.md`.
-
-## Reference links: Tom's look (repo: `../site_2024/`)
-
-Plan 4.1a, "Looked at by Tom". RL1 to RL7 are done and not deployed; Architect has recorded
-that the rule of 4.1a holds (plan 4.1a, "Result"), and Tom said yes on 2026-11-26.
-
-- [x] RL7 Show Tom the local site with the setting on: three first answers, a dig deeper and a
-      follow-up, one of them on a question he knows well. He clicks some numbers and says
-      whether anything stops the deploy.
-      Done 2026-11-26. Tom: "Looks good", then "let's deploy all to the server". His only
-      remark: the thumbnails did not show. Cause local: `site_local.ini` points them at
-      `http://127.0.0.1:8090` and that server was not running; with
-      `python3 -m http.server 8090 --bind 127.0.0.1 --directory data/images/thumbs` (from
-      `ml/`) Tom saw them. The numbering lines are out of `site_local.ini` again, flask
-      restarted, the thumbnail server stopped.
 
 ## The deploy: citations and repaired collection (both repos, D63)
 
-Plan 4.1b, "Deploy", the paragraph of 2026-11-25, and "Collapsed posts", step 7. Not before
-Tom's yes at RL7. It is the first run of the combined deploy of the top-level `README.md` in
-one session.
+Done 2026-11-26. Plan 4.1b, "Deploy", and "Collapsed posts", step 7. Task details, the code
+review (R1 to R5) and RL7 are in the git history of this file at `247b98b`.
 
-Until it is done: do not embed into the local production collection and do not reset it. It
-is ahead of the server's on purpose (local `42577 4e273635...`, in
-`~/update_records/after.txt`; server `42276 92d43eed...`, in `~/update_records/before.txt`).
-
-- [x] DP1 One code review for both: the `site_2024` commits after `4f85f9e` and the `ml`
-      commits of the collapsed posts. Results by "Code Review Hand-off" in `CLAUDE.md`.
-      Done 2026-11-26: Not approved, see "Code review results (2026-11-26)" below.
-- [x] DP2 `NUMBER_DOCS = True` in the tracked `site.ini`; both repos merged to `main` with
-      Tom's approval and pushed.
-      Done 2026-11-26: `site_2024` `4bcdd79` (setting and its test, 412 pass); Tom said
-      "let's move to the deploy".
-- [ ] DP3 The deploy with Tom by the top-level `README.md`, steps 3 and 5 to 8, with the code
-      in 6d, in small blocks. Step 3 compares the server with `before.txt`, not with the
-      local collection. What goes up: the collection, `gallery261125.idx`, the thumbnails of
-      `thumbs261125.txt`.
-- [ ] DP4 Checks: those of README step 7 and those of plan 4.1b, "Deploy". The question that
-      lists a repaired thread: "On the N249PM test flight, how did the plane behave at 3,000
-      AGL and what were the CHTs?" (`SVdmlqx3aco`).
-- [ ] DP5 Correct the README wherever a step did not work as written. Known already: the
-      heredoc of the server command in step 3 got stuck in Tom's paste (wrapped lines
-      indent the closing `PY`); a one-line `python -c` worked.
-- [ ] DP6 Report to Architect in a note in `architect_todo.md`: what was deployed, each check
-      as Tom saw it, what the README needed corrected. Add what the deploy left on the server
-      to "Server cleanup".
-
-### Code review results (2026-11-26)
-
-DP1. Reviewed: `site_2024` `4f85f9e..dbfa93b` (all files) and `ml` `72957f4..ce59a68`: the code
-of the collapsed posts (`msgGetter/f_collapsed.py`, `process_message.py`, `get_msg_ids.py`,
-their tests) and the top-level `README.md` steps 3 and 5 to 8, which the deploy runs.
-Not reviewed line by line: the evaluation scripts `cite_trial.py` and `count_citations.py`
-(not used by the site, already run) and the `msgGetter` README (CP8 rewrites it).
-Tests: `site_2024` 411 passed, `ml` 307 passed and 19 skipped (archived tests that need
-Ollama); output clean. Done in the Code Reviewer role in the same session as RL7, at
-Tom's request.
-
-**Verdict: Not approved** (R1 open).
-R1 and R2 fixed 2026-11-26. Tom waived the rest of the review (the check of R1) on
-2026-11-26.
-
-Sound, checked: the prompt and the record number the chunks from the same filtered lists
-in a first answer, a revise and a follow-up; each provided chunk's source is among the rows,
-so `get_citations` cannot miss; the title of a link is escaped (tried with a `"`); marks in
-headings, tables, bold and code behave as the plan says; with numbering off the three
-prompts are pinned character for character.
-
-- [x] R1 MUST FIX `README.md:262` (step 8, server cleanup). The `ls -d` check and the
-      deletions it allows (`docker image rm`, `sudo rm -r ~/chroma_before_$D`, ...) are one
-      block. `CLAUDE.md`, "Deploys and server work": a deletion is never in the same block
-      as the check that allows it. Read from the README, not run. Done: the check is a
-      block of its own with what to expect, and the deletions follow in a later block. It
-      blocks no step of the deploy itself; it is fixed by DP5 at the latest.
-      Fixed `ml` `ac7f2bd`; the check block was run on scratch files and the local images.
-- [x] R2 SHOULD FIX `site_2024/fwww/src/answer_html.py:44` (`link_citations`). A mark
-      inside the text of a link the model writes itself becomes a link inside a link:
-      `see [the doc [1]](https://x.example)` gives `<a href="https://x.example">the doc
-      <a href="https://groups...">[1]</a></a>`, which is not valid HTML. Reproduced by
-      calling `get_answer_html`. Not seen in the trial (216 marks, all `[n]`, no links).
-      Done: a mark inside a link is left as written, as one in code is, with a test.
-      Fixed `site_2024` `340d820`; 412 tests pass.
-- [x] R3 SHOULD FIX `ml/msgGetter/process_message.py` (whole file). `8748394` changed its
-      line endings from CRLF to LF together with the fix, so every line shows as changed
-      (483 lines; 191 without line endings and indentation). `CLAUDE.md`: no whitespace
-      changes by hand. The directory is mixed already (`get_msg_ids.py` CRLF, `f_filter.py`
-      LF) and Python on Windows reads both. Read from git, not tried. Done: Tom accepts it
-      (recorded here with the date), or the endings are restored in a commit of their own.
-      Tom, 2026-11-26: accepted as it is.
-- [x] R4 CONSIDER `ml/msgGetter/process_message.py:156` and `:135`. A thread whose `.md`
-      exists is read from disk, not fetched. If that `.md` holds a collapsed post, the run
-      prints "not saved" and the next run reads the same `.md` again: it is never fetched
-      again, which the plan's step 3 ("the next run tries it again") assumes. A new fetch
-      never saves such a `.md`, so only an old one (or a copy put back) does it. Read from
-      the code, not run. Done: the message or the troubleshooting of `msgGetter/README.md`
-      (CP8) says to set the `.md` aside so the thread is fetched.
-      Tom, 2026-11-26: accepted as it is.
-- [x] R5 CONSIDER, for DP2: `site_2024/tests/test_numbered_docs.py:14` asserts that
-      `NUMBER_DOCS` is `False` in `site.ini`. Switching the setting on fails it. Done: the
-      test says `True` in the same commit as the setting.
-      Tom, 2026-11-26: accepted as it is (DP2 changes the test with the setting).
+- [x] RL7 Tom's look at the local site with numbering on: "Looks good". The thumbnails did
+      not show locally: `site_local.ini` points them at `http://127.0.0.1:8090`, and that
+      needs `python3 -m http.server 8090 --bind 127.0.0.1 --directory data/images/thumbs`
+      running (from `ml/`).
+- [x] DP1 Code review: Not approved (R1, step 8 of the README). R1 and R2 fixed (`ml`
+      `ac7f2bd`, `site_2024` `340d820`); Tom accepted R3 to R5 and waived the rest.
+- [x] DP2 `NUMBER_DOCS = True` (`site_2024` `4bcdd79`); both repos merged to `main` and
+      pushed (`ml` `247b98b`).
+- [x] DP3 The deploy by the README, steps 3 and 5 to 8 (6d with the code).
+- [x] DP4 Every check passed as Tom saw it; see the note to Architect.
+- [x] DP5 README corrected.
+- [x] DP6 Report to Architect; the leftovers are in "Server cleanup".
 
 ## Collapsed posts: closing (repo: `ml/`, D58)
 
@@ -221,6 +140,20 @@ of the code to before the pictures now needs a rebuild of `775692d`.
 
       The local leftovers of this deploy were deleted 2026-11-24.
 
+- [ ] **From the deploy of the citations and the repaired collection (2026-11-26).** Not
+      before 2026-12-03, and only if Tom says the site has run well. By the top-level
+      `README.md`, step 8, with `OLD=4f85f9e; D=261126`: the check block first, the removal
+      in a later block. On the server: `~/chroma_before_261126` (the collection of
+      2026-11-22), `~/gallery_before_261126.idx` (`gallery261123b.idx`), `~/update_deploy`,
+      and the image name `site_2024-flask:4f85f9e`, which has the same ID as `latest`
+      (`c0bbdf9222ee`): removing it removes only the name. Locally, by the same step:
+      `~/update_deploy`, `~/update_records`, `data/refetch_backup`.
+
+      The ways back are the README's "The way back" with those values (not run). For the
+      citations alone the setting off is enough: revert `4bcdd79`, push, then on the
+      server `git pull` and `docker compose restart flask` (the settings are read at the
+      start; the container is not recreated, so nginx needs no restart).
+
 - [ ] **World-writable directories (D59).** With the full cleanup, after the server has run
       for a week: `~/site_2024`, `~/www` and `~/chroma_before_corpus_update` are
       world-writable. First a read-only step that shows why (who owns them, which user the
@@ -231,12 +164,12 @@ of the code to before the pictures now needs a rebuild of `775692d`.
 Deployed: Phase 0 (2026-11-21, `bed83f4`), the Phase 1 code change and site fixes
 (2026-11-21, `3278e9e`), the follow-on fixes (2026-11-22, `c311cda`), the answer display, the
 corpus update and the model change (2026-11-22, `775692d`), the pictures of an answer
-(2026-11-24, `site_2024` `4f85f9e`, `ml` `72957f4`). Done and not deployed: the model
-evaluation, the image update (plan 4.0), the yearly update instructions (D57), the collapsed
-posts through CP6 and the citations through RL6. Tom waived the code reviews of the deploys
-so far, in whole or in the rest.
+(2026-11-24, `site_2024` `4f85f9e`, `ml` `72957f4`), the citations with the repaired
+collection (2026-11-26, `site_2024` `4bcdd79`, `ml` `247b98b`). Done and not deployed: the
+model evaluation, the image update (plan 4.0), the yearly update instructions (D57). Tom
+waived the code reviews of the deploys so far, in whole or in the rest.
 
-Still useful, the collapsed posts (done locally 2026-11-25, not deployed):
+Still useful, the collapsed posts (deployed 2026-11-26):
 
 - "Expand all" does nothing while the debug Chrome is minimized: it stays on screen during a
   fetch (`msgGetter/README.md`, step 6). The fetch reads the page again for up to 15 s and
@@ -255,18 +188,19 @@ Still useful, the collapsed posts (done locally 2026-11-25, not deployed):
 - The local collection: 42,577 chunks of 11,448 sources. Top 15 of the 52 questions before
   and after are in `data/collapsed_update/`.
 
-Still useful, the citations (done 2026-11-25, not deployed; `site_2024` `dbfa93b`):
+Still useful, the citations (deployed 2026-11-26, setting on; `site_2024` `4bcdd79`):
 
 - `build_prompt(..., numbered=)` numbers the chunks; the setting is `[PROMPTS] NUMBER_DOCS`
-  in `site.ini`, off; every record holds `numbered_docs`. A test pins the three prompts of
+  in `site.ini`, on; every record holds `numbered_docs`. A test pins the three prompts of
   today character for character. Do not change the wording of the prompt: it is Architect's.
 - `get_result_for_display` numbers the rows of the source list and gives `citations`;
   `get_answer_html(text, citations)` makes the links. The rating page passes no citations
-  and shows its answers as before. The renderer reads no link definitions (`[1]: https://`).
+  and shows its answers as before. The renderer reads no link definitions (`[1]: https://`),
+  and a mark inside a link the answer writes itself stays as written.
 - The trial: `evaluation/cite_trial.py` (paid) and `evaluation/count_citations.py`; answers
   in `evaluation/output/cite_trial/`, report in `cite_trial_count.md` (git-ignored). Q08
   cannot be rebuilt from its saved prompt: its chunk ids changed in the corpus update.
-- 409 tests passed at `755027c`.
+- 412 tests passed at `4bcdd79`.
 
 Still useful, the server:
 
@@ -307,8 +241,8 @@ Still useful, `site_2024`:
 
 Still useful, the collection:
 
-- On the server: 42,276 chunks of 11,388 sources (2026-11-22), id hash `92d43eed...`; 42
-  prefix-only chunks are still in it. Chunk ids are `<source>#<number>`.
+- On the server and locally: 42,577 chunks of 11,448 sources (2026-11-26), id hash
+  `4e273635...` (`~/update_records/after.txt`); 42 prefix-only chunks are still in it. Chunk ids are `<source>#<number>`.
 - For the production collection only the containers of `site_2024` are used; do not start
   those of `ml/docker-compose.yaml`.
 - `data/corpus_update/`: `before.json`, `after.json` and `snapshot.py`, which made them (count,

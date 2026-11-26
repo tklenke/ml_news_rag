@@ -39,38 +39,43 @@ new pictures. Ends with a new gallery index and the list of its thumbnails.
 The deploy replaces the server's collection with the local one. That is only right if they
 are the same before the embedding changes the local one, so this comes before step 4.
 
+The Python in these blocks starts with `if 1:` and is indented, so that it still runs when a
+paste puts spaces before every line (copying from a terminal can add two).
+
 Locally, in WSL:
 
 ```bash
 cd ~/projects/ml/embedder
-../venv/bin/python - <<'PY' | tee ~/update_records/before.txt
-import chromadb
-from f_collection import get_all_ids, hash_ids
-col = chromadb.HttpClient('localhost', '8000').get_collection('nomic-embed-text')
-print(col.count(), hash_ids(get_all_ids(col)))
-PY
+../venv/bin/python -c "if 1:
+    import chromadb
+    from f_collection import get_all_ids, hash_ids
+    c = chromadb.HttpClient('localhost', '8000')
+    col = c.get_collection('nomic-embed-text')
+    print(col.count(), hash_ids(get_all_ids(col)))
+" | tee ~/update_records/before.txt
 ```
 
 On the server:
 
 ```bash
 cd ~/site_2024
-docker compose exec -T flask python - <<'PY'
-import chromadb, hashlib
-col = chromadb.HttpClient('chroma-rag', 8000).get_collection('nomic-embed-text')
-ids = []
-while True:
-    page = col.get(limit=5000, offset=len(ids), include=[])['ids']
-    if not page:
-        break
-    ids.extend(page)
-print(col.count(), hashlib.sha256('\n'.join(sorted(ids)).encode()).hexdigest())
-PY
+docker compose exec -T flask python -c "if 1:
+    import chromadb, hashlib
+    c = chromadb.HttpClient('chroma-rag', 8000)
+    col = c.get_collection('nomic-embed-text')
+    n = col.count()
+    get = lambda o: col.get(limit=5000, offset=o,
+        include=[])['ids']
+    ids = sum((get(o) for o in range(0, n, 5000)), [])
+    print(n, hashlib.sha256(
+        '\n'.join(sorted(ids)).encode()).hexdigest())
+"
 ```
 
 - Each prints the number of chunks and a hash of all their ids. The two lines must be equal.
-  On 2026-11-24 both gave `42276 92d43eedddf498273275f0d2f0765d4c4da14e826ac43c60ce94f06e945be4a6`
-  (the server's snippet was run in the local flask container, the same image).
+  On 2026-11-24 both gave `42276 92d43eedddf498273275f0d2f0765d4c4da14e826ac43c60ce94f06e945be4a6`;
+  on 2026-11-26 the server gave it again, the line of 2026-11-24 kept in
+  `~/update_records/before.txt`.
 - If they differ, **stop**: the server holds something this machine does not, and the
   deploy would lose it. Find out why first.
 
@@ -91,8 +96,8 @@ G=$(ls -t ~/projects/ml/data/images/gallery*.idx | head -1); echo $G
 L=$(ls -t ~/projects/ml/data/images/thumbs*.txt | head -1); echo $L
 ```
 
-`echo` must show the files of `imageGetter` steps 7 and 8 (2026: `gallery261123b.idx` and
-`thumbs261123b.txt`). If not, set `G=` and `L=` to their full names.
+`echo` must show the files of `imageGetter` steps 7 and 8 (2026-11-26: `gallery261125.idx`
+and `thumbs261125.txt`). If not, set `G=` and `L=` to their full names.
 
 The thumbnails (about 100 names start with `-`; `--verbatim-files-from` keeps tar from taking
 them for options):
@@ -105,7 +110,7 @@ tar -cf ~/update_deploy/thumbs.tar --verbatim-files-from -T $L
 cp $G ~/update_deploy/gallery.idx
 ```
 
-`wc -l` prints the number of thumbnails (2026: 5661); `tar` prints nothing. Run 2026-11-24.
+`wc -l` prints the number of thumbnails (2026-11-26: 5795); `tar` prints nothing.
 
 The collection; the local Chroma is stopped while it is packed, so the copy is whole:
 
@@ -128,7 +133,7 @@ ls -la
 cd ~/projects/site_2024 && git status --short && git log --oneline -1 origin/main
 ```
 
-- `ls` shows five files (2026 sizes: `chroma.tar.gz` 320 MB, `thumbs.tar` 62 MB).
+- `ls` shows five files (2026-11-26 sizes: `chroma.tar.gz` 320 MB, `thumbs.tar` 63 MB).
 - If the site's code changed this year, it must be merged into `main` and pushed by now
   (`site_2024` README, "Deploy a change of the code", first block). `git log` shows the
   commit the server will get. `git status` shows nothing.
@@ -160,7 +165,7 @@ ls -A | wc -l
 
 - The check prints `0`. Any other number: a file is missing or different; unpack again.
 - The count is at least the number `wc -l` printed in step 5 (thumbnails of earlier years
-  stay; they harm nothing). Run 2026-11-24: `0` and `5661`.
+  stay; they harm nothing). Run 2026-11-26: `0` and `5796`.
 
 **6c. Write down what runs now, and keep it for going back.**
 
@@ -172,7 +177,7 @@ git log --oneline -1
 ```
 
 - No change but the untracked `server/old.nginx_all_apps.conf`; branch `main`.
-- Write down the commit `git log` shows (2026-11-24: `775692d`): the way back needs it. Then
+- Write down the commit `git log` shows (2026-11-26: `4f85f9e`): the way back needs it. Then
   keep its image:
 
 ```bash
@@ -191,7 +196,10 @@ git log --oneline -1
 docker compose build flask
 ```
 
-`git log` shows the commit of step 5.
+`git log` shows the commit of step 5. The code (`fwww`) is not in the image: the container
+reads it from the checkout, so the new code runs from the restart in 6e. The build changes the
+image only when `requirements.txt` or `flask.dockerfile` changed; otherwise every step is
+`CACHED` and `latest` keeps the ID of `$OLD` (2026-11-26).
 
 **6e. Swap in the data and start.** The site is down from the first line to `up -d`, about a
 minute.
@@ -229,8 +237,8 @@ docker compose ps
    pictures for this answer" opens; a thumbnail opens the picture at Google Groups when you
    are signed in to the group; whatever the code change is for.
 
-Each part was checked like this in 2026 on its own deploy (the collection on 2026-11-22, the
-pictures on 2026-11-24). This combined deploy, in one session, has not been run yet.
+Run as one deploy in one session on 2026-11-26 (the repaired threads, their pictures and a
+change of the code); every check passed.
 
 **The way back,** for one part or all. Set `OLD` and `D` to what you wrote down in 6c and 6e
 (the values below are examples):
@@ -268,7 +276,8 @@ docker images site_2024-flask
 ```
 
 - `ls` lists all three, with no `No such file or directory`.
-- `docker images` lists `latest` and `$OLD`. Their IDs differ when 6d built the code.
+- `docker images` lists `latest` and `$OLD`. They have the same ID when 6d's build changed
+  nothing (6d); `docker image rm` then removes only the name `$OLD`.
 - If anything is missing or not as described, **stop** and find out why before removing
   anything.
 
