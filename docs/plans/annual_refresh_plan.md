@@ -935,6 +935,75 @@ If a variant wins:
   `site.ini` so the switch and any rollback are config changes. Not built unless a
   variant wins.
 
+### 2.6 A look at the answers, in place of the labelling (D65)
+
+**[REVISED - 2026-11-26]** New. Tom and Architect share three doubts about 2.3 to 2.5. Hit
+rate at 15 chunks will be met by nearly every variant, so the main rule may never fire.
+Fifteen chunks of 400 words are 2.5 times the text of fifteen of 150, so a variant could win
+on the amount it is given and not on its chunk size. And the labelling costs Tom 600 to
+1,000 judgements. Tom decided (D65) that Claude, not Tom, first looks at the answers the
+variants give, with equal text for each, on a few questions. 2.3 to 2.5 are not run unless
+this look sends a variant on.
+
+**What is asked.** 5 questions, each put to `gpt-6-luna` (paid) once per variant, and once
+more for A, to show how much two answers from the same text differ: 30 calls. About two
+cents at the price of 2026-11-22.
+
+- **Questions.** Three where chunk size should matter most (long documents, `chunk_only`):
+  Q13, Q17, Q51. Two that Tom rated in Phase 1: Q02 (`not_good`) and Q28 (`ok`). None
+  of the five retrieves, in any variant within the budget, a source among the 93 that the
+  variants lack (checked 2026-11-26; Q19 and Q52 did and were passed over).
+- **Retrieval.** The question is embedded as production does (`search_query:` and
+  `nomic-embed-text`, the site's Ollama), and the variant's collection on port 8010 gives
+  its top 60 chunks in order of distance. No `MAX_DISTANCE` cut.
+- **Equal text.** Chunks are taken in that order while the words of those taken, without
+  the `search_document:` prefix, stay within 3,750 (15 chunks of 250, what production
+  sends). The first chunk that does not fit ends the list; none is skipped or cut. In D
+  and E the words two chunks share count twice. Measured on 12 questions: every variant
+  lands between 3,355 and 3,750 words, about 9 to 13 chunks for C and E, 15 to 18 for A
+  and D, 25 or 26 for B. The words given are recorded with each answer.
+- **Prompt.** Production's first answer, `build_prompt` with `numbered=False`: no
+  citations. A answered twice gets the same prompt twice.
+- **Recorded per answer.** The chunk ids, the words given, tokens in and out, seconds,
+  and cost.
+
+**How the answers are judged** (Claude, blind):
+
+- A script gives the six answers of each question a random letter and writes the key to a
+  file of its own. The scores are written and committed before the key is opened, so the
+  git history shows the order.
+- Each answer is judged against the pooled text of all six prompts of its question, so
+  whose text an answer had is not visible while judging.
+- Three scores, 0 to 2 each:
+  - **correct**: 2 no statement contradicts the pooled text or is made up beyond it; 1 one
+    such statement of minor weight; 0 one that misleads on what was asked.
+  - **complete**: 2 has what the pooled text holds that answers the question; 1 misses
+    part of it; 0 misses the main point.
+  - **useful**: 2 a builder could act on it as written (clear, well arranged, to the
+    point); 1 usable with effort; 0 not.
+  Speed and cost are reported from the figures, not scored: with equal text they differ
+  only by the length of the answer.
+- Claude knows nothing of the aircraft beyond the text given. "Correct" means correct to
+  the corpus, not to the airplane; Tom's ratings of Q02 and Q28 are a reference.
+
+**Decision rule** (fixed before the run):
+
+- On a question, a variant is **clearly better** than A when its total (0 to 6) is at
+  least 2 above the higher of the two answers of A. The **noise** of a question is the
+  difference between the two answers of A.
+- A variant is a **candidate** when it is clearly better on at least 3 of the 5
+  questions, and on fewer than 3 questions is the noise of A 2 or more. A candidate goes
+  to Tom with the answers side by side; what follows (2.3 to 2.5 on it alone, or a
+  switch) is decided then.
+- Otherwise chunking stays as it is, and Phase 2 closes with this result.
+- Also reported, not part of the rule: what each variant would cost at its own 15 chunks,
+  computed from its chunk sizes, with no call.
+
+**Where.** The harness is `site_2024/evaluation/chunk_answers.py`, built under TDD like the
+cite trial (one function selects the chunks within the budget, one makes the blind
+sheets); its output in `evaluation/output/chunk_answers/` (git-ignored, as the prompts
+can hold email addresses). The scores and the report go to `ml/docs/notes/`.
+
 ---
 
 ## Phase 3: Site fixes from review
