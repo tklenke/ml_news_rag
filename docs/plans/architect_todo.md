@@ -119,3 +119,5 @@ Read this before planning the next update.
 - The chunk experiment is closed (plan 2.6): chunking stays at 250 words, no overlap. Its
   Chroma and collections are removed (2026-11-26); its checks and log stay in
   `ml/data/chunk_experiment/`.
+  Its code stays (Tom, 2026-11-26): the options of `embedder.py` and `embedder/chunk_queue.py`
+  with their tests.
