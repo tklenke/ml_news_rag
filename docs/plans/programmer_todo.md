@@ -11,7 +11,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 
 **Order:**
 
-1. RL7, Tom's look at the local site with numbering on.
+1. RL7, Tom's look at the local site with numbering on. Done 2026-11-26.
 2. "The deploy": the citations and the repaired collection together (D63).
 3. CP8, the closing report of the collapsed posts.
 4. Phase 2 (2.3 to 2.5, D41).
@@ -36,19 +36,18 @@ file (CP1 to CP6 and RL1 to RL6 at `4a1cf3a`). The finished image database tasks
 
 ## Reference links: Tom's look (repo: `../site_2024/`)
 
-Plan 4.1a, "Looked at by Tom". RL1 to RL6 are done and not deployed; Architect has recorded
-that the rule of 4.1a holds (plan 4.1a, "Result"). Of the two conditions for the deploy,
-only Tom's yes is open.
+Plan 4.1a, "Looked at by Tom". RL1 to RL7 are done and not deployed; Architect has recorded
+that the rule of 4.1a holds (plan 4.1a, "Result"), and Tom said yes on 2026-11-26.
 
-- [ ] RL7 Show Tom the local site with the setting on: three first answers, a dig deeper and a
+- [x] RL7 Show Tom the local site with the setting on: three first answers, a dig deeper and a
       follow-up, one of them on a question he knows well. He clicks some numbers and says
       whether anything stops the deploy.
-      Ready since 2026-11-25: numbering is on locally only, in the git-ignored
-      `fwww/site_local.ini` (`[PROMPTS] NUMBER_DOCS = True`, appended), flask restarted.
-      Smoke test: one first answer (`dlTmfeeRHN`), numbered, `[5]` shown as `[4]` linking to
-      `SVdmlqx3aco`, rows numbered.
-      **Take the two lines out of `site_local.ini` after Tom's look** (the deploy switches it
-      on through `site.ini`).
+      Done 2026-11-26. Tom: "Looks good", then "let's deploy all to the server". His only
+      remark: the thumbnails did not show. Cause local: `site_local.ini` points them at
+      `http://127.0.0.1:8090` and that server was not running; with
+      `python3 -m http.server 8090 --bind 127.0.0.1 --directory data/images/thumbs` (from
+      `ml/`) Tom saw them. The numbering lines are out of `site_local.ini` again, flask
+      restarted, the thumbnail server stopped.
 
 ## The deploy: citations and repaired collection (both repos, D63)
 
