@@ -62,8 +62,10 @@ is ahead of the server's on purpose (local `42577 4e273635...`, in
 - [x] DP1 One code review for both: the `site_2024` commits after `4f85f9e` and the `ml`
       commits of the collapsed posts. Results by "Code Review Hand-off" in `CLAUDE.md`.
       Done 2026-11-26: Not approved, see "Code review results (2026-11-26)" below.
-- [ ] DP2 `NUMBER_DOCS = True` in the tracked `site.ini`; both repos merged to `main` with
+- [x] DP2 `NUMBER_DOCS = True` in the tracked `site.ini`; both repos merged to `main` with
       Tom's approval and pushed.
+      Done 2026-11-26: `site_2024` `4bcdd79` (setting and its test, 412 pass); Tom said
+      "let's move to the deploy".
 - [ ] DP3 The deploy with Tom by the top-level `README.md`, steps 3 and 5 to 8, with the code
       in 6d, in small blocks. Step 3 compares the server with `before.txt`, not with the
       local collection. What goes up: the collection, `gallery261125.idx`, the thumbnails of
@@ -90,6 +92,8 @@ Ollama); output clean. Done in the Code Reviewer role in the same session as RL7
 Tom's request.
 
 **Verdict: Not approved** (R1 open).
+R1 and R2 fixed 2026-11-26. Tom waived the rest of the review (the check of R1) on
+2026-11-26.
 
 Sound, checked: the prompt and the record number the chunks from the same filtered lists
 in a first answer, a revise and a follow-up; each provided chunk's source is among the rows,
