@@ -1,11 +1,15 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-26 (twenty-second revision); the citations and the repaired collection are deployed in one session by the top-level `README.md` (`site_2024` `4bcdd79`; 4.1b, "Deploy", "As run"); the refresh stops for this year with Phase 2 from 2.3 and the server cleanup open (D64; CP8 closed the same day). Before that, 2026-11-25 (twenty-first revision); the citation trial passed its rule and the setting may be switched on at the deploy once Tom has looked at the local site (4.1a); the five collections of the chunk experiment are fit for the labelling (2.2a); the collapsed posts are repaired locally and not deployed yet ("Collapsed posts"). Before that, 2026-11-24 (twentieth revision): the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
+**Status:** Revised 2026-11-26 (twenty-third revision); Phase 2 goes on by a blind look at answers first (2.6, D65). Before that, 2026-11-26 (twenty-second revision); the citations and the repaired collection are deployed in one session by the top-level `README.md` (`site_2024` `4bcdd79`; 4.1b, "Deploy", "As run"); the refresh stops for this year with Phase 2 from 2.3 and the server cleanup open (D64; CP8 closed the same day). Before that, 2026-11-25 (twenty-first revision); the citation trial passed its rule and the setting may be switched on at the deploy once Tom has looked at the local site (4.1a); the five collections of the chunk experiment are fit for the labelling (2.2a); the collapsed posts are repaired locally and not deployed yet ("Collapsed posts"). Before that, 2026-11-24 (twentieth revision): the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-26 (twenty-third revision):** Phase 2 does not go to Tom's labelling first.
+  Claude looks at the answers `gpt-6-luna` gives from each variant on 5 questions, with
+  the same number of words of text for each, judged blind against a rule fixed here
+  (2.6, D65). The labelling of 2.3 to 2.5 is run only for a variant this look sends on.
 - **2026-11-26 (twenty-second revision):** The Programmer's report of the deploy (DP6) is
   read and recorded; no design changed by Architect. The citations and the repaired
   collection went to the server in one session by the top-level `README.md`, the first
@@ -252,6 +256,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D62 | (2026-11-25) The deploy of the repaired collection and its report (CP7, CP8) wait until the citations are done. Until then the local collection is ahead of the server's. |
 | D63 | (2026-11-25) The citations and the repaired collection, with its thumbnails and gallery index, go to the server in one deploy, by the top-level `README.md` (4.1b, "Deploy"). |
 | D64 | (2026-11-26) After the deploy of D63 the refresh stops for this year. Three groups are open: CP8 (the README of the fetch and the closing report of "Collapsed posts"), Phase 2 from the labelling (2.3) on, and the server cleanup. For each, whether it is finished, dropped or deferred to 2027 is not decided yet. |
+| D65 | (2026-11-26) Phase 2 goes on, by a look at answers first: Claude judges, blind, `gpt-6-luna`'s answers from each of the five variants on 5 questions of Claude's choosing, with no citations in the prompt and about the same words of text for each variant, on correctness, completeness and usefulness, with speed and cost reported. A is asked twice to show the noise (30 paid calls). The rule is in 2.6. 2.3 to 2.5 wait for its result. |
 
 ## Two repositories
 

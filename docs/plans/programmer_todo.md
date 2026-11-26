@@ -62,6 +62,17 @@ Plan "Collapsed posts", "As found and built". CP1 to CP7 are done; CP7 was the d
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
+**First, plan 2.6 (D65): the look at answers.** Repo `site_2024`, paid (Tom approved the 30
+calls, 2026-11-26).
+
+- [ ] CA1 `evaluation/chunk_answers.py` under TDD: the chunks within the budget, the run
+      (kept answers not paid again), the blind sheets and their key.
+- [ ] CA2 The run: 30 answers of `gpt-6-luna`.
+- [ ] CA3 Scores written and committed before the key is opened; then the report to
+      Architect and Tom, in `ml/docs/notes/phase2_answer_look.md`.
+
+2.3 to 2.5 wait for the result of 2.6.
+
 Plan 2.1 to 2.5. The five variants are embedded and Architect found them fit for the
 labelling (plan 2.2a, "Result").
 

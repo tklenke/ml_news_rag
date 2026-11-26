@@ -6,7 +6,7 @@ Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-Decided: D1 to D64 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
+Decided: D1 to D65 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -29,9 +29,8 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
 
 ### Waiting for a decision (2026-11-26, D64)
 
-- [ ] **The open groups of the refresh.** For each of Phase 2 from the labelling (2.3)
-      and the server cleanup: finished, dropped, or deferred to 2027. (CP8 was closed
-      the same day.)
+- [ ] **The server cleanup:** finished, dropped, or deferred to 2027. (CP8 was closed the
+      same day; Phase 2 goes on by plan 2.6, D65.)
 
 ### Asked by Architect 2026-11-25
 

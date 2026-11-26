@@ -8,12 +8,13 @@ Active workstream: the annual RAG / website refresh. The plan is
 
 ## Resume point
 
-The plan is at its twenty-second revision (2026-11-26), decisions D1 to D64. The server
+The plan is at its twenty-third revision (2026-11-26), decisions D1 to D65. The server
 runs `site_2024` `4bcdd79` and `ml` `247b98b`; the local collection and the server's are
 the same again. Nothing waits to be designed.
 
-The refresh is stopped for this year (D64). CP8 is closed. Waiting for Tom: for Phase 2
-from 2.3 and for the server cleanup, whether it is finished, dropped or deferred to 2027.
+The refresh is stopped for this year (D64), with two exceptions. CP8 is closed. Phase 2
+goes on by the look at answers of plan 2.6 (D65), done by Claude in this session. The
+server cleanup waits for Tom: finished, dropped or deferred to 2027.
 
 ## Open
 
@@ -23,8 +24,10 @@ from 2.3 and for the server cleanup, whether it is finished, dropped or deferred
       Done 2026-11-26 at Tom's request, by Architect: the README was already in line;
       plan "Collapsed posts", "As found and built"; the unknowns in the opportunities
       for improvement.
-- [ ] After the first batch of labels (2.3, 2.4): read the metrics and apply the stopping
-      rule of plan 2.3 and the decision rule of 2.5.
+- [x] Design the look at answers that comes before the labelling (plan 2.6, D65). Done
+      2026-11-26.
+- [ ] Read the report of 2.6 and apply its rule. Only if a variant is a candidate: the
+      labelling of 2.3 to 2.5, for it alone, as Tom decides.
 
 ## Notes from Programmer
 
