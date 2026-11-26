@@ -97,34 +97,39 @@ so `get_citations` cannot miss; the title of a link is escaped (tried with a `"`
 headings, tables, bold and code behave as the plan says; with numbering off the three
 prompts are pinned character for character.
 
-- [ ] R1 MUST FIX `README.md:262` (step 8, server cleanup). The `ls -d` check and the
+- [x] R1 MUST FIX `README.md:262` (step 8, server cleanup). The `ls -d` check and the
       deletions it allows (`docker image rm`, `sudo rm -r ~/chroma_before_$D`, ...) are one
       block. `CLAUDE.md`, "Deploys and server work": a deletion is never in the same block
       as the check that allows it. Read from the README, not run. Done: the check is a
       block of its own with what to expect, and the deletions follow in a later block. It
       blocks no step of the deploy itself; it is fixed by DP5 at the latest.
-- [ ] R2 SHOULD FIX `site_2024/fwww/src/answer_html.py:44` (`link_citations`). A mark
+      Fixed `ml` `ac7f2bd`; the check block was run on scratch files and the local images.
+- [x] R2 SHOULD FIX `site_2024/fwww/src/answer_html.py:44` (`link_citations`). A mark
       inside the text of a link the model writes itself becomes a link inside a link:
       `see [the doc [1]](https://x.example)` gives `<a href="https://x.example">the doc
       <a href="https://groups...">[1]</a></a>`, which is not valid HTML. Reproduced by
       calling `get_answer_html`. Not seen in the trial (216 marks, all `[n]`, no links).
       Done: a mark inside a link is left as written, as one in code is, with a test.
-- [ ] R3 SHOULD FIX `ml/msgGetter/process_message.py` (whole file). `8748394` changed its
+      Fixed `site_2024` `340d820`; 412 tests pass.
+- [x] R3 SHOULD FIX `ml/msgGetter/process_message.py` (whole file). `8748394` changed its
       line endings from CRLF to LF together with the fix, so every line shows as changed
       (483 lines; 191 without line endings and indentation). `CLAUDE.md`: no whitespace
       changes by hand. The directory is mixed already (`get_msg_ids.py` CRLF, `f_filter.py`
       LF) and Python on Windows reads both. Read from git, not tried. Done: Tom accepts it
       (recorded here with the date), or the endings are restored in a commit of their own.
-- [ ] R4 CONSIDER `ml/msgGetter/process_message.py:156` and `:135`. A thread whose `.md`
+      Tom, 2026-11-26: accepted as it is.
+- [x] R4 CONSIDER `ml/msgGetter/process_message.py:156` and `:135`. A thread whose `.md`
       exists is read from disk, not fetched. If that `.md` holds a collapsed post, the run
       prints "not saved" and the next run reads the same `.md` again: it is never fetched
       again, which the plan's step 3 ("the next run tries it again") assumes. A new fetch
       never saves such a `.md`, so only an old one (or a copy put back) does it. Read from
       the code, not run. Done: the message or the troubleshooting of `msgGetter/README.md`
       (CP8) says to set the `.md` aside so the thread is fetched.
-- [ ] R5 CONSIDER, for DP2: `site_2024/tests/test_numbered_docs.py:14` asserts that
+      Tom, 2026-11-26: accepted as it is.
+- [x] R5 CONSIDER, for DP2: `site_2024/tests/test_numbered_docs.py:14` asserts that
       `NUMBER_DOCS` is `False` in `site.ini`. Switching the setting on fails it. Done: the
       test says `True` in the same commit as the setting.
+      Tom, 2026-11-26: accepted as it is (DP2 changes the test with the setting).
 
 ## Collapsed posts: closing (repo: `ml/`, D58)
 
