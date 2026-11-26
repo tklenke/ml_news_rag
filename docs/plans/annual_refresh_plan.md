@@ -1013,7 +1013,8 @@ C 26, D 27, E 27. One variant was clearly better than A on one question (D on Q1
 B's and D's text held the one line that answers it); the rule asks for 3 of 5. The two
 answers of A differed by 1 point on one question. With equal text, speed and cost differ only
 by the length of the answer, and by no more than A differs from itself. 2.3 to 2.5 are not
-run. The five collections and the experiment's Chroma (port 8010) are still on disk.
+run. At Tom's request the experiment's Chroma and its five collections were removed the
+same day; `data/chunk_experiment/` keeps the checks and the log of the embedding.
 
 ---
 

@@ -27,8 +27,8 @@ server cleanup waits for Tom: finished, dropped or deferred to 2027.
 - [x] Design the look at answers that comes before the labelling (plan 2.6, D65). Done
       2026-11-26.
 - [x] Read the report of 2.6 and apply its rule. Done 2026-11-26: no candidate; chunking
-      stays as it is, Phase 2 closes (plan 2.6, "Result"). Open with Tom: whether the five
-      collections and the experiment's Chroma are kept.
+      stays as it is, Phase 2 closes (plan 2.6, "Result"). Tom had the five
+      collections and the experiment's Chroma removed the same day.
 
 ## Notes from Programmer
 
@@ -116,4 +116,6 @@ Read this before planning the next update.
   2026-11-26. Decisions are by content hash in `imageGetter/image_decisions.json`. The
   server still has the static pages of 2025 under `/cgimages/`; they are to be replaced by the
   pictures of an answer and are not deleted yet (D54).
-- The chunk experiment has a Chroma of its own: port 8010, `ml/data/chunk_experiment/chroma`.
+- The chunk experiment is closed (plan 2.6): chunking stays at 250 words, no overlap. Its
+  Chroma and collections are removed (2026-11-26); its checks and log stay in
+  `ml/data/chunk_experiment/`.

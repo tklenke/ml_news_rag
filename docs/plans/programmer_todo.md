@@ -15,8 +15,7 @@ has not yet decided whether it is finished, dropped or deferred to 2027; ask him
 starting any of them:
 
 1. CP8: closed by Architect the same day, at Tom's request (below).
-2. Phase 2 stops before the labelling (2.3). The five collections stay in
-   `data/chunk_experiment/`.
+2. Phase 2: closed by plan 2.6 the same day (below); its data removed at Tom's request.
 3. Server cleanup is not done. The rollback copies stay on the server, and the check of the
    world-writable directories (D59) has not been made. Until each entry is done, no
    `docker system prune` on the server.
@@ -72,8 +71,10 @@ calls, 2026-11-26).
       `ml/docs/notes/phase2_answer_look.md`.
 
 **Phase 2 is closed (plan 2.6, "Result"): no variant is a candidate.** 2.3 to 2.5 are not
-run; their tasks below stay for the record. Whether the five collections and the
-container `chunk_experiment_chroma` are kept is Tom's to say.
+run; their tasks below stay for the record. At Tom's request (2026-11-26) the container
+`chunk_experiment_chroma` and its data (2.8 GB, the five collections), the progress files and
+the lock are removed. `data/chunk_experiment/` keeps `checks.json`, `check_variants.py` and
+`queue.log` as the record of the embedding checks.
 
 Plan 2.1 to 2.5. The five variants are embedded and Architect found them fit for the
 labelling (plan 2.2a, "Result").
@@ -93,20 +94,11 @@ Still useful:
 - `embedder.py` takes chunk size, overlap, `--collection`, Chroma port, Ollama port and
   `--sources`, with a progress file per collection; with no parameters it does what it did. A
   chunk size or overlap without `--collection` is refused.
-- The experiment's Chroma is the container `chunk_experiment_chroma` on port 8010 (data in
-  `data/chunk_experiment/chroma`; an empty `defaultdb` stays in it). The collections are
-  `words250_overlap0`, `words150_overlap0`, `words400_overlap0`, `words250_overlap50` and
-  `words400_overlap80`. The GPU Ollama container is removed; to embed a question, the
-  site's Ollama on port 11434 has the same model.
-  The command the Chroma container was made with:
-
-      docker run -d --name chunk_experiment_chroma -p 127.0.0.1:8010:8000 \
-          -v /home/tom/projects/ml/data/chunk_experiment/chroma:/data chromadb/chroma:1.5.9
-
-- The collections were made before the refetch of 2026-11-25: they lack the 60 threads of
-  D59 and hold the 33 repaired threads as they were. They are not embedded again (plan,
-  "Collapsed posts").
-- The checks of the embedding: `data/chunk_experiment/check_variants.py` and `checks.json`.
+- The experiment's Chroma and its five collections are removed (2026-11-26). To build a
+  variant again: `embedder.py` with chunk size, overlap and `--collection` into a Chroma of
+  its own (plan 2.2a), about 2.5 hours per variant on the GPU.
+- The checks of the embedding: `data/chunk_experiment/check_variants.py` and `checks.json`
+  (they need the collections to run again).
 
 ## Server cleanup (with Tom)
 
