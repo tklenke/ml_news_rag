@@ -1,6 +1,6 @@
 # Architect Todo
 
-**Last Updated:** 2026-11-25
+**Last Updated:** 2026-11-26
 
 Active workstream: the annual RAG / website refresh. The plan is
 `annual_refresh_plan.md`; read it first. The finished image database work is in
@@ -9,42 +9,27 @@ Active workstream: the annual RAG / website refresh. The plan is
 ## Resume point
 
 The plan is at its twenty-first revision (2026-11-25), decisions D1 to D63. The server runs
-`site_2024` `4f85f9e` and `ml` `72957f4`. Three reports of the Programmer were read on
-2026-11-25 and are recorded in the plan: the citation trial passed its rule (4.1a,
-"Result"), the five collections of the chunk experiment are fit for the labelling (2.2a,
-"Result"), and the collapsed posts are repaired locally ("Collapsed posts", "As found and
-built"). Nothing waits to be designed.
+`site_2024` `4f85f9e` and `ml` `72957f4`. Nothing waits to be designed and no decision
+waits for Tom.
 
-Where the Programmer is: RL7, Tom's look at the local site with numbering on. Then RL8 and CP7
-as one deploy (D63: the citations with the repaired collection, by the top-level
-`README.md`), CP8, then 2.3. The local collection is ahead of the server's until that
-deploy. It is the first run of the combined deploy in one session; read in the reports what
-the README needed corrected.
+Where the Programmer is: RL7, Tom's look at the local site with numbering on. Then one
+deploy of the citations with the repaired collection (D63, by the top-level `README.md`),
+the closing report of the collapsed posts (CP8), then the chunk experiment from 2.3. The
+local collection is ahead of the server's until that deploy.
 
 ## Open
 
-- [x] Read the Programmer's report of the overnight embedding (plan 2.2a, five checks) and decide
-      whether the five collections are fit for the labelling (2.3). Done 2026-11-25: fit.
-- [~] Read the Programmer's report of the cause of the collapsed posts (CP2), if the
-      Programmer stops there, and the closing report (CP8); record both in the plan.
-      The cause and the work through CP6 are recorded (2026-11-25). CP8 is not written yet.
-- [~] Read the Programmer's report of the citation run (RL4), read the answers without a
-      number, apply the rule of 4.1a (form only, D60) and record in the plan whether the
-      setting may be switched on. Then read the report of the deploy (RL8).
-      The rule holds and is recorded (2026-11-25). RL8 is not run yet.
+- [ ] Read the Programmer's report of the deploy (DP6 in `programmer_todo.md`) and record it
+      in the plan. It is the first run of the combined deploy in one session: record what
+      the README needed corrected, and bring "For the yearly update of 2027" below in line.
+- [ ] Read the closing report of the collapsed posts (CP8) and record it in the plan.
+- [ ] After the first batch of labels (2.3, 2.4): read the metrics and apply the stopping
+      rule of plan 2.3 and the decision rule of 2.5.
 
 ## Notes from Programmer
 
-None open.
-
-Closed on 2026-11-25 (in this file at commit `9c7570b`; each is recorded in the
-plan): the five checks of the overnight embedding, the cause of the
-collapsed posts with Tom's decision for option 1, and the citation trial.
-
-Closed on 2026-11-24 (in the git history of this file): the process suggestions
-(1 to 5, 7 and 8 are in `CLAUDE.md`; 6 not taken, a cleanup waits its week), the collapsed
-posts (D58), the 60 unfetched threads (D59), and the awkward yearly steps (logged in
-`docs/notes/opportunities_for_improvement.md`, "ml: yearly update").
+None open. Closed notes are in the git history of this file: those read on 2026-11-25 (the
+embedding checks, the cause of the collapsed posts, the citation trial) at `9c7570b`.
 
 ## Notes from Code Reviewer
 
@@ -64,8 +49,8 @@ Read this before planning the next update.
 - Three things were not proven in 2026, as far as this file knew on 2026-11-24: `webGetter`
   has no instructions; the Chroma upload in the top-level `README.md` (steps 5 to 7) was
   written from a rehearsal; the deploy of everything in one session had not been run. The
-  deploy of the collapsed posts (D58) was to be the first real run of the last two; read
-  its report (CP8) in the plan to see what it showed.
+  deploy of the citations with the repaired collection (D63) is to be the first real run
+  of the last two; read its report in the plan (4.1b, "Deploy") to see what it showed.
 - The fetch had saved posts collapsed (D58), because the click on "Expand all" does nothing
   in a minimized Chrome (D61). The fetch now saves no thread with a collapsed post, and
   `msgGetter/f_collapsed.py` lists such threads. Check that the yearly steps still tell Tom
@@ -123,6 +108,4 @@ Read this before planning the next update.
   2026-11-25 and not on the server yet: `gallery261125.idx` (2,407 threads, 5,795 pictures). The
   server still has the static pages of 2025 under `/cgimages/`; they are to be replaced by the
   pictures of an answer and are not deleted yet (D54).
-- Tom runs the yearly update himself from written steps: the top-level `README.md` and the
-  "Yearly Update" sections of the module READMEs (D57).
 - The chunk experiment has a Chroma of its own: port 8010, `ml/data/chunk_experiment/chroma`.

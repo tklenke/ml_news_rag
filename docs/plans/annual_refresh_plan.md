@@ -1805,6 +1805,9 @@ lose which chunk a statement was taken from.
   can only lead to our source. Checked when this is built: that none of the 90 archived
   answers is shown differently for it.
 - The rating page of the evaluation uses the same function and shows the same links.
+  **[REVISED - 2026-11-26]** As built it uses the same function and passes it no
+  citations, so it shows its answers as before. Architect accepts this: no numbered
+  answer is rated on that page since D60.
 - With the pictures (4.2) there is nothing to settle: both read the same documents of the
   record and neither changes the other.
 
