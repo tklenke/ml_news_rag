@@ -14,8 +14,6 @@ task, every session. The tasks below are only a checklist; section numbers refer
 1. CP8, the closing report of the collapsed posts.
 2. Phase 2 (2.3 to 2.5, D41).
 
-"The deploy" of the citations and the repaired collection (D63) is done (2026-11-26).
-
 "Server cleanup" is done with Tom from 2026-11-28. One session per group; start each session
 fresh. Code review happens once per deploy, not per commit.
 
@@ -33,35 +31,21 @@ All code tasks follow TDD. Escalate design questions to Architect; do not resolv
 
 Everything finished (the server runs `site_2024` `4bcdd79`) is under "Done" at the end, with
 the facts still worth knowing. Task details of finished work are in the git history of this
-file (CP1 to CP6 and RL1 to RL6 at `4a1cf3a`, the deploy at `247b98b`). The finished image database tasks are in
+file (CP1 to CP6 and RL1 to RL6 at `4a1cf3a`; RL7, the code review R1 to R5 and the deploy
+DP1 to DP6 at `247b98b`). The finished image database tasks are in
 `docs/archive/programmer_todo_image_database.md`.
-
-## The deploy: citations and repaired collection (both repos, D63)
-
-Done 2026-11-26. Plan 4.1b, "Deploy", and "Collapsed posts", step 7. Task details, the code
-review (R1 to R5) and RL7 are in the git history of this file at `247b98b`.
-
-- [x] RL7 Tom's look at the local site with numbering on: "Looks good". The thumbnails did
-      not show locally: `site_local.ini` points them at `http://127.0.0.1:8090`, and that
-      needs `python3 -m http.server 8090 --bind 127.0.0.1 --directory data/images/thumbs`
-      running (from `ml/`).
-- [x] DP1 Code review: Not approved (R1, step 8 of the README). R1 and R2 fixed (`ml`
-      `ac7f2bd`, `site_2024` `340d820`); Tom accepted R3 to R5 and waived the rest.
-- [x] DP2 `NUMBER_DOCS = True` (`site_2024` `4bcdd79`); both repos merged to `main` and
-      pushed (`ml` `247b98b`).
-- [x] DP3 The deploy by the README, steps 3 and 5 to 8 (6d with the code).
-- [x] DP4 Every check passed as Tom saw it; see the note to Architect.
-- [x] DP5 README corrected.
-- [x] DP6 Report to Architect; the leftovers are in "Server cleanup".
 
 ## Collapsed posts: closing (repo: `ml/`, D58)
 
-Plan "Collapsed posts", "As found and built". CP1 to CP6 are done; CP7 is "The deploy" above.
+Plan "Collapsed posts", "As found and built". CP1 to CP7 are done; CP7 was the deploy of
+2026-11-26.
 
 - [ ] CP8 `msgGetter/README.md` step 8 and troubleshooting say what the fetch does now; the
       note in `docs/notes/opportunities_for_improvement.md` if anything is left. Report to
       Architect: the threads repaired and not, pictures gained, chunks before and after.
-      The cause is already recorded in the plan.
+      The cause is already recorded in the plan. Tom accepted review finding R4 as it is
+      (2026-11-26): a thread whose old `.md` holds a collapsed post is read from that `.md`
+      and never fetched again; the troubleshooting can say to set such a `.md` aside.
 
 ## Phase 2: Chunk-size experiment (repo: `ml/`)
 
@@ -138,7 +122,8 @@ of the code to before the pictures now needs a rebuild of `775692d`.
           docker compose up -d
           docker compose restart nginx
 
-      The local leftovers of this deploy were deleted 2026-11-24.
+      The local leftovers of this deploy were deleted 2026-11-24. Since 2026-11-26 the
+      rollback of the data goes back two collections: it also drops the repaired threads.
 
 - [ ] **From the deploy of the citations and the repaired collection (2026-11-26).** Not
       before 2026-12-03, and only if Tom says the site has run well. By the top-level
@@ -147,7 +132,8 @@ of the code to before the pictures now needs a rebuild of `775692d`.
       2026-11-22), `~/gallery_before_261126.idx` (`gallery261123b.idx`), `~/update_deploy`,
       and the image name `site_2024-flask:4f85f9e`, which has the same ID as `latest`
       (`c0bbdf9222ee`): removing it removes only the name. Locally, by the same step:
-      `~/update_deploy`, `~/update_records`, `data/refetch_backup`.
+      `~/update_deploy` and `~/update_records`. There is no `data/refetch_backup` this
+      year; the old copies of the repaired threads are in `data/collapsed_backup` and stay.
 
       The ways back are the README's "The way back" with those values (not run). For the
       citations alone the setting off is enough: revert `4bcdd79`, push, then on the
@@ -181,12 +167,7 @@ Still useful, the collapsed posts (deployed 2026-11-26):
   33 repaired threads are in `data/collapsed_backup`, their ids in `data/collapsed_ids.txt`;
   the 60 ids of D59 in `data/msgids_never_fetched_2024-09-03_2025-10-02.txt`. The probe and
   its runs are in `data/collapsed_probe/`.
-- Pictures: working index `index261125103303.idx`; `gallery261125.idx` (2,407 threads, 5,795
-  pictures) and `thumbs261125.txt` (5,795, 56.2 MB). One thumbnail cannot be made:
-  `eJJziZ0ar3U_..._Ahaa.jpg` of 2025 is truncated and in neither gallery. The review tool's
-  port 8765 was taken by another project; it ran with `--port 8790`.
-- The local collection: 42,577 chunks of 11,448 sources. Top 15 of the 52 questions before
-  and after are in `data/collapsed_update/`.
+- Top 15 of the 52 questions before and after the repair are in `data/collapsed_update/`.
 
 Still useful, the citations (deployed 2026-11-26, setting on; `site_2024` `4bcdd79`):
 
@@ -223,6 +204,8 @@ Still useful, `site_2024`:
   the old stack. The tests need docker, node and openssl. Those that read the collection need
   the local Chroma (`docker compose up -d chroma-rag`); the page tests use Flask's test
   client. The tests do not read `ml/`; a test carries its own data.
+- The local site shows thumbnails only while a server on port 8090 runs (`site_local.ini`):
+  `python3 -m http.server 8090 --bind 127.0.0.1 --directory data/images/thumbs`, from `ml/`.
 - `python-dotenv` stays in `requirements.txt` because `pydantic-settings` requires it.
 - The HTML of an answer comes from one function (`fwww/src/answer_html.py`, `markdown-it-py`),
   used by the results page and by `evaluation/review_answers.py`. The site's own pages keep
@@ -242,12 +225,12 @@ Still useful, `site_2024`:
 Still useful, the collection:
 
 - On the server and locally: 42,577 chunks of 11,448 sources (2026-11-26), id hash
-  `4e273635...` (`~/update_records/after.txt`); 42 prefix-only chunks are still in it. Chunk ids are `<source>#<number>`.
+  `4e273635...` (`~/update_records/after.txt`); 42 prefix-only chunks are still in it.
+  Chunk ids are `<source>#<number>`.
 - For the production collection only the containers of `site_2024` are used; do not start
   those of `ml/docker-compose.yaml`.
 - `data/corpus_update/`: `before.json`, `after.json` and `snapshot.py`, which made them (count,
-  id hash, top 15 of the 52 questions). The tar and check script of that deploy:
-  `~/chroma_deploy` (local).
+  id hash, top 15 of the 52 questions).
 - The repair F2 was stopped after about 3,360 of 36,500 chunks and was not finished (D46). It
   continues from `embedder/` with `../venv/bin/python repair_collection.py 11998`.
 
@@ -255,13 +238,17 @@ Still useful, the pictures:
 
 - Never delete or overwrite a file in `data/images` or `imageGetter/input`. Both and `data/`
   are git-ignored: a test carries its own small pictures.
-- Gallery index on the server: `data/images/gallery261123b.idx` (2,368 threads, 5,661 pictures), made by
+- Gallery index on the server since 2026-11-26: `data/images/gallery261125.idx` (2,407
+  threads, 5,795 pictures; thumbnails listed in `thumbs261125.txt`), made by
   `gallery_index_cli.py`; the server has it as `data/gallery/gallery.idx`. It drops by
   decision only and stops on a file on disk that is not measured.
-- Working index: `data/images/index261123105058.idx`, built from `data/msgs_md` and measured
+- Working index: `data/images/index261125103303.idx`, built from `data/msgs_md` and measured
   by `measure_images_cli.py`.
+- One thumbnail cannot be made: `eJJziZ0ar3U_..._Ahaa.jpg` of 2025 is truncated and in
+  neither gallery.
 - Decisions: `imageGetter/image_decisions.json` (tracked; content hash to `remove` / `keep`);
-  nothing is undecided. The review tool is `review_images_cli.py`, port 8765.
+  nothing is undecided. The review tool is `review_images_cli.py`, port 8765 (another
+  project may hold it; `--port 8790` works).
 - Run once in 2026 and not again: `rename_images_cli.py` and `load_removals_cli.py`.
 - A local name: each of `< > : " / \ | ? *` becomes `_`, at most 180 bytes, extension kept.
 - The download rewrote the index with CRLF; the content was unchanged.
