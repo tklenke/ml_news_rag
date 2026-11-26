@@ -257,19 +257,29 @@ docker compose restart nginx
 
 #### 8. Clean up, after a few days of the site running well
 
-On the server, with `OLD` and `D` set to what you wrote down in 6c and 6e (examples below):
+On the server, with `OLD` and `D` set to what you wrote down in 6c and 6e (examples below).
+First look at what is to be removed:
 
 ```bash
 cd ~/site_2024
 OLD=775692d; D=271125
-ls -d ~/chroma_before_$D ~/gallery_before_$D.idx
+ls -d ~/chroma_before_$D ~/gallery_before_$D.idx ~/update_deploy
+docker images site_2024-flask
+```
+
+- `ls` lists all three, with no `No such file or directory`.
+- `docker images` lists `latest` and `$OLD`. Their IDs differ when 6d built the code.
+- If anything is missing or not as described, **stop** and find out why before removing
+  anything.
+
+Then remove them, in the same shell, so that `OLD` and `D` are still set:
+
+```bash
 docker image rm site_2024-flask:$OLD
 sudo rm -r ~/chroma_before_$D
 sudo rm ~/gallery_before_$D.idx
 rm -r ~/update_deploy
 ```
-
-`ls` must list both before anything is removed.
 
 Locally:
 
