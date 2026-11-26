@@ -1,12 +1,12 @@
 # Required From Tom
 
-**Last Updated:** 2026-11-25
+**Last Updated:** 2026-11-26
 
 Items the annual refresh needs from Tom. See `annual_refresh_plan.md`.
 
 ## Decisions
 
-Decided: D1 to D63 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
+Decided: D1 to D64 in the plan's table, D50, D51 and D55 as amended on 2026-11-23.
  The dated list of what Tom decided and the
 finished work items are in the git history of this file.
 
@@ -26,6 +26,12 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
 - [x] **World-writable directories on the server.** Decided 2026-11-24: with the full server
       cleanup, after the server has run for a week (D59; `programmer_todo.md`, "Server
       cleanup").
+
+### Waiting for a decision (2026-11-26, D64)
+
+- [ ] **The open groups of the refresh.** For each of Phase 2 from the labelling (2.3)
+      and the server cleanup: finished, dropped, or deferred to 2027. (CP8 was closed
+      the same day.)
 
 ### Asked by Architect 2026-11-25
 
@@ -61,10 +67,10 @@ Details of each are in `architect_todo.md`, "Notes from Programmer".
       (PA7); at the deploy, upload the thumbnails and the index (under 100 MB; the Programmer
       supplies the commands) and do the browser checks, one of them in a browser that is not
       signed in to Google.
-- [ ] Collapsed posts (D58): be at Chrome on Windows while the Programmer finds the cause;
+- [x] (Done 2026-11-26, deployed with the citations, D63.) Collapsed posts (D58): be at Chrome on Windows while the Programmer finds the cause;
       fetch the affected threads again; download and review pictures if the repaired threads
       bring new ones; run the deploy of the collection from the top-level `README.md`.
-- [ ] Reference links (plan 4.1, D60): no rating page any more. When the Programmer shows the
+- [x] (Done 2026-11-26: RL7 "Looks good", then the deploy, D63.) Reference links (plan 4.1, D60): no rating page any more. When the Programmer shows the
       local site with numbers on (RL7), look at three first answers, a dig deeper and a
       follow-up, one of them on a question you know well, click some numbers, and say
       whether anything stops the deploy. Then the deploy with the Programmer, which also

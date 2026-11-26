@@ -14,9 +14,7 @@ task, every session. The tasks below are only a checklist; section numbers refer
 has not yet decided whether it is finished, dropped or deferred to 2027; ask him before
 starting any of them:
 
-1. CP8 is not done. `msgGetter/README.md` step 8 and its troubleshooting do not yet say
-   what the fetch does now, and the report to Architect is not written. The yearly update
-   of 2027 runs from that README.
+1. CP8: closed by Architect the same day, at Tom's request (below).
 2. Phase 2 stops before the labelling (2.3). The five collections stay in
    `data/chunk_experiment/`.
 3. Server cleanup is not done. The rollback copies stay on the server, and the check of the
@@ -25,8 +23,7 @@ starting any of them:
 
 **Order:**
 
-1. CP8, the closing report of the collapsed posts.
-2. Phase 2 (2.3 to 2.5, D41).
+1. Phase 2 (2.3 to 2.5, D41).
 
 "Server cleanup" is done with Tom from 2026-11-28. One session per group; start each session
 fresh. Code review happens once per deploy, not per commit.
@@ -54,7 +51,9 @@ DP1 to DP6 at `247b98b`). The finished image database tasks are in
 Plan "Collapsed posts", "As found and built". CP1 to CP7 are done; CP7 was the deploy of
 2026-11-26.
 
-- [ ] CP8 `msgGetter/README.md` step 8 and troubleshooting say what the fetch does now; the
+- [x] CP8 (closed by Architect 2026-11-26 at Tom's request: the README already said what
+      the fetch does, from CP3 and CP4; the unknowns are in the opportunities for
+      improvement.) `msgGetter/README.md` step 8 and troubleshooting say what the fetch does now; the
       note in `docs/notes/opportunities_for_improvement.md` if anything is left. Report to
       Architect: the threads repaired and not, pictures gained, chunks before and after.
       The cause is already recorded in the plan. Tom accepted review finding R4 as it is

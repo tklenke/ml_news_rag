@@ -59,3 +59,15 @@ Steps Tom does by hand each year from the READMEs. None is built; Tom decided on
 - The index, gallery and list names carry a date that the steps keep in shell variables
   (`$IDX`, `$G`, `$L`); a new terminal means setting them again.
 - `webGetter` has no yearly instructions; it was not run in 2026.
+
+## ml: the fetch of threads (logged 2026-11-26, the close of "Collapsed posts", CP8)
+
+What the repair of the collapsed posts left not known. None of it is scheduled.
+
+- Threads fetched before 2026 may hold collapsed posts in a form `msgGetter/f_collapsed.py`
+  does not find: its sign was wrong once for the older files. A count of 0 is not proof
+  for them.
+- Two searches over the same dates of 2024-25 gave different thread ids (60 only in one, 29
+  only in the other). Other years may have threads that no search returned. Not looked into.
+- The fetch needs the debug Chrome on screen. Bringing the window to the front before each
+  thread was not tried; if it works, the rule could go.

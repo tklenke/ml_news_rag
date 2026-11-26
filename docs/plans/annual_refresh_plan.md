@@ -1,11 +1,23 @@
 # Annual RAG / Website Refresh Plan
 
 **Created:** 2026-11-21
-**Status:** Revised 2026-11-25 (twenty-first revision); the citation trial passed its rule and the setting may be switched on at the deploy once Tom has looked at the local site (4.1a); the five collections of the chunk experiment are fit for the labelling (2.2a); the collapsed posts are repaired locally and not deployed yet ("Collapsed posts"). Before that, 2026-11-24 (twentieth revision): the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
+**Status:** Revised 2026-11-26 (twenty-second revision); the citations and the repaired collection are deployed in one session by the top-level `README.md` (`site_2024` `4bcdd79`; 4.1b, "Deploy", "As run"); the refresh stops for this year with Phase 2 from 2.3 and the server cleanup open (D64; CP8 closed the same day). Before that, 2026-11-25 (twenty-first revision); the citation trial passed its rule and the setting may be switched on at the deploy once Tom has looked at the local site (4.1a); the five collections of the chunk experiment are fit for the labelling (2.2a); the collapsed posts are repaired locally and not deployed yet ("Collapsed posts"). Before that, 2026-11-24 (twentieth revision): the fault of the collapsed posts is found, fixed and its threads fetched again and deployed before the citations are built (D60) ("Collapsed posts", D58); Phase 0, the Phase 1 code change, the follow-on fixes, and the answer display with the corpus update and the model change deployed (`775692d`); the pictures of an answer (4.2) deployed (`4f85f9e`); the Phase 2 embedding has run all five variants (2.2a), its checks are not reported yet; the image update (4.0) is done; the yearly update is written down for Tom to run (D57); the reference links (4.1) are designed as a trial first, then the display
 **Owner:** Architect (design), Programmer (implementation)
 
 ## Design Revision History
 
+- **2026-11-26 (twenty-second revision):** The Programmer's report of the deploy (DP6) is
+  read and recorded; no design changed by Architect. The citations and the repaired
+  collection went to the server in one session by the top-level `README.md`, the first
+  run of that combined deploy, and every check passed (4.1b, "Deploy", "As run"). The
+  README needed three corrections, made during the run: the Python of step 3 is pasted
+  as `python -c "if 1:` because Tom's paste indents every line and breaks a heredoc; the
+  site's code is mounted into the container, not built into the image; and the example
+  values are those of this run. The ways back were not run. "Yearly update" is brought in
+  line. Tom stopped the refresh for this year with CP8, Phase 2 from 2.3 and the server
+  cleanup open (D64). At Tom's request Architect then closed CP8 the same day: the
+  fetch's README already said what the fetch does, and what is not known went to the
+  opportunities for improvement ("Collapsed posts", "As found and built").
 - **2026-11-25 (twenty-first revision):** Three reports of the Programmer are read and
   recorded; no design changed by Architect. The citation trial passed the rule of 4.1a
   on 29 answers, so the setting may be switched on at the deploy. The five collections
@@ -239,6 +251,7 @@ Source: https://developers.openai.com/api/docs/deprecations (read 2026-11-21)
 | D61 | (2026-11-25) Collapsed posts: the debug Chrome stays on screen during a fetch, as a step of the README, and the fetch saves no thread that still holds a collapsed post. Decided with the Programmer, without Architect ("Collapsed posts", "As found and built"). |
 | D62 | (2026-11-25) The deploy of the repaired collection and its report (CP7, CP8) wait until the citations are done. Until then the local collection is ahead of the server's. |
 | D63 | (2026-11-25) The citations and the repaired collection, with its thumbnails and gallery index, go to the server in one deploy, by the top-level `README.md` (4.1b, "Deploy"). |
+| D64 | (2026-11-26) After the deploy of D63 the refresh stops for this year. Three groups are open: CP8 (the README of the fetch and the closing report of "Collapsed posts"), Phase 2 from the labelling (2.3) on, and the server cleanup. For each, whether it is finished, dropped or deferred to 2027 is not decided yet. |
 
 ## Two repositories
 
@@ -280,8 +293,12 @@ at `bed83f4`. Programmer follows the same version-control rules there.
    the trial of 4.1 is next. **[REVISED - 2026-11-24] (nineteenth revision)** "Collapsed
    posts" (D58) comes before the trial. **[REVISED - 2026-11-24] (twentieth revision)** 4.1
    is built (D60): the run that checks the form, then the display.
+   **[REVISED - 2026-11-26]** 4.1 is deployed with the repaired collection of "Collapsed
+   posts" in one deploy (D63; `site_2024` `4bcdd79`).
 7. **[REVISED - 2026-11-22] Phase 2,** after Phase 4 (D41). Tom wants it this week.
    Its embedding (2.1, 2.2a) is brought forward to the nights from 2026-11-22 (D48).
+   **[REVISED - 2026-11-26]** Stopped before the labelling (2.3) when the refresh stopped
+   for this year (D64).
 
 One Programmer session per step. Code review once per deploy.
 
@@ -1850,6 +1867,45 @@ corrected.
 - Accepted by Tom: if answers get worse, the deploy does not show whether the numbering
   or the chunks caused it. Going back on one of them does.
 
+**[REVISED - 2026-11-26] As run** (the Programmer's report DP6, in the git history of
+`architect_todo.md` after `62aef9a`; details in `programmer_todo.md` at `247b98b`). Run on
+2026-11-26 in one session, Tom at the server, by the top-level `README.md` steps 3 and 5
+to 8. Every check passed.
+
+- **Before it.** Tom looked at the local site with numbering on and said to deploy (RL7).
+  One code review of `site_2024` `4f85f9e..dbfa93b` and of the `ml` commits of the
+  collapsed posts: not approved on R1 (the check and the deletions of README step 8 in
+  one block). R1 and R2 were fixed (R2: a citation mark inside a link the answer writes
+  itself made a link inside a link; it now stays as written). Tom accepted R3 to R5 as
+  they are and waived the check of R1.
+- **What went up.** `site_2024` `4bcdd79`, with `NUMBER_DOCS = True`; the collection of
+  42,577 chunks of 11,448 sources (id hash `4e273635...`) in place of 42,276 of 11,388
+  (`92d43eed...`); `gallery261125.idx` (5,795 pictures) in place of `gallery261123b.idx`;
+  5,795 thumbnails unpacked beside those of earlier years.
+- **Checks.** Step 3 gave the line of 2026-11-24 exactly. The upload, the thumbnails, the
+  collection's count and hash and the gallery index all matched their checksums or lines;
+  no "No pictures" line. On the live site five answers (two first answers, a dig deeper,
+  a follow-up, and one about N249PM) had 22 numbers, each leading to the address of the
+  row with that number, and no unlinked `[n]`. An answer from 2026-11-24 is shown as
+  before, without numbers.
+- **What the README needed** (corrected during the run):
+  1. Step 3: the heredocs failed when pasted, because Tom's paste puts two spaces before
+     every line, so the closing word never matches and Python sees an indented first
+     line. Both blocks are now `python -c "if 1:` with an indented body and short lines,
+     rehearsed with and without the two spaces.
+  2. 6d and step 8: the site's code (`fwww`) is mounted into the container, not built
+     into the image. The build changes the image only when the requirements or the
+     dockerfile change; this time it was all cached, `latest` kept the ID of the old
+     image, and the new code ran from the restart in 6e.
+  3. The example values are those of this run.
+- **Not run:** the ways back.
+- **Seen, left alone:** in the source list a `&` in an address is written bare
+  (`2004_Forum_Q&A.htm`), while the citation links write `&amp;`. Browsers read both
+  the same way; the code of the rows is as it was before the citations.
+- **Left on the server** until the cleanup (not before 2026-12-03, `programmer_todo.md`,
+  "Server cleanup"): the collection and gallery index of before, the upload directory,
+  and the image name `site_2024-flask:4f85f9e`.
+
 **To watch afterwards.** The share of `not_good` ratings on the site before and after,
 told apart by the date of the job.
 
@@ -2070,10 +2126,17 @@ and Tom approved it (2026-11-24); Architect designed none of it.
 - **Not known.** The combined deploy has not been run as one session: each part was run
   on its own in 2026. The steps for the upload of the collection follow this plan and a
   local rehearsal, not a record of the run of 2026-11-22. The ways back were not run.
+  **[REVISED - 2026-11-26]** The combined deploy, the upload of the collection with it,
+  was run as one session on 2026-11-26 by the top-level `README.md` steps 3 and 5 to 8,
+  and the README was corrected where it failed (4.1b, "Deploy", "As run"). The ways
+  back are still not run.
 - **Not covered.** `webGetter`: not run in 2026 and without instructions Tom could follow.
 - **Open, with Architect:** the fetch saves some posts cut off, and up to 60 threads of
   2024-25 may never have been fetched (`architect_todo.md`). The steps that are Python
   pasted from a README, and could be small tested scripts, are listed there too.
+  **[REVISED - 2026-11-26]** Both are done and deployed ("Collapsed posts"). The scripts
+  are in `docs/notes/opportunities_for_improvement.md`, "ml: yearly update", not built.
+  The fetch's README says what the fetch now does (CP8, done 2026-11-26).
 
 ## Collapsed posts (D58)
 
@@ -2175,7 +2238,15 @@ Architect reading the code and the files; it has not been tried in Chrome.
 **[REVISED - 2026-11-25] As found and built** (the Programmer's reports of 2026-11-24 and
 2026-11-25, in the git history of `architect_todo.md`; details in `programmer_todo.md`,
 CP1 to CP6). The hypothesis above was wrong, and steps 2 to 6 are done. Step 7 waits for
-the citations (D62).
+the citations (D62). **[REVISED - 2026-11-26]** Step 7 is done: deployed with the
+citations on 2026-11-26 (4.1b, "Deploy", "As run"). Step 8 is done (CP8, Architect,
+2026-11-26): `msgGetter/README.md` already says what the fetch does, from the commits of
+CP3 and CP4. Step 6 keeps Chrome on screen and describes a thread not saved; step 8 runs
+`f_collapsed.py` and says to set a listed thread aside and fetch it again, which covers a
+thread whose old `.md` holds a collapsed post (review finding R4); the troubleshooting has
+the case; the line "seen, not fixed" is gone. The figures of the closing report are those
+above and in 4.1b, "As run". What is still not known is in
+`docs/notes/opportunities_for_improvement.md`, "ml: the fetch of threads".
 
 - **Cause.** The "Expand all" click has no effect while the Chrome window is minimized:
   the button is found, the click raises no error, and the posts stay collapsed, also 15
